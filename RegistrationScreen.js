@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
+import insertData from './insertData';  // Correct the path if necessary
 
 const RegistrationScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
       Alert.alert('Error', 'All fields are required!');
       return;
@@ -18,8 +19,11 @@ const RegistrationScreen = ({ navigation }) => {
       return;
     }
 
-    Alert.alert('Success', 'Account created successfully!');
-    navigation.navigate('Login'); // Navigate to LoginScreen
+    // Call the insertData function to insert data into the Supabase table
+    await insertData(email, password, confirmPassword);
+
+    // Navigate to LoginScreen after successful insertion
+    navigation.navigate('Login');
   };
 
   return (
