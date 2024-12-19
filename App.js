@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './HomeScreen'; // Ensure this file exists and works correctly
 import LoginScreen from './LoginScreen';
 import RegistrationScreen from './RegistrationScreen';
+import LandingPage from './LandingPage';
+import HomePage from './HomePage';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +17,8 @@ export default function App() {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegistrationScreen} />
+        <Stack.Screen name="LandingPage" component={LandingPage} />
+        <Stack.Screen name="HomePage" component={HomePage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <LinearGradient
         colors={['#A259B5', '#FFFFFF']}
         start={{ x: 0, y: 0 }}
@@ -23,7 +24,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.registerText}>REGISTER</Text>
         </TouchableOpacity>
       </LinearGradient>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -41,20 +42,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 220,
+    height: 220,
+    bottom: 70,
   },
   image2: {
-    width: 100,
-    height: 100,
-    marginTop: 20,
+    width: 130,
+    height: 130,
+    marginTop: 70,
   },
   registerText: {
-    marginTop: 20,
+    position: 'absolute',  // Fix position relative to the container
+    top: -70,  // You can adjust this value to control how far from the top the text appears
     fontSize: 18,
+    color: '#fff',
     fontWeight: 'bold',
-    color: '#A259B5',
-  },
-});
+    left: -35,
+  },});
 
 export default HomeScreen;
