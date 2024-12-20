@@ -25,3 +25,5 @@ async function insertData(email, password, confirm_pass) {
 }
 
 export default insertData;
+
+//insertData

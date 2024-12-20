@@ -99,3 +99,5 @@ const styles = StyleSheet.create({
 });
 
 export default RegistrationScreen;
+
+//RegistrationScreen
