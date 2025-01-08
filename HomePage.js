@@ -1,126 +1,107 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Import for the account circle icon
+import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const HomePage = ({ navigation }) => {
   const [search, setSearch] = useState('');
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Welcome to {'\n'} Pet Fur Me!</Text>
-        <TouchableOpacity 
-          style={styles.accountCircle} 
-          onPress={() => navigation.navigate('Profile')} // Navigate to Profile or Account screen
-        >
-          <MaterialIcons name="account-circle" size={40} color="#333" />
-        </TouchableOpacity>
-      </View>
+    <LinearGradient colors={['#A259B5', '#FFFFFF']} style={styles.gradientContainer}>
+      <View style={styles.container}>
+        {/* Header Section */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Welcome to {'\n'} Pet Fur Me!</Text>
+          <TouchableOpacity 
+            style={styles.accountCircle} 
+            onPress={() => navigation.navigate('Profile')}>
+            <MaterialIcons name="account-circle" size={40} color="#333" />
+          </TouchableOpacity>
+        </View>
 
-      {/* Search bar */}
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search here..."
-        value={search}
-        onChangeText={setSearch}
-      />
+        {/* Search Bar */}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search for pets or products..."
+          value={search}
+          onChangeText={setSearch}
+        />
 
-      {/* Product display rectangle */}
-      <View style={styles.productContainer}>
-        <Text style={styles.productText}>Products {'\n'}Available Here</Text>
-      </View>
-
-      {/* Animal categories section */}
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryHeader}>Categories</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categories}>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Dogs')}>
-            <Text style={styles.categoryText}>Dogs</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Cats')}>
-            <Text style={styles.categoryText}>Cats</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Birds')}>
-            <Text style={styles.categoryText}>Birds</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Fish')}>
-            <Text style={styles.categoryText}>Fish</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Reptiles')}>
-            <Text style={styles.categoryText}>Reptiles</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => console.log('Go to Small Pets')}>
-            <Text style={styles.categoryText}>Small Pets</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-
-      {/* Pets with images section */}
-      <View style={styles.petsContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pets}>
-          <View style={styles.petItem}>
+        {/* Featured Products Section */}
+        <View style={styles.featuredSection}>
+          <Text style={styles.sectionHeader}>Products Available Here</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Image
-              style={styles.petImage}
-              source={{ uri: 'https://example.com/dog.jpg' }} // Replace with actual pet image URL
+              style={styles.featuredImage}
+              source={{ uri: 'https://example.com/product1.jpg' }} // Replace with actual image
             />
-            <Text style={styles.petName}>Dog</Text>
-          </View>
-          <View style={styles.petItem}>
             <Image
-              style={styles.petImage}
-              source={{ uri: 'https://example.com/cat.jpg' }} // Replace with actual pet image URL
+              style={styles.featuredImage}
+              source={{ uri: 'https://example.com/product2.jpg' }} // Replace with actual image
             />
-            <Text style={styles.petName}>Cat</Text>
-          </View>
-          <View style={styles.petItem}>
             <Image
-              style={styles.petImage}
-              source={{ uri: 'https://example.com/bird.jpg' }} // Replace with actual pet image URL
+              style={styles.featuredImage}
+              source={{ uri: 'https://example.com/product3.jpg' }} // Replace with actual image
             />
-            <Text style={styles.petName}>Bird</Text>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
 
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem} 
-          onPress={() => navigation.navigate('Home')}
-        >
-          <MaterialIcons name="home" size={30} color="#333" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem} 
-          onPress={() => navigation.navigate('Notification')}
-        >
-          <MaterialIcons name="notifications" size={30} color="#333" />
-          <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem} 
-          onPress={() => navigation.navigate('Chat')}
-        >
-          <MaterialIcons name="chat" size={30} color="#333" />
-          <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem} 
-          onPress={() => navigation.navigate('Profile')}
-        >
-          <MaterialIcons name="account-circle" size={30} color="#333" />
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
+        {/* Animal Categories Section */}
+        <View style={styles.categoryContainer}>
+          <Text style={styles.sectionHeader}>Categories</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {['Dogs', 'Cats', 'Birds', 'Fish', 'Reptiles', 'Small Pets'].map((category) => (
+              <TouchableOpacity 
+                key={category} 
+                style={styles.categoryItem} 
+                onPress={() => console.log(`Go to ${category}`)}>
+                <Text style={styles.categoryText}>{category}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Popular Pets Section */}
+        <View style={styles.popularPetsSection}>
+          <Text style={styles.sectionHeader}>Popular Pets</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {[{ name: 'Dog', uri: 'https://example.com/dog.jpg' }, { name: 'Cat', uri: 'https://example.com/cat.jpg' }, { name: 'Bird', uri: 'https://example.com/bird.jpg' }].map((pet) => (
+              <View key={pet.name} style={styles.petItem}>
+                <Image style={styles.petImage} source={{ uri: pet.uri }} />
+                <Text style={styles.petName}>{pet.name}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Bottom Navigation */}
+        <View style={styles.bottomNav}>
+          {[
+            { name: 'Home', icon: 'home', screen: 'Home' },
+            { name: 'Notifications', icon: 'notifications', screen: 'Notification' },
+            { name: 'Chat', icon: 'chat', screen: 'Chat' },
+            { name: 'Profile', icon: 'account-circle', screen: 'Profile' },
+          ].map((navItem) => (
+            <TouchableOpacity 
+              key={navItem.name} 
+              style={styles.navItem} 
+              onPress={() => navigation.navigate(navItem.screen)}>
+              <MaterialIcons name={navItem.icon} size={30} color="#333" />
+              <Text style={styles.navText}>{navItem.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
     padding: 20,
   },
   headerContainer: {
@@ -130,74 +111,53 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   header: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
   },
   accountCircle: {
     marginRight: 10,
   },
   searchBar: {
     height: 40,
-    borderColor: '#99ccff',
-    borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 15,
-    marginTop: 8,
-    fontSize: 16,
     backgroundColor: '#fff',
+    marginBottom: 20,
   },
-  productContainer: {
-    marginTop: 20, // Space between the search bar and product container
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    backgroundColor: '#ffccff',
-    width: '100%',
-    height: '15%',
+  featuredSection: {
+    marginBottom: 20,
   },
-  productText: {
-    fontSize: 18,
-    color: '#333',
-    marginBottom: 10, // Space between product names
-  },
-  categoryContainer: {
-    marginTop: 20, // Space between product container and category section
-  },
-  categoryHeader: {
+  sectionHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 10,
   },
-  categories: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  featuredImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  categoryContainer: {
+    marginBottom: 20,
   },
   categoryItem: {
     padding: 10,
-    backgroundColor: '#99ccff',
+    backgroundColor: '#A259B5',
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 15, // Space between category items
+    marginRight: 10,
   },
   categoryText: {
-    fontSize: 16,
     color: '#fff',
+    fontSize: 16,
   },
-  petsContainer: {
-    marginTop: 30, // Space between category section and pets section
-  },
-  pets: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  popularPetsSection: {
+    marginBottom: 20,
   },
   petItem: {
-    marginRight: 20, // Space between pet items
+    marginRight: 10,
     alignItems: 'center',
   },
   petImage: {
@@ -214,9 +174,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 70,
-    backgroundColor: '#f5f5f5',
+    paddingVertical: 10,
+    backgroundColor: '#fff',
     borderTopColor: '#ddd',
+    borderTopWidth: 1,
   },
   navItem: {
     alignItems: 'center',
@@ -228,5 +189,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage;
-
-//HomePage
