@@ -1,34 +1,46 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LandingPage = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <View style={styles.circleBackground}>
+      <LinearGradient
+        colors={['#A259B5', '#FFFFFF']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.background}
+      >
         <Image 
-          source={require('./assets/images/dogcat.png')} 
+          source={require('./assets/images/lanpage.png')} 
           style={styles.image}
         />
-      </View>
 
-      <View style={styles.headerContainer}>
-        <Text style={styles.header1}>Where Caring</Text>
-        <Text style={styles.header2}>Means More</Text>
-      </View>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => navigation.navigate('HomePage')} // Replace 'HomePage' with your actual route name
+        >
+          <Text style={styles.buttonText}>Let's Explore</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.content}>
-        Join & discover the best pet services near you.
-      </Text>
+        <Image 
+          source={require('./assets/images/3.png')} 
+          style={styles.image1}
+        />
 
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => navigation.navigate('HomePage')} // Replace 'HomePage' with your actual route name
-      >
-        <Text style={styles.buttonText}>Continue...</Text>
-      </TouchableOpacity>
+        <Image 
+          source={require('./assets/images/4.png')} 
+          style={styles.image2}
+        />
+
+        <Image 
+          source={require('./assets/images/5.png')} 
+          style={styles.image3}
+        />
+      </LinearGradient>
     </View>
   );
 };
@@ -36,58 +48,54 @@ const LandingPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F9F9F9', // Light gray for a softer background
-    padding: 20,
   },
-  circleBackground: {
-    width: 235, // Slightly larger circle for better balance
-    height: 230,
-    borderRadius: 115, // Half of width/height for a perfect circle
-    backgroundColor: '#df80ff', // A vibrant violet shade
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 100,
   },
   image: {
-    width: 280, // Reduced image size for better proportions
-    height: 250,
+    width: 580,
+    height: 400,
     resizeMode: 'contain',
-    top: -38,
-    left: -18,
+    position: 'absolute', // Fixes the image in place
+    top: 45,
   },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
+  image1: {
+    width: 280,
+    height: 200,
+    resizeMode: 'contain',
+    position: 'absolute', // Fixes the image in place
+    top: 490,
+    left: 15,
   },
-  header1: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#6666ff',
+  image2: {
+    width: 220,
+    height: 300,
+    resizeMode: 'contain',
+    position: 'absolute', // Fixes the image in place
+    top: 450,
+    left: -60,
   },
-  header2: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#333',
-  },
-  content: {
-    fontSize: 16,
-    marginTop: 10,
-    textAlign: 'center',
-    color: '#555',
-    paddingHorizontal: 10,
-    lineHeight: 24,
+  image3: {
+    width: 400,
+    height: 300,
+    resizeMode: 'contain',
+    position: 'absolute', // Fixes the image in place
+    top: 455,
+    left: 100,
   },
   button: {
-    marginTop: 30,
+    marginBottom: -400,
     backgroundColor: '#6666ff',
     paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 15,
-    alignItems: 'center',
+    paddingHorizontal: 57,
+    borderRadius: 3,
+    position: 'absolute', // Fixes the button in place
+    top: 450,
+    zIndex: 10,
   },
   buttonText: {
     color: '#fff',
@@ -97,5 +105,3 @@ const styles = StyleSheet.create({
 });
 
 export default LandingPage;
-
-//LandingPage

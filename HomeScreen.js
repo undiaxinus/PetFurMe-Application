@@ -1,11 +1,9 @@
 import React from 'react';
 import { Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
       <LinearGradient
         colors={['#A259B5', '#FFFFFF']}
         start={{ x: 0, y: 0 }}
@@ -24,7 +22,6 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.registerText}>REGISTER</Text>
         </TouchableOpacity>
       </LinearGradient>
-    </SafeAreaView>
   );
 };
 
