@@ -1,71 +1,77 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Text } from 'react-native-paper';
-import insertData from './insertData';  // Correct the path if necessary
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 const RegistrationScreen = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) {
-      Alert.alert('Error', 'All fields are required!');
+  const handleSignUp = () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match!');
+      Alert.alert('Error', 'Passwords do not match.');
       return;
     }
 
-    // Call the insertData function to insert data into the Supabase table
-    await insertData(email, password, confirmPassword);
-
-    // Navigate to LoginScreen after successful insertion
+    console.log('Sign up:', { name, email, password });
+    // Add navigation or API integration here
     navigation.navigate('Login');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Sign Up</Text>
-
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCompleteType="email"
+      <Image
+        style={styles.logo}
+        source={require('./assets/images/vetcare.png')} // Replace with your logo path
       />
 
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-      />
+      <View style={styles.square}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+        </View>
 
-      <TextInput
-        label="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        style={styles.input}
-        secureTextEntry
-      />
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <Button mode="contained" onPress={handleSignUp} style={styles.button}>
-        Sign Up
-      </Button>
-
-      <Text style={styles.footer}>
-        Already have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-          Log in
+        <Text style={styles.loginText}>
+          Already have an account?{' '}
+          <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+            Log In
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -73,31 +79,66 @@ const RegistrationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+  logo: {
+    width: 170,
+    height: 170,
+    position: 'absolute',
+    top: 12,
+  },
+  square: {
+    width: 310,
+    height: 450,
+    backgroundColor: '#D1ACDA',
+    marginTop: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 15,
+    top: -10,
+  },
+  inputContainer: {
+    width: '100%',
   },
   input: {
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 25,
+    backgroundColor: '#fff',
+    fontSize: 18,
+    height: 50,
   },
   button: {
-    marginTop: 20,
+    borderWidth: 1,
+    padding: 15,
+    borderRadius: 90,
+    marginBottom: 35,
+    backgroundColor: '#fff',
+    fontSize: 15,
+    width: 130,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  footer: {
+  buttonText: {
+    color: '#8146C1',
+    fontSize: 15,
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 20,
   },
   link: {
     color: '#007bff',
   },
+  loginText: {
+    marginTop: 20,
+    color: '#000000',
+    textAlign: 'center',
+  },
 });
 
 export default RegistrationScreen;
-
-//RegistrationScreen

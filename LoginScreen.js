@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { TextInput, Button, Text } from 'react-native-paper';
+import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -13,57 +12,55 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
-      // Simulate login process (Replace this with your login API request)
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate a network delay
-      // On successful login, navigate to LandingPage
-      navigation.navigate('LandingPage'); // Navigate to LandingPage instead of Home
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate login process
+      navigation.navigate('LandingPage'); // Navigate to LandingPage on successful login
     } catch (error) {
       Alert.alert('Error', 'Login failed. Please try again.');
     } finally {
-      setLoading(false); // Stop loading once the process is finished
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Log In</Text>
+      <Image style={styles.logo} source={require('./assets/images/vetcare.png')} />
 
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCompleteType="email"
-      />
+      <View style={styles.square}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-      />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+          />
+        </View>
 
-      <Button mode="contained" onPress={handleLogin} style={styles.button} disabled={loading}>
-        {loading ? 'Logging in...' : 'Log In'}
-      </Button>
+        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'Log In'}</Text>
+        </TouchableOpacity>
 
-      {/* Show loading spinner if loading is true */}
-      {loading && (
-        <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
-      )}
+        {loading && <ActivityIndicator size="large" color="#8146C1" style={styles.loading} />}
 
-      <Text style={styles.footer}>
-        Don't have an account?{' '}
-        <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
-          Sign Up
+        <Text style={styles.loginText}>
+          Don't have an account?{' '}
+          <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
+            Sign Up
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -71,34 +68,68 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+  logo: {
+    width: 170,
+    height: 170,
+    position: 'absolute',
+    top: 12,
+  },
+  square: {
+    width: 310,
+    height: 350,
+    backgroundColor: '#D1ACDA',
+    marginTop: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 15,
+    top: -10,
+  },
+  inputContainer: {
+    width: '100%',
   },
   input: {
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 25,
+    backgroundColor: '#fff',
+    fontSize: 18,
+    height: 50,
   },
   button: {
-    marginTop: 20,
+    borderWidth: 1,
+    padding: 15,
+    borderRadius: 90,
+    marginBottom: 35,
+    backgroundColor: '#fff',
+    fontSize: 15,
+    height: 50,
+    width: 130,
   },
-  footer: {
+  buttonText: {
+    color: '#8146C1',
+    fontSize: 15,
+    fontWeight: 'bold',
     textAlign: 'center',
+    backgroundColor: '#FEFEFF',
+  },
+  loading: {
     marginTop: 20,
   },
   link: {
     color: '#007bff',
   },
-  loading: {
+  loginText: {
     marginTop: 20,
+    color: '#000000',
+    textAlign: 'center',
   },
 });
 
 export default LoginScreen;
-
-//LoginScreen
