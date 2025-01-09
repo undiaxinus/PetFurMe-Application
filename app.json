@@ -3,13 +3,17 @@
     "name": "Thesis",
     "slug": "Thesis",
     "version": "1.0.0",
+    "extra": {
+    "SUPABASE_URL": "https://euaelkwwqtlztdalgnfo.supabase.co",
+    "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1YWVsa3d3cXRsenRkYWxnbmZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk0MzM3NTAsImV4cCI6MjA0NTAwOTc1MH0.LP4qArmAk05dGpQBUcko5_FGiByMTF8tpOOOZdpY0Cg",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+    }
     },
     "ios": {
       "supportsTablet": true
