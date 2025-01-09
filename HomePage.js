@@ -174,18 +174,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderTopColor: '#ddd',
-    borderTopWidth: 1,
+    paddingVertical: 15, // Increase padding
+    backgroundColor: '#A259B5', // More vibrant background
+    borderTopLeftRadius: 5, // Add rounded corners
+    borderTopRightRadius: 5,
+    elevation: 5, // Shadow effect (Android)
+    shadowColor: '#000', // Shadow effect (iOS)
+    shadowOffset: { width: 5, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    top: -10,
+    width: 350,
+    left: -15,
+    height: 50,
   },
   navItem: {
     alignItems: 'center',
   },
   navText: {
-    fontSize: 12,
-    color: '#333',
+    fontSize: 14, // Slightly larger font size
+    color: '#fff', // White color for better contrast
+    fontWeight: 'bold', // Make text bold
+    marginTop: 5, // Add spacing between icon and text
   },
+
 });
 
 export default HomePage;
