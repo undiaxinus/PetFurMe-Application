@@ -11,7 +11,7 @@ const HomePage = ({ navigation }) => {
       <View style={styles.container}>
         {/* Header Section */}
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Welcome to {'\n'} Pet Fur Me!</Text>
+          <Text style={styles.header}>Welcome to {'\n'} PetFurMe!</Text>
           <TouchableOpacity 
             style={styles.accountCircle} 
             onPress={() => navigation.navigate('Profile')}>
@@ -116,8 +116,11 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   accountCircle: {
-    marginRight: 10,
+    marginRight: -20,
+    width: 60, 
+    height: 60, 
   },
+
   searchBar: {
     height: 40,
     borderRadius: 20,

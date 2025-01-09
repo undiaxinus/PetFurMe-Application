@@ -7,6 +7,9 @@ import LoginScreen from './LoginScreen';
 import RegistrationScreen from './RegistrationScreen';
 import LandingPage from './LandingPage';
 import HomePage from './HomePage';
+import ProfileScreen from './ProfileScreen';
+import ChatScreen from './ChatScreen';
+import NotificationScreen from './NotificationScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +22,21 @@ export default function App() {
         <Stack.Screen name="Register" component={RegistrationScreen} />
         <Stack.Screen name="LandingPage" component={LandingPage} />
         <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen 
+          name="Profile" 
+          component={ProfileScreen} 
+          options={{ title: 'User Profile' }} // Optional: Customize the header title
+        />
+        <Stack.Screen 
+          name="Chat" 
+          component={ChatScreen} 
+          options={{ title: 'Chat' }} // Optional: Customize the header title
+        />
+        <Stack.Screen 
+        name="Notification" 
+        component={NotificationScreen} 
+        options={{ title: 'Notification' }} // Optional: Customize the header title
+      />
       </Stack.Navigator>
     </NavigationContainer>
   );
