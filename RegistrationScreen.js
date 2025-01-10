@@ -1,144 +1,181 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
-const RegistrationScreen = ({ navigation }) => {
+const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const handleSignUp = () => {
-    if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all fields.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
-      return;
-    }
-
-    console.log('Sign up:', { name, email, password });
-    // Add navigation or API integration here
-    navigation.navigate('Login');
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require('./assets/images/vetcare.png')} // Replace with your logo path
-      />
+    <LinearGradient
+      colors={['#FFFFFF', '#D1ACDA']}
+      style={styles.container}
+    >
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('./assets/images/vetcare.png')} // Replace with your logo path
+          style={styles.logo}
+        />
+      </View>
 
-      <View style={styles.square}>
-        <View style={styles.inputContainer}>
+      <View style={styles.formContainer}>
+        <View style={styles.inputWrapper}>
+          <Ionicons name="person-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Name"
             value={name}
             onChangeText={setName}
+            placeholderTextColor="#8146C1"
           />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            placeholderTextColor="#8146C1"
           />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+            secureTextEntry={!showPassword}
+            placeholderTextColor="#8146C1"
           />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              size={20}
+              color="#8146C1"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Confirm Password"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            secureTextEntry
+            secureTextEntry={!showConfirmPassword}
+            placeholderTextColor="#8146C1"
           />
+          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+            <Ionicons
+              name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
+              size={20}
+              color="#8146C1"
+            />
+          </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableOpacity style={styles.signupButton}>
+          <Text style={styles.signupButtonText} onPress={() => navigation.navigate('Landing')}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text style={styles.loginText}>
+        <Text style={styles.footerText}>
           Already have an account?{' '}
-          <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-            Log In
+          <Text
+            style={styles.loginText}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Log in now
           </Text>
         </Text>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
+    
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
   logo: {
-    width: 170,
-    height: 170,
-    position: 'absolute',
-    top: 12,
+    width: 140,
+    height: 140,
+    bottom: 30,
   },
-  square: {
-    width: 310,
-    height: 450,
-    backgroundColor: '#D1ACDA',
-    marginTop: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 15,
+  formContainer: {
+    width: '90%',
+    padding: 20,
+    backgroundColor: '#FFFFFF',
     borderRadius: 15,
-    top: -10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  inputContainer: {
-    width: '100%',
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#8146C1',
+    borderRadius: 10,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 10,
+  },
+  icon: {
+    marginRight: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 25,
-    backgroundColor: '#fff',
-    fontSize: 18,
-    height: 50,
-  },
-  button: {
-    borderWidth: 1,
-    padding: 15,
-    borderRadius: 90,
-    marginBottom: 35,
-    backgroundColor: '#fff',
-    fontSize: 15,
-    width: 130,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
+    flex: 1,
+    fontSize: 16,
     color: '#8146C1',
-    fontSize: 15,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
-  link: {
-    color: '#007bff',
+  signupButton: {
+    backgroundColor: '#8146C1',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  signupButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  footerText: {
+    textAlign: 'center',
+    color: '#8146C1',
+    marginTop: 10,
   },
   loginText: {
-    marginTop: 20,
-    color: '#000000',
-    textAlign: 'center',
+    color: '#8146C1',
+    fontWeight: 'bold',
   },
 });
 
-export default RegistrationScreen;
+export default SignupScreen;

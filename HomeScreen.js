@@ -23,6 +23,7 @@ const HomeScreen = ({ navigation }) => {
       duration: 1000,
       useNativeDriver: true,
     }).start(() => {
+      rotation.setValue(0); // Reset rotation value
       navigation.navigate('Register'); // Navigate to the Register screen after animation
     });
   };
@@ -43,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
       <Animated.View
         style={[
           styles.outerCircle,
-          { transform: [{ rotate: rotateInterpolate }] }, // Apply rotation to the blue circle
+          { transform: [{ rotate: rotateInterpolate }] }, // Apply rotation to the outer circle
         ]}
       >
         <View style={styles.imageWrapper}>
@@ -64,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
         style={[styles.image2, { transform: [{ rotate: '12deg' }] }]} // Apply rotation here
       />
       <TouchableOpacity onPress={rotateCircle}>
-        <Text style={styles.registerText}>REGISTER</Text>
+        <Text style={styles.registerText}>GET STARTED</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -117,10 +118,10 @@ const styles = StyleSheet.create({
   registerText: {
     position: 'absolute',
     top: -50,
-    fontSize: 15,
+    fontSize: 12,
     color: '#fff',
     fontWeight: 'bold',
-    left: -29,
+    left: -37,
     fontFamily: 'Fredoka_400Regular',
   },
 });
