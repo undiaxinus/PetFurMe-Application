@@ -1,134 +1,198 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import LandingPage from './LandingPage';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Both fields are required!');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate login process
-      navigation.navigate('LandingPage'); // Navigate to LandingPage on successful login
-    } catch (error) {
-      Alert.alert('Error', 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleLogin = () => {
+    // Perform login validation if needed
+    navigation.navigate('LandingPage'); // Navigate to LandingPage after login
   };
 
   return (
-    <View style={styles.container}>
-      <Image style={styles.logo} source={require('./assets/images/vetcare.png')} />
+    <LinearGradient
+      colors={['#FFFFFF', '#D1ACDA']}
+      style={styles.container}
+    >
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('./assets/images/vetcare.png')} // Replace with your logo path
+          style={styles.logo}
+        />
+      </View>
 
-      <View style={styles.square}>
-        <View style={styles.inputContainer}>
+      <View style={styles.formContainer}>
+        <View style={styles.inputWrapper}>
+          <Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Email"
             value={email}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={setEmail}
             keyboardType="email-address"
-            autoCapitalize="none"
+            placeholderTextColor="#8146C1"
           />
+        </View>
 
+        <View style={styles.inputWrapper}>
+          <Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
             placeholder="Password"
             value={password}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={setPassword}
             secureTextEntry
+            placeholderTextColor="#8146C1"
           />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-          <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'Log In'}</Text>
+        <TouchableOpacity style={styles.forgotPasswordButton}>
+          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        {loading && <ActivityIndicator size="large" color="#8146C1" style={styles.loading} />}
+        <TouchableOpacity style={styles.loginButton} onPress={LandingPage}>
+          <Text style={styles.loginButtonText}  onPress={() => navigation.navigate('Landing')}>LOGIN</Text>
+        </TouchableOpacity>
 
-        <Text style={styles.loginText}>
-          Don't have an account?{' '}
-          <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.orText}>or connect with</Text>
+
+        <View style={styles.socialButtonsContainer}>
+          <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
+            <Ionicons name="logo-google" size={20} color="#EA4335" />
+            <Text style={styles.socialButtonText}>Login With Google</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.socialButton, styles.facebookButton]}>
+            <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+            <Text style={styles.socialButtonText}>Login With Facebook</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.socialButton, styles.appleButton]}>
+            <Ionicons name="logo-apple" size={20} color="#000000" />
+            <Text style={styles.socialButtonText}>Login With Apple</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.footerText}>
+          Don’t have an account?{' '}
+          <Text
+            style={styles.signUpText}
+            onPress={() => navigation.navigate('Register')}
+          >
             Sign Up
           </Text>
         </Text>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
   logo: {
-    width: 170,
-    height: 170,
-    position: 'absolute',
-    top: 12,
+    width: 130,
+    height: 130,
+    resizeMode: 'contain',
   },
-  square: {
-    width: 310,
-    height: 350,
-    backgroundColor: '#D1ACDA',
-    marginTop: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 15,
+  formContainer: {
+    width: '90%',
+    padding: 10,
+    backgroundColor: '#FFFFFF',
     borderRadius: 15,
-    top: -10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  inputContainer: {
-    width: '100%',
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#8146C1',
+    borderRadius: 10,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 10,
+  },
+  icon: {
+    marginRight: 10,
   },
   input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#8146C1',
+  },
+  forgotPasswordButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: '#8146C1',
+    fontSize: 14,
+  },
+  loginButton: {
+    backgroundColor: '#8146C1',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  orText: {
+    textAlign: 'center',
+    color: '#8146C1',
+    marginBottom: 20,
+  },
+  socialButtonsContainer: {
+    marginBottom: 20,
+  },
+  socialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 15,
     borderRadius: 10,
-    marginBottom: 25,
-    backgroundColor: '#fff',
-    fontSize: 18,
-    height: 50,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 10,
   },
-  button: {
-    borderWidth: 1,
-    padding: 15,
-    borderRadius: 90,
-    marginBottom: 35,
-    backgroundColor: '#fff',
-    fontSize: 15,
-    height: 50,
-    width: 130,
-  },
-  buttonText: {
+  socialButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
     color: '#8146C1',
-    fontSize: 15,
+  },
+  footerText: {
+    textAlign: 'center',
+    color: '#8146C1',
+    marginTop: 10,
+  },
+  signUpText: {
+    color: '#8146C1',
     fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#FEFEFF',
-  },
-  loading: {
-    marginTop: 20,
-  },
-  link: {
-    color: '#007bff',
-  },
-  loginText: {
-    marginTop: 20,
-    color: '#000000',
-    textAlign: 'center',
   },
 });
 

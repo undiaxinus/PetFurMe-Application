@@ -1,46 +1,46 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
-const LandingPage = () => {
-  const navigation = useNavigation();
-
+const LandingPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#A259B5', '#FFFFFF']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.background}
+      {/* Top Header */}
+      <View style={styles.header}>
+        <Text style={styles.greetingText}>Hello,</Text>
+        <Text style={styles.userName}>Esther</Text>
+      </View>
+
+      {/* Illustration */}
+      <View style={styles.illustrationContainer}>
+        <Image
+          source={require('./assets/images/landingimage.png')} // Replace with your illustration path
+          style={styles.illustration}
+        />
+      </View>
+
+      {/* Message Section */}
+      <View style={styles.messageContainer}>
+        <Text style={styles.title}>Uh Oh!</Text>
+        <Text style={styles.subtitle}>
+          Looks like you have no profiles set up at this moment, add your pet now
+        </Text>
+      </View>
+
+      {/* Swipe Button */}
+      <TouchableOpacity
+        style={styles.swipeButton}
+        onPress={() => navigation.navigate('ProfileSetup')}
       >
-        <Image 
-          source={require('./assets/images/lanpage.png')} 
-          style={styles.image}
-        />
-
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={() => navigation.navigate('HomePage')} // Replace 'HomePage' with your actual route name
+        <LinearGradient
+          colors={['#8146C1', '#B682EB']}
+          style={styles.gradientButton}
         >
-          <Text style={styles.buttonText}>Let's Explore</Text>
-        </TouchableOpacity>
-
-        <Image 
-          source={require('./assets/images/3.png')} 
-          style={styles.image1}
-        />
-
-        <Image 
-          source={require('./assets/images/4.png')} 
-          style={styles.image2}
-        />
-
-        <Image 
-          source={require('./assets/images/5.png')} 
-          style={styles.image3}
-        />
-      </LinearGradient>
+          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+          <Text style={styles.swipeButtonText} onPress={() => navigation.navigate('Profile2')}>Swipe to continue</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -48,59 +48,69 @@ const LandingPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  background: {
-    flex: 1,
+  header: {
     width: '100%',
-    height: '100%',
+    backgroundColor: '#8146C1',
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+    alignItems: 'flex-start',
+  },
+  greetingText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    top: 20,
+  },
+  userName: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+    top: 20,
+  },
+  illustrationContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 580,
-    height: 400,
-    resizeMode: 'contain',
-    position: 'absolute', // Fixes the image in place
-    top: 45,
+  illustration: {
+    width: 230,
+    height: 230,
+    position: 'absolute',
   },
-  image1: {
-    width: 280,
-    height: 200,
-    resizeMode: 'contain',
-    position: 'absolute', // Fixes the image in place
-    top: 490,
-    left: 15,
+  messageContainer: {
+    alignItems: 'center',
+    marginBottom: 100,
   },
-  image2: {
-    width: 220,
-    height: 300,
-    resizeMode: 'contain',
-    position: 'absolute', // Fixes the image in place
-    top: 450,
-    left: -60,
-  },
-  image3: {
-    width: 400,
-    height: 300,
-    resizeMode: 'contain',
-    position: 'absolute', // Fixes the image in place
-    top: 455,
-    left: 100,
-  },
-  button: {
-    marginBottom: -400,
-    backgroundColor: '#6666ff',
-    paddingVertical: 12,
-    paddingHorizontal: 57,
-    borderRadius: 3,
-    position: 'absolute', // Fixes the button in place
-    top: 450,
-    zIndex: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
+    color: '#212134',
+    marginBottom: 50,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#8E8E8E',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  swipeButton: {
+    width: '90%',
+    marginBottom: 30,
+  },
+  gradientButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    paddingVertical: 15,
+  },
+  swipeButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginLeft: 10,
   },
 });
 
