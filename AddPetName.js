@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const Profile3 = ({ navigation }) => {
+const AddPetProfile = ({ navigation }) => {
   const [petName, setPetName] = useState('');
 
   const handleContinue = () => {
@@ -25,13 +25,20 @@ const Profile3 = ({ navigation }) => {
       {/* Header */}
       <View style={styles.headerContainer}>
         <View style={styles.header}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="#FFFFFF"
+          <TouchableOpacity
             onPress={() => navigation.goBack()}
-          />
+            
+            style={styles.backButton}
+             // Adjust arrow position here
+          >
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color="#808080" // Changed to gray
+            />
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Add Pet Profile</Text>
+          <Text style={styles.name}>Name</Text>
           <Text style={styles.headerStep}>Step 3/5</Text>
         </View>
 
@@ -61,15 +68,16 @@ const Profile3 = ({ navigation }) => {
         placeholder="Your pet’s name"
         value={petName}
         onChangeText={setPetName}
+        placeholderTextColor="#8146C1"
       />
 
       {/* Continue Button */}
       <TouchableOpacity
-        style={[styles.continueButton, !petName.trim() && { backgroundColor: '#E0E0E0' }]}
+        style={[styles.continueButton, !petName.trim() && { backgroundColor: '#D52FFF' }]}
         onPress={handleContinue}
         disabled={!petName.trim()}
       >
-        <Text style={styles.continueButtonText}>Continue</Text>
+        <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetSize')}>Continue</Text>
       </TouchableOpacity>
     </View>
   );
@@ -79,50 +87,66 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   headerContainer: {
-    width: '100%',
+    width: 360,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 200,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#8146C1',
-    width: '400',
+    width: '100%',
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    top: -120,
+    paddingVertical: 14,
+    top: -25,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 10, // Adjust horizontal position
+    top: 60,
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: '#000000',
     fontSize: 18,
     fontWeight: 'bold',
+    top: 42,
+    left: 105,
   },
   headerStep: {
-    color: '#FFFFFF',
+    color: '#808080',
     fontSize: 14,
+    top: 65,
+    left: 15,
   },
   progressBarContainer: {
     backgroundColor: '#E0E0E0',
     height: 4,
     width: '90%',
     marginVertical: 10,
-    borderRadius: 2,
+    top: 30,
   },
   progressBar: {
     backgroundColor: '#8146C1',
     width: '60%', // Adjust width based on step progress
     height: '100%',
-    borderRadius: 2,
+  },
+  name: {
+    color: '#bfbfbf',
+    fontSize: 14,
+    fontWeight: 'bold',
+    top: 65,
+    left: -30,
   },
   imageContainer: {
     alignItems: 'center',
     marginVertical: 20,
+    top: -110,
   },
   imageCircle: {
     width: 150,
@@ -132,6 +156,7 @@ const styles = StyleSheet.create({
     borderColor: '#D1ACDA',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
   petImage: {
     width: 140,
@@ -150,14 +175,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333333',
     marginBottom: 10,
+    fontWeight: 'bold',
+    top: -80,
   },
   input: {
     width: '90%',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: '#bfbfbf',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    color: '#bfbfbf',
+    top: -70,
   },
   continueButton: {
     width: '90%',
@@ -165,6 +195,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
+    marginTop: 10,
   },
   continueButtonText: {
     color: '#FFFFFF',
@@ -173,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile3;
+export default AddPetProfile;
