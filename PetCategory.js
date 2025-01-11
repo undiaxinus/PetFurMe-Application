@@ -38,7 +38,7 @@ const PetCategory = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Pet Category</Text>
           <Text style={styles.breed}>Breed</Text>
-          <Text style={styles.headerStep}>Step 2/9</Text>
+          <Text style={styles.headerStep}>Step 2/5</Text>
         </View>
 
         {/* Progress Bar */}
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 10, 
   },
   continueButtonText: {
     color: '#FFFFFF',

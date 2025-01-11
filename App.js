@@ -12,6 +12,8 @@ import LandingPage from './LandingPage';
 import PetCategory from './PetCategory';
 import AddPetName from './AddPetName';
 import AddPetSize from './AddPetSize';
+import AddPetBirth from './AddPetBirth';
+import Burger from './Burger';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +35,8 @@ export default function App() {
         <Stack.Screen name='PetCategory' component={PetCategory} />
         <Stack.Screen name='AddPetName' component={AddPetName} />
         <Stack.Screen name='AddPetSize' component={AddPetSize} />
+        <Stack.Screen name='AddPetBirth' component={AddPetBirth} />
+        <Stack.Screen name='Burger' component={Burger} />
       </Stack.Navigator>
     </NavigationContainer>
   );
