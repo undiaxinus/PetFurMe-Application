@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Profile2 = ({ navigation }) => {
+const PetCategory = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const categories = [
@@ -79,7 +79,7 @@ const Profile2 = ({ navigation }) => {
           onPress={handleContinue}
           disabled={!selectedCategory}
         > 
-          <Text style={styles.continueButtonText} onPress={() => navigation.navigate('Profile3')}>Continue</Text>
+          <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetName')}>Continue</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('SkipScreen')}>
           <Text style={styles.skipText}>Skip for now</Text>
@@ -107,14 +107,13 @@ const styles = StyleSheet.create({
    backgroundColor: '#8146C1',
    width: '400',
    paddingHorizontal: 20,
-   paddingVertical: 15,
+   paddingVertical: 14,
    top: 35,
   },
   backButton: {
     position: 'absolute',
     left: 30,
     top: 60,
-    color: '#000000',
   },
   headerTitle: {
     color: '#0d0d0d',
@@ -178,6 +177,7 @@ const styles = StyleSheet.create({
   },
   selectedCategory: {
     borderColor: '#8146C1',
+    borderWidth: 3,
   },
   categoryImage: {
     width: 140, // Increased width
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile2;
+export default PetCategory;

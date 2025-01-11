@@ -9,8 +9,9 @@ import ProfileScreen from './ProfileScreen';
 import ChatScreen from './ChatScreen';
 import NotificationScreen from './NotificationScreen';
 import LandingPage from './LandingPage';
-import Profile2 from './Profile2';
-import Profile3 from './Profile3';
+import PetCategory from './PetCategory';
+import AddPetName from './AddPetName';
+import AddPetSize from './AddPetSize';
 
 const Stack = createStackNavigator();
 
@@ -27,10 +28,11 @@ export default function App() {
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
-        <Stack.Screen name="Landing" component={LandingPage} />
+        <Stack.Screen name="LandingPage" component={LandingPage} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
-        <Stack.Screen name='Profile2' component={Profile2} />
-        <Stack.Screen name='Profile3' component={Profile3} />
+        <Stack.Screen name='PetCategory' component={PetCategory} />
+        <Stack.Screen name='AddPetName' component={AddPetName} />
+        <Stack.Screen name='AddPetSize' component={AddPetSize} />
       </Stack.Navigator>
     </NavigationContainer>
   );

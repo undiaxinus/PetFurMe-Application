@@ -6,103 +6,135 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import LandingPage from './LandingPage';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
-    // Perform login validation if needed
-    navigation.navigate('LandingPage'); // Navigate to LandingPage after login
+    setLoading(true); // Start loading spinner
+
+    setTimeout(() => {
+      setLoading(false); // Stop loading spinner
+      navigation.navigate('LandingPage'); // Navigate to LandingPage after login
+    }, 2000); // Simulate a network request with a 2-second delay
   };
 
   return (
-    <LinearGradient
-      colors={['#FFFFFF', '#D1ACDA']}
-      style={styles.container}
-    >
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('./assets/images/vetcare.png')} // Replace with your logo path
-          style={styles.logo}
-        />
-      </View>
+    <View style={styles.container}>
+      {/* Spinner overlay */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+        </View>
+      )}
 
-      <View style={styles.formContainer}>
-        <View style={styles.inputWrapper}>
-          <Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            placeholderTextColor="#8146C1"
+      <LinearGradient
+        colors={['#FFFFFF', '#D1ACDA']}
+        style={styles.gradientBackground}
+      >
+        {/* Logo Section */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('./assets/images/vetcare.png')} // Replace with your logo path
+            style={styles.logo}
           />
         </View>
 
-        <View style={styles.inputWrapper}>
-          <Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor="#8146C1"
-          />
-        </View>
+        {/* Form Section */}
+        <View style={styles.formContainer}>
+          <View style={styles.inputWrapper}>
+            <Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              placeholderTextColor="#8146C1"
+            />
+          </View>
 
-        <TouchableOpacity style={styles.forgotPasswordButton}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+          <View style={styles.inputWrapper}>
+            <Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              placeholderTextColor="#8146C1"
+            />
+          </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={LandingPage}>
-          <Text style={styles.loginButtonText}  onPress={() => navigation.navigate('Landing')}>LOGIN</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.orText}>or connect with</Text>
-
-        <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
-            <Ionicons name="logo-google" size={20} color="#EA4335" />
-            <Text style={styles.socialButtonText}>Login With Google</Text>
+          <TouchableOpacity style={styles.forgotPasswordButton}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.socialButton, styles.facebookButton]}>
-            <Ionicons name="logo-facebook" size={20} color="#1877F2" />
-            <Text style={styles.socialButtonText}>Login With Facebook</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.socialButton, styles.appleButton]}>
-            <Ionicons name="logo-apple" size={20} color="#000000" />
-            <Text style={styles.socialButtonText}>Login With Apple</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.footerText}>
-          Don’t have an account?{' '}
-          <Text
-            style={styles.signUpText}
-            onPress={() => navigation.navigate('Register')}
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            disabled={loading} // Disable button while loading
           >
-            Sign Up
+            <Text style={styles.loginButtonText}>LOGIN</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.orText}>or connect with</Text>
+
+          {/* Social Login Section */}
+          <View style={styles.socialButtonsContainer}>
+            <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
+              <Ionicons name="logo-google" size={20} color="#EA4335" />
+              <Text style={styles.socialButtonText}>Login With Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.socialButton, styles.facebookButton]}>
+              <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+              <Text style={styles.socialButtonText}>Login With Facebook</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.socialButton, styles.appleButton]}>
+              <Ionicons name="logo-apple" size={20} color="#000000" />
+              <Text style={styles.socialButtonText}>Login With Apple</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.footerText}>
+            Don’t have an account?{' '}
+            <Text
+              style={styles.signUpText}
+              onPress={() => navigation.navigate('Register')}
+            >
+              Sign Up
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </LinearGradient>
+        </View>
+      </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
+  },
+  gradientBackground: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
   },
   logoContainer: {
     alignItems: 'center',

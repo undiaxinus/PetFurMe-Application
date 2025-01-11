@@ -1,11 +1,27 @@
-import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 
 const LandingPage = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleContinue = () => {
+    setLoading(true); // Start the spinner
+    setTimeout(() => {
+      setLoading(false); // Stop the spinner
+      navigation.navigate('PetCategory'); // Navigate to the next screen
+    }, 2000); // Simulate a delay for the loading animation
+  };
+
   return (
     <View style={styles.container}>
+      {/* Loading Overlay */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+        </View>
+      )}
+
       {/* Top Header */}
       <View style={styles.header}>
         <Text style={styles.greetingText}>Hello,</Text>
@@ -24,21 +40,14 @@ const LandingPage = ({ navigation }) => {
       <View style={styles.messageContainer}>
         <Text style={styles.title}>Uh Oh!</Text>
         <Text style={styles.subtitle}>
-          Looks like you have no profiles set up at this moment, add your pet now
+          Looks like you have no profiles set up at this moment, add your pet now!
         </Text>
       </View>
 
       {/* Swipe Button */}
-      <TouchableOpacity
-        style={styles.swipeButton}
-        onPress={() => navigation.navigate('ProfileSetup')}
-      >
-        <LinearGradient
-          colors={['#8146C1', '#B682EB']}
-          style={styles.gradientButton}
-        >
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-          <Text style={styles.swipeButtonText} onPress={() => navigation.navigate('Profile2')}>Swipe to continue</Text>
+      <TouchableOpacity style={styles.swipeButton} onPress={handleContinue} disabled={loading}>
+        <LinearGradient colors={['#8146C1', '#B682EB']} style={styles.gradientButton}>
+          <Text style={styles.swipeButtonText}>Click to continue</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>
@@ -51,6 +60,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
   },
   header: {
     width: '100%',
