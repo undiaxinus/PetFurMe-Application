@@ -78,7 +78,7 @@ const PetSizeSelection = ({ navigation }) => {
         onPress={handleContinue}
         disabled={!selectedSize}
       >
-        <Text style={styles.continueButtonText}>Continue</Text>
+        <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetBirth')}>Continue</Text>
       </TouchableOpacity>
     </View>
   );

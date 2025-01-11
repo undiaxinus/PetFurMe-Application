@@ -1,206 +1,269 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  FlatList,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomePage = ({ navigation }) => {
-  const [search, setSearch] = useState('');
+  const categories = [
+    { id: '1', label: 'Consultation', icon: 'ios-cart', backgroundColor: '#FF8ACF', screen: 'Consultation' },
+    { id: '2', label: 'Vaccination', icon: 'ios-cut', backgroundColor: '#8146C1', screen: 'Vaccination' },
+    { id: '3', label: 'Deworming', icon: 'ios-paw', backgroundColor: '#FF8ACF', screen: 'Deworming' },
+    { id: '4', label: 'Grooming', icon: 'ios-home', backgroundColor: '#8146C1', screen: 'Grooming' },
+  ];
+
+  const petProducts = [
+    { id: '1', name: 'Pedigree Adult', weight: '3kg', image: require('./assets/images/pedigree.png') },
+    { id: '2', name: 'Meow Mix', weight: '2kg', image: require('./assets/images/meowmix.png') },
+  ];
+
+  const vets = [
+    {
+      id: '1',
+      name: 'Dr. Iwan',
+      specialty: 'Bachelor of Veterinary Science',
+      rating: '5.0',
+      reviews: '100 reviews',
+      lastVisit: '25/07/2024',
+      distance: '2.5km',
+      image: require('./assets/images/doctor.png'),
+    },
+  ];
 
   return (
-    <LinearGradient colors={['#A259B5', '#FFFFFF']} style={styles.gradientContainer}>
-      <View style={styles.container}>
-        {/* Header Section */}
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Welcome to {'\n'} PetFurMe!</Text>
-          <TouchableOpacity 
-            style={styles.accountCircle} 
-            onPress={() => navigation.navigate('Profile')}>
-            <MaterialIcons name="account-circle" size={40} color="#333" />
-          </TouchableOpacity>
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+      <Image source={require('./assets/images/burger.png')} style={styles.burger} onPress={() => navigation.navigate(Burger)}/>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.greetingText}>Hey Angge,</Text>
+          <Text style={styles.questionText}>What are you looking for?</Text>
         </View>
-
-        {/* Search Bar */}
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search for pets or products..."
-          value={search}
-          onChangeText={setSearch}
-        />
-
-        {/* Featured Products Section */}
-        <View style={styles.featuredSection}>
-          <Text style={styles.sectionHeader}>Products Available Here</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Image
-              style={styles.featuredImage}
-              source={{ uri: 'https://example.com/product1.jpg' }} // Replace with actual image
-            />
-            <Image
-              style={styles.featuredImage}
-              source={{ uri: 'https://example.com/product2.jpg' }} // Replace with actual image
-            />
-            <Image
-              style={styles.featuredImage}
-              source={{ uri: 'https://example.com/product3.jpg' }} // Replace with actual image
-            />
-          </ScrollView>
-        </View>
-
-        {/* Animal Categories Section */}
-        <View style={styles.categoryContainer}>
-          <Text style={styles.sectionHeader}>Categories</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {['Dogs', 'Cats', 'Birds', 'Fish', 'Reptiles', 'Small Pets'].map((category) => (
-              <TouchableOpacity 
-                key={category} 
-                style={styles.categoryItem} 
-                onPress={() => console.log(`Go to ${category}`)}>
-                <Text style={styles.categoryText}>{category}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-
-        {/* Popular Pets Section */}
-        <View style={styles.popularPetsSection}>
-          <Text style={styles.sectionHeader}>Popular Pets</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {[{ name: 'Dog', uri: 'https://example.com/dog.jpg' }, { name: 'Cat', uri: 'https://example.com/cat.jpg' }, { name: 'Bird', uri: 'https://example.com/bird.jpg' }].map((pet) => (
-              <View key={pet.name} style={styles.petItem}>
-                <Image style={styles.petImage} source={{ uri: pet.uri }} />
-                <Text style={styles.petName}>{pet.name}</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-
-        {/* Bottom Navigation */}
-        <View style={styles.bottomNav}>
-          {[
-            { name: 'Home', icon: 'home', screen: 'Home' },
-            { name: 'Notifications', icon: 'notifications', screen: 'Notification' },
-            { name: 'Chat', icon: 'chat', screen: 'Chat' },
-            { name: 'Profile', icon: 'account-circle', screen: 'Profile' },
-          ].map((navItem) => (
-            <TouchableOpacity 
-              key={navItem.name} 
-              style={styles.navItem} 
-              onPress={() => navigation.navigate(navItem.screen)}>
-              <MaterialIcons name={navItem.icon} size={30} color="#333" />
-              <Text style={styles.navText}>{navItem.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Image source={require('./assets/images/profile.png')} style={styles.profileImage} />
       </View>
-    </LinearGradient>
+
+      {/* Categories */}
+      <View style={styles.categoriesContainer}>
+        {categories.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[styles.categoryItem, { backgroundColor: item.backgroundColor }]}
+            onPress={() => navigation.navigate(item.screen)}
+          >
+            <Ionicons name={item.icon} size={30} color="#FFFFFF" />
+            <Text style={styles.categoryLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Pet Products Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Pet Products</Text>
+        <FlatList
+          data={petProducts}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View style={styles.petFoodItem}>
+              <Image source={item.image} style={styles.petFoodImage} />
+              <View>
+                <Text style={styles.petFoodName}>{item.name}</Text>
+                <Text style={styles.petFoodWeight}>{item.weight}</Text>
+              </View>
+              <Ionicons name="ios-cart" size={24} color="#8146C1" style={styles.cartIcon} />
+            </View>
+          )}
+        />
+      </View>
+
+      {/* Vets Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Veterinary Doctor</Text>
+        {vets.map((vet) => (
+          <View key={vet.id} style={styles.vetCard}>
+            <Image source={vet.image} style={styles.vetImage} />
+            <View style={styles.vetDetails}>
+              <Text style={styles.vetName}>{vet.name}</Text>
+              <Text style={styles.vetSpecialty}>{vet.specialty}</Text>
+              <Text style={styles.vetRating}>
+                ⭐ {vet.rating} ({vet.reviews})
+              </Text>
+              <Text style={styles.vetDistance}>{vet.distance}</Text>
+              <Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('VetDetails', { vetId: vet.id })}>
+                <Text style={styles.bookAppointmentText}>Book Appointment →</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </View>
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <Ionicons name="ios-home" size={30} color="#FFFFFF" />
+        <Ionicons name="ios-star" size={30} color="#FFFFFF" />
+        <Ionicons name="ios-heart" size={30} color="#FFFFFF" />
+        <Ionicons name="ios-person" size={30} color="#FFFFFF" />
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  gradientContainer: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    padding: 20,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    fontSize: 24,
+    flexDirection: 'row',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+   backgroundColor: '#8146C1',
+   width: '400',
+   paddingHorizontal: 20,
+   paddingVertical: 14,
+   top: 35,
+  },
+  menuIcon: {
+    marginRight: 10,
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  greetingText: {
+    fontSize: 18,
+    color: '#9134A9',
     fontWeight: 'bold',
-    color: '#fff',
+    top: 65,
+    left: -40,
   },
-  accountCircle: {
-    marginRight: -20,
-    width: 60, 
-    height: 60, 
+  questionText: {
+    fontSize: 16,
+    color: '#000000',
+    top: 81,
+    fontWeight: 'bold',
   },
-
-  searchBar: {
+  profileImage: {
+    width: 40,
     height: 40,
     borderRadius: 20,
-    paddingLeft: 15,
-    backgroundColor: '#fff',
-    marginBottom: 20,
+    right: 30,
   },
-  featuredSection: {
-    marginBottom: 20,
-  },
-  sectionHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-  },
-  featuredImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  categoryContainer: {
-    marginBottom: 20,
+  categoriesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 115,
   },
   categoryItem: {
-    padding: 10,
-    backgroundColor: '#A259B5',
+    width: 70,
+    height: 70,
     borderRadius: 10,
-    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  categoryText: {
-    color: '#fff',
-    fontSize: 16,
+  categoryLabel: {
+    marginTop: 5,
+    fontSize: 12,
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
-  popularPetsSection: {
+  burger: {
+   left: -10,
+   width: 25, // Adjusted width
+  height: 25, // Adjusted height
+  resizeMode: 'contain',
+  },
+  sectionContainer: {
+    marginHorizontal: 20,
     marginBottom: 20,
   },
-  petItem: {
-    marginRight: 10,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#8146C1',
+    marginBottom: 10,
+  },
+  petFoodItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-  },
-  petImage: {
-    width: 120,
-    height: 120,
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    padding: 10,
+    marginRight: 10,
+    elevation: 2,
   },
-  petName: {
-    marginTop: 5,
+  petFoodImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  petFoodName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  petFoodWeight: {
+    fontSize: 12,
+    color: '#888888',
+  },
+  cartIcon: {
+    marginLeft: 'auto',
+  },
+  vetCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    elevation: 2,
+  },
+  vetImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+  vetDetails: {
+    flex: 1,
+  },
+  vetName: {
     fontSize: 16,
-    color: '#333',
+    fontWeight: 'bold',
+  },
+  vetSpecialty: {
+    fontSize: 12,
+    color: '#888888',
+  },
+  vetRating: {
+    fontSize: 12,
+    color: '#FFD700',
+  },
+  vetDistance: {
+    fontSize: 12,
+    color: '#888888',
+  },
+  lastVisit: {
+    fontSize: 12,
+    color: '#888888',
+    marginVertical: 5,
+  },
+  bookAppointmentText: {
+    fontSize: 14,
+    color: '#8146C1',
+    fontWeight: 'bold',
   },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 15, // Increase padding
-    backgroundColor: '#A259B5', // More vibrant background
-    borderTopLeftRadius: 5, // Add rounded corners
-    borderTopRightRadius: 5,
-    elevation: 5, // Shadow effect (Android)
-    shadowColor: '#000', // Shadow effect (iOS)
-    shadowOffset: { width: 5, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    top: -10,
-    width: 350,
-    left: -15,
-    height: 50,
+    paddingVertical: 10,
+    backgroundColor: '#8146C1',
   },
-  navItem: {
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 14, // Slightly larger font size
-    color: '#fff', // White color for better contrast
-    fontWeight: 'bold', // Make text bold
-    marginTop: 5, // Add spacing between icon and text
-  },
-
 });
 
 export default HomePage;
