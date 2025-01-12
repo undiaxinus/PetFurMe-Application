@@ -37,7 +37,7 @@ const HomePage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      
+      {/* Header */}
       <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
     <Image

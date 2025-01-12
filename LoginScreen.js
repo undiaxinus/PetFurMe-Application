@@ -81,7 +81,7 @@ const LoginScreen = ({ navigation }) => {
             onPress={handleLogin}
             disabled={loading} // Disable button while loading
           >
-            <Text style={styles.loginButtonText}>LOGIN</Text>
+            <Text style={styles.loginButtonText} onPress={() => navigation.navigate('LandingPage')}>LOGIN</Text>
           </TouchableOpacity>
 
           <Text style={styles.orText}>or connect with</Text>
