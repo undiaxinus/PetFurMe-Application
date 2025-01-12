@@ -11,15 +11,15 @@ import { Ionicons } from '@expo/vector-icons';
 
 const HomePage = ({ navigation }) => {
   const categories = [
-    { id: '1', label: 'Consultation', icon: 'ios-cart', backgroundColor: '#FF8ACF', screen: 'Consultation' },
-    { id: '2', label: 'Vaccination', icon: 'ios-cut', backgroundColor: '#8146C1', screen: 'Vaccination' },
-    { id: '3', label: 'Deworming', icon: 'ios-paw', backgroundColor: '#FF8ACF', screen: 'Deworming' },
-    { id: '4', label: 'Grooming', icon: 'ios-home', backgroundColor: '#8146C1', screen: 'Grooming' },
+    { id: '1', label: 'Consultation', backgroundColor: '#FF8ACF', screen: 'Consultation', image: require('./assets/images/consultation.png') },
+    { id: '2', label: 'Vaccination', backgroundColor: '#8146C1', screen: 'Vaccination', image: require('./assets/images/vaccination.png') },
+    { id: '3', label: 'Deworming', backgroundColor: '#FF8ACF', screen: 'Deworming', image: require('./assets/images/deworming.png') },
+    { id: '4', label: 'Grooming', backgroundColor: '#8146C1', screen: 'Grooming', image: require('./assets/images/grooming.png') },
   ];
 
   const petProducts = [
-    { id: '1', name: 'Pedigree Adult', weight: '3kg', image: require('./assets/images/pedigree.png') },
-    { id: '2', name: 'Meow Mix', weight: '2kg', image: require('./assets/images/meowmix.png') },
+    { id: '1', name: 'Pedigree Adult', weight: '3kg', image: require('./assets/images/pedigree.png'), type: 'Dog' },
+    { id: '2', name: 'Meow Mix', weight: '726g', image: require('./assets/images/meowmix.png'), type: 'Cat' },
   ];
 
   const vets = [
@@ -39,12 +39,16 @@ const HomePage = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-      <Image source={require('./assets/images/burger.png')} style={styles.burger} onPress={() => navigation.navigate(Burger)}/>
+        <Image
+          source={require('./assets/images/burger.png')}
+          style={styles.burger}
+          onPress={() => navigation.openDrawer()} // Opens the drawer
+        />
         <View style={styles.headerTextContainer}>
           <Text style={styles.greetingText}>Hey Angge,</Text>
           <Text style={styles.questionText}>What are you looking for?</Text>
+          
         </View>
-        <Image source={require('./assets/images/profile.png')} style={styles.profileImage} />
       </View>
 
       {/* Categories */}
@@ -55,31 +59,39 @@ const HomePage = ({ navigation }) => {
             style={[styles.categoryItem, { backgroundColor: item.backgroundColor }]}
             onPress={() => navigation.navigate(item.screen)}
           >
-            <Ionicons name={item.icon} size={30} color="#FFFFFF" />
+            <Image source={item.image} style={styles.categoryImage} />
             <Text style={styles.categoryLabel}>{item.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
       {/* Pet Products Section */}
-      <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Pet Products</Text>
-        <FlatList
-          data={petProducts}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View style={styles.petFoodItem}>
-              <Image source={item.image} style={styles.petFoodImage} />
-              <View>
-                <Text style={styles.petFoodName}>{item.name}</Text>
-                <Text style={styles.petFoodWeight}>{item.weight}</Text>
+      <View style={styles.petProductsBox}>
+        <View style={styles.sectionHeader}>
+        <Image source={require('./assets/images/petpro.png')} style={styles.vetcare}/>
+          <Text style={styles.sectionTitle}>Pet Products</Text>
+          <Text style={styles.viewmore} onPress={() => navigation.navigate('ViewMorePro')}>View More</Text>
+        </View>
+        
+        {petProducts.map((item) => (
+          <View key={item.id} style={styles.petProductCard}>
+            <Image source={item.image} style={styles.productImage} />
+            <View style={styles.productDetails}>
+              <Text style={styles.productName}>{item.name}</Text>
+              <Text style={styles.productWeight}>{item.weight}</Text>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{item.type}</Text>
               </View>
-              <Ionicons name="ios-cart" size={24} color="#8146C1" style={styles.cartIcon} />
             </View>
-          )}
-        />
+            <TouchableOpacity style={styles.cartButton}>
+              <Image
+                  source={require('./assets/images/basket.png')}
+                  style={styles.vetcare}
+              />
+            </TouchableOpacity>
+            
+          </View>
+        ))}
       </View>
 
       {/* Vets Section */}
@@ -106,10 +118,10 @@ const HomePage = ({ navigation }) => {
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
-        <Ionicons name="ios-home" size={30} color="#FFFFFF" />
-        <Ionicons name="ios-star" size={30} color="#FFFFFF" />
-        <Ionicons name="ios-heart" size={30} color="#FFFFFF" />
-        <Ionicons name="ios-person" size={30} color="#FFFFFF" />
+        <Image source={require('./assets/images/homee.png')} style={styles.vetcare}/>
+        <Image source={require('./assets/images/cart.png')} style={styles.vetcare}/>
+        <Image source={require('./assets/images/notif.png')} style={styles.vetcare}/>
+        <Image source={require('./assets/images/circle.png')} style={styles.vetcare}/>
       </View>
     </View>
   );
@@ -122,97 +134,130 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   backgroundColor: '#8146C1',
-   width: '400',
-   paddingHorizontal: 20,
-   paddingVertical: 14,
-   top: 35,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#8146C1',
+    width: '100%',
+    paddingHorizontal: 20,
+    top: 38,
   },
-  menuIcon: {
-    marginRight: 10,
+  burger: {
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
   },
   headerTextContainer: {
     flex: 1,
+    marginLeft: 10,
   },
   greetingText: {
     fontSize: 18,
     color: '#9134A9',
     fontWeight: 'bold',
-    top: 65,
+    top: 50,
     left: -40,
   },
   questionText: {
-    fontSize: 16,
-    color: '#000000',
-    top: 81,
+    fontSize: 14,
+    color: '#141415',
     fontWeight: 'bold',
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    right: 30,
+    top: 50,
+    left: 0,
   },
   categoriesContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 115,
+    justifyContent: 'space-between',
+    marginVertical: 65,
+    paddingHorizontal: 10,
+    top: 40,
   },
   categoryItem: {
-    width: 70,
-    height: 70,
-    borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 10,
+    width: 80, // Increased size
+    height: 90, // Increased size
+  },
+  categoryImage: {
+    width: 60, // Adjusted size
+    height: 60, // Adjusted size
+    marginBottom: 9,
   },
   categoryLabel: {
-    marginTop: 5,
-    fontSize: 12,
+    fontSize: 12, // Adjusted font size
     color: '#FFFFFF',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
-  burger: {
-   left: -10,
-   width: 25, // Adjusted width
-  height: 25, // Adjusted height
-  resizeMode: 'contain',
-  },
-  sectionContainer: {
+  petProductsBox: {
+    backgroundColor: '#F7F7F7',
+    borderRadius: 10,
+    padding: 15,
     marginHorizontal: 20,
     marginBottom: 20,
+    marginTop: -10,
+    elevation: 3,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#8146C1',
-    marginBottom: 10,
+    marginLeft: 5,
   },
-  petFoodItem: {
+  petProductCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 10,
-    marginRight: 10,
+    marginBottom: 10,
     elevation: 2,
   },
-  petFoodImage: {
-    width: 50,
-    height: 50,
+  productImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
     marginRight: 10,
   },
-  petFoodName: {
+  productDetails: {
+    flex: 1,
+  },
+  viewmore: {
+    left: 95,
+    top: 210,
+    color: '#808080',
+  },
+  productName: {
     fontSize: 14,
     fontWeight: 'bold',
   },
-  petFoodWeight: {
+  productWeight: {
     fontSize: 12,
     color: '#888888',
+    marginBottom: 5,
   },
-  cartIcon: {
-    marginLeft: 'auto',
+  badge: {
+    backgroundColor: '#FFD700',
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  badgeText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+  },
+  cartButton: {
+    padding: -10,
+    borderRadius: 20,
+  },
+  sectionContainer: {
+    marginHorizontal: 20,
+    marginBottom: 6,
   },
   vetCard: {
     flexDirection: 'row',
@@ -261,7 +306,7 @@ const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 10,
+    paddingVertical: 15,
     backgroundColor: '#8146C1',
   },
 });

@@ -13,7 +13,10 @@ import PetCategory from './PetCategory';
 import AddPetName from './AddPetName';
 import AddPetSize from './AddPetSize';
 import AddPetBirth from './AddPetBirth';
-import Burger from './Burger';
+import CustomDrawerContent from './CustomDrawerContent';
+import ViewMorePro from './ViewMorePro';
+import AddtoCart from './AddtoCart';
+import AddedtoCart from './AddedtoCart';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +39,10 @@ export default function App() {
         <Stack.Screen name='AddPetName' component={AddPetName} />
         <Stack.Screen name='AddPetSize' component={AddPetSize} />
         <Stack.Screen name='AddPetBirth' component={AddPetBirth} />
-        <Stack.Screen name='Burger' component={Burger} />
+        <Stack.Screen name='CustomDrawerContent' component={CustomDrawerContent} />
+        <Stack.Screen name='ViewMorePro' component={ViewMorePro} />
+        <Stack.Screen name='AddtoCart' component={AddtoCart} />
+        <Stack.Screen name='AddedtoCart' component={AddedtoCart} />
       </Stack.Navigator>
     </NavigationContainer>
   );
