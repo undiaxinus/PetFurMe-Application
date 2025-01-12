@@ -47,7 +47,7 @@ const LandingPage = ({ navigation }) => {
       {/* Swipe Button */}
       <TouchableOpacity style={styles.swipeButton} onPress={handleContinue} disabled={loading}>
         <LinearGradient colors={['#8146C1', '#B682EB']} style={styles.gradientButton}>
-          <Text style={styles.swipeButtonText}>Click to continue</Text>
+          <Text style={styles.swipeButtonText}onPress={() => navigation.navigate('DrawerNavigator', { screen: 'PetCategory' })}>Click to continue</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>
