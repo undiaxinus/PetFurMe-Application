@@ -28,16 +28,55 @@ const CustomDrawerContent = ({ navigation }) => {
     <View style={styles.container}>
       {/* Profile Section */}
       <View style={styles.profileSection}>
+
+        <Image
+          source={require('./assets/images/ekis.png')}
+          style={styles.ekis}
+        />
+
         <Image
           source={require('./assets/images/profile.png')}
           style={styles.profileImage}
         />
         <Text style={styles.profileName}>Angelica V.</Text>
         <Text style={styles.profileRole}>User</Text>
+        <Text style={styles.urpets}>Your Pets</Text>
       </View>
+
+      <View style={styles.yourpets}>
+      <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+      <Image
+          source={require('./assets/images/rigor.png')}
+          style={styles.profileImage}
+      />
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+      <Image
+          source={require('./assets/images/lena.png')}
+          style={styles.profileImage}
+      />
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+      <Image
+          source={require('./assets/images/addnew.png')}
+          style={styles.profileImage}
+      />
+      </TouchableOpacity>
+      </View>
+
+
+      <View style={styles.petname}>
+      <Text style={styles.rigor}>Rigor</Text>
+      <Text style={styles.lena}>Lena</Text>
+      <Text style={styles.more}>Add New</Text>
+      </View>
+
 
       {/* Navigation Links */}
       <View style={styles.navSection}>
+    
         <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
           <View style={styles.navItem}>
             <Ionicons name="home" size={24} color="#808080" />
@@ -45,25 +84,10 @@ const CustomDrawerContent = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('PetProfile')}>
-          <View style={styles.navItem}>
-            <MaterialIcons name="pets" size={24} color="#808080" />
-            <Text style={styles.navText}>Pet Profiles</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('HealthRecords')}>
-          <View style={styles.navItem}>
-            <MaterialIcons name="folder" size={24} color="#808080" />
-            <Text style={styles.navText}>Health Records</Text>
-          </View>
-        </TouchableOpacity>
-
-        
         <TouchableOpacity onPress={() => navigation.navigate('Reminders')}>
           <View style={styles.navItem}>
             <MaterialIcons name="alarm" size={24} color="#808080" />
-            <Text style={styles.navText}>Reminders</Text>
+            <Text style={styles.navText}>Reminder</Text>
           </View>
         </TouchableOpacity>
 
@@ -181,6 +205,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '80%',
+  },
+  ekis: {
+  left: 250,
+  },
+  yourpets: {
+    flexDirection: 'row',
+    top: -10,
+    left: -20,
+    justifyContent: 'space-between',
+  },
+  urpets: {
+    top: 30,
+    fontSize: 18,
+    color: '#808080',
+  },
+  petname: {
+    flexDirection: 'row',
+    top: -10,
+    left: -10,
+    justifyContent: 'space-between',
+    fontWeight: 'bold',
   },
   modalText: {
     fontSize: 18,

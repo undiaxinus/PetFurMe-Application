@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#333333',
+    color: '#595959',
     marginBottom: 10,
     fontWeight: 'bold',
     top: -80,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     backgroundColor: '#FFFFFF',
-    color: '#bfbfbf',
+    color: '#000000',
     top: -70,
   },
   continueButton: {

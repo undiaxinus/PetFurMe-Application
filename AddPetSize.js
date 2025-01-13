@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const PetSizeSelection = ({ navigation }) => {
   const [selectedSize, setSelectedSize] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const sizes = [
     { id: 'small', label: 'Small', range: 'under 14kg', icon: 'paw' },
@@ -19,7 +21,11 @@ const PetSizeSelection = ({ navigation }) => {
 
   const handleContinue = () => {
     if (selectedSize) {
-      navigation.navigate('NextStep'); // Replace 'NextStep' with your next screen
+      setLoading(true); // Show loading spinner
+      setTimeout(() => {
+        setLoading(false); // Hide loading spinner
+        navigation.navigate('AddPetBirth'); // Navigate to the next screen
+      }, 2000); // Simulate a delay
     } else {
       alert('Please select a size.');
     }
@@ -27,6 +33,13 @@ const PetSizeSelection = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Loading Overlay */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#8146C1" />
+        </View>
+      )}
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -78,7 +91,7 @@ const PetSizeSelection = ({ navigation }) => {
         onPress={handleContinue}
         disabled={!selectedSize}
       >
-        <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetBirth')}>Continue</Text>
+        <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
     </View>
   );
@@ -91,6 +104,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -98,9 +118,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#8146C1',
     width: 400,
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 10,
     position: 'relative',
-    top: 38,
+    top: 35,
   },
   backButton: {
     position: 'absolute',
@@ -135,13 +155,14 @@ const styles = StyleSheet.create({
     height: 4,
     marginTop: 10,
     borderRadius: 2,
+    top: 85,
   },
   progressBar: {
     width: '80%', // Adjust based on step
     height: '100%',
     backgroundColor: '#8146C1',
     borderRadius: 2,
-    top: 85,
+    top: 0,
   },
   imageContainer: {
     alignItems: 'center',
@@ -172,6 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    top: 10,
   },
   sizeBox: {
     width: '30%',
@@ -203,6 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     marginTop: 50,
+    top: 30,
   },
   continueButtonText: {
     color: '#FFFFFF',

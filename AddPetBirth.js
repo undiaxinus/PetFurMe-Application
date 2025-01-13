@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -13,6 +14,7 @@ const PetBirthdaySelection = ({ navigation }) => {
   const [selectedYear, setSelectedYear] = useState('2025');
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0); // January index
   const [selectedDay, setSelectedDay] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading spinner
 
   const months = [
     'January',
@@ -41,6 +43,19 @@ const PetBirthdaySelection = ({ navigation }) => {
   );
 
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const handleDone = () => {
+    if (!selectedDay) {
+      alert('Please select a day.');
+      return;
+    }
+
+    setLoading(true); // Show spinner
+    setTimeout(() => {
+      setLoading(false); // Hide spinner
+      navigation.navigate('HomePage'); // Navigate to the next screen
+    }, 2000); // Simulated delay for loading
+  };
 
   const renderMonth = ({ item }) => (
     <View style={styles.monthContainer}>
@@ -80,6 +95,13 @@ const PetBirthdaySelection = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Loading Spinner */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#8146C1" />
+        </View>
+      )}
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -128,8 +150,8 @@ const PetBirthdaySelection = ({ navigation }) => {
       />
 
       {/* Done Button */}
-      <TouchableOpacity style={styles.doneButton}>
-        <Text style={styles.doneButtonText} onPress={() => navigation.navigate('HomePage')}>Done</Text>
+      <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+        <Text style={styles.doneButtonText}>Done</Text>
       </TouchableOpacity>
     </View>
   );
@@ -147,8 +169,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8146C1',
     width: '100%',
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    top: 38,
+    paddingVertical: 10,
+    top: 35,
   },
   backButton: {
     position: 'absolute',
@@ -211,13 +233,14 @@ const styles = StyleSheet.create({
   },
   monthContainer: {
     width: 300,
+    height: 360,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: '#EDE7F6',
     marginHorizontal: 30,
-    marginBottom: 0,
-    paddingVertical: 10,
+    paddingVertical: 20,
+    top: -20,
   },
   weekdaysContainer: {
     flexDirection: 'row',
@@ -271,13 +294,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     alignSelf: 'center',
-    position: 'absolute', 
-    top: 700, 
+    position: 'absolute',
+    top: 680,
   },
   doneButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
   },
 });
 
