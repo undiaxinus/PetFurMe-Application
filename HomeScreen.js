@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation }) => {
       useNativeDriver: true,
     }).start(() => {
       rotation.setValue(0); // Reset rotation value
-      navigation.navigate('Register'); // Navigate to the Register screen after animation
+      navigation.navigate('LoginScreen'); // Navigate to the Register screen after animation
     });
   };
 

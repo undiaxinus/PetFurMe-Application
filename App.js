@@ -20,6 +20,7 @@ import CustomDrawerContent from './CustomDrawerContent';
 import ViewMorePro from './ViewMorePro';
 import AddtoCart from './AddtoCart';
 import AddedtoCart from './AddedtoCart';
+import PetProfile from './PetProfile';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -27,22 +28,22 @@ const Drawer = createDrawerNavigator();
 // Drawer Navigator
 function DrawerNavigator() {
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{ headerShown: false }} // Hide headers for all drawer screens
+      screenOptions={{ headerShown: false }} // Hide headers for drawer screens
     >
-      <Stack.Screen name="HomePage" component={HomePage} /> 
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="Notification" component={NotificationScreen} />
-      <Stack.Screen name="PetCategory" component={PetCategory} />
-      <Stack.Screen name="AddPetName" component={AddPetName} />
-      <Stack.Screen name="AddPetSize" component={AddPetSize} />
-      <Stack.Screen name="AddPetBirth" component={AddPetBirth} />
-      <Stack.Screen name="ViewMorePro" component={ViewMorePro} />
-      <Stack.Screen name="AddtoCart" component={AddtoCart} />
-      <Stack.Screen name="AddedtoCart" component={AddedtoCart} />
-    </Stack.Navigator>
+      <Drawer.Screen name="HomePage" component={HomePage} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Chat" component={ChatScreen} />
+      <Drawer.Screen name="Notification" component={NotificationScreen} />
+      <Drawer.Screen name="PetCategory" component={PetCategory} />
+      <Drawer.Screen name="AddPetName" component={AddPetName} />
+      <Drawer.Screen name="AddPetSize" component={AddPetSize} />
+      <Drawer.Screen name="AddPetBirth" component={AddPetBirth} />
+      <Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
+      <Drawer.Screen name="AddtoCart" component={AddtoCart} />
+      <Drawer.Screen name="AddedtoCart" component={AddedtoCart} />
+    </Drawer.Navigator>
   );
 }
 
@@ -50,19 +51,20 @@ function DrawerNavigator() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator
+      <Stack.Navigator
         initialRouteName="HomeScreen"
         screenOptions={{ headerShown: false }} // Hide headers globally
       >
-        {/* Auth and landing screens */}
+        {/* Authentication and Landing Screens */}
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegistrationScreen} />
         <Stack.Screen name="LandingPage" component={LandingPage} />
+        <Stack.Screen name="PetProfile" component={PetProfile} />
 
         {/* Drawer Navigator */}
         <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
-      </Drawer.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

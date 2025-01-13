@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const PetCategory = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for spinner
 
   const categories = [
     { id: '1', label: 'DOG', image: require('./assets/images/dogg.png') },
@@ -22,7 +15,11 @@ const PetCategory = ({ navigation }) => {
 
   const handleContinue = () => {
     if (selectedCategory) {
-      navigation.navigate('NextScreen'); // Replace 'NextScreen' with your target screen
+      setLoading(true); // Show the spinner
+      setTimeout(() => {
+        setLoading(false); // Hide the spinner
+        navigation.navigate('AddPetName'); // Navigate to the next screen
+      }, 2000); // Simulate a delay for the spinner
     } else {
       alert('Please select a pet category.');
     }
@@ -30,20 +27,21 @@ const PetCategory = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Loading Overlay */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#8146C1" />
+        </View>
+      )}
+
       {/* Header */}
       <View style={styles.headerContainer}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('LandingPage')}>
             <Ionicons name="arrow-back" size={24} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Pet Category</Text>
-          <Text style={styles.breed}>Breed</Text>
           <Text style={styles.headerStep}>Step 2/5</Text>
-        </View>
-
-        {/* Progress Bar */}
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar} />
         </View>
       </View>
 
@@ -77,9 +75,9 @@ const PetCategory = ({ navigation }) => {
             !selectedCategory && { backgroundColor: '#D428FF' },
           ]}
           onPress={handleContinue}
-          disabled={!selectedCategory}
-        > 
-          <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetName')}>Continue</Text>
+          disabled={!selectedCategory || loading}
+        >
+          <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('SkipScreen')}>
           <Text style={styles.skipText}>Skip for now</Text>
@@ -96,19 +94,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
   headerContainer: {
     width: '100%',
     alignItems: 'center',
   },
   header: {
-   flexDirection: 'row',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   backgroundColor: '#8146C1',
-   width: '400',
-   paddingHorizontal: 20,
-   paddingVertical: 14,
-   top: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#8146C1',
+    width: '400',
+    paddingHorizontal: 20,
+    paddingVertical: 10 ,
+    top: 35,
   },
   backButton: {
     position: 'absolute',
@@ -122,13 +127,6 @@ const styles = StyleSheet.create({
     top: 40,
     left: 130,
   },
-  breed: {
-   color: '#b3b3b3',
-   fontSize: 15,
-   fontWeight: 'bold',
-   top: 60,
-   left: -20,
- },
   headerStep: {
     color: '#808080',
     fontSize: 14,
@@ -150,30 +148,31 @@ const styles = StyleSheet.create({
     top: 65,
   },
   categoryBackground: {
-   flex: 1,
-   backgroundColor: '#D1ACDA',
-   borderRadius: 5,
-   marginHorizontal: 2,
-   alignItems: 'center',
-   justifyContent: 'center',
-   marginVertical: 70,
+    flex: 1,
+    backgroundColor: '#D1ACDA',
+    borderRadius: 5,
+    marginHorizontal: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 70,
+    top: 20,
   },
   categoryList: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   categoryItem: {
-   width: 150,
-   height: 150,
-   backgroundColor: '#FFFFFF',
-   borderRadius: 10,
-   margin: 10,
-   alignItems: 'center',
-   justifyContent: 'center',
-   borderWidth: 2,
-   borderColor: '#FFFFFF',
-   elevation: 5,
-   marginVertical: 30,
+    width: 150,
+    height: 150,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    elevation: 5,
+    marginVertical: 30,
   },
   selectedCategory: {
     borderColor: '#8146C1',
@@ -185,16 +184,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   categoryLabel: {
-   marginTop: 10,
-   fontSize: 16,
-   color: '#FFFFFF',
-   fontWeight: 'bold',
-   textAlign: 'center',
-   backgroundColor: '#FF3DE0',
-   borderRadius: 10,
-   paddingHorizontal: 10,
-   paddingVertical: 5,
-   overflow: 'hidden',
+    marginTop: 10,
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: '#FF3DE0',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    overflow: 'hidden',
   },
   bottomContainer: {
     width: '100%',
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   continueButtonText: {
     color: '#FFFFFF',

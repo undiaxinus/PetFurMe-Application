@@ -1,8 +1,29 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, ActivityIndicator } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const CustomDrawerContent = ({ navigation }) => {
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = () => {
+    setIsLogoutModalVisible(true);
+  };
+
+  const confirmLogout = () => {
+    setIsLoggingOut(true); // Show the spinner
+    setTimeout(() => {
+      setIsLoggingOut(false); // Hide the spinner
+      setIsLogoutModalVisible(false);
+      navigation.navigate('HomeScreen'); // Navigate after logout
+    }, 2000); // Simulate a delay for the logout process
+  };
+
+  const cancelLogout = () => {
+    setIsLogoutModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Profile Section */}
@@ -17,56 +38,84 @@ const CustomDrawerContent = ({ navigation }) => {
 
       {/* Navigation Links */}
       <View style={styles.navSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
           <View style={styles.navItem}>
-            <Ionicons name="ios-home" size={24} color="#8146C1" />
+            <Ionicons name="home" size={24} color="#808080" />
             <Text style={styles.navText}>Home</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('PetProfiles')}>
+        <TouchableOpacity onPress={() => navigation.navigate('PetProfile')}>
           <View style={styles.navItem}>
-            <Ionicons name="ios-paw" size={24} color="#8146C1" />
+            <MaterialIcons name="pets" size={24} color="#808080" />
             <Text style={styles.navText}>Pet Profiles</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('Appointment')}>
-          <View style={styles.navItem}>
-            <Ionicons name="ios-calendar" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Appointment</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('HealthRecords')}>
           <View style={styles.navItem}>
-            <Ionicons name="ios-folder" size={24} color="#8146C1" />
+            <MaterialIcons name="folder" size={24} color="#808080" />
             <Text style={styles.navText}>Health Records</Text>
           </View>
         </TouchableOpacity>
 
+        
         <TouchableOpacity onPress={() => navigation.navigate('Reminders')}>
           <View style={styles.navItem}>
-            <Ionicons name="ios-alarm" size={24} color="#8146C1" />
+            <MaterialIcons name="alarm" size={24} color="#808080" />
             <Text style={styles.navText}>Reminders</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Help')}>
           <View style={styles.navItem}>
-            <Ionicons name="ios-help-circle" size={24} color="#8146C1" />
+            <MaterialIcons name="help-outline" size={24} color="#808080" />
             <Text style={styles.navText}>Help</Text>
           </View>
         </TouchableOpacity>
       </View>
 
       {/* Logout Section */}
-      <TouchableOpacity onPress={() => alert('Logged out')}>
+      <TouchableOpacity onPress={handleLogout}>
         <View style={styles.logoutSection}>
-          <Ionicons name="ios-exit" size={24} color="#8146C1" />
+          <MaterialIcons name="logout" size={24} color="#808080" />
           <Text style={styles.navText}>Logout</Text>
         </View>
       </TouchableOpacity>
+
+      {/* Logout Confirmation Modal */}
+      <Modal
+        transparent={true}
+        visible={isLogoutModalVisible}
+        animationType="fade"
+        onRequestClose={cancelLogout}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {isLoggingOut ? (
+              <ActivityIndicator size="large" color="#8146C1" />
+            ) : (
+              <>
+                <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={cancelLogout}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.confirmButton}
+                    onPress={confirmLogout}
+                  >
+                    <Text style={styles.confirmButtonText}>Logout</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -74,12 +123,14 @@ const CustomDrawerContent = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 40,
     backgroundColor: '#FFFFFF',
   },
   profileSection: {
-    alignItems: 'center',
-    marginBottom: 30,
+    alignItems: 'flex-start',
+    marginBottom: 50,
+    marginTop: 20,
+    left: -20,
   },
   profileImage: {
     width: 70,
@@ -90,7 +141,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#8146C1',
+    color: '#000000',
   },
   profileRole: {
     fontSize: 14,
@@ -103,17 +154,66 @@ const styles = StyleSheet.create({
   navItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
+    left: -20,
   },
   navText: {
     marginLeft: 15,
     fontSize: 16,
-    color: '#8146C1',
+    color: '#000000',
   },
   logoutSection: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 30,
+    left: -15,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  cancelButton: {
+    backgroundColor: '#CCCCCC',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  cancelButtonText: {
+    color: '#000000',
+    fontSize: 16,
+  },
+  confirmButton: {
+    backgroundColor: '#FF0000',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  confirmButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
   },
 });
 
