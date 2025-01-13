@@ -102,20 +102,6 @@ const ProductPage = ({ navigation }) => {
       weight: '3kg',
       image: require('./assets/images/meowmix.png'),
     },
-    {
-      id: '13',
-      name: 'Eukanuba Adult Dog Food',
-      price: '3100.00',
-      weight: '4kg',
-      image: require('./assets/images/meowmix.png'),
-    },
-    {
-      id: '14',
-      name: 'Wellness Core',
-      price: '5800.00',
-      weight: '2.5kg',
-      image: require('./assets/images/meowmix.png'),
-    },
   ]);
 
   const renderProduct = ({ item }) => (
@@ -130,7 +116,12 @@ const ProductPage = ({ navigation }) => {
       {item.weight && <Text style={styles.productWeight}>{item.weight}</Text>}
       <View style={styles.actionContainer}>
         <TouchableOpacity style={styles.addToCartButton}>
-          <Text style={styles.addToCartText} onPress={() => navigation.navigate('AddtoCart')}>Add to cart</Text>
+          <Text
+            style={styles.addToCartText}
+            onPress={() => navigation.navigate('AddtoCart')}
+          >
+            Add to cart
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -140,16 +131,21 @@ const ProductPage = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Ionicons name="menu" size={30} color="#FFFFFF" />
         </TouchableOpacity>
+
         <TextInput
           style={styles.searchBar}
           placeholder="Search"
           placeholderTextColor="#888888"
         />
-        <Image source={require('./assets/images/search.png')} style={styles.search} />
+        <TouchableOpacity>
+          <Image
+            source={require('./assets/images/search.png')}
+            style={styles.search}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Product List */}
@@ -163,10 +159,18 @@ const ProductPage = ({ navigation }) => {
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
-        <Image source={require('./assets/images/homee.png')} style={styles.navIcon} />
-        <Image source={require('./assets/images/cart.png')} style={styles.navIcon} />
-        <Image source={require('./assets/images/notif.png')} style={styles.navIcon} />
-        <Image source={require('./assets/images/circle.png')} style={styles.navIcon} />
+        <TouchableOpacity>
+          <Image source={require('./assets/images/homee.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require('./assets/images/cart.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require('./assets/images/notif.png')} style={styles.navIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require('./assets/images/circle.png')} style={styles.navIcon} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8146C1',
     width: '100%',
     paddingHorizontal: 20,
-    top: 38,
+    top: 30,
   },
   searchBar: {
     flex: 1,
@@ -206,7 +210,7 @@ const styles = StyleSheet.create({
   },
   productList: {
     padding: 10,
-    top: 20,
+    top: 80,
   },
   productCard: {
     flex: 1,
@@ -216,7 +220,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 30,
-    top: 90,
+    marginHorizontal: 5,
+    padding: 10,
   },
   tagContainer: {
     flexDirection: 'row',
@@ -252,11 +257,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   productPrice: {
-    fontSize: 12,
-    color: '#888',
-    marginBottom: 5,
-    textAlign: 'center',
+    fontSize: 16,
     color: '#5CB15A',
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   productWeight: {
     fontSize: 10,

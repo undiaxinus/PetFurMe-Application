@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
 const SignupScreen = ({ navigation }) => {
@@ -19,10 +18,7 @@ const SignupScreen = ({ navigation }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <LinearGradient
-      colors={['#FFFFFF', '#D1ACDA']}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
           source={require('./assets/images/vetcare.png')} // Replace with your logo path
@@ -93,20 +89,22 @@ const SignupScreen = ({ navigation }) => {
         </View>
 
         <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupButtonText} onPress={() => navigation.navigate('Landing')}>Sign Up</Text>
+          <Text style={styles.signupButtonText} onPress={() => navigation.navigate('Landing')}>
+            Sign Up
+          </Text>
         </TouchableOpacity>
 
         <Text style={styles.footerText}>
           Already have an account?{' '}
           <Text
             style={styles.loginText}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('LoginScreen')}
           >
             Log in now
           </Text>
         </Text>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -115,27 +113,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+    backgroundColor: '#FFFFFF', // Changed to white
   },
   logoContainer: {
     alignItems: 'center',
     marginBottom: 20,
   },
   logo: {
-    width: 140,
-    height: 140,
+    width: 130,
+    height: 130,
     bottom: 30,
   },
   formContainer: {
     width: '90%',
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#D1ACDA',
     borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    height: 430,
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -156,21 +155,27 @@ const styles = StyleSheet.create({
     color: '#8146C1',
   },
   signupButton: {
-    backgroundColor: '#8146C1',
-    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
     paddingVertical: 12,
     alignItems: 'center',
     marginBottom: 20,
+    width: 120,
+    height: 30,
+    left: 80,
+    top: 30,
   },
   signupButtonText: {
-    color: '#FFFFFF',
+    color: '#8146C1',
     fontSize: 16,
     fontWeight: 'bold',
+    top: -10,
+    height: 20,
   },
   footerText: {
     textAlign: 'center',
-    color: '#8146C1',
-    marginTop: 10,
+    color: '#000000',
+    marginTop: 55,
   },
   loginText: {
     color: '#8146C1',

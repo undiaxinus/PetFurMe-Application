@@ -6,39 +6,47 @@ import {
   Image,
   StyleSheet,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const AddPetProfile = ({ navigation }) => {
   const [petName, setPetName] = useState('');
+  const [petAge, setPetAge] = useState('');
+  const [petType, setPetType] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleContinue = () => {
-    if (petName.trim() === '') {
-      alert('Please enter your pet\'s name.');
+    if (petName.trim() === '' || petAge.trim() === '' || petType.trim() === '') {
+      alert('Please fill out all the fields.');
     } else {
-      navigation.navigate('NextStep'); // Replace 'NextStep' with your next screen
+      setLoading(true); // Show loading spinner
+      setTimeout(() => {
+        setLoading(false); // Hide loading spinner
+        navigation.navigate('AddPetSize'); // Replace 'NextStep' with your next screen
+      }, 2000); // Simulate a delay
     }
   };
 
   return (
     <View style={styles.container}>
+      {/* Loading Overlay */}
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#8146C1" />
+        </View>
+      )}
+
       {/* Header */}
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            
             style={styles.backButton}
-             // Adjust arrow position here
           >
-            <Ionicons
-              name="arrow-back"
-              size={24}
-              color="#808080" // Changed to gray
-            />
+            <Ionicons name="arrow-back" size={24} color="#808080" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Add Pet Profile</Text>
-          <Text style={styles.name}>Name</Text>
           <Text style={styles.headerStep}>Step 3/5</Text>
         </View>
 
@@ -71,13 +79,34 @@ const AddPetProfile = ({ navigation }) => {
         placeholderTextColor="#8146C1"
       />
 
+      {/* Pet Age Input */}
+      <Text style={styles.label}>Age</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Your pet’s age"
+        value={petAge}
+        onChangeText={setPetAge}
+        placeholderTextColor="#8146C1"
+        keyboardType="numeric"
+      />
+
+      {/* Pet Type Input */}
+      <Text style={styles.label}>Pet Type</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Your pet's type"
+        value={petType}
+        onChangeText={setPetType}
+        placeholderTextColor="#8146C1"
+      />
+
       {/* Continue Button */}
       <TouchableOpacity
-        style={[styles.continueButton, !petName.trim() && { backgroundColor: '#D52FFF' }]}
+        style={[styles.continueButton, (!petName.trim() || !petAge.trim() || !petType.trim()) && { backgroundColor: '#D52FFF' }]}
         onPress={handleContinue}
-        disabled={!petName.trim()}
+        disabled={!petName.trim() || !petAge.trim() || !petType.trim()}
       >
-        <Text style={styles.continueButtonText} onPress={() => navigation.navigate('AddPetSize')}>Continue</Text>
+        <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
     </View>
   );
@@ -91,62 +120,62 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
   headerContainer: {
     width: 360,
     alignItems: 'center',
-    marginBottom: 200,
+    marginBottom: 150,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#8146C1',
-    width: '100%',
+    width: '400',
     paddingHorizontal: 20,
-    paddingVertical: 14,
-    top: -25,
+    paddingVertical: 10,
+    top: 18,
   },
   backButton: {
     position: 'absolute',
-    left: 10, // Adjust horizontal position
-    top: 60,
+    left: 35,
+    top: 50,
   },
   headerTitle: {
     color: '#000000',
     fontSize: 18,
     fontWeight: 'bold',
-    top: 42,
-    left: 105,
+    top: 40,
+    left: 110,
   },
   headerStep: {
     color: '#808080',
     fontSize: 14,
-    top: 65,
-    left: 15,
+    top: 45,
+    left: -5,
   },
   progressBarContainer: {
     backgroundColor: '#E0E0E0',
     height: 4,
-    width: '90%',
+    width: '70%',
     marginVertical: 10,
-    top: 30,
+    top: 50,
   },
   progressBar: {
     backgroundColor: '#8146C1',
-    width: '60%', // Adjust width based on step progress
+    width: '60%',
     height: '100%',
-  },
-  name: {
-    color: '#bfbfbf',
-    fontSize: 14,
-    fontWeight: 'bold',
-    top: 65,
-    left: -30,
   },
   imageContainer: {
     alignItems: 'center',
     marginVertical: 20,
-    top: -110,
+    top: -100,
   },
   imageCircle: {
     width: 150,
@@ -195,7 +224,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: -50,
   },
   continueButtonText: {
     color: '#FFFFFF',

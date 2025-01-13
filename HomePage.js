@@ -7,7 +7,9 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
+
 
 const HomePage = ({ navigation }) => {
   const categories = [
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8146C1',
     width: '100%',
     paddingHorizontal: 20,
-    top: 38,
+    top: 32,
   },
   burger: {
     width: 25,

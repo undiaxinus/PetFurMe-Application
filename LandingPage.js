@@ -9,7 +9,7 @@ const LandingPage = ({ navigation }) => {
     setLoading(true); // Start the spinner
     setTimeout(() => {
       setLoading(false); // Stop the spinner
-      navigation.navigate('PetCategory'); // Navigate to the next screen
+      navigation.navigate('DrawerNavigator', { screen: 'PetCategory' });// Navigate to the next screen
     }, 2000); // Simulate a delay for the loading animation
   };
 
@@ -18,14 +18,17 @@ const LandingPage = ({ navigation }) => {
       {/* Loading Overlay */}
       {loading && (
         <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
+          <ActivityIndicator size="large" color="#8146C1" />
         </View>
       )}
 
       {/* Top Header */}
       <View style={styles.header}>
+      <Image source={require('./assets/images/person.png')}
+          style={styles.person}
+        />
         <Text style={styles.greetingText}>Hello,</Text>
-        <Text style={styles.userName}>Esther</Text>
+        <Text style={styles.userName}>Angee</Text>
       </View>
 
       {/* Illustration */}
@@ -46,8 +49,8 @@ const LandingPage = ({ navigation }) => {
 
       {/* Swipe Button */}
       <TouchableOpacity style={styles.swipeButton} onPress={handleContinue} disabled={loading}>
-        <LinearGradient colors={['#8146C1', '#B682EB']} style={styles.gradientButton}>
-          <Text style={styles.swipeButtonText}onPress={() => navigation.navigate('DrawerNavigator', { screen: 'PetCategory' })}>Click to continue</Text>
+        <LinearGradient colors={['#b3b3ff', '#9999ff']} style={styles.gradientButton}>
+          <Text style={styles.swipeButtonText}>Click to continue</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>
@@ -71,20 +74,23 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     backgroundColor: '#8146C1',
-    paddingVertical: 30,
+    paddingVertical: -30,
     paddingHorizontal: 20,
     alignItems: 'flex-start',
+    top: 35,
   },
   greetingText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    top: 20,
+    color: '#8c8c8c',
+    fontSize: 18,
+    top: 60,
+    left: 20,
   },
   userName: {
-    color: '#FFFFFF',
-    fontSize: 20,
+    color: '#8c8c8c',
+    fontSize: 19,
     fontWeight: 'bold',
-    top: 20,
+    top: 35,
+    left: 70,
   },
   illustrationContainer: {
     flex: 1,
@@ -95,6 +101,14 @@ const styles = StyleSheet.create({
     width: 230,
     height: 230,
     position: 'absolute',
+    top: 150,
+  },
+  person: {
+    width: 28,
+    height: 28,
+    position: 'absolute',
+    top: 55,
+    left: 8,
   },
   messageContainer: {
     alignItems: 'center',
