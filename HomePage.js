@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
     width: 60, // Adjusted size
     height: 60, // Adjusted size
     marginBottom: 9,
+    top: 5,
   },
   categoryLabel: {
     fontSize: 12, // Adjusted font size
