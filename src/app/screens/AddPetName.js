@@ -14,13 +14,15 @@ const AddPetProfile = ({ navigation }) => {
 	const [petName, setPetName] = useState("");
 	const [petAge, setPetAge] = useState("");
 	const [petType, setPetType] = useState("");
+	const [petBreed, setPetBreed] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	const handleContinue = () => {
 		if (
 			petName.trim() === "" ||
 			petAge.trim() === "" ||
-			petType.trim() === ""
+			petType.trim() === "" ||
+			petBreed.trim() === "" 
 		) {
 			alert("Please fill out all the fields.");
 		} else {
@@ -50,12 +52,6 @@ const AddPetProfile = ({ navigation }) => {
 						<Ionicons name="arrow-back" size={24} color="#808080" />
 					</TouchableOpacity>
 					<Text style={styles.headerTitle}>Add Pet Profile</Text>
-					<Text style={styles.headerStep}>Step 3/5</Text>
-				</View>
-
-				{/* Progress Bar */}
-				<View style={styles.progressBarContainer}>
-					<View style={styles.progressBar} />
 				</View>
 			</View>
 
@@ -63,7 +59,7 @@ const AddPetProfile = ({ navigation }) => {
 			<View style={styles.imageContainer}>
 				<View style={styles.imageCircle}>
 					<Image
-						source={require("../../assets/images/dogg.png")} // Replace with your image path
+						source={require("../../assets/images/doprof.png")} // Replace with your image path
 						style={styles.petImage}
 					/>
 					<TouchableOpacity style={styles.cameraButton}>
@@ -82,37 +78,45 @@ const AddPetProfile = ({ navigation }) => {
 				placeholderTextColor="#8146C1"
 			/>
 
-			{/* Pet Age Input */}
-			<Text style={styles.label}>Age</Text>
+<Text style={styles.label}>What’s your pet’s age?</Text>
 			<TextInput
 				style={styles.input}
 				placeholder="Your pet’s age"
-				value={petAge}
+				value={petName}
 				onChangeText={setPetAge}
 				placeholderTextColor="#8146C1"
-				keyboardType="numeric"
 			/>
 
-			{/* Pet Type Input */}
-			<Text style={styles.label}>Pet Type</Text>
+<Text style={styles.label}>What’s your pet’s type?</Text>
 			<TextInput
 				style={styles.input}
-				placeholder="Your pet's type"
-				value={petType}
+				placeholder="Your pet’s type"
+				value={petName}
 				onChangeText={setPetType}
 				placeholderTextColor="#8146C1"
 			/>
+
+<Text style={styles.label}>What’s your pet’s breed?</Text>
+			<TextInput
+				style={styles.input}
+				placeholder="Your pet’s breed"
+				value={petName}
+				onChangeText={setPetBreed}
+				placeholderTextColor="#8146C1"
+			/>
+
+	
 
 			{/* Continue Button */}
 			<TouchableOpacity
 				style={[
 					styles.continueButton,
-					(!petName.trim() || !petAge.trim() || !petType.trim()) && {
+					(!petName.trim() || !petAge.trim() || !petType.trim() || !petBreed.trim()) && {
 						backgroundColor: "#D52FFF",
 					},
 				]}
 				onPress={handleContinue}
-				disabled={!petName.trim() || !petAge.trim() || !petType.trim()}>
+				disabled={!petName.trim() || !petAge.trim() || !petType.trim() || !petBreed.trim()}>
 				<Text style={styles.continueButtonText}>Continue</Text>
 			</TouchableOpacity>
 		</View>
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
 		width: "400",
 		paddingHorizontal: 20,
 		paddingVertical: 10,
-		top: 18,
+		bottom: 1,
 	},
 	backButton: {
 		position: "absolute",
@@ -159,34 +163,16 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "bold",
 		top: 40,
-		left: 110,
-	},
-	headerStep: {
-		color: "#808080",
-		fontSize: 14,
-		top: 45,
-		left: -5,
-	},
-	progressBarContainer: {
-		backgroundColor: "#E0E0E0",
-		height: 4,
-		width: "70%",
-		marginVertical: 10,
-		top: 50,
-	},
-	progressBar: {
-		backgroundColor: "#8146C1",
-		width: "60%",
-		height: "100%",
+		left: 120,
 	},
 	imageContainer: {
 		alignItems: "center",
 		marginVertical: 20,
-		top: -100,
+		bottom: 120,
 	},
 	imageCircle: {
-		width: 150,
-		height: 150,
+		width: 120,
+		height: 120,
 		borderRadius: 75,
 		borderWidth: 2,
 		borderColor: "#D1ACDA",
@@ -195,14 +181,14 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	petImage: {
-		width: 140,
-		height: 140,
+		width: 120,
+		height: 120,
 		borderRadius: 70,
 	},
 	cameraButton: {
 		position: "absolute",
-		bottom: 10,
-		right: 10,
+		bottom: 0,
+		right: 0,
 		backgroundColor: "#FF3DE0",
 		borderRadius: 20,
 		padding: 8,
@@ -212,18 +198,19 @@ const styles = StyleSheet.create({
 		color: "#595959",
 		marginBottom: 10,
 		fontWeight: "bold",
-		top: -80,
+		top: -100,
+		right: 50,
 	},
 	input: {
 		width: "90%",
 		borderWidth: 1,
 		borderColor: "#bfbfbf",
 		borderRadius: 10,
-		padding: 15,
+		padding: 9,
 		marginBottom: 20,
 		backgroundColor: "#FFFFFF",
 		color: "#000000",
-		top: -70,
+		top: -100,
 	},
 	continueButton: {
 		width: "90%",
@@ -231,7 +218,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		borderRadius: 25,
 		alignItems: "center",
-		marginTop: -50,
+		marginTop: -80,
 	},
 	continueButtonText: {
 		color: "#FFFFFF",

@@ -16,7 +16,7 @@ const LandingPage = ({ navigation }) => {
 		setLoading(true); // Start the spinner
 		setTimeout(() => {
 			setLoading(false); // Stop the spinner
-			navigation.navigate("DrawerNavigator", { screen: "PetCategory" }); // Navigate to the next screen
+			navigation.navigate("DrawerNavigator", { screen: "AddPetName" }); // Navigate to the next screen
 		}, 2000); // Simulate a delay for the loading animation
 	};
 

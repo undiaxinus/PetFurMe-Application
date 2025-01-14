@@ -10,12 +10,9 @@ import RegistrationScreen from "./src/app/screens/RegistrationScreen";
 import HomePage from "./src/app/screens/HomePage";
 import ProfileScreen from "./src/app/screens/ProfileScreen";
 import ChatScreen from "./src/app/screens/ChatScreen";
+import AddPetName from "./src/app/screens/AddPetName";
 import NotificationScreen from "./src/app/screens/NotificationScreen";
 import LandingPage from "./src/app/screens/LandingPage";
-import PetCategory from "./src/app/screens/PetCategory";
-import AddPetName from "./src/app/screens/AddPetName";
-import AddPetSize from "./src/app/screens/AddPetSize";
-import AddPetBirth from "./src/app/screens/AddPetBirth";
 import CustomDrawerContent from "./src/app/screens/CustomDrawerContent";
 import ViewMorePro from "./src/app/screens/ViewMorePro";
 import AddtoCart from "./src/app/screens/AddtoCart";
@@ -37,10 +34,7 @@ function DrawerNavigator() {
 			<Drawer.Screen name="Profile" component={ProfileScreen} />
 			<Drawer.Screen name="Chat" component={ChatScreen} />
 			<Drawer.Screen name="Notification" component={NotificationScreen} />
-			<Drawer.Screen name="PetCategory" component={PetCategory} />
 			<Drawer.Screen name="AddPetName" component={AddPetName} />
-			<Drawer.Screen name="AddPetSize" component={AddPetSize} />
-			<Drawer.Screen name="AddPetBirth" component={AddPetBirth} />
 			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
 			<Drawer.Screen name="AddtoCart" component={AddtoCart} />
 			<Drawer.Screen name="AddedtoCart" component={AddedtoCart} />
