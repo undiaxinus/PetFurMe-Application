@@ -7,13 +7,30 @@ import {
 	Image,
 	Modal,
 	ActivityIndicator,
+	Alert,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-const CustomDrawerContent = ({ navigation }) => {
+const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+	const getUserData = () => {
+		if (!state?.routes) return {};
+		
+		const homeRoute = state.routes.find(route => route.name === "HomePage");
+		if (!homeRoute?.params) {
+			console.log("No params in HomePage route");
+			return {};
+		}
+		
+		console.log("Found user data in route:", homeRoute.params);
+		return homeRoute.params;
+	};
+
+	const userData = getUserData();
+	console.log("Drawer user data:", userData);
 
 	const handleLogout = () => {
 		setIsLogoutModalVisible(true);
@@ -32,23 +49,48 @@ const CustomDrawerContent = ({ navigation }) => {
 		setIsLogoutModalVisible(false);
 	};
 
+	const handleAddNewPet = () => {
+		const userId = userData.user_id;
+		console.log("Attempting to add new pet with user ID:", userId);
+		
+		if (userId) {
+			navigation.navigate("AddPetName", {
+				user_id: userId
+			});
+		} else {
+			console.error("No user ID available");
+			Alert.alert(
+				"Error",
+				"Please login again to add a new pet",
+				[
+					{
+						text: "OK",
+						onPress: () => navigation.navigate("LoginScreen")
+					}
+				]
+			);
+		}
+	};
+
+	const renderProfileSection = () => (
+		<View style={styles.profileSection}>
+			<Image
+				source={require("../../assets/images/ekis.png")}
+				style={styles.ekis}
+			/>
+			<Image
+				source={require("../../assets/images/profile.png")}
+				style={styles.profileImage}
+			/>
+			<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
+			<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
+			<Text style={styles.urpets}>Your Pets</Text>
+		</View>
+	);
+
 	return (
 		<View style={styles.container}>
-			{/* Profile Section */}
-			<View style={styles.profileSection}>
-				<Image
-					source={require("../../assets/images/ekis.png")}
-					style={styles.ekis}
-				/>
-
-				<Image
-					source={require("../../assets/images/profile.png")}
-					style={styles.profileImage}
-				/>
-				<Text style={styles.profileName}>Angelica V.</Text>
-				<Text style={styles.profileRole}>User</Text>
-				<Text style={styles.urpets}>Your Pets</Text>
-			</View>
+			{renderProfileSection()}
 
 			<View style={styles.yourpets}>
 				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
@@ -65,7 +107,10 @@ const CustomDrawerContent = ({ navigation }) => {
 					/>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate("AddPetName")}>
+				<TouchableOpacity 
+					onPress={handleAddNewPet}
+					style={styles.addNewPetButton}
+				>
 					<Image
 						source={require("../../assets/images/addnew.png")}
 						style={styles.profileImage}
@@ -262,6 +307,10 @@ const styles = StyleSheet.create({
 	confirmButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
+	},
+	addNewPetButton: {
+		marginTop: 10,
+		marginLeft: 10,
 	},
 });
 

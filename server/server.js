@@ -14,12 +14,14 @@ const app = express();
 app.use(
 	cors({
 		origin: "*",
-		methods: ["GET", "POST"],
-		allowedHeaders: ["Content-Type"],
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization"],
+		credentials: true
 	})
 );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -56,7 +58,7 @@ const db = mysql.createPool({
 	host: "localhost",
 	user: "root",
 	password: "",
-	database: "pet-management",
+	database: "pet",
 	waitForConnections: true,
 	connectionLimit: 10,
 	queueLimit: 0,
@@ -241,6 +243,56 @@ app.use((req, res, next) => {
 		ip: req.ip,
 	});
 	next();
+});
+
+// Add pet endpoint
+app.post("/api/pets/create", async (req, res) => {
+	try {
+		const { user_id, name, type, breed, age, category, gender, weight } = req.body;
+		
+		console.log("Received pet creation request:", req.body);
+
+		// Validate required fields
+		if (!name || !type) {
+			return res.status(400).json({
+				success: false,
+				error: "Missing required fields"
+			});
+		}
+
+		const [result] = await db.query(
+			`INSERT INTO pets 
+			(user_id, name, type, breed, age, category, gender, weight, created_at, updated_at) 
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+			[
+				user_id || 1,
+				name,
+				type,
+				breed || null,
+				age || null,
+				category || 'Mammal',
+				gender || 'Unknown',
+				weight || 0
+			]
+		);
+
+		console.log("Pet created successfully:", result);
+
+		res.json({
+			success: true,
+			message: "Pet added successfully",
+			pet_id: result.insertId
+		});
+
+	} catch (error) {
+		console.error("Error creating pet:", error);
+		res.status(500).json({
+			success: false,
+			error: error.message || "Failed to add pet",
+			sqlMessage: error.sqlMessage,
+			code: error.code
+		});
+	}
 });
 
 const startServer = async () => {
