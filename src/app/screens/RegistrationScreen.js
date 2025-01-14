@@ -6,8 +6,12 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Image,
+	ActivityIndicator,
+	Platform,
+	Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 
 const SignupScreen = ({ navigation }) => {
 	const [name, setName] = useState("");
@@ -16,6 +20,55 @@ const SignupScreen = ({ navigation }) => {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+
+	const API_URL = Platform.select({
+		ios: "http://localhost:3001",
+		android: "http://192.168.43.100:3001"
+	});
+
+	const handleSignup = async () => {
+		try {
+			setIsLoading(true);
+			setError("");
+
+			// Validation
+			if (!name || !email || !password || !confirmPassword) {
+				setError("All fields are required");
+				return;
+			}
+
+			if (password !== confirmPassword) {
+				setError("Passwords do not match");
+				return;
+			}
+
+			const response = await axios.post(`${API_URL}/api/register`, {
+				name,
+				email,
+				password,
+				username: email.split('@')[0],
+				role: 'pet_owner'
+			});
+
+			if (response.data.success) {
+				Alert.alert(
+					"Success",
+					"Registration successful! Please login.",
+					[{ 
+						text: "OK", 
+						onPress: () => navigation.navigate("LoginScreen") 
+					}]
+				);
+			}
+		} catch (error) {
+			console.error("Registration error:", error);
+			setError(error.response?.data?.error || "Registration failed. Please try again.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	return (
 		<View style={styles.container}>
@@ -109,12 +162,21 @@ const SignupScreen = ({ navigation }) => {
 					</TouchableOpacity>
 				</View>
 
-				<TouchableOpacity style={styles.signupButton}>
-					<Text
-						style={styles.signupButtonText}
-						onPress={() => navigation.navigate("Landing")}>
-						Sign Up
-					</Text>
+				{error ? (
+					<Text style={styles.errorText}>{error}</Text>
+				) : null}
+
+				<TouchableOpacity 
+					style={[styles.signupButton, isLoading && styles.disabledButton]}
+					onPress={handleSignup}
+					disabled={isLoading}>
+					{isLoading ? (
+						<ActivityIndicator size="small" color="#8146C1" />
+					) : (
+						<Text style={styles.signupButtonText}>
+							Sign Up
+						</Text>
+					)}
 				</TouchableOpacity>
 
 				<Text style={styles.footerText}>
@@ -202,6 +264,14 @@ const styles = StyleSheet.create({
 	loginText: {
 		color: "#8146C1",
 		fontWeight: "bold",
+	},
+	errorText: {
+		color: 'red',
+		textAlign: 'center',
+		marginBottom: 10,
+	},
+	disabledButton: {
+		opacity: 0.7,
 	},
 });
 
