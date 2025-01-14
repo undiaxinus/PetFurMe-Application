@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }) => {
 
 			if (response.data.success) {
 				Alert.alert("Success", "Login successful!", [
-					{ text: "OK", onPress: () => navigation.navigate("LandingPage") },
+					{ text: "OK", onPress: () => navigation.navigate("DrawerNavigator", { screen: "HomePage" }) },
 				]);
 			} else {
 				setError(response.data.error || "Login failed");
