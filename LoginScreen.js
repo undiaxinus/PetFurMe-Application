@@ -7,50 +7,83 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  Alert,
+  Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    setLoading(true); // Start loading spinner
+  const API_URL = Platform.select({
+    ios: 'http://localhost:3001',
+    android: 'http://192.168.43.100:3001'
+  });
 
-    setTimeout(() => {
-      setLoading(false); // Stop loading spinner
-      navigation.navigate('LandingPage'); // Navigate to LandingPage after login
-    }, 2000); // Simulate a network request with a 2-second delay
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      setError('');
+
+      if (!email || !password) {
+        setError('Please enter both email and password');
+        return;
+      }
+
+      const response = await axios.post(`${API_URL}/api/login`, {
+        username: email,
+        password: password
+      });
+
+      console.log('Login response:', response.data);
+
+      if (response.data.success) {
+        Alert.alert(
+          'Success',
+          'Login successful!',
+          [{ text: 'OK', onPress: () => navigation.navigate('LandingPage') }]
+        );
+      } else {
+        setError(response.data.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      setError(error.response?.data?.error || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Spinner overlay */}
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#8146C1" />
         </View>
       )}
 
-      {/* Logo Section */}
       <View style={styles.logoContainer}>
         <Image
-          source={require('./assets/images/vetcare.png')} // Replace with your logo path
+          source={require('./assets/images/vetcare.png')}
           style={styles.logo}
         />
       </View>
 
-      {/* Form Section */}
       <View style={styles.formContainer}>
         <View style={styles.inputWrapper}>
-          <Ionicons name="person-outline" size={20} color="#8146C1" style={styles.icon} />
+          <Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
             placeholderTextColor="#8146C1"
+            autoCapitalize="none"
           />
         </View>
 
@@ -66,20 +99,24 @@ const LoginScreen = ({ navigation }) => {
           />
         </View>
 
+        {error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : null}
+
         <TouchableOpacity style={styles.forgotPasswordButton}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.loginButton}
+          style={[styles.loginButton, loading && styles.disabledButton]}
           onPress={handleLogin}
-          disabled={loading} // Disable button while loading
+          disabled={loading}
         >
           <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
 
         <Text style={styles.footerText}>
-          Don’t have an account?{' '}
+          Don't have an account?{' '}
           <Text
             style={styles.signUpText}
             onPress={() => navigation.navigate('Register')}
@@ -183,6 +220,14 @@ const styles = StyleSheet.create({
     color: '#8146C1',
     fontWeight: 'bold',
   },
+  errorText: {
+    color: '#FF0000',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  disabledButton: {
+    opacity: 0.7,
+  }
 });
 
 export default LoginScreen;
