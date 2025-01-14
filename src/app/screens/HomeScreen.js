@@ -65,11 +65,12 @@ const HomeScreen = ({ navigation }) => {
 				style={styles.vetcare}
 			/>
 
+			
+			<TouchableOpacity onPress={rotateCircle}>
 			<Image
 				source={require("../../assets/images/footprint.png")}
 				style={[styles.image2, { transform: [{ rotate: "12deg" }] }]} // Apply rotation here
 			/>
-			<TouchableOpacity onPress={rotateCircle}>
 				<Text style={styles.registerText}>GET STARTED</Text>
 			</TouchableOpacity>
 		</LinearGradient>
@@ -121,14 +122,17 @@ const styles = StyleSheet.create({
 		top: -70,
 	},
 	registerText: {
-		position: "absolute",
-		top: -50,
+		position: 'absolute',
 		fontSize: 12,
-		color: "#fff",
-		fontWeight: "bold",
-		left: -37,
-		fontFamily: "Fredoka_400Regular",
-	},
+		color: '#fff',
+		fontWeight: 'bold',
+		fontFamily: 'Fredoka_400Regular',
+		alignSelf: 'center',
+		width: '100%',
+		textAlign: 'center',
+		top: 150,
+	  },
+
 });
 
 export default HomeScreen;
