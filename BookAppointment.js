@@ -5,31 +5,58 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const AddAppointment = ({ navigation }) => {
-  const [userAccount, setUserAccount] = useState('');
-  const [ownerName, setOwnerName] = useState('');
-  const [petName, setPetName] = useState('');
-  const [category, setCategory] = useState('');
-  const [reason, setReason] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [owner_name, setOwnerName] = useState('');
+  const [reason_for_visit, setReason] = useState('');
+  const [appointment_date, setDate] = useState('');
+  const [appointment_time, setTime] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSaveAppointment = () => {
+  // Save Appointment Handler
+  const handleSaveAppointment = async () => {
+    // Validate input fields
     if (
-      userAccount.trim() &&
-      ownerName.trim() &&
-      petName.trim() &&
-      category.trim() &&
-      reason.trim() &&
-      date.trim() &&
-      time.trim()
+      owner_name.trim() &&
+      reason_for_visit.trim() &&
+      appointment_date.trim() &&
+      appointment_time.trim()
     ) {
-      alert('Appointment Saved Successfully!');
+      setLoading(true); // Show loading spinner
+      try {
+        const response = await fetch('http://192.168.0.100:3000/saveAppointment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            owner_name,
+            reason_for_visit,
+            appointment_date,
+            appointment_time,
+          }),          
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          Alert.alert('Success', result.message);
+          navigation.goBack();
+        } else {
+          Alert.alert('Error', result.error || 'Failed to save appointment');
+        }
+      } catch (error) {
+        Alert.alert('Error', 'Unable to connect to the server. Check your connection or server.');
+        console.error('Error:', error.message);
+      } finally {
+        setLoading(false); // Hide loading spinner
+      }
     } else {
-      alert('Please fill out all the fields.');
+      Alert.alert('Validation Error', 'Please fill out all the fields.');
     }
   };
 
@@ -47,68 +74,56 @@ const AddAppointment = ({ navigation }) => {
       <View style={styles.formContainer}>
         <Text style={styles.formLabel}>Fill out the form</Text>
 
+        {/* Owner Name Input */}
         <TextInput
           style={styles.input}
-          placeholder="User Account"
-          value={userAccount}
-          onChangeText={setUserAccount}
-          placeholderTextColor="#b3b3b3"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Owner Name"
-          value={ownerName}
+          placeholder="Enter Owner Name"
+          value={owner_name}
           onChangeText={setOwnerName}
           placeholderTextColor="#b3b3b3"
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Pet Name"
-          value={petName}
-          onChangeText={setPetName}
-          placeholderTextColor="#b3b3b3"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Add a category"
-          value={category}
-          onChangeText={setCategory}
-          placeholderTextColor="#b3b3b3"
-        />
-
+        {/* Reason for Visit Input */}
         <TextInput
           style={[styles.input, styles.textArea]}
-          placeholder="Reason for Visit"
-          value={reason}
+          placeholder="Enter Reason for Visit"
+          value={reason_for_visit}
           onChangeText={setReason}
           placeholderTextColor="#b3b3b3"
           multiline
           numberOfLines={4}
         />
 
+        {/* Appointment Date Input */}
         <TextInput
           style={styles.input}
-          placeholder="dd/mm/yyyy"
-          value={date}
+          placeholder="Enter Date (dd/mm/yyyy)"
+          value={appointment_date}
           onChangeText={setDate}
           placeholderTextColor="#b3b3b3"
         />
 
+        {/* Appointment Time Input */}
         <TextInput
           style={styles.input}
-          placeholder="-- : --"
-          value={time}
+          placeholder="Enter Time (HH:mm)"
+          value={appointment_time}
           onChangeText={setTime}
           placeholderTextColor="#b3b3b3"
         />
       </View>
 
       {/* Save Appointment Button */}
-      <TouchableOpacity style={styles.saveButton} onPress={handleSaveAppointment}>
-        <Text style={styles.saveButtonText}>Save Appointment</Text>
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={handleSaveAppointment}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <Text style={styles.saveButtonText}>Save Appointment</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -124,6 +139,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    top: 40,
   },
   backButton: {
     marginRight: 10,
@@ -135,12 +151,14 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
+    top: 70,
   },
   formLabel: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#000000',
+    top: -10,
   },
   input: {
     width: '100%',
@@ -155,6 +173,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     textAlignVertical: 'top',
+    height: 80,
   },
   saveButton: {
     backgroundColor: '#CC38F2',
