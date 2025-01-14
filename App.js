@@ -15,8 +15,6 @@ import NotificationScreen from "./src/app/screens/NotificationScreen";
 import LandingPage from "./src/app/screens/LandingPage";
 import CustomDrawerContent from "./src/app/screens/CustomDrawerContent";
 import ViewMorePro from "./src/app/screens/ViewMorePro";
-import AddtoCart from "./src/app/screens/AddtoCart";
-import AddedtoCart from "./src/app/screens/AddedtoCart";
 import PetProfile from "./src/app/screens/PetProfile";
 import BookAppointment from "./src/app/screens/BookAppointment";
 
@@ -36,8 +34,6 @@ function DrawerNavigator() {
 			<Drawer.Screen name="Notification" component={NotificationScreen} />
 			<Drawer.Screen name="AddPetName" component={AddPetName} />
 			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
-			<Drawer.Screen name="AddtoCart" component={AddtoCart} />
-			<Drawer.Screen name="AddedtoCart" component={AddedtoCart} />
 			<Drawer.Screen name="BookAppointment" component={BookAppointment} />
 		</Drawer.Navigator>
 	);

@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	image2: {
-		width: 140,
-		height: 140,
+		width: 160,
+		height: 160,
 		marginTop: 60,
 	},
 	vetcare: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		width: '100%',
 		textAlign: 'center',
-		top: 150,
+		top: 170,
 	  },
 
 });

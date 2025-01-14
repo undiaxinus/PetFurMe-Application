@@ -121,7 +121,7 @@ const ProductPage = ({ navigation }) => {
 					<Text
 						style={styles.addToCartText}
 						onPress={() => navigation.navigate("AddtoCart")}>
-						Add to cart
+						Stocks: 100
 					</Text>
 				</TouchableOpacity>
 			</View>

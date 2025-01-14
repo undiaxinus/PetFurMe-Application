@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	logo: {
-		width: 130,
-		height: 130,
+		width: 150,
+		height: 150,
 		bottom: 30,
 	},
 	formContainer: {

@@ -65,7 +65,7 @@ const CustomDrawerContent = ({ navigation }) => {
 					/>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
+				<TouchableOpacity onPress={() => navigation.navigate("AddPetName")}>
 					<Image
 						source={require("../../assets/images/addnew.png")}
 						style={styles.profileImage}
