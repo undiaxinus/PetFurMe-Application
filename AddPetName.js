@@ -8,13 +8,16 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 
-const AddPetProfile = ({ navigation }) => {
+const AddPetProfile = ({ navigation, route }) => {
   const [petName, setPetName] = useState('');
   const [petAge, setPetAge] = useState('');
-  const [petType, setPetType] = useState('');
+  const [petType, setPetType] = useState(route.params?.petType || ''); // Default to passed pet type
   const [loading, setLoading] = useState(false);
+
+  const petTypes = ['Dog', 'Cat', 'Rabbit', 'Bird'];
 
   const handleContinue = () => {
     if (petName.trim() === '' || petAge.trim() === '' || petType.trim() === '') {
@@ -23,7 +26,7 @@ const AddPetProfile = ({ navigation }) => {
       setLoading(true); // Show loading spinner
       setTimeout(() => {
         setLoading(false); // Hide loading spinner
-        navigation.navigate('AddPetSize'); // Replace 'NextStep' with your next screen
+        navigation.navigate('AddPetSize'); // Navigate to the next screen
       }, 2000); // Simulate a delay
     }
   };
@@ -90,19 +93,28 @@ const AddPetProfile = ({ navigation }) => {
         keyboardType="numeric"
       />
 
-      {/* Pet Type Input */}
+      {/* Pet Type Dropdown */}
       <Text style={styles.label}>Pet Type</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Your pet's type"
-        value={petType}
-        onChangeText={setPetType}
-        placeholderTextColor="#8146C1"
-      />
+      <View style={styles.dropdown}>
+        <Picker
+          selectedValue={petType}
+          onValueChange={(itemValue) => setPetType(itemValue)}
+        >
+          <Picker.Item label="Select Pet Type" value="" />
+          {petTypes.map((type, index) => (
+            <Picker.Item label={type} value={type} key={index} />
+          ))}
+        </Picker>
+      </View>
 
       {/* Continue Button */}
       <TouchableOpacity
-        style={[styles.continueButton, (!petName.trim() || !petAge.trim() || !petType.trim()) && { backgroundColor: '#D52FFF' }]}
+        style={[
+          styles.continueButton,
+          (!petName.trim() || !petAge.trim() || !petType.trim()) && {
+            backgroundColor: '#D52FFF',
+          },
+        ]}
         onPress={handleContinue}
         disabled={!petName.trim() || !petAge.trim() || !petType.trim()}
       >
@@ -216,6 +228,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#FFFFFF',
     color: '#000000',
+    top: -70,
+  },
+  dropdown: {
+    width: '90%',
+    borderWidth: 1,
+    borderColor: '#bfbfbf',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
     top: -70,
   },
   continueButton: {

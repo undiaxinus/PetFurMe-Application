@@ -238,7 +238,7 @@ const startServer = async () => {
       console.log('=================================');
       console.log(`Server running on:`);
       console.log(`- Local: http://localhost:${PORT}`);
-      console.log(`- Network: http://192.168.43.100:${PORT}`);
+      console.log(`- Network: http://192.168.43.87:${PORT}`);
       console.log(`- Android: http://10.0.2.2:${PORT}`);
       console.log('Database Status: Connected');
       console.log('=================================');
