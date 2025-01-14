@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -16,6 +20,138 @@ const SignupScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const API_URL = Platform.select({
+    ios: 'http://localhost:3001',
+    android: 'http://192.168.43.100:3001'
+  });
+
+  // Add debug logging
+  console.log('Using API URL:', API_URL);
+
+  // Update axios configuration
+  const axiosInstance = axios.create({
+    baseURL: API_URL,
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  });
+
+  // Add connection test
+  const testConnection = async () => {
+    try {
+      console.log('Testing connection to:', `${API_URL}/health`);
+      const response = await axiosInstance.get('/health');
+      console.log('Connection test response:', response.data);
+      return true;
+    } catch (error) {
+      console.error('Connection test failed:', {
+        message: error.message,
+        code: error.code,
+        config: error.config
+      });
+      return false;
+    }
+  };
+
+  const handleSignup = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      // Test connection first
+      const isConnected = await testConnection();
+      if (!isConnected) {
+        setError('Cannot connect to server. Please check your connection.');
+        return;
+      }
+
+      // Validate inputs
+      if (!name || !email || !password || !confirmPassword) {
+        setError('All fields are required');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('Please enter a valid email address');
+        return;
+      }
+
+      // Password strength validation (minimum 6 characters)
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return;
+      }
+
+      // Log the request details
+      console.log('Sending registration request to:', `${API_URL}/api/register`);
+      console.log('Request data:', {
+        name,
+        email,
+        password,
+        username: email.split('@')[0],
+        phone: null,
+        pet_name: null,
+        pet_type: null,
+        role: 'pet_owner'
+      });
+
+      const response = await axiosInstance.post('/api/register', {
+        name,
+        email,
+        password,
+        username: email.split('@')[0],
+        phone: null,
+        pet_name: null,
+        pet_type: null,
+        role: 'pet_owner'
+      });
+
+      console.log('Registration response:', response.data); // Add this for debugging
+
+      if (response.data.success) {
+        Alert.alert(
+          'Success',
+          'Registration successful! Please login.',
+          [{ text: 'OK', onPress: () => navigation.navigate('LoginScreen') }]
+        );
+      } else {
+        // If the server returns an error message
+        setError(response.data.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration error:', error.response || error);
+      setError(error.response?.data?.error || 'Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Add this for debugging connection issues
+  const checkServerConnection = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/health`);
+      console.log('Server health check:', response.data);
+    } catch (error) {
+      console.error('Server health check failed:', error.message);
+    }
+  };
+
+  // Call this when component mounts
+  useEffect(() => {
+    checkServerConnection();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -88,10 +224,27 @@ const SignupScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupButtonText} onPress={() => navigation.navigate('Landing')}>
-            Sign Up
+        {error ? (
+          <Text style={styles.errorText}>
+            {error}
           </Text>
+        ) : null}
+
+        <TouchableOpacity 
+          style={[
+            styles.signupButton,
+            isLoading && styles.disabledButton
+          ]} 
+          onPress={handleSignup}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <Text style={styles.signupButtonText}>
+              Sign Up
+            </Text>
+          )}
         </TouchableOpacity>
 
         <Text style={styles.footerText}>
@@ -180,6 +333,14 @@ const styles = StyleSheet.create({
   loginText: {
     color: '#8146C1',
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: '#FF0000',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  disabledButton: {
+    opacity: 0.7,
   },
 });
 
