@@ -112,7 +112,8 @@ const HomePage = ({ navigation }) => {
               </Text>
               <Text style={styles.vetDistance}>{vet.distance}</Text>
               <Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('VetDetails', { vetId: vet.id })}>
+
+              <TouchableOpacity onPress={() => navigation.navigate('BookAppointment', { vetId: vet.id })}>
                 <Text style={styles.bookAppointmentText}>Book Appointment →</Text>
               </TouchableOpacity>
             </View>

@@ -21,6 +21,7 @@ import ViewMorePro from './ViewMorePro';
 import AddtoCart from './AddtoCart';
 import AddedtoCart from './AddedtoCart';
 import PetProfile from './PetProfile';
+import BookAppointment from './BookAppointment';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,6 +44,7 @@ function DrawerNavigator() {
       <Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
       <Drawer.Screen name="AddtoCart" component={AddtoCart} />
       <Drawer.Screen name="AddedtoCart" component={AddedtoCart} />
+      <Drawer.Screen name="BookAppointment" component={BookAppointment} />
     </Drawer.Navigator>
   );
 }

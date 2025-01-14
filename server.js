@@ -4,52 +4,50 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
 
-// MySQL Database Connection
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} request to ${req.url}`);
+  next();
+});
+
+// MySQL Connection
 const db = mysql.createConnection({
-  host: 'localhost',  // Change to your DB host
-  user: 'root',       // Change to your DB username
-  password: '',       // Change to your DB password
-  database: 'pet_management',  // Change to your DB name
+  host: '10.0.2.2',
+  user: 'root',
+  password: '',
+  database: 'pet-management',
 });
 
 db.connect((err) => {
   if (err) {
-    console.error('Database connection failed: ' + err.stack);
+    console.error('Error connecting to MySQL:', err.message);
     return;
   }
-  console.log('Connected to MySQL database');
+  console.log('Connected to MySQL Database');
 });
 
-// API Endpoint to Fetch Data
-app.get('/products', (req, res) => {
-  const sql = 'SELECT * FROM products'; // Replace 'products' with your table name
-  db.query(sql, (err, result) => {
+// Save appointment endpoint
+app.post('/saveAppointment', (req, res) => {
+  const { owner_name, reason_for_visit, appointment_date, appointment_time } = req.body;
+
+  const query = `
+    INSERT INTO appointment (owner_name, reason_for_visit, appointment_date, appointment_time) 
+    VALUES (?, ?, ?, ?)
+  `;
+  db.query(query, [owner_name, reason_for_visit, appointment_date, appointment_time], (err, result) => {
     if (err) {
-      res.status(500).send(err);
-    } else {
-      res.json(result);
+      console.error('Error saving appointment:', err.message);
+      return res.status(500).json({ error: 'Failed to save appointment' });
     }
+    res.status(200).json({ message: 'Appointment saved successfully' });
   });
 });
 
-// API Endpoint to Add Data
-app.post('/add-product', (req, res) => {
-  const { name, price } = req.body;
-  const sql = 'INSERT INTO products (name, price) VALUES (?, ?)';
-  db.query(sql, [name, price], (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.json({ message: 'Product added', result });
-    }
-  });
-});
 
-// Start Server
-const PORT = 5000;
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
