@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,20 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const AddAppointment = ({ navigation }) => {
+const AddAppointment = ({ route, navigation }) => {
+  const { reason } = route.params || {}; // Retrieve reason from navigation params
   const [owner_name, setOwnerName] = useState('');
-  const [reason_for_visit, setReason] = useState('');
+  const [reason_for_visit, setReason] = useState(reason || ''); // Initialize with passed reason
   const [appointment_date, setDate] = useState('');
   const [appointment_time, setTime] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Save Appointment Handler
+  useEffect(() => {
+    if (reason) {
+      setReason(reason); // Set the reason from navigation params
+    }
+  }, [reason]);
+
   const handleSaveAppointment = async () => {
     if (
       owner_name.trim() &&
@@ -66,7 +72,7 @@ const AddAppointment = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Book Appointment</Text>
+        <Text style={styles.headerTitle}>Add Appointment</Text>
       </View>
 
       {/* Form */}
@@ -79,41 +85,16 @@ const AddAppointment = ({ navigation }) => {
           style={styles.input}
           value={owner_name}
           onChangeText={setOwnerName}
-          placeholder="Enter owner name"
           placeholderTextColor="#b3b3b3"
         />
 
         {/* Reason for Visit Input */}
         <Text style={styles.inputLabel}>Reason for Visit</Text>
-        <View style={styles.reasonButtonsContainer}>
-          {['Consultation', 'Vaccination', 'Deworming', 'Grooming'].map((reason) => (
-            <TouchableOpacity
-              key={reason}
-              style={[
-                styles.reasonButton,
-                reason_for_visit === reason && styles.selectedReasonButton,
-              ]}
-              onPress={() => setReason(reason)}
-            >
-              <Text
-                style={[
-                  styles.reasonButtonText,
-                  reason_for_visit === reason && styles.selectedReasonButtonText,
-                ]}
-              >
-                {reason}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
         <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Enter additional details (optional)"
+          style={styles.input}
           value={reason_for_visit}
           onChangeText={setReason}
           placeholderTextColor="#b3b3b3"
-          multiline
-          numberOfLines={4}
         />
 
         {/* Appointment Date Input */}
@@ -172,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000000',
+    left: 60,
   },
   formContainer: {
     flex: 1,
@@ -200,34 +182,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     backgroundColor: '#FFFFFF',
-  },
-  textArea: {
-    textAlignVertical: 'top',
-    height: 80,
-  },
-  reasonButtonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  reasonButton: {
-    backgroundColor: '#E0E0E0',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    marginRight: 10,
-  },
-  selectedReasonButton: {
-    backgroundColor: '#8146C1',
-  },
-  reasonButtonText: {
-    fontSize: 14,
-    color: '#000000',
-  },
-  selectedReasonButtonText: {
-    color: '#FFFFFF',
   },
   saveButton: {
     backgroundColor: '#CC38F2',

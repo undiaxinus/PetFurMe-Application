@@ -17,6 +17,10 @@ import CustomDrawerContent from "./src/app/screens/CustomDrawerContent";
 import ViewMorePro from "./src/app/screens/ViewMorePro";
 import PetProfile from "./src/app/screens/PetProfile";
 import BookAppointment from "./src/app/screens/BookAppointment";
+import Consultation from "./src/app/screens/Consultation";
+import Vaccination from "./src/app/screens/Vaccination";
+import Deworming from "./src/app/screens/Deworming";
+import Grooming from "./src/app/screens/Grooming";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -35,6 +39,10 @@ function DrawerNavigator() {
 			<Drawer.Screen name="AddPetName" component={AddPetName} />
 			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
 			<Drawer.Screen name="BookAppointment" component={BookAppointment} />
+			<Drawer.Screen name="Consultation" component={Consultation} />
+			<Drawer.Screen name="Vaccination" component={Vaccination} />
+			<Drawer.Screen name="Deworming" component={Deworming} />
+			<Drawer.Screen name="Grooming" component={Grooming} />
 		</Drawer.Navigator>
 	);
 }

@@ -8,7 +8,7 @@ import {
 	FlatList,
 } from "react-native";
 
-import { Ionicons } from "@expo/vector-icons";
+
 
 const HomePage = ({ navigation }) => {
 	const categories = [
@@ -88,21 +88,69 @@ const HomePage = ({ navigation }) => {
 				</View>
 			</View>
 
-			{/* Categories */}
-			<View style={styles.categoriesContainer}>
-				{categories.map((item) => (
-					<TouchableOpacity
-						key={item.id}
-						style={[
-							styles.categoryItem,
-							{ backgroundColor: item.backgroundColor },
-						]}
-						onPress={() => navigation.navigate(item.screen)}>
-						<Image source={item.image} style={styles.categoryImage} />
-						<Text style={styles.categoryLabel}>{item.label}</Text>
-					</TouchableOpacity>
-				))}
-			</View>
+			
+
+			{/* What are you looking for? */}
+		<View style={styles.categoriesContainer}>
+  {/* Consultation */}
+  <TouchableOpacity
+  key="1"
+  style={[styles.categoryItem, { backgroundColor: "#FF8ACF" }]}
+  onPress={() => navigation.navigate("Consultation", { reason: "Consultation" })}
+>
+  <Image
+    source={require("../../assets/images/consultation.png")}
+    style={styles.categoryImage}
+  />
+  <Text style={styles.categoryLabel}>Consultation</Text>
+</TouchableOpacity>
+
+
+  {/* Vaccination */}
+		<TouchableOpacity
+  key="2"
+  style={[styles.categoryItem, { backgroundColor: "#8146C1" }]}
+  onPress={() => navigation.navigate("Vaccination", { reason: "Vaccination" })}
+>
+  <Image
+    source={require("../../assets/images/vaccination.png")}
+    style={styles.categoryImage}
+  />
+  <Text style={styles.categoryLabel}>Vaccination</Text>
+</TouchableOpacity>
+
+
+		{/* Deworming */}
+  <TouchableOpacity
+  key="3"
+  style={[styles.categoryItem, { backgroundColor: "#FF8ACF" }]}
+  onPress={() => navigation.navigate("Deworming", { reason: "Deworming" })}
+>
+  <Image
+    source={require("../../assets/images/deworming.png")}
+    style={styles.categoryImage}
+  />
+  <Text style={styles.categoryLabel}>Deworming</Text>
+</TouchableOpacity>
+
+
+		{/* Grooming */}
+  <TouchableOpacity
+    key="4"
+    style={[styles.categoryItem, { backgroundColor: "#8146C1" }]}
+    onPress={() => navigation.navigate("Grooming", { reason: "Grooming" })}
+  >
+    <Image
+      source={require("../../assets/images/grooming.png")}
+      style={styles.categoryImage}
+    />
+    <Text style={styles.categoryLabel}>Grooming</Text>
+  </TouchableOpacity>
+</View>
+
+
+
+
 
 			{/* Pet Products Section */}
 			<View style={styles.petProductsBox}>
@@ -245,6 +293,7 @@ const styles = StyleSheet.create({
 		color: "#FFFFFF",
 		textAlign: "center",
 		fontWeight: "bold",
+
 	},
 	petProductsBox: {
 		backgroundColor: "#F7F7F7",
