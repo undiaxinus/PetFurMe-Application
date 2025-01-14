@@ -129,12 +129,7 @@ const HomePage = ({ navigation }) => {
 								<Text style={styles.badgeText}>{item.type}</Text>
 							</View>
 						</View>
-						<TouchableOpacity style={styles.cartButton}>
-							<Image
-								source={require("../../assets/images/basket.png")}
-								style={styles.vetcare}
-							/>
-						</TouchableOpacity>
+				
 					</View>
 				))}
 			</View>
@@ -170,10 +165,6 @@ const HomePage = ({ navigation }) => {
 			<View style={styles.bottomNav}>
 				<Image
 					source={require("../../assets/images/homee.png")}
-					style={styles.vetcare}
-				/>
-				<Image
-					source={require("../../assets/images/cart.png")}
 					style={styles.vetcare}
 				/>
 				<Image

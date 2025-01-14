@@ -31,10 +31,6 @@ const LandingPage = ({ navigation }) => {
 
 			{/* Top Header */}
 			<View style={styles.header}>
-				<Image
-					source={require("../../assets/images/person.png")}
-					style={styles.person}
-				/>
 				<Text style={styles.greetingText}>Hello,</Text>
 				<Text style={styles.userName}>Angee</Text>
 			</View>

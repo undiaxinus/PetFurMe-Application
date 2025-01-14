@@ -22,26 +22,26 @@ const ProductPage = ({ navigation }) => {
 		},
 		{
 			id: "2",
-			name: "Pedigree",
+			name: "Bowl",
 			price: "530.00",
 			weight: "3kg",
-			image: require("../../assets/images/pedigree.png"),
+			image: require("../../assets/images/bowl.png"),
 			tag: "Bestseller",
 			discount: "-15%",
 		},
 		{
 			id: "3",
-			name: "Wagners",
+			name: "Toys",
 			price: "3500.00",
 			weight: "3kg",
-			image: require("../../assets/images/wagners.png"),
+			image: require("../../assets/images/toys.png"),
 		},
 		{
 			id: "4",
-			name: "Kaytee Fiesta",
+			name: "Products",
 			price: "11450.00",
 			weight: "3kg",
-			image: require("../../assets/images/kaytee.png"),
+			image: require("../../assets/images/products.png"),
 		},
 		{
 			id: "5",
@@ -52,17 +52,17 @@ const ProductPage = ({ navigation }) => {
 		},
 		{
 			id: "6",
-			name: "Royal Canin",
+			name: "Collars",
 			price: "700.00",
 			weight: "3kg",
-			image: require("../../assets/images/royalcanin.png"),
+			image: require("../../assets/images/collars.png"),
 		},
 		{
 			id: "7",
 			name: "Purina Pro Plan",
 			price: "2200.00",
 			weight: "2kg",
-			image: require("../../assets/images/meowmix.png"),
+			image: require("../../assets/images/vitamins.png"),
 			tag: "Premium",
 		},
 		{
@@ -166,12 +166,14 @@ const ProductPage = ({ navigation }) => {
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
+
 				<TouchableOpacity>
 					<Image
-						source={require("../../assets/images/cart.png")}
+						source={require("../../assets/images/message.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
+				
 				<TouchableOpacity>
 					<Image
 						source={require("../../assets/images/notif.png")}
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 	},
 	addToCartText: {
-		color: "#010101",
+		color: "#808080",
 		marginLeft: 5,
 		fontSize: 12,
 		fontWeight: "bold",
