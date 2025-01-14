@@ -68,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
 
 			<View style={styles.logoContainer}>
 				<Image
-					source={require("./assets/images/vetcare.png")}
+					source={require("../../assets/images/vetcare.png")}
 					style={styles.logo}
 				/>
 			</View>
