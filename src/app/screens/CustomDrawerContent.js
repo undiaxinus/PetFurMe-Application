@@ -84,7 +84,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			/>
 			<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
 			<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
-			<Text style={styles.urpets}>Your Pets</Text>
 		</View>
 	);
 
@@ -124,30 +123,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				<Text style={styles.more}>Add New</Text>
 			</View>
 
-			{/* Navigation Links */}
-			<View style={styles.navSection}>
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<View style={styles.navItem}>
-						<Ionicons name="home" size={24} color="#808080" />
-						<Text style={styles.navText}>Home</Text>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("Reminders")}>
-					<View style={styles.navItem}>
-						<MaterialIcons name="alarm" size={24} color="#808080" />
-						<Text style={styles.navText}>Reminder</Text>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("Help")}>
-					<View style={styles.navItem}>
-						<MaterialIcons name="help-outline" size={24} color="#808080" />
-						<Text style={styles.navText}>Help</Text>
-					</View>
-				</TouchableOpacity>
-			</View>
-
+			
 			{/* Logout Section */}
 			<TouchableOpacity onPress={handleLogout}>
 				<View style={styles.logoutSection}>
@@ -219,21 +195,6 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#888888",
 	},
-	navSection: {
-		flex: 1,
-		marginTop: 20,
-	},
-	navItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 30,
-		left: -20,
-	},
-	navText: {
-		marginLeft: 15,
-		fontSize: 16,
-		color: "#000000",
-	},
 	logoutSection: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -262,11 +223,6 @@ const styles = StyleSheet.create({
 		top: -10,
 		left: -20,
 		justifyContent: "space-between",
-	},
-	urpets: {
-		top: 30,
-		fontSize: 18,
-		color: "#808080",
 	},
 	petname: {
 		flexDirection: "row",

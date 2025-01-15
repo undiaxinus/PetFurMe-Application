@@ -5,10 +5,8 @@ import {
 	TouchableOpacity,
 	Image,
 	StyleSheet,
-	FlatList,
+	ScrollView,
 } from "react-native";
-
-
 
 const HomePage = ({ navigation }) => {
 	const categories = [
@@ -42,8 +40,6 @@ const HomePage = ({ navigation }) => {
 		},
 	];
 
-
-
 	const petProducts = [
 		{
 			id: "1",
@@ -60,7 +56,6 @@ const HomePage = ({ navigation }) => {
 			type: "Cat",
 		},
 	];
-	
 
 	const vets = [
 		{
@@ -75,161 +70,157 @@ const HomePage = ({ navigation }) => {
 		},
 	];
 
+	const handleAddNewPet = () => {
+		navigation.navigate("AddPetName");
+	};
+
 	return (
 		<View style={styles.container}>
-			<View style={styles.header}>
-				<TouchableOpacity onPress={() => navigation.openDrawer()}>
-					<Image
-						source={require("../../assets/images/burger.png")}
-						style={styles.burger}
-					/>
-				</TouchableOpacity>
+			{/* Main Scrollable Content */}
+			<ScrollView contentContainerStyle={styles.scrollContent}>
+				{/* Header Section */}
+				<View style={styles.header}>
+					<TouchableOpacity onPress={() => navigation.openDrawer()}>
+						<Image
+							source={require("../../assets/images/burger.png")}
+							style={styles.burger}
+						/>
+					</TouchableOpacity>
 
-				<View style={styles.headerTextContainer}>
-					<Text style={styles.greetingText}>Hey Angge,</Text>
-					<Text style={styles.questionText}>What are you looking for?</Text>
-				</View>
-			</View>
-
-			
-
-			{/* What are you looking for? */}
-		<View style={styles.categoriesContainer}>
-  {/* Consultation */}
-  <TouchableOpacity
-  key="1"
-  style={[styles.categoryItem, { backgroundColor: "#FF8ACF" }]}
-  onPress={() => navigation.navigate("Consultation", { reason: "Consultation" })}
->
-  <Image
-    source={require("../../assets/images/consultation.png")}
-    style={styles.categoryImage}
-  />
-  <Text style={styles.categoryLabel}>Consultation</Text>
-</TouchableOpacity>
-
-
-  {/* Vaccination */}
-		<TouchableOpacity
-  key="2"
-  style={[styles.categoryItem, { backgroundColor: "#8146C1" }]}
-  onPress={() => navigation.navigate("Vaccination", { reason: "Vaccination" })}
->
-  <Image
-    source={require("../../assets/images/vaccination.png")}
-    style={styles.categoryImage}
-  />
-  <Text style={styles.categoryLabel}>Vaccination</Text>
-</TouchableOpacity>
-
-
-		{/* Deworming */}
-  <TouchableOpacity
-  key="3"
-  style={[styles.categoryItem, { backgroundColor: "#FF8ACF" }]}
-  onPress={() => navigation.navigate("Deworming", { reason: "Deworming" })}
->
-  <Image
-    source={require("../../assets/images/deworming.png")}
-    style={styles.categoryImage}
-  />
-  <Text style={styles.categoryLabel}>Deworming</Text>
-</TouchableOpacity>
-
-
-		{/* Grooming */}
-  <TouchableOpacity
-    key="4"
-    style={[styles.categoryItem, { backgroundColor: "#8146C1" }]}
-    onPress={() => navigation.navigate("Grooming", { reason: "Grooming" })}
-  >
-    <Image
-      source={require("../../assets/images/grooming.png")}
-      style={styles.categoryImage}
-    />
-    <Text style={styles.categoryLabel}>Grooming</Text>
-  </TouchableOpacity>
-</View>
-
-
-
-
-
-			{/* Pet Products Section */}
-			<View style={styles.petProductsBox}>
-				<View style={styles.sectionHeader}>
-					<Image
-						source={require("../../assets/images/petpro.png")}
-						style={styles.vetcare}
-					/>
-					<Text style={styles.sectionTitle}>Pet Products</Text>
-					<Text
-						style={styles.viewmore}
-						onPress={() => navigation.navigate("ViewMorePro")}>
-						View More
-					</Text>
+					<View style={styles.headerTextContainer}>
+						<Text style={styles.greetingText}>Hey Angge,</Text>
+						<Text style={styles.questionText}>What are you looking for?</Text>
+					</View>
 				</View>
 
-				{petProducts.map((item) => (
-					<View key={item.id} style={styles.petProductCard}>
-						<Image source={item.image} style={styles.productImage} />
-						<View style={styles.productDetails}>
-							<Text style={styles.productName}>{item.name}</Text>
-							<Text style={styles.productWeight}>{item.weight}</Text>
-							<View style={styles.badge}>
-								<Text style={styles.badgeText}>{item.type}</Text>
+				{/* Categories Section */}
+				<View style={styles.categoriesContainer}>
+					{categories.map((category) => (
+						<TouchableOpacity
+							key={category.id}
+							style={[
+								styles.categoryItem,
+								{ backgroundColor: category.backgroundColor },
+							]}
+							onPress={() =>
+								navigation.navigate(category.screen, { reason: category.label })
+							}
+						>
+							<Image source={category.image} style={styles.categoryImage} />
+							<Text style={styles.categoryLabel}>{category.label}</Text>
+						</TouchableOpacity>
+					))}
+				</View>
+
+				{/* Pets Section */}
+				<View style={styles.petsContainer}>
+					<TouchableOpacity>
+						<Image
+							source={require("../../assets/images/rigor.png")}
+							style={styles.petImage}
+						/>
+						<Text style={styles.petName}>Rigor</Text>
+					</TouchableOpacity>
+					<TouchableOpacity>
+						<Image
+							source={require("../../assets/images/lena.png")}
+							style={styles.petImage}
+						/>
+						<Text style={styles.petName}>Lena</Text>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={handleAddNewPet}>
+						<Image
+							source={require("../../assets/images/addnew.png")}
+							style={styles.petImage}
+						/>
+						<Text style={styles.petName}>Add New</Text>
+					</TouchableOpacity>
+				</View>
+
+				{/* Pet Products Section */}
+				<View style={styles.petProductsBox}>
+					<View style={styles.sectionHeader}>
+						<Image
+							source={require("../../assets/images/petpro.png")}
+							style={styles.vetcare}
+						/>
+						<Text style={styles.sectionTitle}>Pet Products</Text>
+						<Text
+							style={styles.viewmore}
+							onPress={() => navigation.navigate("ViewMorePro")}>
+							View More
+						</Text>
+					</View>
+
+					{petProducts.map((item) => (
+						<View key={item.id} style={styles.petProductCard}>
+							<Image source={item.image} style={styles.productImage} />
+							<View style={styles.productDetails}>
+								<Text style={styles.productName}>{item.name}</Text>
+								<Text style={styles.productWeight}>{item.weight}</Text>
+								<View style={styles.badge}>
+									<Text style={styles.badgeText}>{item.type}</Text>
+								</View>
 							</View>
 						</View>
-					</View>
-				))}
-			</View>
+					))}
+				</View>
 
-			{/* Vets Section */}
-			<View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>Veterinary Doctor</Text>
-				{vets.map((vet) => (
-					<View key={vet.id} style={styles.vetCard}>
-						<Image source={vet.image} style={styles.vetImage} />
-						<View style={styles.vetDetails}>
-							<Text style={styles.vetName}>{vet.name}</Text>
-							<Text style={styles.vetSpecialty}>{vet.specialty}</Text>
-							<Text style={styles.vetRating}>
-								⭐ {vet.rating} ({vet.reviews})
-							</Text>
-							<Text style={styles.vetDistance}>{vet.distance}</Text>
-							<Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
-
-							<TouchableOpacity
-								onPress={() =>
-									navigation.navigate("BookAppointment", { vetId: vet.id })
-								}>
-								<Text style={styles.bookAppointmentText}>
-									Book Appointment →
+				{/* Vets Section */}
+				<View style={styles.sectionContainer}>
+					<Text style={styles.sectionTitle}>Vets</Text>
+					{vets.map((vet) => (
+						<View key={vet.id} style={styles.vetCard}>
+							<Image source={vet.image} style={styles.vetImage} />
+							<View style={styles.vetDetails}>
+								<Text style={styles.vetName}>{vet.name}</Text>
+								<Text style={styles.vetSpecialty}>{vet.specialty}</Text>
+								<Text style={styles.vetRating}>
+									⭐ {vet.rating} ({vet.reviews})
 								</Text>
-							</TouchableOpacity>
+								<Text style={styles.vetDistance}>{vet.distance}</Text>
+								<Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
+
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate("BookAppointment", { vetId: vet.id })
+									}>
+									<Text style={styles.bookAppointmentText}>
+										Book Appointment →
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
-					</View>
-				))}
-			</View>
+					))}
+				</View>
+			</ScrollView>
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
-				<Image
-					source={require("../../assets/images/homee.png")}
-					style={styles.vetcare}
-				/>
-				<Image
-					source={require("../../assets/images/message.png")}
-					style={styles.vetcare}
-				/>
-				<Image
-					source={require("../../assets/images/notif.png")}
-					style={styles.vetcare}
-				/>
-				<Image
-					source={require("../../assets/images/circle.png")}
-					style={styles.vetcare}
-				/>
+				<TouchableOpacity>
+					<Image
+						source={require("../../assets/images/homee.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
+				<TouchableOpacity>
+					<Image
+						source={require("../../assets/images/message.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
+				<TouchableOpacity>
+					<Image
+						source={require("../../assets/images/notif.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
+				<TouchableOpacity>
+					<Image
+						source={require("../../assets/images/circle.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -239,6 +230,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
+	},
+	scrollContent: {
+		paddingBottom: 100, // Space for bottom navigation
 	},
 	header: {
 		flexDirection: "row",
@@ -269,7 +263,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#141415",
 		fontWeight: "bold",
-		top: 50,
+		top: 60,
 		left: 0,
 	},
 	categoriesContainer: {
@@ -296,7 +290,26 @@ const styles = StyleSheet.create({
 		color: "#FFFFFF",
 		textAlign: "center",
 		fontWeight: "bold",
-
+	},
+	petsContainer: {
+		flexDirection: "row",
+		marginVertical: 20,
+		paddingHorizontal: 20,
+		top: -20,
+		width: 70,
+		height: 70,
+	},
+	petImage: {
+		width: 60,
+		height: 60,
+		borderRadius: 35,
+		marginBottom: 5,
+	},
+	petName: {
+		textAlign: "center",
+		color: "#8146C1",
+		fontWeight: "bold",
+		fontSize: 12,
 	},
 	petProductsBox: {
 		backgroundColor: "#F7F7F7",
@@ -339,7 +352,8 @@ const styles = StyleSheet.create({
 	viewmore: {
 		left: 95,
 		top: 210,
-		color: "#808080",
+		color: "#5809BB",
+		fontWeight: 'bold',
 	},
 	productName: {
 		fontSize: 14,
@@ -361,13 +375,8 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		color: "#FFFFFF",
 	},
-	cartButton: {
-		padding: -10,
-		borderRadius: 20,
-	},
 	sectionContainer: {
 		marginHorizontal: 20,
-		marginBottom: 6,
 	},
 	vetCard: {
 		flexDirection: "row",
