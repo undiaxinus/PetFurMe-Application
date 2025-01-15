@@ -13,21 +13,10 @@ import { Fredoka_400Regular } from "@expo-google-fonts/fredoka";
 
 const HomeScreen = ({ navigation }) => {
   const [gradientAnimation] = useState(new Animated.Value(0));
-
   const [fontsLoaded] = useFonts({
     Fredoka_400Regular,
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  // Handle navigation without rotation
-  const handlePress = () => {
-    navigation.navigate("LoginScreen");
-  };
-
-  // Start the gradient animation
   useEffect(() => {
     Animated.loop(
       Animated.timing(gradientAnimation, {
@@ -38,7 +27,14 @@ const HomeScreen = ({ navigation }) => {
     ).start();
   }, []);
 
-  // Interpolate gradient colors
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  const handlePress = () => {
+    navigation.navigate("LoginScreen");
+  };
+
   const backgroundColor1 = gradientAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: ["#A259B5", "#537FE7"],
