@@ -42,16 +42,36 @@ const LoginScreen = ({ navigation }) => {
 			console.log("Login response:", response.data);
 
 			if (response.data.success) {
-				Alert.alert("Success", "Login successful!", [
-					{ text: "OK", onPress: () => navigation.navigate("DrawerNavigator", { screen: "HomePage" }) },
-				]);
+				const userData = response.data.user;
+				navigation.reset({
+					index: 0,
+					routes: [
+						{
+							name: "DrawerNavigator",
+							state: {
+								routes: [
+									{
+										name: "HomePage",
+										params: {
+											user_id: userData.id,
+											userName: userData.name,
+											userEmail: userData.email,
+											userRole: userData.role
+										}
+									}
+								]
+							}
+						}
+					]
+				});
 			} else {
 				setError(response.data.error || "Login failed");
 			}
 		} catch (error) {
-			console.error("Login error:", error.response?.data || error.message);
+			console.error("Login error:", error);
 			setError(
-				error.response?.data?.error || "Login failed. Please try again."
+				error.response?.data?.error || 
+				"Login failed. Please try again."
 			);
 		} finally {
 			setLoading(false);

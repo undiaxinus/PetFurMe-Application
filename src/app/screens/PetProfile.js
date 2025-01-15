@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -9,7 +9,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const HomePage = ({ navigation }) => {
+const HomePage = ({ navigation, route }) => {
+	const [userData, setUserData] = useState(route.params || {});
+
+	useEffect(() => {
+		console.log("HomePage route params:", route.params);
+		if (route.params) {
+			setUserData(route.params);
+			// Store user data in navigation state for drawer access
+			navigation.setParams(route.params);
+		}
+	}, [route.params]);
+
 	const categories = [
 		{
 			id: "1",
@@ -71,11 +82,16 @@ const HomePage = ({ navigation }) => {
 		},
 	];
 
+	// Add this function to handle drawer open
+	const handleDrawerOpen = () => {
+		navigation.openDrawer();
+	};
+
 	return (
 		<View style={styles.container}>
 			{/* Header */}
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => navigation.openDrawer()}>
+				<TouchableOpacity onPress={handleDrawerOpen}>
 					<Image
 						source={require("../../assets/images/burger.png")}
 						style={styles.burger}
@@ -83,8 +99,12 @@ const HomePage = ({ navigation }) => {
 				</TouchableOpacity>
 
 				<View style={styles.headerTextContainer}>
-					<Text style={styles.greetingText}>Hey Angge,</Text>
-					<Text style={styles.questionText}>What are you looking for?</Text>
+					<Text style={styles.greetingText}>
+						Hey {userData.userName || "there"},
+					</Text>
+					<Text style={styles.questionText}>
+						What are you looking for?
+					</Text>
 				</View>
 			</View>
 

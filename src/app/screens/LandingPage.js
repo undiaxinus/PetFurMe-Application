@@ -13,11 +13,13 @@ const LandingPage = ({ navigation }) => {
 	const [loading, setLoading] = useState(false);
 
 	const handleContinue = () => {
-		setLoading(true); // Start the spinner
+		setLoading(true);
 		setTimeout(() => {
-			setLoading(false); // Stop the spinner
-			navigation.navigate("DrawerNavigator", { screen: "AddPetName" }); // Navigate to the next screen
-		}, 2000); // Simulate a delay for the loading animation
+			setLoading(false);
+			navigation.navigate("DrawerNavigator", { 
+				screen: "AddPetName"
+			});
+		}, 2000);
 	};
 
 	return (
