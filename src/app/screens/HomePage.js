@@ -42,6 +42,8 @@ const HomePage = ({ navigation }) => {
 		},
 	];
 
+
+
 	const petProducts = [
 		{
 			id: "1",
@@ -58,6 +60,7 @@ const HomePage = ({ navigation }) => {
 			type: "Cat",
 		},
 	];
+	
 
 	const vets = [
 		{
