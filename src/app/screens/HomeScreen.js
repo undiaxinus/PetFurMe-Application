@@ -32,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const handlePress = () => {
-    navigation.navigate("LoginScreen");
+    navigation.navigate("Register");
   };
 
   const backgroundColor1 = gradientAnimation.interpolate({

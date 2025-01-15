@@ -22,6 +22,7 @@ import Vaccination from "./src/app/screens/Vaccination";
 import Deworming from "./src/app/screens/Deworming";
 import Grooming from "./src/app/screens/Grooming";
 import Help from "./src/app/screens/Help";
+import AddPetSize from "./src/app/screens/AddPetSize";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -57,6 +58,7 @@ export default function App() {
 				<Stack.Screen name="Profile" component={ProfileScreen} />
 				<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
 				<Stack.Screen name="AddPetName" component={AddPetName} />
+				<Stack.Screen name="AddPetSize" component={AddPetSize} />
 				<Stack.Screen name="ViewMorePro" component={ViewMorePro} />
 				<Stack.Screen name="BookAppointment" component={BookAppointment} />
 				<Stack.Screen name="Consultation" component={Consultation} />

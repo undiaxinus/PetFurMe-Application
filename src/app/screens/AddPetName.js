@@ -21,16 +21,19 @@ const AddPetProfile = ({ navigation, route }) => {
 	// Get user_id from route params
 	const user_id = route.params?.user_id;
 
+	// Add this for debugging
+	console.log("AddPetName user_id:", user_id);
+
 	// Add useEffect to check for user_id
 	useEffect(() => {
 		if (!user_id) {
 			Alert.alert(
 				"Error",
-				"User ID is missing. Please try registering again.",
+				"User ID is missing. Please try logging in again.",
 				[
 					{
 						text: "OK",
-						onPress: () => navigation.navigate("RegistrationScreen")
+						onPress: () => navigation.navigate("LoginScreen")
 					}
 				]
 			);
@@ -89,7 +92,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			setLoading(false);
 			alert('Pet profile created successfully!');
-			navigation.navigate("AddPetSize");
+			navigation.navigate("AddPetSize", { pet_id: data.pet_id });
 			
 		} catch (error) {
 			setLoading(false);

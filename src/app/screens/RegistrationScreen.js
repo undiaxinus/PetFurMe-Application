@@ -55,12 +55,10 @@ const SignupScreen = ({ navigation }) => {
 			if (response.data.success) {
 				Alert.alert(
 					"Success",
-					"Registration successful! Please add your pet details.",
+					"Registration successful! Please login.",
 					[{ 
 						text: "OK", 
-						onPress: () => navigation.navigate("AddPetName", {
-							user_id: response.data.user_id
-						})
+						onPress: () => navigation.navigate("LoginScreen")
 					}]
 				);
 			}

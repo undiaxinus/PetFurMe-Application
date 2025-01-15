@@ -43,27 +43,9 @@ const LoginScreen = ({ navigation }) => {
 			console.log("Login response:", response.data);
 
 			if (response.data.success) {
-				const userData = response.data.user;
-				navigation.reset({
-					index: 0,
-					routes: [
-						{
-							name: "DrawerNavigator",
-							state: {
-								routes: [
-									{
-										name: "HomePage",
-										params: {
-											user_id: userData.id,
-											userName: userData.name,
-											userEmail: userData.email,
-											userRole: userData.role,
-										},
-									},
-								],
-							},
-						},
-					],
+				navigation.navigate("DrawerNavigator", { 
+					screen: 'HomePage',
+					params: { user_id: response.data.user.id }
 				});
 			} else {
 				setError(response.data.error || "Login failed");

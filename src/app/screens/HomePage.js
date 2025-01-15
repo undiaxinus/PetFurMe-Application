@@ -6,9 +6,14 @@ import {
 	Image,
 	StyleSheet,
 	ScrollView,
+	Alert,
 } from "react-native";
 
-const HomePage = ({ navigation }) => {
+const HomePage = ({ navigation, route }) => {
+	const user_id = route.params?.user_id;
+
+	console.log("HomePage user_id:", user_id);
+
 	const categories = [
 		{
 			id: "1",
@@ -71,7 +76,12 @@ const HomePage = ({ navigation }) => {
 	];
 
 	const handleAddNewPet = () => {
-		navigation.navigate("AddPetName");
+		if (!user_id) {
+			Alert.alert("Error", "User ID is missing. Please try logging in again.");
+			navigation.navigate("LoginScreen");
+			return;
+		}
+		navigation.navigate("AddPetName", { user_id: user_id });
 	};
 
 	return (
