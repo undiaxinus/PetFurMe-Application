@@ -207,7 +207,7 @@ const HomePage = ({ navigation, route }) => {
 						{userPets.map((pet) => (
 							<TouchableOpacity key={pet.id}>
 								<Image
-									source={pet.photo ? { uri: pet.photo } : require("../../assets/images/addnew.png")}
+									source={pet.photo ? { uri: pet.photo } : require("../../assets/images/lena.png")}
 									style={styles.petImage}
 								/>
 								<Text style={styles.petName}>{pet.name}</Text>
