@@ -1,139 +1,157 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-	Text,
-	TouchableOpacity,
-	Image,
-	StyleSheet,
-	View,
-	Animated,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  View,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
-import { Fredoka_400Regular } from "@expo-google-fonts/fredoka"; // Import the font
+import { Fredoka_400Regular } from "@expo-google-fonts/fredoka";
 
 const HomeScreen = ({ navigation }) => {
-	const [rotation] = useState(new Animated.Value(0)); // Initialize animated value for rotation
+  const [gradientAnimation] = useState(new Animated.Value(0));
 
-	// Load the font
-	const [fontsLoaded] = useFonts({
-		Fredoka_400Regular, // Register the font
-	});
+  const [fontsLoaded] = useFonts({
+    Fredoka_400Regular,
+  });
 
-	if (!fontsLoaded) {
-		return null; // Ensure the app waits for the font to load
-	}
+  if (!fontsLoaded) {
+    return null;
+  }
 
-	// Function to handle the rotation animation
-	const rotateCircle = () => {
-		Animated.timing(rotation, {
-			toValue: 1,
-			duration: 1000,
-			useNativeDriver: true,
-		}).start(() => {
-			rotation.setValue(0); // Reset rotation value
-			navigation.navigate("LoginScreen"); // Navigate to the Register screen after animation
-		});
-	};
+  // Handle navigation without rotation
+  const handlePress = () => {
+    navigation.navigate("LoginScreen");
+  };
 
-	// Interpolate the rotation value to rotate the circle
-	const rotateInterpolate = rotation.interpolate({
-		inputRange: [0, 1],
-		outputRange: ["0deg", "360deg"], // Rotate from 0 to 360 degrees
-	});
+  // Start the gradient animation
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(gradientAnimation, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: false,
+      })
+    ).start();
+  }, []);
 
-	return (
-		<LinearGradient
-			colors={["#A259B5", "#FFFFFF"]}
-			start={{ x: 0, y: 0 }}
-			end={{ x: 1, y: 1 }}
-			style={styles.background}>
-			<Animated.View
-				style={[
-					styles.outerCircle,
-					{ transform: [{ rotate: rotateInterpolate }] }, // Apply rotation to the outer circle
-				]}>
-				<View style={styles.imageWrapper}>
-					<Image
-						source={require("../../assets/images/logo.png")}
-						style={styles.image}
-					/>
-				</View>
-			</Animated.View>
+  // Interpolate gradient colors
+  const backgroundColor1 = gradientAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#A259B5", "#537FE7"],
+  });
+  const backgroundColor2 = gradientAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#537FE7", "#A259B5"],
+  });
 
-			<Image
-				source={require("../../assets/images/animal.png")}
-				style={styles.vetcare}
-			/>
+  return (
+    <LinearGradient
+      colors={["#A259B5", "#FFFFFF"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.background}
+    >
+      <View style={styles.outerCircle}>
+        <Animated.View
+          style={[
+            styles.gradientCircle,
+            {
+              backgroundColor: backgroundColor1,
+            },
+          ]}
+        >
+          <View style={styles.imageWrapper}>
+            <Image
+              source={require("../../assets/images/finallogo.png")}
+              style={styles.image}
+            />
+          </View>
+        </Animated.View>
+      </View>
 
-			
-			<TouchableOpacity onPress={rotateCircle}>
-			<Image
-				source={require("../../assets/images/footprint.png")}
-				style={[styles.image2, { transform: [{ rotate: "12deg" }] }]} // Apply rotation here
-			/>
-				<Text style={styles.registerText}>GET STARTED</Text>
-			</TouchableOpacity>
-		</LinearGradient>
-	);
+      <Image
+        source={require("../../assets/images/animal.png")}
+        style={styles.vetcare}
+      />
+
+      <TouchableOpacity onPress={handlePress}>
+        <Image
+          source={require("../../assets/images/footprint.png")}
+          style={[styles.image2, { transform: [{ rotate: "12deg" }] }]}
+        />
+        <Text style={styles.registerText}>GET STARTED</Text>
+      </TouchableOpacity>
+    </LinearGradient>
+  );
 };
 
 const styles = StyleSheet.create({
-	background: {
-		flex: 1,
-		width: "100%",
-		height: "100%",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	outerCircle: {
-		width: 200,
-		height: 200,
-		borderRadius: 100,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#FFFFFF",
-		borderWidth: 9,
-		borderColor: "#2A27AE",
-		marginBottom: 80,
-	},
-	imageWrapper: {
-		width: 180,
-		height: 180,
-		borderRadius: 90,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#fff",
-		borderWidth: 12,
-		borderColor: "#B61DB0",
-	},
-	image: {
-		width: 150,
-		height: 150,
-		resizeMode: "contain",
-	},
-	image2: {
-		width: 160,
-		height: 160,
-		marginTop: 60,
-	},
-	vetcare: {
-		width: 200,
-		height: 70,
-		top: -70,
-	},
-	registerText: {
-		position: 'absolute',
-		fontSize: 12,
-		color: '#fff',
-		fontWeight: 'bold',
-		fontFamily: 'Fredoka_400Regular',
-		alignSelf: 'center',
-		width: '100%',
-		textAlign: 'center',
-		top: 170,
-	  },
-
+  background: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  outerCircle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 9,
+    borderColor: "#2A27AE",
+    marginBottom: 80,
+  },
+  gradientCircle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imageWrapper: {
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderWidth: 12,
+    borderColor: "#B61DB0",
+    overflow: 'hidden',
+  },
+  image: {
+    width: 150,
+    height: 150,
+    resizeMode: "contain",
+  },
+  image2: {
+    width: 160,
+    height: 160,
+    marginTop: 60,
+  },
+  vetcare: {
+    width: 200,
+    height: 70,
+    top: -70,
+  },
+  registerText: {
+    position: "absolute",
+    fontSize: 12,
+    color: "#fff",
+    fontWeight: "bold",
+    fontFamily: "Fredoka_400Regular",
+    alignSelf: "center",
+    width: "100%",
+    textAlign: "center",
+    top: 170,
+  },
 });
 
 export default HomeScreen;
-//huhu

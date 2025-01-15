@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require("uuid");
 
 // Server configuration - declare these once at the top
@@ -313,7 +313,7 @@ const startServer = async () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
-			console.log(`- Network: http://192.168.1.7:${PORT}`);
+			console.log(`- Network: http://192.168.0.100:${PORT}`);
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");

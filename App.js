@@ -21,6 +21,7 @@ import Consultation from "./src/app/screens/Consultation";
 import Vaccination from "./src/app/screens/Vaccination";
 import Deworming from "./src/app/screens/Deworming";
 import Grooming from "./src/app/screens/Grooming";
+import Help from "./src/app/screens/Help";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -33,16 +34,6 @@ function DrawerNavigator() {
 			screenOptions={{ headerShown: false }} // Hide headers for drawer screens
 		>
 			<Drawer.Screen name="HomePage" component={HomePage} />
-			<Drawer.Screen name="Profile" component={ProfileScreen} />
-			<Drawer.Screen name="Chat" component={ChatScreen} />
-			<Drawer.Screen name="Notification" component={NotificationScreen} />
-			<Drawer.Screen name="AddPetName" component={AddPetName} />
-			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
-			<Drawer.Screen name="BookAppointment" component={BookAppointment} />
-			<Drawer.Screen name="Consultation" component={Consultation} />
-			<Drawer.Screen name="Vaccination" component={Vaccination} />
-			<Drawer.Screen name="Deworming" component={Deworming} />
-			<Drawer.Screen name="Grooming" component={Grooming} />
 		</Drawer.Navigator>
 	);
 }
@@ -61,6 +52,18 @@ export default function App() {
 				<Stack.Screen name="Register" component={RegistrationScreen} />
 				<Stack.Screen name="LandingPage" component={LandingPage} />
 				<Stack.Screen name="PetProfile" component={PetProfile} />
+				<Stack.Screen name="ChatScreen" component={ChatScreen} />
+
+				<Stack.Screen name="Profile" component={ProfileScreen} />
+				<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+				<Stack.Screen name="AddPetName" component={AddPetName} />
+				<Stack.Screen name="ViewMorePro" component={ViewMorePro} />
+				<Stack.Screen name="BookAppointment" component={BookAppointment} />
+				<Stack.Screen name="Consultation" component={Consultation} />
+				<Stack.Screen name="Vaccination" component={Vaccination} />
+				<Stack.Screen name="Deworming" component={Deworming} />
+				<Stack.Screen name="Grooming" component={Grooming} />
+				<Stack.Screen name="Help" component={Help} />
 
 				{/* Drawer Navigator */}
 				<Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
