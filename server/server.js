@@ -58,7 +58,7 @@ const db = mysql.createPool({
 	host: "localhost",
 	user: "root",
 	password: "",
-	database: "pet",
+	database: "pet-management",
 	waitForConnections: true,
 	connectionLimit: 10,
 	queueLimit: 0,
@@ -252,11 +252,11 @@ app.post("/api/pets/create", async (req, res) => {
 		
 		console.log("Received pet creation request:", req.body);
 
-		// Validate required fields
-		if (!name || !type) {
+		// Validate required fields including user_id
+		if (!name || !type || !user_id) {
 			return res.status(400).json({
 				success: false,
-				error: "Missing required fields"
+				error: "Missing required fields (name, type, and user_id are required)"
 			});
 		}
 
@@ -265,7 +265,7 @@ app.post("/api/pets/create", async (req, res) => {
 			(user_id, name, type, breed, age, category, gender, weight, created_at, updated_at) 
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
 			[
-				user_id || 1,
+				user_id,
 				name,
 				type,
 				breed || null,
@@ -295,6 +295,11 @@ app.post("/api/pets/create", async (req, res) => {
 	}
 });
 
+// Add this test endpoint
+app.get('/api/test', (req, res) => {
+	res.json({ status: 'ok', message: 'API is working' });
+});
+
 const startServer = async () => {
 	try {
 		// Test database connection first
@@ -308,7 +313,7 @@ const startServer = async () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
-			console.log(`- Network: http://192.168.43.100:${PORT}`);
+			console.log(`- Network: http://192.168.1.7:${PORT}`);
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");

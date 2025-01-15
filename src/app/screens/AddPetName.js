@@ -10,27 +10,69 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const AddPetProfile = ({ navigation }) => {
+const AddPetProfile = ({ navigation, route }) => {
 	const [petName, setPetName] = useState("");
 	const [petAge, setPetAge] = useState("");
 	const [petType, setPetType] = useState("");
 	const [petBreed, setPetBreed] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	const handleContinue = () => {
+	// Get user_id from route params or your auth state
+	const user_id = route.params?.user_id;
+
+	const handleContinue = async () => {
 		if (
 			petName.trim() === "" ||
 			petAge.trim() === "" ||
 			petType.trim() === "" ||
-			petBreed.trim() === "" 
+			petBreed.trim() === ""
 		) {
 			alert("Please fill out all the fields.");
-		} else {
-			setLoading(true); // Show loading spinner
-			setTimeout(() => {
-				setLoading(false); // Hide loading spinner
-				navigation.navigate("AddPetSize"); // Replace 'NextStep' with your next screen
-			}, 2000); // Simulate a delay
+			return;
+		}
+
+		try {
+			setLoading(true);
+			
+			const response = await fetch('http://192.168.1.7:3001/api/pets/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					user_id: user_id,
+					name: petName.trim(),
+					age: parseInt(petAge),
+					type: petType.trim(),
+					breed: petBreed.trim(),
+					category: 'Mammal',
+				}),
+			});
+
+			// Log the raw response for debugging
+			const responseText = await response.text();
+			console.log('Raw response:', responseText);
+
+			// Try to parse as JSON
+			let data;
+			try {
+				data = JSON.parse(responseText);
+			} catch (parseError) {
+				throw new Error(`Server response was not JSON: ${responseText}`);
+			}
+
+			if (!response.ok) {
+				throw new Error(data.error || data.message || 'Failed to save pet details');
+			}
+
+			setLoading(false);
+			alert('Pet profile created successfully!');
+			navigation.navigate("AddPetSize");
+			
+		} catch (error) {
+			setLoading(false);
+			console.error('Error details:', error);
+			alert("Error saving pet details: " + error.message);
 		}
 	};
 
@@ -81,17 +123,18 @@ const AddPetProfile = ({ navigation }) => {
 <Text style={styles.label}>What’s your pet’s age?</Text>
 			<TextInput
 				style={styles.input}
-				placeholder="Your pet’s age"
-				value={petName}
+				placeholder="Your pet's age"
+				value={petAge}
 				onChangeText={setPetAge}
 				placeholderTextColor="#8146C1"
+				keyboardType="numeric"
 			/>
 
 <Text style={styles.label}>What’s your pet’s type?</Text>
 			<TextInput
 				style={styles.input}
-				placeholder="Your pet’s type"
-				value={petName}
+				placeholder="Your pet's type"
+				value={petType}
 				onChangeText={setPetType}
 				placeholderTextColor="#8146C1"
 			/>
@@ -99,8 +142,8 @@ const AddPetProfile = ({ navigation }) => {
 <Text style={styles.label}>What’s your pet’s breed?</Text>
 			<TextInput
 				style={styles.input}
-				placeholder="Your pet’s breed"
-				value={petName}
+				placeholder="Your pet's breed"
+				value={petBreed}
 				onChangeText={setPetBreed}
 				placeholderTextColor="#8146C1"
 			/>
@@ -117,7 +160,7 @@ const AddPetProfile = ({ navigation }) => {
 				]}
 				onPress={handleContinue}
 				disabled={!petName.trim() || !petAge.trim() || !petType.trim() || !petBreed.trim()}>
-				<Text style={styles.continueButtonText}>Continue</Text>
+				<Text style={styles.continueButtonText}>Save</Text>
 			</TouchableOpacity>
 		</View>
 	);
