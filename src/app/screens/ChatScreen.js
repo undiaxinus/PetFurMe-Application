@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   chatContainer: {
-    padding: 10,
+    padding: 15,
+    top: 100,
   },
   messageBubble: {
     padding: 10,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   },
   otherBubble: {
     alignSelf: 'flex-start',
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#cccccc',
   },
   messageText: {
     color: '#FFFFFF',

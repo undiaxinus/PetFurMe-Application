@@ -75,79 +75,17 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const renderProfileSection = () => (
 		<View style={styles.profileSection}>
 			<Image
-				source={require("../../assets/images/ekis.png")}
-				style={styles.ekis}
-			/>
-			<Image
 				source={require("../../assets/images/profile.png")}
 				style={styles.profileImage}
 			/>
 			<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
 			<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
-			<Text style={styles.urpets}>Your Pets</Text>
 		</View>
 	);
 
 	return (
 		<View style={styles.container}>
 			{renderProfileSection()}
-
-			<View style={styles.yourpets}>
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<Image
-						source={require("../../assets/images/rigor.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<Image
-						source={require("../../assets/images/lena.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-
-				<TouchableOpacity 
-					onPress={handleAddNewPet}
-					style={styles.addNewPetButton}
-				>
-					<Image
-						source={require("../../assets/images/addnew.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-			</View>
-
-			<View style={styles.petname}>
-				<Text style={styles.rigor}>Rigor</Text>
-				<Text style={styles.lena}>Lena</Text>
-				<Text style={styles.more}>Add New</Text>
-			</View>
-
-			{/* Navigation Links */}
-			<View style={styles.navSection}>
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<View style={styles.navItem}>
-						<Ionicons name="home" size={24} color="#808080" />
-						<Text style={styles.navText}>Home</Text>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("Reminders")}>
-					<View style={styles.navItem}>
-						<MaterialIcons name="alarm" size={24} color="#808080" />
-						<Text style={styles.navText}>Reminder</Text>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("Help")}>
-					<View style={styles.navItem}>
-						<MaterialIcons name="help-outline" size={24} color="#808080" />
-						<Text style={styles.navText}>Help</Text>
-					</View>
-				</TouchableOpacity>
-			</View>
-
 			{/* Logout Section */}
 			<TouchableOpacity onPress={handleLogout}>
 				<View style={styles.logoutSection}>
@@ -219,21 +157,6 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#888888",
 	},
-	navSection: {
-		flex: 1,
-		marginTop: 20,
-	},
-	navItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 30,
-		left: -20,
-	},
-	navText: {
-		marginLeft: 15,
-		fontSize: 16,
-		color: "#000000",
-	},
 	logoutSection: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -254,19 +177,11 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		width: "80%",
 	},
-	ekis: {
-		left: 250,
-	},
 	yourpets: {
 		flexDirection: "row",
 		top: -10,
 		left: -20,
 		justifyContent: "space-between",
-	},
-	urpets: {
-		top: 30,
-		fontSize: 18,
-		color: "#808080",
 	},
 	petname: {
 		flexDirection: "row",

@@ -16,12 +16,13 @@ import axios from "axios";
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false); // New state for password visibility
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
 	const API_URL = Platform.select({
 		ios: "http://localhost:3001",
-		android: "http://192.168.43.100:3001",
+		android: "http://192.168.0.100:3001",
 	});
 
 	const handleLogin = async () => {
@@ -56,13 +57,13 @@ const LoginScreen = ({ navigation }) => {
 											user_id: userData.id,
 											userName: userData.name,
 											userEmail: userData.email,
-											userRole: userData.role
-										}
-									}
-								]
-							}
-						}
-					]
+											userRole: userData.role,
+										},
+									},
+								],
+							},
+						},
+					],
 				});
 			} else {
 				setError(response.data.error || "Login failed");
@@ -70,8 +71,7 @@ const LoginScreen = ({ navigation }) => {
 		} catch (error) {
 			console.error("Login error:", error);
 			setError(
-				error.response?.data?.error || 
-				"Login failed. Please try again."
+				error.response?.data?.error || "Login failed. Please try again."
 			);
 		} finally {
 			setLoading(false);
@@ -124,9 +124,16 @@ const LoginScreen = ({ navigation }) => {
 						placeholder="Password"
 						value={password}
 						onChangeText={setPassword}
-						secureTextEntry
+						secureTextEntry={!showPassword} // Toggle visibility based on `showPassword`
 						placeholderTextColor="#8146C1"
 					/>
+					<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+						<Ionicons
+							name={showPassword ? "eye-outline" : "eye-off-outline"} // Eye icon changes based on `showPassword`
+							size={20}
+							color="#8146C1"
+						/>
+					</TouchableOpacity>
 				</View>
 
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -134,7 +141,8 @@ const LoginScreen = ({ navigation }) => {
 				<TouchableOpacity
 					style={[styles.loginButton, loading && styles.disabledButton]}
 					onPress={handleLogin}
-					disabled={loading}>
+					disabled={loading}
+				>
 					<Text style={styles.loginButtonText}>LOGIN</Text>
 				</TouchableOpacity>
 
@@ -142,7 +150,8 @@ const LoginScreen = ({ navigation }) => {
 					Don't have an account?{" "}
 					<Text
 						style={styles.signUpText}
-						onPress={() => navigation.navigate("Register")}>
+						onPress={() => navigation.navigate("Register")}
+					>
 						Sign Up
 					</Text>
 				</Text>
