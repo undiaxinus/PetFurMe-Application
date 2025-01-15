@@ -14,6 +14,7 @@ const API_BASE_URL = 'http://192.168.1.7';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
+	const refresh = route.params?.refresh;
 	const [userPets, setUserPets] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -21,9 +22,10 @@ const HomePage = ({ navigation, route }) => {
 
 	useEffect(() => {
 		if (user_id) {
+			console.log("Fetching pets...", { user_id, refresh });
 			fetchUserPets();
 		}
-	}, [user_id]);
+	}, [user_id, refresh]);
 
 	const fetchUserPets = async () => {
 		setIsLoading(true);
@@ -203,23 +205,30 @@ const HomePage = ({ navigation, route }) => {
 				{isLoading ? (
 					<ActivityIndicator size="large" color="#8146C1" />
 				) : (
-					<View style={styles.petsContainer}>
-						{userPets.map((pet) => (
-							<TouchableOpacity key={pet.id}>
+					<View>
+						<Text style={styles.sectionTitle}>My Pets</Text>
+						<ScrollView 
+							horizontal 
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.petsScrollContainer}
+						>
+							{userPets.map((pet) => (
+								<TouchableOpacity key={pet.id} style={styles.petItem}>
+									<Image
+										source={pet.photo ? { uri: pet.photo } : require("../../assets/images/lena.png")}
+										style={styles.petImage}
+									/>
+									<Text style={styles.petName}>{pet.name}</Text>
+								</TouchableOpacity>
+							))}
+							<TouchableOpacity onPress={handleAddNewPet} style={styles.petItem}>
 								<Image
-									source={pet.photo ? { uri: pet.photo } : require("../../assets/images/lena.png")}
+									source={require("../../assets/images/addnew.png")}
 									style={styles.petImage}
 								/>
-								<Text style={styles.petName}>{pet.name}</Text>
+								<Text style={styles.petName}>Add New</Text>
 							</TouchableOpacity>
-						))}
-						<TouchableOpacity onPress={handleAddNewPet}>
-							<Image
-								source={require("../../assets/images/addnew.png")}
-								style={styles.petImage}
-							/>
-							<Text style={styles.petName}>Add New</Text>
-						</TouchableOpacity>
+						</ScrollView>
 					</View>
 				)}
 
@@ -529,7 +538,33 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: 'rgba(255, 255, 255, 0.7)',
 		zIndex: 1000
-	}
+	},
+	petsScrollContainer: {
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+	},
+	petItem: {
+		alignItems: 'center',
+		marginRight: 15, // Space between pets
+	},
+	petImage: {
+		width: 50,
+		height: 50,
+		borderRadius: 40,
+		marginBottom: 5,
+	},
+	petName: {
+		fontSize: 12,
+		color: '#333',
+		textAlign: 'center',
+	},
+	sectionTitle: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		marginLeft: 20,
+		marginBottom: 10,
+		color: '#333',
+	},
 });
 
 export default HomePage;

@@ -92,9 +92,14 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			setLoading(false);
 			alert('Pet profile created successfully!');
+			
+			// Navigate back and force refresh by passing a timestamp
 			navigation.navigate("DrawerNavigator", { 
 				screen: "HomePage",
-				params: { pet_id: data.pet_id }
+				params: { 
+					user_id: user_id,
+					refresh: Date.now() // Add this to force refresh
+				}
 			});
 			
 		} catch (error) {
