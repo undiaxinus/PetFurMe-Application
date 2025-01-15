@@ -88,8 +88,7 @@ app.get("/health", (req, res) => {
 
 // Registration endpoint with password hashing
 app.post("/api/register", async (req, res) => {
-	const { name, email, password, username, phone, pet_name, pet_type, role } =
-		req.body;
+	const { name, email, password, username, role } = req.body;
 
 	try {
 		console.log("Received registration request:", {
@@ -118,30 +117,28 @@ app.post("/api/register", async (req, res) => {
 		const uuid = uuidv4();
 
 		// Insert user
-		const result = await db.query(
-			`INSERT INTO users (uuid, username, name, email, password, phone, pet_name, pet_type, role, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+		const [result] = await db.query(
+			`INSERT INTO users (uuid, username, name, email, password, role, created_at, updated_at) 
+			VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
 			[
 				uuid,
 				username,
 				name,
 				email,
 				hashedPassword,
-				phone,
-				pet_name,
-				pet_type,
 				role || "pet_owner",
 			]
 		);
 
 		console.log("User registered successfully:", {
-			id: result[0].insertId,
+			id: result.insertId,
 			email,
 		});
 
 		res.json({
 			success: true,
 			message: "Registration successful",
+			user_id: result.insertId
 		});
 	} catch (error) {
 		console.error("Registration error:", {
@@ -313,7 +310,7 @@ const startServer = async () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
-			console.log(`- Network: http://192.168.0.100:${PORT}`);
+			console.log(`- Network: http://192.168.1.7:${PORT}`);
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");

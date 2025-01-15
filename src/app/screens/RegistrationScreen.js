@@ -25,7 +25,7 @@ const SignupScreen = ({ navigation }) => {
 
 	const API_URL = Platform.select({
 		ios: "http://localhost:3001",
-		android: "http://192.168.0.100:3001"
+		android: "http://192.168.1.7:3001"
 	});
 
 	const handleSignup = async () => {
@@ -55,10 +55,12 @@ const SignupScreen = ({ navigation }) => {
 			if (response.data.success) {
 				Alert.alert(
 					"Success",
-					"Registration successful! Please login.",
+					"Registration successful! Please add your pet details.",
 					[{ 
 						text: "OK", 
-						onPress: () => navigation.navigate("LoginScreen") 
+						onPress: () => navigation.navigate("AddPetName", {
+							user_id: response.data.user_id
+						})
 					}]
 				);
 			}

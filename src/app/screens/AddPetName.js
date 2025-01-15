@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -7,6 +7,7 @@ import {
 	StyleSheet,
 	TextInput,
 	ActivityIndicator,
+	Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -17,10 +18,31 @@ const AddPetProfile = ({ navigation, route }) => {
 	const [petBreed, setPetBreed] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	// Get user_id from route params or your auth state
+	// Get user_id from route params
 	const user_id = route.params?.user_id;
 
+	// Add useEffect to check for user_id
+	useEffect(() => {
+		if (!user_id) {
+			Alert.alert(
+				"Error",
+				"User ID is missing. Please try registering again.",
+				[
+					{
+						text: "OK",
+						onPress: () => navigation.navigate("RegistrationScreen")
+					}
+				]
+			);
+		}
+	}, [user_id]);
+
 	const handleContinue = async () => {
+		if (!user_id) {
+			alert("Error: User ID is missing");
+			return;
+		}
+
 		if (
 			petName.trim() === "" ||
 			petAge.trim() === "" ||
