@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -7,12 +7,84 @@ import {
 	StyleSheet,
 	ScrollView,
 	Alert,
+	ActivityIndicator,
 } from "react-native";
+
+const API_BASE_URL = 'http://192.168.1.7';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
+	const [userPets, setUserPets] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	console.log("HomePage user_id:", user_id);
+
+	useEffect(() => {
+		if (user_id) {
+			fetchUserPets();
+		}
+	}, [user_id]);
+
+	const fetchUserPets = async () => {
+		setIsLoading(true);
+		try {
+			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
+			console.log("Attempting to fetch from:", url);
+			
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 5000);
+			
+			const response = await fetch(url, {
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				signal: controller.signal
+			});
+			
+			clearTimeout(timeoutId);
+			
+			console.log("Response status:", response.status);
+			console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+			
+			if (!response.ok) {
+				const errorText = await response.text();
+				console.error("Error response body:", errorText);
+				throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+			}
+			
+			const data = await response.json();
+			console.log("Successfully parsed response data:", data);
+			
+			if (data.success) {
+				setUserPets(data.data?.pets || []);
+			} else {
+				throw new Error(data.message || 'Failed to load pets data');
+			}
+		} catch (error) {
+			console.error("Error fetching pets:", error);
+			console.error("Error details:", {
+				message: error.message,
+				stack: error.stack,
+				name: error.name
+			});
+			
+			let errorMessage = 'Unable to load pets';
+			if (error.name === 'AbortError') {
+				errorMessage = 'Request timed out. Please check your connection.';
+			} else if (error.message.includes('Network request failed')) {
+				errorMessage = 'Network error. Please check if the server is running.';
+			}
+			
+			Alert.alert(
+				"Connection Error",
+				`${errorMessage}\n${error.message}`
+			);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const categories = [
 		{
@@ -86,6 +158,11 @@ const HomePage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
+			{isLoading && (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" color="#8146C1" />
+				</View>
+			)}
 			{/* Main Scrollable Content */}
 			<ScrollView contentContainerStyle={styles.scrollContent}>
 				{/* Header Section */}
@@ -123,29 +200,28 @@ const HomePage = ({ navigation, route }) => {
 				</View>
 
 				{/* Pets Section */}
-				<View style={styles.petsContainer}>
-					<TouchableOpacity>
-						<Image
-							source={require("../../assets/images/rigor.png")}
-							style={styles.petImage}
-						/>
-						<Text style={styles.petName}>Rigor</Text>
-					</TouchableOpacity>
-					<TouchableOpacity>
-						<Image
-							source={require("../../assets/images/lena.png")}
-							style={styles.petImage}
-						/>
-						<Text style={styles.petName}>Lena</Text>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={handleAddNewPet}>
-						<Image
-							source={require("../../assets/images/addnew.png")}
-							style={styles.petImage}
-						/>
-						<Text style={styles.petName}>Add New</Text>
-					</TouchableOpacity>
-				</View>
+				{isLoading ? (
+					<ActivityIndicator size="large" color="#8146C1" />
+				) : (
+					<View style={styles.petsContainer}>
+						{userPets.map((pet) => (
+							<TouchableOpacity key={pet.id}>
+								<Image
+									source={pet.photo ? { uri: pet.photo } : require("../../assets/images/addnew.png")}
+									style={styles.petImage}
+								/>
+								<Text style={styles.petName}>{pet.name}</Text>
+							</TouchableOpacity>
+						))}
+						<TouchableOpacity onPress={handleAddNewPet}>
+							<Image
+								source={require("../../assets/images/addnew.png")}
+								style={styles.petImage}
+							/>
+							<Text style={styles.petName}>Add New</Text>
+						</TouchableOpacity>
+					</View>
+				)}
 
 				{/* Pet Products Section */}
 				<View style={styles.petProductsBox}>
@@ -443,6 +519,17 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		backgroundColor: "#8146C1",
 	},
+	loadingContainer: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(255, 255, 255, 0.7)',
+		zIndex: 1000
+	}
 });
 
 export default HomePage;

@@ -3,12 +3,33 @@ const mysql = require("mysql2/promise");
 const cors = require("cors");
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require("uuid");
+const path = require('path');
 
-// Server configuration - declare these once at the top
+// Server configuration
 const PORT = 3001;
 const HOST = "0.0.0.0";
 
+// Set the path to your XAMPP htdocs directory
+const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api');
+
+// Database configuration
+const dbConfig = {
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "pet-management",
+	waitForConnections: true,
+	connectionLimit: 10,
+	queueLimit: 0
+};
+
+// Create database pool
+const db = mysql.createPool(dbConfig);
+
 const app = express();
+
+// Serve static files from the API directory
+app.use('/api', express.static(API_PATH));
 
 // CORS configuration
 app.use(
@@ -43,7 +64,53 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Add error handling middleware
+// Add this test endpoint
+app.get('/api/test', (req, res) => {
+	res.json({ status: 'ok', message: 'API is working' });
+});
+
+// Add this new endpoint for getting user pets with proper error handling
+app.get("/api/pets/get_user_pets", async (req, res) => {
+	try {
+		const user_id = req.query.user_id;
+		
+		if (!user_id) {
+			return res.status(400).json({
+				success: false,
+				message: 'user_id parameter is missing'
+			});
+		}
+
+		console.log("API Path:", API_PATH);
+		console.log("Full endpoint path:", path.join(API_PATH, 'pets', 'get_user_pets.php'));
+		console.log("Attempting to fetch pets for user_id:", user_id);
+
+		// Execute the query with proper error handling
+		const [pets] = await db.query(
+			"SELECT id, name, photo FROM pets WHERE user_id = ?",
+			[user_id]
+		);
+
+		console.log("Query successful, found pets:", pets);
+
+		res.json({
+			success: true,
+			data: {
+				pets: pets || []
+			}
+		});
+
+	} catch (error) {
+		console.error("Error in get_user_pets endpoint:", error);
+		res.status(500).json({
+			success: false,
+			message: error.message || "Failed to fetch pets",
+			sqlMessage: error.sqlMessage
+		});
+	}
+});
+
+// Move error handling middleware to after all route definitions
 app.use((err, req, res, next) => {
 	console.error("Server Error:", err);
 	res.status(500).json({
@@ -53,23 +120,11 @@ app.use((err, req, res, next) => {
 	});
 });
 
-// Database configuration
-const db = mysql.createPool({
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "pet-management",
-	waitForConnections: true,
-	connectionLimit: 10,
-	queueLimit: 0,
-});
-
 // Test database connection
 const testConnection = async () => {
 	try {
-		const connection = await db.getConnection();
+		await db.query("SELECT 1");
 		console.log("Database connected successfully");
-		connection.release();
 		return true;
 	} catch (err) {
 		console.error("Database connection failed:", err);
@@ -290,11 +345,6 @@ app.post("/api/pets/create", async (req, res) => {
 			code: error.code
 		});
 	}
-});
-
-// Add this test endpoint
-app.get('/api/test', (req, res) => {
-	res.json({ status: 'ok', message: 'API is working' });
 });
 
 const startServer = async () => {
