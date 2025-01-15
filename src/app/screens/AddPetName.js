@@ -92,7 +92,10 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			setLoading(false);
 			alert('Pet profile created successfully!');
-			navigation.navigate("AddPetSize", { pet_id: data.pet_id });
+			navigation.navigate("DrawerNavigator", { 
+				screen: "HomePage",
+				params: { pet_id: data.pet_id }
+			});
 			
 		} catch (error) {
 			setLoading(false);
