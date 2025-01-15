@@ -75,10 +75,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const renderProfileSection = () => (
 		<View style={styles.profileSection}>
 			<Image
-				source={require("../../assets/images/ekis.png")}
-				style={styles.ekis}
-			/>
-			<Image
 				source={require("../../assets/images/profile.png")}
 				style={styles.profileImage}
 			/>
@@ -90,40 +86,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	return (
 		<View style={styles.container}>
 			{renderProfileSection()}
-
-			<View style={styles.yourpets}>
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<Image
-						source={require("../../assets/images/rigor.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("HomePage")}>
-					<Image
-						source={require("../../assets/images/lena.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-
-				<TouchableOpacity 
-					onPress={handleAddNewPet}
-					style={styles.addNewPetButton}
-				>
-					<Image
-						source={require("../../assets/images/addnew.png")}
-						style={styles.profileImage}
-					/>
-				</TouchableOpacity>
-			</View>
-
-			<View style={styles.petname}>
-				<Text style={styles.rigor}>Rigor</Text>
-				<Text style={styles.lena}>Lena</Text>
-				<Text style={styles.more}>Add New</Text>
-			</View>
-
-			
 			{/* Logout Section */}
 			<TouchableOpacity onPress={handleLogout}>
 				<View style={styles.logoutSection}>
@@ -214,9 +176,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		width: "80%",
-	},
-	ekis: {
-		left: 250,
 	},
 	yourpets: {
 		flexDirection: "row",

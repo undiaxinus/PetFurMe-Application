@@ -203,24 +203,29 @@ const HomePage = ({ navigation }) => {
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
-				<TouchableOpacity>
+
+				<TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
 					<Image
 						source={require("../../assets/images/message.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
-				<TouchableOpacity>
-					<Image
-						source={require("../../assets/images/notif.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
-				<TouchableOpacity>
-					<Image
-						source={require("../../assets/images/circle.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
+
+				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
+  <Image
+    source={require("../../assets/images/notif.png")}
+    style={styles.navIcon}
+  />
+			</TouchableOpacity>
+
+
+			<TouchableOpacity onPress={() => navigation.navigate('Help')}>
+  <Image
+    source={require("../../assets/images/circle.png")}
+    style={styles.navIcon}
+  />
+			</TouchableOpacity>
+
 			</View>
 		</View>
 	);
