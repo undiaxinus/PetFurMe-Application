@@ -4,6 +4,7 @@ const cors = require("cors");
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require("uuid");
 const path = require('path');
+const authRoutes = require('./routes/auth');
 
 // Server configuration
 const PORT = 3001;
@@ -299,6 +300,23 @@ app.use((req, res, next) => {
 
 // Add pet endpoint
 // app.post("/api/pets/create", async (req, res) => { ... });
+
+app.use('/api', authRoutes);
+
+// Add this near the top of your server.js, after your middleware setup
+app.use((req, res, next) => {
+	console.log(`${req.method} ${req.path}`);
+	next();
+});
+
+// Add error handling middleware at the bottom of your server.js
+app.use((err, req, res, next) => {
+	console.error('Server error:', err);
+	res.status(500).json({
+		success: false,
+		error: 'Internal server error'
+	});
+});
 
 const startServer = async () => {
 	try {

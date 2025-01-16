@@ -8,6 +8,7 @@ import {
   Image,
   ActivityIndicator,
   Platform,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -37,6 +38,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
+      // First, verify if the email exists
+      const verifyResponse = await axios.post(`${API_URL}/api/verify-email`, {
+        email: email.trim()
+      });
+
+      if (!verifyResponse.data.exists) {
+        setError('Email address not found. Please check your email or register.');
+        return;
+      }
+
+      // If email exists, proceed with sending OTP
       const response = await axios.post(`${API_URL}/api/send-otp`, {
         email: email.trim()
       });
@@ -63,10 +75,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
-      const response = await axios.post(`${API_URL}/api/verify-otp`, {
+      console.log('Sending OTP verification request:', {
         email,
         otp
       });
+
+      const response = await axios.post(`${API_URL}/api/verify-otp`, {
+        email,
+        otp: otp.trim()
+      });
+
+      console.log('OTP verification response:', response.data);
 
       if (response.data.success) {
         setStep(3);
@@ -74,6 +93,10 @@ const ForgotPasswordScreen = ({ navigation }) => {
         setError(response.data.error || 'Invalid OTP');
       }
     } catch (error) {
+      console.error('OTP verification error:', {
+        message: error.message,
+        response: error.response?.data
+      });
       setError(error.response?.data?.error || 'Failed to verify OTP');
     } finally {
       setLoading(false);
@@ -95,18 +118,34 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
-      const response = await axios.post(`${API_URL}/api/reset-password`, {
+      console.log('Sending reset password request:', {
         email,
-        otp,
+        hasPassword: !!newPassword
+      });
+
+      const response = await axios.post(`${API_URL}/api/reset-password`, {
+        email: email.trim(),
         newPassword
       });
 
+      console.log('Reset password response:', response.data);
+
       if (response.data.success) {
-        navigation.replace('LoginScreen');
+        Alert.alert(
+          'Success',
+          'Password has been reset successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.replace('LoginScreen')
+            }
+          ]
+        );
       } else {
         setError(response.data.error || 'Failed to reset password');
       }
     } catch (error) {
+      console.error('Reset password error:', error.response?.data || error.message);
       setError(error.response?.data?.error || 'Failed to reset password');
     } finally {
       setLoading(false);
