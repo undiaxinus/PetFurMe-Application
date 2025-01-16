@@ -35,6 +35,7 @@ CREATE TABLE `appointment` (
   `appointment_date` date NOT NULL,
   `appointment_time` time NOT NULL,
   `reason_for_visit` text NOT NULL,
+  `other_reason` text NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -43,10 +44,10 @@ CREATE TABLE `appointment` (
 -- Dumping data for table `appointment`
 --
 
-INSERT INTO `appointment` (`id`, `user_id`, `pet_id`, `owner_name`, `appointment_date`, `appointment_time`, `reason_for_visit`, `created_at`, `updated_at`) VALUES
-(13, 101, 201, 'John Doe', '2025-01-20', '14:00:00', 'Routine check-up', '2025-01-13 10:00:05', '2025-01-13 10:00:05'),
-(14, 102, 202, 'Jane Smith', '2025-01-21', '15:30:00', 'Vaccination', '2025-01-13 10:00:05', '2025-01-13 10:00:05'),
-(15, NULL, NULL, 'Michael Johnson', '2025-01-22', '16:00:00', 'Emergency', '2025-01-13 10:00:05', '2025-01-13 10:00:05');
+INSERT INTO `appointment` (`id`, `user_id`, `pet_id`, `owner_name`, `appointment_date`, `appointment_time`, `reason_for_visit`, `other_reason`, `created_at`, `updated_at`) VALUES
+(13, 101, 201, 'John Doe', '2025-01-20', '14:00:00', 'Routine check-up', NULL, '2025-01-13 10:00:05', '2025-01-13 10:00:05'),
+(14, 102, 202, 'Jane Smith', '2025-01-21', '15:30:00', 'Vaccination', NULL, '2025-01-13 10:00:05', '2025-01-13 10:00:05'),
+(15, NULL, NULL, 'Michael Johnson', '2025-01-22', '16:00:00', 'Emergency', NULL, '2025-01-13 10:00:05', '2025-01-13 10:00:05');
 
 -- --------------------------------------------------------
 

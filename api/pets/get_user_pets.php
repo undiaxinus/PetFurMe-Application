@@ -1,72 +1,81 @@
 <?php
-// Add this at the top to verify the file is being accessed
-file_put_contents('debug.log', 'File accessed at: ' . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
-
-// Prevent any HTML output from error messages
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-// Set headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
-// Function to send JSON response
-function sendJsonResponse($success, $data, $message = null) {
-    $response = ['success' => $success];
-    if ($data !== null) $response['data'] = $data;
-    if ($message !== null) $response['message'] = $message;
-    echo json_encode($response);
-    exit;
-}
+include_once '../config/Database.php';
 
 try {
-    include_once '../config/Database.php';
-    
-    if (!isset($_GET['user_id'])) {
-        sendJsonResponse(false, null, 'user_id parameter is missing');
-    }
-
     $database = new Database();
-    $conn = $database->connect();
-    
-    if (!$conn) {
-        sendJsonResponse(false, null, 'Database connection failed');
+    $db = $database->connect();
+
+    if (!$db) {
+        throw new Exception("Database connection failed");
     }
 
-    $user_id = mysqli_real_escape_string($conn, $_GET['user_id']);
+    // Get user_id from query parameter
+    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+
+    if (!$user_id) {
+        throw new Exception("User ID is required");
+    }
+
+    // Debug log
+    error_log("Fetching pets for user_id: " . $user_id);
+
+    // Fetch pets for the specific user_id
+    $query = "SELECT id, name, type, breed, age, gender, weight, size 
+             FROM pets 
+             WHERE user_id = ?";
+             
+    $stmt = $db->prepare($query);
     
-    // Log for debugging
-    error_log("Processing request for user_id: " . $user_id);
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $db->error);
+    }
+
+    $stmt->bind_param("i", $user_id);
     
-    $query = "SELECT id, name, photo FROM pets WHERE user_id = '$user_id'";
-    $result = mysqli_query($conn, $query);
-    
-    if (!$result) {
-        sendJsonResponse(false, null, 'Query failed: ' . mysqli_error($conn));
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $pets = array();
+        
+        while ($row = $result->fetch_assoc()) {
+            // Debug log
+            error_log("Found pet: " . json_encode($row));
+            
+            $pets[] = array(
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'type' => $row['type'] ?? '',
+                'breed' => $row['breed'] ?? '',
+                'age' => $row['age'] ?? '',
+                'gender' => $row['gender'] ?? '',
+                'weight' => $row['weight'] ?? '',
+                'size' => $row['size'] ?? ''
+            );
+        }
+        
+        $stmt->close();
+        
+        // Debug log
+        error_log("Total pets found: " . count($pets));
+        
+        echo json_encode(array(
+            'success' => true,
+            'pets' => $pets,
+            'user_id' => $user_id // Include user_id in response for verification
+        ));
+    } else {
+        throw new Exception("Execute failed: " . $stmt->error);
     }
     
-    $pets = [];
-    $baseUrl = 'http://192.168.1.5/PetFurMe-Application/'; // Update this to match your server URL
-
-    while($row = mysqli_fetch_assoc($result)) {
-        $photoUrl = $row['photo'] ? $baseUrl . $row['photo'] : null;
-        $pets[] = [
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'photo' => $photoUrl
-        ];
-    }
-    
-    sendJsonResponse(true, ['pets' => $pets]);
-
-} catch (Exception $e) {
+} catch(Exception $e) {
     error_log("Error in get_user_pets.php: " . $e->getMessage());
-    sendJsonResponse(false, null, $e->getMessage());
-} finally {
-    if (isset($conn)) {
-        mysqli_close($conn);
-    }
+    echo json_encode(array(
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+    ));
 }
 ?> 

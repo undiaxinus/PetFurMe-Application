@@ -19,14 +19,16 @@ try {
     
     // Validate required fields
     if (!isset($data->user_id) || !isset($data->owner_name) || !isset($data->reason_for_visit) || 
-        !isset($data->appointment_date) || !isset($data->appointment_time)) {
+        !isset($data->appointment_date) || !isset($data->appointment_time) || 
+        !isset($data->pet_id) || !isset($data->pet_name)) {
         throw new Exception("Missing required fields");
     }
 
     // Prepare the query
     $query = "INSERT INTO appointment 
-              (user_id, owner_name, reason_for_visit, appointment_date, appointment_time, created_at, updated_at) 
-              VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+              (user_id, pet_id, pet_name, owner_name, reason_for_visit, other_reason, 
+               appointment_date, appointment_time, created_at, updated_at) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
     
     $stmt = $db->prepare($query);
     
@@ -34,12 +36,19 @@ try {
         throw new Exception("Prepare failed: " . $db->error);
     }
 
+    // Get other_reason value
+    $other_reason = ($data->reason_for_visit === "Other" && isset($data->other_reason)) ? 
+                    $data->other_reason : null;
+
     // Bind parameters
     $stmt->bind_param(
-        "issss",
+        "iissssss",
         $data->user_id,
+        $data->pet_id,
+        $data->pet_name,
         $data->owner_name,
         $data->reason_for_visit,
+        $other_reason,
         $data->appointment_date,
         $data->appointment_time
     );

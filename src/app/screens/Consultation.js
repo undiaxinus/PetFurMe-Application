@@ -8,20 +8,25 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import { Picker } from '@react-native-picker/picker';
 
 const AddAppointment = ({ route, navigation }) => {
   const { reason, user_id } = route.params || {}; // Get both reason and user_id from params
   const [owner_name, setOwnerName] = useState('');
   const [reason_for_visit, setReason] = useState(reason || ''); // Initialize with the passed reason
+  const [custom_reason, setCustomReason] = useState(''); // Add this line
   const [appointment_date, setDate] = useState('');
   const [appointment_time, setTime] = useState('');
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [pets, setPets] = useState([]);
+  const [selectedPet, setSelectedPet] = useState(null);
 
   useEffect(() => {
     if (reason) {
@@ -29,27 +34,66 @@ const AddAppointment = ({ route, navigation }) => {
     }
   }, [reason]);
 
+  useEffect(() => {
+    if (user_id) {
+      fetchUserPets();
+    }
+  }, [user_id]);
+
+  const fetchUserPets = async () => {
+    try {
+      console.log("Fetching pets for user_id:", user_id); // Debug log
+      const response = await fetch(`http://192.168.1.5/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`);
+      const result = await response.json();
+      
+      console.log("API Response:", result); // Debug log
+      
+      if (result.success) {
+        setPets(result.pets);
+      } else {
+        console.error('Failed to fetch pets:', result.message);
+        Alert.alert('Error', 'Failed to fetch pets. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error fetching pets:', error);
+      Alert.alert('Error', 'Unable to connect to the server.');
+    }
+  };
+
   const handleSaveAppointment = async () => {
     if (
       owner_name.trim() &&
-      reason_for_visit &&
+      (reason_for_visit === 'Other' ? custom_reason.trim() : reason_for_visit) &&
       appointment_date.trim() &&
-      appointment_time.trim()
+      appointment_time.trim() &&
+      selectedPet
     ) {
       if (!user_id) {
         Alert.alert('Error', 'User ID is missing. Please login again.');
         return;
       }
 
+      // Get the selected pet's name
+      const selectedPetDetails = pets.find(p => p.id === selectedPet);
+      if (!selectedPetDetails) {
+        Alert.alert('Error', 'Selected pet not found');
+        return;
+      }
+
       setLoading(true);
       try {
         const appointmentData = {
-          user_id: user_id, // Include user_id in the data
+          user_id: user_id,
+          pet_id: selectedPet,
+          pet_name: selectedPetDetails.name, // Add pet name to the data
           owner_name: owner_name.trim(),
           reason_for_visit: reason_for_visit,
+          other_reason: reason_for_visit === 'Other' ? custom_reason.trim() : null,
           appointment_date: appointment_date.trim(),
           appointment_time: appointment_time.trim(),
         };
+
+        console.log('Sending appointment data:', appointmentData); // Debug log
 
         const response = await fetch('http://192.168.1.5/PetFurMe-Application/api/appointments/save.php', {
           method: 'POST',
@@ -61,6 +105,7 @@ const AddAppointment = ({ route, navigation }) => {
         });
 
         const result = await response.json();
+        console.log('API Response:', result); // Debug log
 
         if (result.success) {
           Alert.alert('Success', 'Appointment saved successfully');
@@ -78,7 +123,7 @@ const AddAppointment = ({ route, navigation }) => {
         setLoading(false);
       }
     } else {
-      Alert.alert('Validation Error', 'Please fill out all required fields');
+      Alert.alert('Validation Error', 'Please fill out all fields including selecting a pet.');
     }
   };
 
@@ -124,99 +169,158 @@ const AddAppointment = ({ route, navigation }) => {
         <Text style={styles.headerTitle}>Add Appointment</Text>
       </View>
 
-      {/* Form */}
-      <View style={styles.formContainer}>
-        <Text style={styles.formLabel}>Fill out the form</Text>
+      {/* Wrap the form in ScrollView */}
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.formContainer}>
+          <Text style={styles.formLabel}>Fill out the form</Text>
 
-        {/* Owner Name Input */}
-        <Text style={styles.inputLabel}>Owner Name</Text>
-        <TextInput
-          style={styles.input}
-          value={owner_name}
-          onChangeText={setOwnerName}
-          placeholderTextColor="#b3b3b3"
-        />
+          {/* Owner Name Input */}
+          <Text style={styles.inputLabel}>Owner Name</Text>
+          <TextInput
+            style={styles.input}
+            value={owner_name}
+            onChangeText={setOwnerName}
+            placeholderTextColor="#b3b3b3"
+          />
 
-        {/* Reason for Visit Input */}
-        <Text style={styles.inputLabel}>Reason for Visit</Text>
-        <View style={styles.reasonButtonsContainer}>
-          {['Consultation', 'Vaccination', 'Deworming', 'Grooming'].map((reasonOption) => (
-            <TouchableOpacity
-              key={reasonOption}
-              style={[
-                styles.reasonButton,
-                reason_for_visit === reasonOption && styles.selectedReasonButton,
-              ]}
-              onPress={() => setReason(reasonOption)}
+          {/* Add Pet Selection Dropdown */}
+          <Text style={styles.inputLabel}>Select Your Pet</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedPet}
+              style={styles.picker}
+              onValueChange={(itemValue) => {
+                setSelectedPet(itemValue);
+                console.log("Selected pet:", pets.find(p => p.id === itemValue));
+              }}
             >
-              <Text
+              <Picker.Item label="Select a pet" value={null} />
+              {pets.map(pet => (
+                <Picker.Item 
+                  key={pet.id} 
+                  label={pet.name} 
+                  value={pet.id} 
+                />
+              ))}
+            </Picker>
+          </View>
+
+          {/* Show selected pet details only if a pet is selected */}
+          {selectedPet && (
+            <View style={styles.selectedPetDetails}>
+              {(() => {
+                const pet = pets.find(p => p.id === selectedPet);
+                if (!pet) return null;
+                
+                return (
+                  <>
+                    <Text style={styles.petDetailText}>Type: {pet.type || 'N/A'}</Text>
+                    <Text style={styles.petDetailText}>Breed: {pet.breed || 'N/A'}</Text>
+                    <Text style={styles.petDetailText}>Age: {pet.age || 'N/A'}</Text>
+                    <Text style={styles.petDetailText}>Gender: {pet.gender || 'N/A'}</Text>
+                    {pet.weight && <Text style={styles.petDetailText}>Weight: {pet.weight} kg</Text>}
+                    {pet.size && <Text style={styles.petDetailText}>Size: {pet.size}</Text>}
+                  </>
+                );
+              })()}
+            </View>
+          )}
+
+          {/* Reason for Visit Input */}
+          <Text style={styles.inputLabel}>Reason for Visit</Text>
+          <View style={styles.reasonButtonsContainer}>
+            {['Consultation', 'Vaccination', 'Deworming', 'Grooming', 'Other'].map((reasonOption) => (
+              <TouchableOpacity
+                key={reasonOption}
                 style={[
-                  styles.reasonButtonText,
-                  reason_for_visit === reasonOption && styles.selectedReasonButtonText,
+                  styles.reasonButton,
+                  reason_for_visit === reasonOption && styles.selectedReasonButton,
                 ]}
+                onPress={() => setReason(reasonOption)}
               >
-                {reasonOption}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  style={[
+                    styles.reasonButtonText,
+                    reason_for_visit === reasonOption && styles.selectedReasonButtonText,
+                  ]}
+                >
+                  {reasonOption}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Add custom reason input field */}
+          {reason_for_visit === 'Other' && (
+            <TextInput
+              style={[styles.input, styles.customReasonInput]}
+              value={custom_reason}
+              onChangeText={setCustomReason}
+              placeholder="Please specify your reason"
+              placeholderTextColor="#b3b3b3"
+              multiline
+            />
+          )}
+
+          {/* Date Picker */}
+          <Text style={styles.inputLabel}>Appointment Date</Text>
+          <TouchableOpacity
+            style={styles.datePickerButton}
+            onPress={() => setShowDatePicker(true)}
+          >
+            <Text style={styles.datePickerText}>
+              {getFormattedDate() || 'Select Date'}
+            </Text>
+            <Ionicons name="calendar" size={24} color="#CC38F2" />
+          </TouchableOpacity>
+
+          {showDatePicker && (
+            <DateTimePicker
+              value={appointment_date ? new Date(appointment_date) : new Date()}
+              mode="date"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={onDateChange}
+              minimumDate={new Date()}
+            />
+          )}
+
+          {/* Time Picker */}
+          <Text style={styles.inputLabel}>Appointment Time</Text>
+          <TouchableOpacity
+            style={styles.datePickerButton}
+            onPress={() => setShowTimePicker(true)}
+          >
+            <Text style={styles.datePickerText}>
+              {getFormattedTime() || 'Select Time'}
+            </Text>
+            <Ionicons name="time" size={24} color="#CC38F2" />
+          </TouchableOpacity>
+
+          {showTimePicker && (
+            <DateTimePicker
+              value={appointment_time ? moment(appointment_time, 'HH:mm').toDate() : new Date()}
+              mode="time"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={onTimeChange}
+            />
+          )}
         </View>
+      </ScrollView>
 
-        {/* Date Picker */}
-        <Text style={styles.inputLabel}>Appointment Date</Text>
+      {/* Move the save button outside of ScrollView */}
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.datePickerButton}
-          onPress={() => setShowDatePicker(true)}
+          style={styles.saveButton}
+          onPress={handleSaveAppointment}
+          disabled={loading}
         >
-          <Text style={styles.datePickerText}>
-            {getFormattedDate() || 'Select Date'}
-          </Text>
-          <Ionicons name="calendar" size={24} color="#CC38F2" />
+          {loading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <Text style={styles.saveButtonText}>Save Appointment</Text>
+          )}
         </TouchableOpacity>
-
-        {showDatePicker && (
-          <DateTimePicker
-            value={appointment_date ? new Date(appointment_date) : new Date()}
-            mode="date"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={onDateChange}
-            minimumDate={new Date()}
-          />
-        )}
-
-        {/* Time Picker */}
-        <Text style={styles.inputLabel}>Appointment Time</Text>
-        <TouchableOpacity
-          style={styles.datePickerButton}
-          onPress={() => setShowTimePicker(true)}
-        >
-          <Text style={styles.datePickerText}>
-            {getFormattedTime() || 'Select Time'}
-          </Text>
-          <Ionicons name="time" size={24} color="#CC38F2" />
-        </TouchableOpacity>
-
-        {showTimePicker && (
-          <DateTimePicker
-            value={appointment_time ? moment(appointment_time, 'HH:mm').toDate() : new Date()}
-            mode="time"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={onTimeChange}
-          />
-        )}
       </View>
-
-      {/* Save Appointment Button */}
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={handleSaveAppointment}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        ) : (
-          <Text style={styles.saveButtonText}>Save Appointment</Text>
-        )}
-      </TouchableOpacity>
     </View>
   );
 };
@@ -225,13 +329,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 20,
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    top: 40,
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
   },
   backButton: {
     marginRight: 10,
@@ -243,8 +352,7 @@ const styles = StyleSheet.create({
 				left: 60,
   },
   formContainer: {
-    flex: 1,
-    top: 70,
+    paddingBottom: 100, // Add padding to prevent content from being hidden behind button
   },
   formLabel: {
     fontSize: 17,
@@ -252,6 +360,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#000000',
     top: -10,
+    marginTop: 10,
   },
   inputLabel: {
     fontSize: 15,
@@ -275,7 +384,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 20,
+    width: '100%',
   },
   saveButtonText: {
     color: '#FFFFFF',
@@ -321,6 +430,63 @@ const styles = StyleSheet.create({
   },
   datePickerText: {
     fontSize: 14,
+    color: '#000000',
+  },
+  customReasonInput: {
+    height: 80,
+    textAlignVertical: 'top',
+    paddingTop: 12,
+    marginTop: -10,
+    marginBottom: 15,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  petSelectButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#b3b3b3',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
+  },
+  petSelectText: {
+    fontSize: 14,
+    color: '#000000',
+  },
+  selectedPetDetails: {
+    backgroundColor: '#F5F5F5',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  petDetailText: {
+    fontSize: 14,
+    color: '#666666',
+    marginBottom: 5,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#b3b3b3',
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
+    overflow: 'hidden', // This helps maintain the border radius
+  },
+  picker: {
+    width: '100%',
+    height: 50,
     color: '#000000',
   },
 });
