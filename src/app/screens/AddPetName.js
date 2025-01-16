@@ -17,8 +17,6 @@ const PET_TYPES = [
 	"Dog",
 	"Cat",
 	"Bird",
-	"Fish",
-	"Hamster",
 	"Rabbit",
 	"Other"
 ];
