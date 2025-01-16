@@ -27,6 +27,7 @@ const AddAppointment = ({ route, navigation }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
+  const [availableSlots, setAvailableSlots] = useState(null);
 
   useEffect(() => {
     if (reason) {
@@ -144,10 +145,40 @@ const AddAppointment = ({ route, navigation }) => {
   };
 
   // Handle date selection
-  const onDateChange = (event, selectedDate) => {
+  const checkAvailability = async (date) => {
+    try {
+      const formattedDate = moment(date).format('YYYY-MM-DD');
+      const response = await fetch(
+        `http://192.168.1.5/PetFurMe-Application/api/appointments/check_availability.php?date=${formattedDate}`
+      );
+      const result = await response.json();
+      
+      if (result.success) {
+        setAvailableSlots(result.available_slots);
+        return result.is_available;
+      } else {
+        console.error('Failed to check availability:', result.message);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking availability:', error);
+      return false;
+    }
+  };
+
+  const onDateChange = async (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      setDate(moment(selectedDate).format('YYYY-MM-DD'));
+      const isAvailable = await checkAvailability(selectedDate);
+      if (isAvailable) {
+        setDate(moment(selectedDate).format('YYYY-MM-DD'));
+      } else {
+        Alert.alert(
+          'Date Unavailable',
+          'This date is fully booked. Please select another date.',
+          [{ text: 'OK' }]
+        );
+      }
     }
   };
 
@@ -268,9 +299,16 @@ const AddAppointment = ({ route, navigation }) => {
             style={styles.datePickerButton}
             onPress={() => setShowDatePicker(true)}
           >
-            <Text style={styles.datePickerText}>
-              {getFormattedDate() || 'Select Date'}
-            </Text>
+            <View style={styles.datePickerContent}>
+              <Text style={styles.datePickerText}>
+                {getFormattedDate() || 'Select Date'}
+              </Text>
+              {appointment_date && availableSlots !== null && (
+                <Text style={styles.availableSlotsText}>
+                  {availableSlots} slots available
+                </Text>
+              )}
+            </View>
             <Ionicons name="calendar" size={24} color="#CC38F2" />
           </TouchableOpacity>
 
@@ -488,6 +526,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     color: '#000000',
+  },
+  datePickerContent: {
+    flex: 1,
+  },
+  availableSlotsText: {
+    fontSize: 12,
+    color: '#666666',
+    marginTop: 2,
   },
 });
 

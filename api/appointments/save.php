@@ -24,6 +24,23 @@ try {
         throw new Exception("Missing required fields");
     }
 
+    // Check if there are available slots
+    $check_query = "SELECT COUNT(*) as appointment_count 
+                    FROM appointment 
+                    WHERE appointment_date = ?";
+             
+    $check_stmt = $db->prepare($check_query);
+    $check_stmt->bind_param("s", $data->appointment_date);
+    $check_stmt->execute();
+    $result = $check_stmt->get_result();
+    $row = $result->fetch_assoc();
+    $appointment_count = $row['appointment_count'];
+    $check_stmt->close();
+
+    if ($appointment_count >= 10) {
+        throw new Exception("This date is fully booked. Please select another date.");
+    }
+
     // Prepare the query
     $query = "INSERT INTO appointment 
               (user_id, pet_id, pet_name, owner_name, reason_for_visit, other_reason, 
