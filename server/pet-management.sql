@@ -359,20 +359,21 @@ CREATE TABLE `pets` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `gender` varchar(20) DEFAULT NULL,
   `weight` float DEFAULT NULL,
-  `photo` varchar(255) DEFAULT NULL
+  `photo` varchar(255) DEFAULT NULL,
+  `size` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `pets`
 --
 
-INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`) VALUES
-(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL),
-(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png'),
-(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL),
-(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png'),
-(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL),
-(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL);
+INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`, `size`) VALUES
+(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL, NULL),
+(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png', NULL),
+(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL, NULL),
+(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png', NULL),
+(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL),
+(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

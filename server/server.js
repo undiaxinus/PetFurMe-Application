@@ -298,54 +298,7 @@ app.use((req, res, next) => {
 });
 
 // Add pet endpoint
-app.post("/api/pets/create", async (req, res) => {
-	try {
-		const { user_id, name, type, breed, age, category, gender, weight } = req.body;
-		
-		console.log("Received pet creation request:", req.body);
-
-		// Validate required fields including user_id
-		if (!name || !type || !user_id) {
-			return res.status(400).json({
-				success: false,
-				error: "Missing required fields (name, type, and user_id are required)"
-			});
-		}
-
-		const [result] = await db.query(
-			`INSERT INTO pets 
-			(user_id, name, type, breed, age, category, gender, weight, created_at, updated_at) 
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-			[
-				user_id,
-				name,
-				type,
-				breed || null,
-				age || null,
-				category || 'Mammal',
-				gender || 'Unknown',
-				weight || 0
-			]
-		);
-
-		console.log("Pet created successfully:", result);
-
-		res.json({
-			success: true,
-			message: "Pet added successfully",
-			pet_id: result.insertId
-		});
-
-	} catch (error) {
-		console.error("Error creating pet:", error);
-		res.status(500).json({
-			success: false,
-			error: error.message || "Failed to add pet",
-			sqlMessage: error.sqlMessage,
-			code: error.code
-		});
-	}
-});
+// app.post("/api/pets/create", async (req, res) => { ... });
 
 const startServer = async () => {
 	try {

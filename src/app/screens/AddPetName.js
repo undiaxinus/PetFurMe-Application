@@ -8,14 +8,43 @@ import {
 	TextInput,
 	ActivityIndicator,
 	Alert,
+	ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CustomDropdown from '../components/CustomDropdown';
+
+const PET_TYPES = [
+	"Dog",
+	"Cat",
+	"Bird",
+	"Fish",
+	"Hamster",
+	"Rabbit",
+	"Other"
+];
+
+const PET_SIZES = [
+	"Small",
+	"Medium",
+	"Large",
+	"Extra Large"
+];
+
+const PET_GENDERS = [
+	"Male",
+	"Female"
+];
 
 const AddPetProfile = ({ navigation, route }) => {
 	const [petName, setPetName] = useState("");
 	const [petAge, setPetAge] = useState("");
 	const [petType, setPetType] = useState("");
 	const [petBreed, setPetBreed] = useState("");
+	const [petSize, setPetSize] = useState("");
+	const [petWeight, setPetWeight] = useState("");
+	const [petAllergies, setPetAllergies] = useState("");
+	const [petNotes, setPetNotes] = useState("");
+	const [petGender, setPetGender] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	// Get user_id from route params
@@ -46,66 +75,83 @@ const AddPetProfile = ({ navigation, route }) => {
 			return;
 		}
 
+		// Validation for required fields
 		if (
 			petName.trim() === "" ||
 			petAge.trim() === "" ||
-			petType.trim() === "" ||
-			petBreed.trim() === ""
+			!petType ||
+			petBreed.trim() === "" ||
+			!petGender ||
+			petWeight.trim() === ""
 		) {
-			alert("Please fill out all the fields.");
+			alert("Please fill out all required fields.");
 			return;
 		}
 
 		try {
 			setLoading(true);
 			
-			const response = await fetch('http://192.168.1.7:3001/api/pets/create', {
+			const petData = {
+				user_id: parseInt(user_id),
+				name: petName.trim(),
+				type: petType.toLowerCase(),
+				breed: petBreed.trim(),
+				age: parseInt(petAge),
+				owner_name: null,
+				allergies: petAllergies?.trim() || null,
+				notes: petNotes?.trim() || null,
+				category: 'Mammal',
+				gender: petGender.toLowerCase(),
+				weight: parseFloat(petWeight),
+				photo: null,
+				size: petSize?.toLowerCase() || null
+			};
+
+			console.log('Sending pet data:', petData);
+
+			const response = await fetch('http://192.168.43.100/PetFurMe-Application/api/pets/index.php', {
 				method: 'POST',
 				headers: {
+					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({
-					user_id: user_id,
-					name: petName.trim(),
-					age: parseInt(petAge),
-					type: petType.trim(),
-					breed: petBreed.trim(),
-					category: 'Mammal',
-				}),
+				body: JSON.stringify(petData)
 			});
 
-			// Log the raw response for debugging
-			const responseText = await response.text();
-			console.log('Raw response:', responseText);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
 
-			// Try to parse as JSON
+			const responseText = await response.text();
+			console.log('Raw server response:', responseText);
+
 			let data;
 			try {
 				data = JSON.parse(responseText);
-			} catch (parseError) {
-				throw new Error(`Server response was not JSON: ${responseText}`);
+			} catch (e) {
+				console.error('Error parsing response:', e);
+				throw new Error('Invalid server response');
 			}
 
-			if (!response.ok) {
-				throw new Error(data.error || data.message || 'Failed to save pet details');
+			if (data.success) {
+				Alert.alert(
+					"Success",
+					"Pet profile created successfully!",
+					[
+						{
+							text: "OK",
+							onPress: () => navigation.goBack()
+						}
+					]
+				);
+			} else {
+				alert(data.message || 'Failed to create pet profile');
 			}
-
-			setLoading(false);
-			alert('Pet profile created successfully!');
-			
-			// Navigate back and force refresh by passing a timestamp
-			navigation.navigate("DrawerNavigator", { 
-				screen: "HomePage",
-				params: { 
-					user_id: user_id,
-					refresh: Date.now() // Add this to force refresh
-				}
-			});
-			
 		} catch (error) {
+			console.error('Error creating pet profile:', error);
+			alert('Error creating pet profile: ' + error.message);
+		} finally {
 			setLoading(false);
-			console.error('Error details:', error);
-			alert("Error saving pet details: " + error.message);
 		}
 	};
 
@@ -119,82 +165,163 @@ const AddPetProfile = ({ navigation, route }) => {
 			)}
 
 			{/* Header */}
-			<View style={styles.headerContainer}>
-				<View style={styles.header}>
-					<TouchableOpacity
-						onPress={() => navigation.goBack()}
-						style={styles.backButton}>
-						<Ionicons name="arrow-back" size={24} color="#808080" />
-					</TouchableOpacity>
-					<Text style={styles.headerTitle}>Add Pet Profile</Text>
-				</View>
+			<View style={styles.header}>
+				<TouchableOpacity
+					onPress={() => navigation.goBack()}
+					style={styles.backButton}>
+					<Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+				</TouchableOpacity>
+				<Text style={styles.headerTitle}>Add Pet Profile</Text>
 			</View>
 
-			{/* Pet Image */}
-			<View style={styles.imageContainer}>
-				<View style={styles.imageCircle}>
-					<Image
-						source={require("../../assets/images/doprof.png")} // Replace with your image path
-						style={styles.petImage}
-					/>
-					<TouchableOpacity style={styles.cameraButton}>
-						<Ionicons name="camera" size={20} color="#FFFFFF" />
-					</TouchableOpacity>
+			<ScrollView 
+				style={styles.scrollView}
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={styles.scrollViewContent}
+			>
+				{/* Pet Image */}
+				<View style={styles.imageContainer}>
+					<View style={styles.imageCircle}>
+						<Image
+							source={require("../../assets/images/doprof.png")}
+							style={styles.petImage}
+						/>
+						<TouchableOpacity style={styles.cameraButton}>
+							<Ionicons name="camera" size={20} color="#FFFFFF" />
+						</TouchableOpacity>
+					</View>
 				</View>
-			</View>
 
-			{/* Pet Name Input */}
-			<Text style={styles.label}>What’s your pet’s name?</Text>
-			<TextInput
-				style={styles.input}
-				placeholder="Your pet’s name"
-				value={petName}
-				onChangeText={setPetName}
-				placeholderTextColor="#8146C1"
-			/>
+				<View style={styles.formContainer}>
+					{/* Required Fields Section */}
+					<Text style={styles.sectionTitle}>Required Information</Text>
+					
+					<View style={styles.inputGroup}>
+						<Text style={styles.label}>Pet's Name</Text>
+						<TextInput
+							style={styles.input}
+							placeholder="Enter pet's name"
+							value={petName}
+							onChangeText={setPetName}
+							placeholderTextColor="#8146C1"
+						/>
+					</View>
 
-<Text style={styles.label}>What’s your pet’s age?</Text>
-			<TextInput
-				style={styles.input}
-				placeholder="Your pet's age"
-				value={petAge}
-				onChangeText={setPetAge}
-				placeholderTextColor="#8146C1"
-				keyboardType="numeric"
-			/>
+					{/* Create a row for age and weight */}
+					<View style={styles.rowContainer}>
+						<View style={styles.halfInput}>
+							<Text style={styles.label}>Age</Text>
+							<TextInput
+								style={styles.input}
+								placeholder="Age"
+								value={petAge}
+								onChangeText={setPetAge}
+								placeholderTextColor="#8146C1"
+								keyboardType="numeric"
+							/>
+						</View>
+						<View style={styles.halfInput}>
+							<Text style={styles.label}>Weight (kg)</Text>
+							<TextInput
+								style={styles.input}
+								placeholder="Weight"
+								value={petWeight}
+								onChangeText={setPetWeight}
+								placeholderTextColor="#8146C1"
+								keyboardType="decimal-pad"
+							/>
+						</View>
+					</View>
 
-<Text style={styles.label}>What’s your pet’s type?</Text>
-			<TextInput
-				style={styles.input}
-				placeholder="Your pet's type"
-				value={petType}
-				onChangeText={setPetType}
-				placeholderTextColor="#8146C1"
-			/>
+					{/* Create a row for type and size */}
+					<View style={styles.rowContainer}>
+						<View style={styles.halfInput}>
+							<Text style={styles.label}>Type</Text>
+							<CustomDropdown
+								label="Select Pet Type"
+								options={PET_TYPES}
+								value={petType}
+								onSelect={setPetType}
+								placeholder="Select type"
+							/>
+						</View>
+						<View style={styles.halfInput}>
+							<Text style={styles.label}>Size</Text>
+							<CustomDropdown
+								label="Select Pet Size"
+								options={PET_SIZES}
+								value={petSize}
+								onSelect={setPetSize}
+								placeholder="Select size"
+							/>
+						</View>
+					</View>
 
-<Text style={styles.label}>What’s your pet’s breed?</Text>
-			<TextInput
-				style={styles.input}
-				placeholder="Your pet's breed"
-				value={petBreed}
-				onChangeText={setPetBreed}
-				placeholderTextColor="#8146C1"
-			/>
+					<View style={styles.inputGroup}>
+						<Text style={styles.label}>Breed</Text>
+						<TextInput
+							style={styles.input}
+							placeholder="Enter breed"
+							value={petBreed}
+							onChangeText={setPetBreed}
+							placeholderTextColor="#8146C1"
+						/>
+					</View>
 
-	
+					{/* Add Gender dropdown */}
+					<View style={styles.inputGroup}>
+						<Text style={styles.label}>Gender</Text>
+						<CustomDropdown
+							label="Select Pet Gender"
+							options={PET_GENDERS}
+							value={petGender}
+							onSelect={setPetGender}
+							placeholder="Select gender"
+						/>
+					</View>
 
-			{/* Continue Button */}
-			<TouchableOpacity
-				style={[
-					styles.continueButton,
-					(!petName.trim() || !petAge.trim() || !petType.trim() || !petBreed.trim()) && {
-						backgroundColor: "#D52FFF",
-					},
-				]}
-				onPress={handleContinue}
-				disabled={!petName.trim() || !petAge.trim() || !petType.trim() || !petBreed.trim()}>
-				<Text style={styles.continueButtonText}>Save</Text>
-			</TouchableOpacity>
+					{/* Optional Fields Section */}
+					<Text style={styles.sectionTitle}>Additional Information</Text>
+
+					<View style={styles.inputGroup}>
+						<Text style={styles.label}>Allergies (Optional)</Text>
+						<TextInput
+							style={[styles.input, styles.textArea]}
+							placeholder="List any allergies"
+							value={petAllergies}
+							onChangeText={setPetAllergies}
+							placeholderTextColor="#8146C1"
+							multiline
+							numberOfLines={2}
+						/>
+					</View>
+
+					<View style={styles.inputGroup}>
+						<Text style={styles.label}>Notes (Optional)</Text>
+						<TextInput
+							style={[styles.input, styles.textArea]}
+							placeholder="Any additional notes"
+							value={petNotes}
+							onChangeText={setPetNotes}
+							placeholderTextColor="#8146C1"
+							multiline
+							numberOfLines={3}
+						/>
+					</View>
+				</View>
+
+				<TouchableOpacity
+					style={[
+						styles.continueButton,
+						(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()) && {
+							backgroundColor: "#D52FFF",
+						},
+					]}
+					onPress={handleContinue}
+					disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()}>
+					<Text style={styles.continueButtonText}>Save Pet Profile</Text>
+				</TouchableOpacity>
+			</ScrollView>
 		</View>
 	);
 };
@@ -203,53 +330,37 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
-		alignItems: "center",
-		justifyContent: "center",
-		paddingHorizontal: 20,
-	},
-	loadingOverlay: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
-		justifyContent: "center",
-		alignItems: "center",
-		zIndex: 100,
-	},
-	headerContainer: {
-		width: 360,
-		alignItems: "center",
-		marginBottom: 150,
 	},
 	header: {
+		backgroundColor: "#8146C1",
+		paddingTop: 50,
+		paddingBottom: 15,
+		paddingHorizontal: 20,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between",
-		backgroundColor: "#8146C1",
-		width: "400",
-		paddingHorizontal: 20,
-		paddingVertical: 10,
-		bottom: 1,
 	},
 	backButton: {
-		position: "absolute",
-		left: 35,
-		top: 50,
+		marginRight: 15,
 	},
 	headerTitle: {
-		color: "#000000",
-		fontSize: 18,
+		color: "#FFFFFF",
+		fontSize: 20,
 		fontWeight: "bold",
-		top: 40,
-		left: 120,
+	},
+	scrollView: {
+		flex: 1,
+	},
+	scrollViewContent: {
+		paddingBottom: 30,
 	},
 	imageContainer: {
 		alignItems: "center",
 		marginVertical: 20,
-		bottom: 120,
 	},
 	imageCircle: {
 		width: 120,
 		height: 120,
-		borderRadius: 75,
+		borderRadius: 60,
 		borderWidth: 2,
 		borderColor: "#D1ACDA",
 		justifyContent: "center",
@@ -257,9 +368,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	petImage: {
-		width: 120,
-		height: 120,
-		borderRadius: 70,
+		width: 110,
+		height: 110,
+		borderRadius: 55,
 	},
 	cameraButton: {
 		position: "absolute",
@@ -269,37 +380,66 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 8,
 	},
-	label: {
-		fontSize: 16,
-		color: "#595959",
-		marginBottom: 10,
+	formContainer: {
+		paddingHorizontal: 20,
+	},
+	sectionTitle: {
+		fontSize: 18,
 		fontWeight: "bold",
-		top: -100,
-		right: 50,
+		color: "#8146C1",
+		marginTop: 20,
+		marginBottom: 15,
+	},
+	inputGroup: {
+		marginBottom: 15,
+	},
+	rowContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: 15,
+	},
+	halfInput: {
+		width: "48%",
+	},
+	label: {
+		fontSize: 14,
+		color: "#595959",
+		marginBottom: 5,
+		fontWeight: "600",
 	},
 	input: {
-		width: "90%",
 		borderWidth: 1,
 		borderColor: "#bfbfbf",
 		borderRadius: 10,
-		padding: 9,
-		marginBottom: 20,
+		padding: 12,
 		backgroundColor: "#FFFFFF",
 		color: "#000000",
-		top: -100,
+		fontSize: 14,
+	},
+	textArea: {
+		height: 80,
+		textAlignVertical: 'top',
+		paddingTop: 12,
 	},
 	continueButton: {
-		width: "90%",
 		backgroundColor: "#8146C1",
 		paddingVertical: 15,
 		borderRadius: 25,
 		alignItems: "center",
-		marginTop: -80,
+		marginHorizontal: 20,
+		marginTop: 20,
 	},
 	continueButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
 		fontWeight: "bold",
+	},
+	loadingOverlay: {
+		...StyleSheet.absoluteFillObject,
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+		justifyContent: "center",
+		alignItems: "center",
+		zIndex: 100,
 	},
 });
 
