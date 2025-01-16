@@ -22,7 +22,7 @@ const AddPetSize = ({ navigation, route }) => {
 
   const handleSizeSelect = async (size) => {
     try {
-      const response = await fetch('http://192.168.1.7:3001/api/pets/update-size', {
+      const response = await fetch('http://192.168.1.5:3001/api/pets/update-size', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

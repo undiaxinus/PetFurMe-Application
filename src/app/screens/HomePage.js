@@ -10,7 +10,7 @@ import {
 	ActivityIndicator,
 } from "react-native";
 
-const API_BASE_URL = 'http://192.168.43.100';
+const API_BASE_URL = 'http://192.168.1.5';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -193,7 +193,10 @@ const HomePage = ({ navigation, route }) => {
 								{ backgroundColor: category.backgroundColor },
 							]}
 							onPress={() =>
-								navigation.navigate(category.screen, { reason: category.label })
+								navigation.navigate(category.screen, { 
+									reason: category.label,
+									user_id: user_id
+								})
 							}
 						>
 							<Image source={category.image} style={styles.categoryImage} />

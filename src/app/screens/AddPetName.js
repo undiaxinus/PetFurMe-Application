@@ -149,7 +149,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			console.log('Sending form data:', formData);
 
-			const response = await fetch('http://192.168.43.100/PetFurMe-Application/api/pets/index.php', {
+			const response = await fetch('http://192.168.1.5/PetFurMe-Application/api/pets/index.php', {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
