@@ -60,6 +60,10 @@ const LoginScreen = ({ navigation }) => {
 		}
 	};
 
+	const handleForgotPassword = () => {
+		navigation.navigate('ForgotPassword'); // You'll need to create this screen
+	};
+
 	return (
 		<View style={styles.container}>
 			{loading && (
@@ -106,17 +110,21 @@ const LoginScreen = ({ navigation }) => {
 						placeholder="Password"
 						value={password}
 						onChangeText={setPassword}
-						secureTextEntry={!showPassword} // Toggle visibility based on `showPassword`
+						secureTextEntry={!showPassword}
 						placeholderTextColor="#8146C1"
 					/>
 					<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
 						<Ionicons
-							name={showPassword ? "eye-outline" : "eye-off-outline"} // Eye icon changes based on `showPassword`
+							name={showPassword ? "eye-outline" : "eye-off-outline"}
 							size={20}
 							color="#8146C1"
 						/>
 					</TouchableOpacity>
 				</View>
+
+				<TouchableOpacity onPress={handleForgotPassword}>
+					<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+				</TouchableOpacity>
 
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -145,9 +153,10 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF", // White background
+		backgroundColor: "#FFFFFF",
 		justifyContent: "center",
 		alignItems: "center",
+		paddingHorizontal: 20,
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
@@ -158,66 +167,68 @@ const styles = StyleSheet.create({
 	},
 	logoContainer: {
 		alignItems: "center",
-		top: -20,
-		marginBottom: 30,
+		marginBottom: 40,
 	},
 	logo: {
-		width: 150,
-		height: 150,
+		width: 180,
+		height: 180,
 		resizeMode: "contain",
 	},
 	formContainer: {
-		width: "90%",
-		padding: 10,
+		width: "100%",
+		padding: 20,
 		backgroundColor: "#D1ACDA",
-		borderRadius: 15,
+		borderRadius: 20,
 		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 5 },
-		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5,
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.2,
+		shadowRadius: 5,
+		elevation: 8,
 		marginBottom: 20,
-		height: 400,
+		height: 'auto',
+		paddingBottom: 30,
 	},
 	inputWrapper: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 20,
+		marginBottom: 15,
 		borderWidth: 1,
 		borderColor: "#8146C1",
-		borderRadius: 10,
+		borderRadius: 12,
 		backgroundColor: "#F5F5F5",
-		paddingHorizontal: 10,
-		top: 20,
+		paddingHorizontal: 15,
+		paddingVertical: 8,
+		marginTop: 10,
 	},
 	icon: {
-		marginRight: 10,
+		marginRight: 12,
 	},
 	input: {
 		flex: 1,
 		fontSize: 16,
 		color: "#8146C1",
+		paddingVertical: 8,
 	},
 	loginButton: {
-		backgroundColor: "#FFFFFF",
-		borderRadius: 10,
-		paddingVertical: 5,
+		backgroundColor: "#8146C1",
+		borderRadius: 12,
+		paddingVertical: 12,
 		alignItems: "center",
+		marginTop: 20,
 		marginBottom: 20,
-		width: 80,
-		height: 35,
-		left: 110,
-		top: 50,
+		width: "50%",
+		alignSelf: "center",
 	},
 	loginButtonText: {
-		color: "#793ABD",
+		color: "#FFFFFF",
 		fontSize: 16,
 		fontWeight: "bold",
 	},
 	footerText: {
 		textAlign: "center",
 		color: "#000000",
-		marginTop: 110,
+		marginTop: 20,
+		fontSize: 15,
 	},
 	signUpText: {
 		color: "#8146C1",
@@ -227,9 +238,18 @@ const styles = StyleSheet.create({
 		color: "#FF0000",
 		textAlign: "center",
 		marginTop: 10,
+		fontSize: 14,
 	},
 	disabledButton: {
 		opacity: 0.7,
+	},
+	forgotPasswordText: {
+		color: '#8146C1',
+		textAlign: 'right',
+		fontSize: 14,
+		marginTop: 5,
+		marginBottom: 15,
+		fontWeight: '500',
 	},
 });
 
