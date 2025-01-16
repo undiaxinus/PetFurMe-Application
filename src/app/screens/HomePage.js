@@ -17,6 +17,7 @@ const HomePage = ({ navigation, route }) => {
 	const refresh = route.params?.refresh;
 	const [userPets, setUserPets] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [imageLoadErrors, setImageLoadErrors] = useState({});
 
 	console.log("HomePage user_id:", user_id);
 
@@ -215,8 +216,20 @@ const HomePage = ({ navigation, route }) => {
 							{userPets.map((pet) => (
 								<TouchableOpacity key={pet.id} style={styles.petItem}>
 									<Image
-										source={pet.photo ? { uri: pet.photo } : require("../../assets/images/lena.png")}
+										source={
+											pet.photo && !imageLoadErrors[pet.id]
+												? { uri: pet.photo, cache: 'reload' } 
+												: require("../../assets/images/lena.png")
+										}
 										style={styles.petImage}
+										defaultSource={require("../../assets/images/lena.png")}
+										onError={() => {
+											console.log('Image load error for pet:', pet.id);
+											setImageLoadErrors(prev => ({
+												...prev,
+												[pet.id]: true
+											}));
+										}}
 									/>
 									<Text style={styles.petName}>{pet.name}</Text>
 								</TouchableOpacity>

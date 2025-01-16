@@ -48,11 +48,14 @@ try {
     }
     
     $pets = [];
+    $baseUrl = 'http://192.168.43.100/PetFurMe-Application/'; // Update this to match your server URL
+
     while($row = mysqli_fetch_assoc($result)) {
+        $photoUrl = $row['photo'] ? $baseUrl . $row['photo'] : null;
         $pets[] = [
             'id' => $row['id'],
             'name' => $row['name'],
-            'photo' => $row['photo']
+            'photo' => $photoUrl
         ];
     }
     
