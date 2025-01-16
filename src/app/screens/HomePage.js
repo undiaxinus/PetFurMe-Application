@@ -101,21 +101,21 @@ const HomePage = ({ navigation, route }) => {
 			id: "2",
 			label: "Vaccination",
 			backgroundColor: "#8146C1",
-			screen: "Vaccination",
+			screen: "Consultation",
 			image: require("../../assets/images/vaccination.png"),
 		},
 		{
 			id: "3",
 			label: "Deworming",
 			backgroundColor: "#FF8ACF",
-			screen: "Deworming",
+			screen: "Consultation",
 			image: require("../../assets/images/deworming.png"),
 		},
 		{
 			id: "4",
 			label: "Grooming",
 			backgroundColor: "#8146C1",
-			screen: "Grooming",
+			screen: "Consultation",
 			image: require("../../assets/images/grooming.png"),
 		},
 	];
@@ -248,16 +248,16 @@ const HomePage = ({ navigation, route }) => {
 				{/* Pet Products Section */}
 				<View style={styles.petProductsBox}>
 					<View style={styles.sectionHeader}>
-						<Image
-							source={require("../../assets/images/petpro.png")}
-							style={styles.vetcare}
-						/>
-						<Text style={styles.sectionTitle}>Pet Products</Text>
-						<Text
-							style={styles.viewmore}
-							onPress={() => navigation.navigate("ViewMorePro")}>
-							View More
-						</Text>
+						<View style={styles.leftHeader}>
+							<Image
+								source={require("../../assets/images/petpro.png")}
+								style={styles.vetcare}
+							/>
+							<Text style={styles.sectionTitle}>Pet Products</Text>
+						</View>
+						<TouchableOpacity onPress={() => navigation.navigate("ViewMorePro")}>
+							<Text style={styles.viewmore}>View More</Text>
+						</TouchableOpacity>
 					</View>
 
 					{petProducts.map((item) => (
@@ -436,13 +436,29 @@ const styles = StyleSheet.create({
 	sectionHeader: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 10,
+		justifyContent: "space-between",
+		marginBottom: 15,
+		paddingHorizontal: 5,
+	},
+	leftHeader: {
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	vetcare: {
+		width: 24,
+		height: 24,
+		marginRight: 8,
+		resizeMode: "contain",
 	},
 	sectionTitle: {
 		fontSize: 18,
 		fontWeight: "bold",
 		color: "#8146C1",
-		marginLeft: 5,
+	},
+	viewmore: {
+		color: "#5809BB",
+		fontWeight: "bold",
+		fontSize: 14,
 	},
 	petProductCard: {
 		flexDirection: "row",
@@ -461,12 +477,6 @@ const styles = StyleSheet.create({
 	},
 	productDetails: {
 		flex: 1,
-	},
-	viewmore: {
-		left: 95,
-		top: 210,
-		color: "#5809BB",
-		fontWeight: 'bold',
 	},
 	productName: {
 		fontSize: 14,
