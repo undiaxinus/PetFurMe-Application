@@ -205,35 +205,42 @@ const AddAppointment = ({ route, navigation }) => {
         <View style={styles.formContainer}>
           <Text style={styles.formLabel}>Fill out the form</Text>
 
-          {/* Owner Name Input */}
+          {/* Owner Name Input with Icon */}
           <Text style={styles.inputLabel}>Owner Name</Text>
-          <TextInput
-            style={styles.input}
-            value={owner_name}
-            onChangeText={setOwnerName}
-            placeholderTextColor="#b3b3b3"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={20} color="#666666" />
+            <TextInput
+              style={styles.inputWithIcon}
+              value={owner_name}
+              onChangeText={setOwnerName}
+              placeholderTextColor="#b3b3b3"
+              placeholder="Enter owner name"
+            />
+          </View>
 
-          {/* Add Pet Selection Dropdown */}
+          {/* Pet Selection with Icon */}
           <Text style={styles.inputLabel}>Select Your Pet</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedPet}
-              style={styles.picker}
-              onValueChange={(itemValue) => {
-                setSelectedPet(itemValue);
-                console.log("Selected pet:", pets.find(p => p.id === itemValue));
-              }}
-            >
-              <Picker.Item label="Select a pet" value={null} />
-              {pets.map(pet => (
-                <Picker.Item 
-                  key={pet.id} 
-                  label={pet.name} 
-                  value={pet.id} 
-                />
-              ))}
-            </Picker>
+          <View style={styles.pickerContainerWithIcon}>
+            <Ionicons name="paw-outline" size={20} color="#666666" style={styles.pickerIcon} />
+            <View style={styles.pickerWrapper}>
+              <Picker
+                selectedValue={selectedPet}
+                style={styles.picker}
+                onValueChange={(itemValue) => {
+                  setSelectedPet(itemValue);
+                  console.log("Selected pet:", pets.find(p => p.id === itemValue));
+                }}
+              >
+                <Picker.Item label="Select a pet" value={null} />
+                {pets.map(pet => (
+                  <Picker.Item 
+                    key={pet.id} 
+                    label={pet.name} 
+                    value={pet.id} 
+                  />
+                ))}
+              </Picker>
+            </View>
           </View>
 
           {/* Show selected pet details only if a pet is selected */}
@@ -293,23 +300,27 @@ const AddAppointment = ({ route, navigation }) => {
             />
           )}
 
-          {/* Date Picker */}
+          {/* Date Picker with Icon */}
           <Text style={styles.inputLabel}>Appointment Date</Text>
           <TouchableOpacity
             style={styles.datePickerButton}
             onPress={() => setShowDatePicker(true)}
           >
             <View style={styles.datePickerContent}>
-              <Text style={styles.datePickerText}>
-                {getFormattedDate() || 'Select Date'}
-              </Text>
+              <View style={styles.datePickerRow}>
+                <Ionicons name="calendar-outline" size={20} color="#666666" />
+                <Text style={[styles.datePickerText, { marginLeft: 10 }]}>
+                  {getFormattedDate() || 'Select Date'}
+                </Text>
+              </View>
               {appointment_date && availableSlots !== null && (
                 <Text style={styles.availableSlotsText}>
-                  {availableSlots} slots available
+                  <Ionicons name="time-outline" size={14} color="#666666" />
+                  {' '}{availableSlots} slots available
                 </Text>
               )}
             </View>
-            <Ionicons name="calendar" size={24} color="#CC38F2" />
+            <Ionicons name="chevron-down-outline" size={20} color="#CC38F2" />
           </TouchableOpacity>
 
           {showDatePicker && (
@@ -322,16 +333,19 @@ const AddAppointment = ({ route, navigation }) => {
             />
           )}
 
-          {/* Time Picker */}
+          {/* Time Picker with Icon */}
           <Text style={styles.inputLabel}>Appointment Time</Text>
           <TouchableOpacity
             style={styles.datePickerButton}
             onPress={() => setShowTimePicker(true)}
           >
-            <Text style={styles.datePickerText}>
-              {getFormattedTime() || 'Select Time'}
-            </Text>
-            <Ionicons name="time" size={24} color="#CC38F2" />
+            <View style={styles.datePickerRow}>
+              <Ionicons name="time-outline" size={20} color="#666666" />
+              <Text style={[styles.datePickerText, { marginLeft: 10 }]}>
+                {getFormattedTime() || 'Select Time'}
+              </Text>
+            </View>
+            <Ionicons name="chevron-down-outline" size={20} color="#CC38F2" />
           </TouchableOpacity>
 
           {showTimePicker && (
@@ -345,7 +359,7 @@ const AddAppointment = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Move the save button outside of ScrollView */}
+      {/* Save Button with Icon */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.saveButton}
@@ -355,7 +369,12 @@ const AddAppointment = ({ route, navigation }) => {
           {loading ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Text style={styles.saveButtonText}>Save Appointment</Text>
+            <View style={styles.saveButtonContent}>
+              <Ionicons name="save-outline" size={20} color="#FFFFFF" />
+              <Text style={[styles.saveButtonText, { marginLeft: 8 }]}>
+                Save Appointment
+              </Text>
+            </View>
           )}
         </TouchableOpacity>
       </View>
@@ -534,6 +553,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666666',
     marginTop: 2,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#b3b3b3',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
+  },
+  inputWithIcon: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#000000',
+  },
+  pickerContainerWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#b3b3b3',
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
+    overflow: 'hidden',
+  },
+  pickerIcon: {
+    paddingLeft: 12,
+  },
+  pickerWrapper: {
+    flex: 1,
+  },
+  datePickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  saveButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
