@@ -28,6 +28,10 @@ const HomePage = ({ navigation, route }) => {
 		}
 	}, [user_id, refresh]);
 
+	useEffect(() => {
+		console.log("Updated userPets:", userPets);
+	}, [userPets]);
+
 	const fetchUserPets = async () => {
 		setIsLoading(true);
 		try {
@@ -61,7 +65,8 @@ const HomePage = ({ navigation, route }) => {
 			console.log("Successfully parsed response data:", data);
 			
 			if (data.success) {
-				setUserPets(data.data?.pets || []);
+				console.log("Pets data received:", data.data?.pets);
+				setUserPets(data.pets || []);
 			} else {
 				throw new Error(data.message || 'Failed to load pets data');
 			}
@@ -220,14 +225,20 @@ const HomePage = ({ navigation, route }) => {
 								<TouchableOpacity key={pet.id} style={styles.petItem}>
 									<Image
 										source={
-											pet.photo && !imageLoadErrors[pet.id]
-												? { uri: pet.photo, cache: 'reload' } 
+											pet.photo 
+												? { 
+													uri: pet.photo,
+													headers: {
+														'Accept': 'image/jpeg',
+														'Cache-Control': 'no-cache'
+													}
+												}
 												: require("../../assets/images/lena.png")
 										}
 										style={styles.petImage}
 										defaultSource={require("../../assets/images/lena.png")}
-										onError={() => {
-											console.log('Image load error for pet:', pet.id);
+										onError={(error) => {
+											console.log('Image load error for pet:', pet.id, error.nativeEvent);
 											setImageLoadErrors(prev => ({
 												...prev,
 												[pet.id]: true

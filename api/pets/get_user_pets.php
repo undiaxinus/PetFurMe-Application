@@ -6,6 +6,8 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../config/Database.php';
 
+$API_BASE_URL = 'http://192.168.1.5'; // Make sure this matches your React Native API_BASE_URL
+
 try {
     $database = new Database();
     $db = $database->connect();
@@ -25,7 +27,7 @@ try {
     error_log("Fetching pets for user_id: " . $user_id);
 
     // Fetch pets for the specific user_id
-    $query = "SELECT id, name, type, breed, age, gender, weight, size 
+    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo 
              FROM pets 
              WHERE user_id = ?";
              
@@ -45,6 +47,13 @@ try {
             // Debug log
             error_log("Found pet: " . json_encode($row));
             
+            // Handle photo path
+            $photoUrl = null;
+            if (!empty($row['photo'])) {
+                // Construct the full URL to the photo
+                $photoUrl = $API_BASE_URL . '/PetFurMe-Application/' . $row['photo'];
+            }
+            
             $pets[] = array(
                 'id' => $row['id'],
                 'name' => $row['name'],
@@ -53,7 +62,8 @@ try {
                 'age' => $row['age'] ?? '',
                 'gender' => $row['gender'] ?? '',
                 'weight' => $row['weight'] ?? '',
-                'size' => $row['size'] ?? ''
+                'size' => $row['size'] ?? '',
+                'photo' => $photoUrl // Send the full URL to the image
             );
         }
         
