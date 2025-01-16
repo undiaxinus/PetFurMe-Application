@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
 	};
 
 	const handleForgotPassword = () => {
-		navigation.navigate('ForgotPassword'); // You'll need to create this screen
+		navigation.navigate('ForgotPassword'); // Make sure this matches the screen name in App.js
 	};
 
 	return (

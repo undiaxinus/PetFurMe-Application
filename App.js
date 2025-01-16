@@ -23,6 +23,7 @@ import Deworming from "./src/app/screens/Deworming";
 import Grooming from "./src/app/screens/Grooming";
 import Help from "./src/app/screens/Help";
 import AddPetSize from "./src/app/screens/AddPetSize";
+import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,6 +52,7 @@ export default function App() {
 				<Stack.Screen name="HomeScreen" component={HomeScreen} />
 				<Stack.Screen name="LoginScreen" component={LoginScreen} />
 				<Stack.Screen name="Register" component={RegistrationScreen} />
+				<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 				<Stack.Screen name="LandingPage" component={LandingPage} />
 				<Stack.Screen name="PetProfile" component={PetProfile} />
 				<Stack.Screen name="ChatScreen" component={ChatScreen} />
