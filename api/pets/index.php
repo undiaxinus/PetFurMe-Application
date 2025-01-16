@@ -6,36 +6,38 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../config/Database.php';
 
-// Get posted data
-$data = json_decode(file_get_contents("php://input"));
-
-// Debug: Log received data
-error_log("Received pet creation request: " . print_r($data, true));
-
 try {
     $database = new Database();
     $db = $database->connect();
 
-    // Add error handling for database connection
     if (!$db) {
         throw new Exception("Database connection failed");
     }
 
-    // Store values in variables first
-    $user_id = $data->user_id;
-    $name = htmlspecialchars(strip_tags($data->name));
-    $age = $data->age;
-    $type = htmlspecialchars(strip_tags($data->type));
-    $breed = htmlspecialchars(strip_tags($data->breed));
-    $category = htmlspecialchars(strip_tags($data->category));
-    $owner_name = null;
-    $allergies = property_exists($data, 'allergies') ? htmlspecialchars(strip_tags($data->allergies)) : null;
-    $notes = property_exists($data, 'notes') ? htmlspecialchars(strip_tags($data->notes)) : null;
-    $gender = htmlspecialchars(strip_tags($data->gender));
-    $weight = $data->weight;
-    $photo = null;
-    $size = property_exists($data, 'size') ? htmlspecialchars(strip_tags($data->size)) : null;
+    // Get the JSON data
+    $petData = json_decode($_POST['data'], true);
+    
+    // Handle photo upload
+    $photo_path = null;
+    if (isset($_FILES['photo'])) {
+        $target_dir = "../../uploads/pet_photos/";
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        
+        $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $new_filename = uniqid() . '.' . $file_extension;
+        $target_file = $target_dir . $new_filename;
+        
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_file)) {
+            // Store only the relative path in database
+            $photo_path = 'uploads/pet_photos/' . $new_filename;
+        } else {
+            throw new Exception("Failed to move uploaded file");
+        }
+    }
 
+    // Prepare the query
     $query = "INSERT INTO pets 
             (user_id, name, age, type, breed, category, owner_name, allergies, notes, gender, weight, photo, size, created_at, updated_at) 
             VALUES 
@@ -49,20 +51,20 @@ try {
 
     // Bind parameters
     $stmt->bind_param(
-        "isisssssssiss",
-        $user_id,
-        $name,
-        $age,
-        $type,
-        $breed,
-        $category,
-        $owner_name,
-        $allergies,
-        $notes,
-        $gender,
-        $weight,
-        $photo,
-        $size
+        "isisssssssiss", // Changed 'b' to 's' for photo path
+        $petData['user_id'],
+        $petData['name'],
+        $petData['age'],
+        $petData['type'],
+        $petData['breed'],
+        $petData['category'],
+        $petData['owner_name'],
+        $petData['allergies'],
+        $petData['notes'],
+        $petData['gender'],
+        $petData['weight'],
+        $photo_path,
+        $petData['size']
     );
 
     if($stmt->execute()) {
@@ -72,7 +74,8 @@ try {
         echo json_encode(array(
             'success' => true,
             'message' => 'Pet added successfully',
-            'pet_id' => $pet_id
+            'pet_id' => $pet_id,
+            'photo_path' => $photo_path
         ));
     } else {
         throw new Exception("Execute failed: " . $stmt->error);

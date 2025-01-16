@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
+import * as ImagePicker from 'expo-image-picker';
 
 const PET_TYPES = [
 	"Dog",
@@ -44,6 +45,7 @@ const AddPetProfile = ({ navigation, route }) => {
 	const [petNotes, setPetNotes] = useState("");
 	const [petGender, setPetGender] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [photo, setPhoto] = useState(null);
 
 	// Get user_id from route params
 	const user_id = route.params?.user_id;
@@ -67,6 +69,33 @@ const AddPetProfile = ({ navigation, route }) => {
 		}
 	}, [user_id]);
 
+	useEffect(() => {
+		(async () => {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+				Alert.alert('Sorry', 'We need camera roll permissions to upload photos.');
+			}
+		})();
+	}, []);
+
+	const pickImage = async () => {
+		try {
+			const result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				allowsEditing: true,
+				aspect: [1, 1],
+				quality: 1,
+			});
+
+			if (!result.canceled) {
+				setPhoto(result.assets[0].uri);
+			}
+		} catch (error) {
+			console.error('Error picking image:', error);
+			Alert.alert('Error', 'Failed to pick image');
+		}
+	};
+
 	const handleContinue = async () => {
 		if (!user_id) {
 			alert("Error: User ID is missing");
@@ -89,6 +118,18 @@ const AddPetProfile = ({ navigation, route }) => {
 		try {
 			setLoading(true);
 			
+			const formData = new FormData();
+			
+			// Handle photo
+			if (photo) {
+				const filename = photo.split('/').pop();
+				formData.append('photo', {
+					uri: photo,
+					type: 'image/jpeg',
+					name: filename
+				});
+			}
+
 			const petData = {
 				user_id: parseInt(user_id),
 				name: petName.trim(),
@@ -101,24 +142,21 @@ const AddPetProfile = ({ navigation, route }) => {
 				category: 'Mammal',
 				gender: petGender.toLowerCase(),
 				weight: parseFloat(petWeight),
-				photo: null,
 				size: petSize?.toLowerCase() || null
 			};
 
-			console.log('Sending pet data:', petData);
+			formData.append('data', JSON.stringify(petData));
+
+			console.log('Sending form data:', formData);
 
 			const response = await fetch('http://192.168.43.100/PetFurMe-Application/api/pets/index.php', {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
-					'Content-Type': 'application/json',
+					'Content-Type': 'multipart/form-data',
 				},
-				body: JSON.stringify(petData)
+				body: formData
 			});
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
 
 			const responseText = await response.text();
 			console.log('Raw server response:', responseText);
@@ -143,11 +181,11 @@ const AddPetProfile = ({ navigation, route }) => {
 					]
 				);
 			} else {
-				alert(data.message || 'Failed to create pet profile');
+				throw new Error(data.message || 'Failed to create pet profile');
 			}
 		} catch (error) {
 			console.error('Error creating pet profile:', error);
-			alert('Error creating pet profile: ' + error.message);
+			Alert.alert('Error', 'Failed to create pet profile: ' + error.message);
 		} finally {
 			setLoading(false);
 		}
@@ -177,20 +215,22 @@ const AddPetProfile = ({ navigation, route }) => {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.scrollViewContent}
 			>
+				
+
+				<View style={styles.formContainer}>
 				{/* Pet Image */}
 				<View style={styles.imageContainer}>
 					<View style={styles.imageCircle}>
 						<Image
-							source={require("../../assets/images/doprof.png")}
+							source={photo ? { uri: photo } : require("../../assets/images/doprof.png")}
 							style={styles.petImage}
 						/>
-						<TouchableOpacity style={styles.cameraButton}>
+						<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
 							<Ionicons name="camera" size={20} color="#FFFFFF" />
 						</TouchableOpacity>
 					</View>
 				</View>
-
-				<View style={styles.formContainer}>
+					
 					{/* Required Fields Section */}
 					<Text style={styles.sectionTitle}>Required Information</Text>
 					
@@ -356,8 +396,8 @@ const styles = StyleSheet.create({
 		marginVertical: 20,
 	},
 	imageCircle: {
-		width: 120,
-		height: 120,
+		width: 100,
+		height: 100,
 		borderRadius: 60,
 		borderWidth: 2,
 		borderColor: "#D1ACDA",
@@ -366,8 +406,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	petImage: {
-		width: 110,
-		height: 110,
+		width: 90,
+		height: 90,
 		borderRadius: 55,
 	},
 	cameraButton: {
