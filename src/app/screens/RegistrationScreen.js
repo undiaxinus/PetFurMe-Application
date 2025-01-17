@@ -28,7 +28,7 @@ const RegistrationScreen = ({ navigation }) => {
 
 	const API_URL = Platform.select({
 		ios: "http://localhost:3001",
-		android: "http://192.168.1.5:3001"
+		android: "http://192.168.43.100:3001"
 	});
 
 	const handleSendOTP = async () => {
@@ -136,7 +136,19 @@ const RegistrationScreen = ({ navigation }) => {
 					placeholderTextColor="#8146C1"
 				/>
 			</View>
-
+			
+			<View style={styles.inputWrapper}>
+				<Ionicons name="person-circle-outline" size={20} color="#8146C1" style={styles.icon} />
+				<TextInput
+					style={styles.input}
+					placeholder="Username"
+					value={username}
+					onChangeText={setUsername}
+					placeholderTextColor="#8146C1"
+					autoCapitalize="none"
+				/>
+			</View>
+			
 			<View style={styles.inputWrapper}>
 				<Ionicons name="mail-outline" size={20} color="#8146C1" style={styles.icon} />
 				<TextInput
@@ -150,17 +162,7 @@ const RegistrationScreen = ({ navigation }) => {
 				/>
 			</View>
 
-			<View style={styles.inputWrapper}>
-				<Ionicons name="person-circle-outline" size={20} color="#8146C1" style={styles.icon} />
-				<TextInput
-					style={styles.input}
-					placeholder="Username"
-					value={username}
-					onChangeText={setUsername}
-					placeholderTextColor="#8146C1"
-					autoCapitalize="none"
-				/>
-			</View>
+			
 
 			<View style={styles.inputWrapper}>
 				<Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />

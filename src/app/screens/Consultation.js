@@ -44,7 +44,7 @@ const AddAppointment = ({ route, navigation }) => {
   const fetchUserPets = async () => {
     try {
       console.log("Fetching pets for user_id:", user_id); // Debug log
-      const response = await fetch(`http://192.168.1.5/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`);
+      const response = await fetch(`http://192.168.43.100/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`);
       const result = await response.json();
       
       console.log("API Response:", result); // Debug log
@@ -96,7 +96,7 @@ const AddAppointment = ({ route, navigation }) => {
 
         console.log('Sending appointment data:', appointmentData); // Debug log
 
-        const response = await fetch('http://192.168.1.5/PetFurMe-Application/api/appointments/save.php', {
+        const response = await fetch('http://192.168.43.100/PetFurMe-Application/api/appointments/save.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -149,7 +149,7 @@ const AddAppointment = ({ route, navigation }) => {
     try {
       const formattedDate = moment(date).format('YYYY-MM-DD');
       const response = await fetch(
-        `http://192.168.1.5/PetFurMe-Application/api/appointments/check_availability.php?date=${formattedDate}`
+        `http://192.168.43.100/PetFurMe-Application/api/appointments/check_availability.php?date=${formattedDate}`
       );
       const result = await response.json();
       

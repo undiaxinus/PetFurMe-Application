@@ -9,8 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-
-const API_BASE_URL = 'http://192.168.1.5';
+const API_BASE_URL = 'http://192.168.43.100';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -18,6 +17,8 @@ const HomePage = ({ navigation, route }) => {
 	const [userPets, setUserPets] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [imageLoadErrors, setImageLoadErrors] = useState({});
+	const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+	const [isProfileComplete, setIsProfileComplete] = useState(false);
 
 	console.log("HomePage user_id:", user_id);
 
@@ -31,6 +32,10 @@ const HomePage = ({ navigation, route }) => {
 	useEffect(() => {
 		console.log("Updated userPets:", userPets);
 	}, [userPets]);
+
+	useEffect(() => {
+		checkProfileStatus();
+	}, [user_id]);
 
 	const fetchUserPets = async () => {
 		setIsLoading(true);
@@ -92,6 +97,93 @@ const HomePage = ({ navigation, route }) => {
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	const checkProfileStatus = async () => {
+		if (!user_id) return;
+		
+		try {
+			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
+			console.log("Checking profile status at:", url);
+			
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 10000);
+			
+			const response = await fetch(url, {
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				signal: controller.signal
+			});
+			
+			clearTimeout(timeoutId);
+			
+			console.log("Response status:", response.status);
+			console.log("Response headers:", Object.fromEntries(response.headers));
+			
+			const text = await response.text();
+			console.log("Raw response:", text);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+			}
+			
+			if (!text.trim()) {
+				throw new Error("Empty response from server");
+			}
+			
+			const data = JSON.parse(text);
+			console.log("Parsed data:", data);
+			
+			if (data.success) {
+				setIsProfileComplete(data.isProfileComplete);
+				setShowWelcomePopup(!data.isProfileComplete);
+			} else {
+				console.error("Profile check failed:", data.message);
+				setIsProfileComplete(false);
+				setShowWelcomePopup(true);
+			}
+		} catch (error) {
+			console.error("Profile check error:", error);
+			console.error("Error details:", {
+				message: error.message,
+				stack: error.stack,
+				name: error.name
+			});
+			
+			let errorMessage = "Failed to check profile status.";
+			if (error.name === 'AbortError') {
+				errorMessage = "Request timed out. Please check your connection.";
+			} else if (error.message.includes('Network request failed')) {
+				errorMessage = "Network error. Please check your connection.";
+			}
+			
+			Alert.alert(
+				"Connection Error",
+				errorMessage
+			);
+			
+			setIsProfileComplete(false);
+			setShowWelcomePopup(true);
+		}
+	};
+
+	const handleSetUpNow = () => {
+		setShowWelcomePopup(false);
+		navigation.navigate('ProfileSetup', { 
+			user_id: user_id,
+			onComplete: () => {
+				setIsProfileComplete(true);
+				// Refresh the home page data
+				fetchUserPets();
+			}
+		});
+	};
+
+	const handleMaybeLater = () => {
+		setShowWelcomePopup(false);
 	};
 
 	const categories = [
@@ -166,6 +258,41 @@ const HomePage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
+			{showWelcomePopup && (
+				<View style={styles.popupOverlay}>
+					<View style={styles.popupContainer}>
+						<Text style={styles.popupTitle}>Welcome to Pet Fur Me!</Text>
+						<Text style={styles.popupText}>
+							Hi Angelica, we're so excited to have you here. To make the most of your
+							experience, let's personalize your profile.
+						</Text>
+						
+						<View style={styles.popupFeatures}>
+							<Text style={styles.popupFeatureItem}>• Tailored recommendations</Text>
+							<Text style={styles.popupFeatureItem}>• Exclusive features</Text>
+							<Text style={styles.popupFeatureItem}>• A smoother experience</Text>
+						</View>
+						
+						<Text style={styles.popupQuestion}>What would you like to do?</Text>
+						
+						<View style={styles.popupButtons}>
+							<TouchableOpacity 
+								style={styles.setupButton} 
+								onPress={handleSetUpNow}
+							>
+								<Text style={styles.setupButtonText}>Set Up Now</Text>
+							</TouchableOpacity>
+							
+							<TouchableOpacity 
+								style={styles.laterButton} 
+								onPress={handleMaybeLater}
+							>
+								<Text style={styles.laterButtonText}>Maybe Later</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+			)}
 			{isLoading && (
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size="large" color="#8146C1" />
@@ -601,6 +728,85 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 		marginBottom: 10,
 		color: '#333',
+	},
+	popupOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		zIndex: 1000,
+	},
+	popupContainer: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 20,
+		padding: 20,
+		width: '85%',
+		alignItems: 'center',
+	},
+	popupTitle: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 15,
+		textAlign: 'center',
+	},
+	popupText: {
+		fontSize: 16,
+		color: '#666',
+		textAlign: 'center',
+		marginBottom: 20,
+		lineHeight: 22,
+	},
+	popupFeatures: {
+		alignSelf: 'flex-start',
+		marginBottom: 20,
+	},
+	popupFeatureItem: {
+		fontSize: 16,
+		color: '#666',
+		marginBottom: 8,
+	},
+	popupQuestion: {
+		fontSize: 18,
+		color: '#333',
+		fontWeight: '600',
+		marginBottom: 20,
+	},
+	popupButtons: {
+		width: '100%',
+		gap: 10,
+	},
+	setupButton: {
+		backgroundColor: '#8146C1',
+		paddingVertical: 12,
+		paddingHorizontal: 30,
+		borderRadius: 25,
+		width: '100%',
+		alignItems: 'center',
+	},
+	setupButtonText: {
+		color: '#FFFFFF',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	laterButton: {
+		backgroundColor: '#FFFFFF',
+		paddingVertical: 12,
+		paddingHorizontal: 30,
+		borderRadius: 25,
+		width: '100%',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: '#8146C1',
+	},
+	laterButtonText: {
+		color: '#8146C1',
+		fontSize: 16,
+		fontWeight: 'bold',
 	},
 });
 
