@@ -33,7 +33,7 @@ const AddAppointment = ({ route, navigation }) => {
     ) {
       setLoading(true); // Show loading spinner
       try {
-        const response = await fetch('http://192.168.43.100:3000/saveAppointment', {
+        const response = await fetch('http://192.168.1.5:3000/saveAppointment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

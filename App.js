@@ -24,6 +24,7 @@ import Grooming from "./src/app/screens/Grooming";
 import Help from "./src/app/screens/Help";
 import AddPetSize from "./src/app/screens/AddPetSize";
 import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
+import ProfileVerification from "./src/app/screens/ProfileVerification";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -36,6 +37,7 @@ function DrawerNavigator() {
 			screenOptions={{ headerShown: false }} // Hide headers for drawer screens
 		>
 			<Drawer.Screen name="HomePage" component={HomePage} />
+			<Drawer.Screen name="ProfileVerification" component={ProfileVerification} />
 		</Drawer.Navigator>
 	);
 }
@@ -68,6 +70,7 @@ export default function App() {
 				<Stack.Screen name="Deworming" component={Deworming} />
 				<Stack.Screen name="Grooming" component={Grooming} />
 				<Stack.Screen name="Help" component={Help} />
+				<Stack.Screen name="ProfileVerification" component={ProfileVerification} />
 
 				{/* Drawer Navigator */}
 				<Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />

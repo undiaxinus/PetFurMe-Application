@@ -9,7 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-const API_BASE_URL = 'http://192.168.43.100';
+const API_BASE_URL = 'http://192.168.1.5';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -172,11 +172,10 @@ const HomePage = ({ navigation, route }) => {
 
 	const handleSetUpNow = () => {
 		setShowWelcomePopup(false);
-		navigation.navigate('ProfileSetup', { 
+		navigation.navigate('ProfileVerification', { 
 			user_id: user_id,
 			onComplete: () => {
 				setIsProfileComplete(true);
-				// Refresh the home page data
 				fetchUserPets();
 			}
 		});
