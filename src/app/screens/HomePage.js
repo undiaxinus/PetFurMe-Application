@@ -9,7 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-const API_BASE_URL = 'http://192.168.0.108';
+const API_BASE_URL = 'http://192.168.0.110';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
