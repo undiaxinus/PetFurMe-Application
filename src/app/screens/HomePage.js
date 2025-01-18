@@ -348,7 +348,7 @@ const HomePage = ({ navigation, route }) => {
 							contentContainerStyle={styles.petsScrollContainer}
 						>
 							{userPets.map((pet) => (
-								<TouchableOpacity key={pet.id} style={styles.petItem}>
+								<TouchableOpacity onPress={() => navigation.navigate('PetProfile', { petId: pet.id, user_id: user_id })} key={pet.id} style={styles.petItem}>
 									<Image
 										source={
 											pet.photo 
