@@ -73,8 +73,8 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const renderProfileSection = () => (
-		<View style={styles.profileSection}>
-			<Image
+		<View style={styles.profileSection} onclick >
+			<Image 
 				source={require("../../assets/images/profile.png")}
 				style={styles.profileImage}
 			/>

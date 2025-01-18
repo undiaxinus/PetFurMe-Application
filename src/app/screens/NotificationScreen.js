@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 const NotificationScreen = ({ navigation }) => {
@@ -50,12 +50,43 @@ const NotificationScreen = ({ navigation }) => {
           data={notifications}
           renderItem={renderNotification}
           keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+          <Image
+            source={require("../../assets/images/homee.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
+          <Image
+            source={require("../../assets/images/message.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Image
+            source={require("../../assets/images/notif.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Help')}>
+          <Image
+            source={require("../../assets/images/faq.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -74,7 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     left: 65,
-				top: 10,
+    top: 10,
   },
   notificationItem: {
     flexDirection: 'row',
@@ -113,6 +144,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#aaa',
     marginTop: 20,
+  },
+  // Added bottom navigation styles
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    backgroundColor: '#8146C1',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
 });
 

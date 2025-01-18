@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#DDD',
     backgroundColor: '#FFF',
-    marginBottom: 60, // Added margin to prevent overlap with bottom nav
+    marginBottom: 25, // Added margin to prevent overlap with bottom nav
   },
   textInput: {
     flex: 1,

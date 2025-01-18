@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../config/Database.php';
 
-$API_BASE_URL = 'http://192.168.0.110'; // Make sure this matches your React Native API_BASE_URL
+$API_BASE_URL = 'http://192.168.0.108'; // Make sure this matches your React Native API_BASE_URL
 
 try {
     $database = new Database();
