@@ -82,7 +82,7 @@ const HelpScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#000" style={styles.backIcon} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Help</Text>
+        <Text style={styles.headerTitle}>FAQ'S</Text>
         <Text style={styles.faq}>Here's our frequently asked question from our application.</Text>
       </View>
 
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingTop: 100, // Add space above the sections
   },
   faq: {
-    right: 170,
+    right: 190,
     fontSize: 15,
     top: 75,
     color: '#808080',

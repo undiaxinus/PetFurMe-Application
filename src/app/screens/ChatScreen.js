@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const ChatScreen = () => {
+const ChatScreen = ({ navigation }) => {
   const [messages, setMessages] = useState([
     { id: '1', text: 'Hello! How can I help you?', sender: 'other' },
     { id: '2', text: 'I need help with pet grooming services.', sender: 'user' },
@@ -56,6 +56,37 @@ const ChatScreen = () => {
           <MaterialIcons name="send" size={24} color="white" />
         </TouchableOpacity>
       </View>
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+          <Image
+            source={require("../../assets/images/homee.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Image
+            source={require("../../assets/images/message.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
+          <Image
+            source={require("../../assets/images/notif.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Help')}>
+          <Image
+            source={require("../../assets/images/faq.png")}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -68,6 +99,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     padding: 15,
     top: 100,
+    paddingBottom: 60, // Added padding to prevent messages from being hidden behind the bottom nav
   },
   messageBubble: {
     padding: 10,
@@ -93,6 +125,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#DDD',
     backgroundColor: '#FFF',
+    marginBottom: 60, // Added margin to prevent overlap with bottom nav
   },
   textInput: {
     flex: 1,
@@ -108,6 +141,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#A259B5',
     borderRadius: 20,
     padding: 10,
+  },
+  // Added bottom navigation styles
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    backgroundColor: '#8146C1',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
 });
 

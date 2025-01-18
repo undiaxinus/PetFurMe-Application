@@ -9,7 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-const API_BASE_URL = 'http://192.168.1.5';
+const API_BASE_URL = 'http://192.168.0.108';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -309,7 +309,11 @@ const HomePage = ({ navigation, route }) => {
 					</TouchableOpacity>
 
 					<View style={styles.headerTextContainer}>
-						<Text style={styles.greetingText}>Hey Angge,</Text>
+						<Text style={styles.greetingText}>Hey! Your pet's happiness starts here!</Text>
+						<Image
+							source={require("../../assets/images/lookingfor.png")}
+							style={styles.look}
+						/>
 						<Text style={styles.questionText}>What are you looking for?</Text>
 					</View>
 				</View>
@@ -393,7 +397,7 @@ const HomePage = ({ navigation, route }) => {
 								source={require("../../assets/images/petpro.png")}
 								style={styles.vetcare}
 							/>
-							<Text style={styles.sectionTitle}>Pet Products</Text>
+							<Text style={styles.petproducts}>Pet Products</Text>
 						</View>
 						<TouchableOpacity onPress={() => navigation.navigate("ViewMorePro")}>
 							<Text style={styles.viewmore}>View More</Text>
@@ -416,7 +420,11 @@ const HomePage = ({ navigation, route }) => {
 
 				{/* Vets Section */}
 				<View style={styles.sectionContainer}>
-					<Text style={styles.sectionTitle}>Vets</Text>
+				<Image
+					source={require("../../assets/images/vet.png")}
+					style={styles.vet}
+				/>
+					<Text style={styles.vets}>Vets</Text>
 					{vets.map((vet) => (
 						<View key={vet.id} style={styles.vetCard}>
 							<Image source={vet.image} style={styles.vetImage} />
@@ -460,16 +468,16 @@ const HomePage = ({ navigation, route }) => {
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
-  <Image
-    source={require("../../assets/images/notif.png")}
-    style={styles.navIcon}
-  />
+  				<Image
+    			source={require("../../assets/images/notif.png")}
+    			style={styles.navIcon}
+				/>
 			</TouchableOpacity>
 
 
 			<TouchableOpacity onPress={() => navigation.navigate('Help')}>
   <Image
-    source={require("../../assets/images/circle.png")}
+    source={require("../../assets/images/faq.png")}
     style={styles.navIcon}
   />
 			</TouchableOpacity>
@@ -494,11 +502,18 @@ const styles = StyleSheet.create({
 		backgroundColor: "#8146C1",
 		width: "100%",
 		paddingHorizontal: 20,
-		top: 32,
+		top: 35,
 	},
 	burger: {
 		width: 25,
 		height: 25,
+		resizeMode: "contain",
+	},
+	look: {
+		width: 25,
+		height: 25,
+		top: 80,
+		right: 30,
 		resizeMode: "contain",
 	},
 	headerTextContainer: {
@@ -506,10 +521,10 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 	},
 	greetingText: {
-		fontSize: 18,
+		fontSize: 15,
 		color: "#9134A9",
 		fontWeight: "bold",
-		top: 50,
+		top: 73,
 		left: -40,
 	},
 	questionText: {
@@ -524,7 +539,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		marginVertical: 65,
 		paddingHorizontal: 10,
-		top: 40,
+		top: 45,
 	},
 	categoryItem: {
 		alignItems: "center",
@@ -570,7 +585,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 		marginHorizontal: 20,
 		marginBottom: 20,
-		marginTop: -10,
+		marginTop: 5,
 		elevation: 3,
 	},
 	sectionHeader: {
@@ -590,10 +605,23 @@ const styles = StyleSheet.create({
 		marginRight: 8,
 		resizeMode: "contain",
 	},
+	vets: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		marginLeft: 32,
+		bottom: 25,
+		color: '#333',
+	},
 	sectionTitle: {
 		fontSize: 18,
 		fontWeight: "bold",
 		color: "#8146C1",
+		left: 30,
+	},
+	petproducts: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		color: '#333',
 	},
 	viewmore: {
 		color: "#5809BB",
@@ -647,7 +675,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 		borderRadius: 10,
 		padding: 15,
-		marginBottom: 10,
+		bottom: 10,
 		elevation: 2,
 	},
 	vetImage: {
@@ -726,7 +754,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		marginLeft: 20,
 		marginBottom: 10,
-		color: '#333',
+		color: '#808080',
 	},
 	popupOverlay: {
 		position: 'absolute',

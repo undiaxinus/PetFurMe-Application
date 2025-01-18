@@ -38,6 +38,7 @@ function DrawerNavigator() {
 		>
 			<Drawer.Screen name="HomePage" component={HomePage} />
 			<Drawer.Screen name="ProfileVerification" component={ProfileVerification} />
+			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
 		</Drawer.Navigator>
 	);
 }
@@ -58,7 +59,7 @@ export default function App() {
 				<Stack.Screen name="LandingPage" component={LandingPage} />
 				<Stack.Screen name="PetProfile" component={PetProfile} />
 				<Stack.Screen name="ChatScreen" component={ChatScreen} />
-
+				<Stack.Screen name="HomePage" component={HomePage} />
 				<Stack.Screen name="Profile" component={ProfileScreen} />
 				<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
 				<Stack.Screen name="AddPetName" component={AddPetName} />

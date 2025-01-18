@@ -119,8 +119,7 @@ const ProductPage = ({ navigation }) => {
 			<View style={styles.actionContainer}>
 				<TouchableOpacity style={styles.addToCartButton}>
 					<Text
-						style={styles.addToCartText}
-						onPress={() => navigation.navigate("AddtoCart")}>
+						style={styles.addToCartText}>
 						Stocks: 100
 					</Text>
 				</TouchableOpacity>
@@ -160,29 +159,29 @@ const ProductPage = ({ navigation }) => {
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
 					<Image
 						source={require("../../assets/images/homee.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
 
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
 					<Image
 						source={require("../../assets/images/message.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
 				
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
 					<Image
 						source={require("../../assets/images/notif.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate('Help')}>
 					<Image
-						source={require("../../assets/images/circle.png")}
+						source={require("../../assets/images/faq.png")}
 						style={styles.navIcon}
 					/>
 				</TouchableOpacity>
@@ -203,7 +202,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#8146C1",
 		width: "100%",
 		paddingHorizontal: 20,
-		top: 30,
+		top: 35,
+		padding: 12,
 	},
 	searchBar: {
 		flex: 1,
@@ -214,14 +214,14 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#000",
 		fontWeight: "bold",
-		top: 50,
+		top: 70,
 	},
 	search: {
 		width: 25,
 		height: 25,
 		resizeMode: "contain",
 		right: 293,
-		top: 50,
+		top: 70,
 	},
 	productList: {
 		padding: 10,
@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
 		marginBottom: 30,
 		marginHorizontal: 5,
 		padding: 10,
+		top: 30,
 	},
 	tagContainer: {
 		flexDirection: "row",

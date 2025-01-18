@@ -4,9 +4,8 @@ import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 const NotificationScreen = ({ navigation }) => {
   const [notifications, setNotifications] = useState([
-    { id: '1', title: 'Order Confirmed', description: 'Your order for Dog Food has been confirmed.', read: false },
-    { id: '2', title: 'Appointment Reminder', description: 'You have an appointment with the vet tomorrow at 10:00 AM.', read: true },
-    { id: '3', title: 'New Product Alert', description: 'Check out our new collection of pet accessories.', read: false },
+    { id: '1', title: 'Appointment Reminder', description: 'You have an appointment with the vet tomorrow at 10:00 AM.', read: true },
+    { id: '2', title: 'New Product Alert', description: 'Check out our new collection of pet accessories.', read: false },
   ]);
 
   const markAsRead = (id) => {
@@ -56,6 +55,7 @@ const NotificationScreen = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
