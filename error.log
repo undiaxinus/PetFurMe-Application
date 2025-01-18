@@ -680,3 +680,14 @@
 [18-Jan-2025 11:08:09 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
 [18-Jan-2025 11:08:09 Europe/Berlin] Profile complete status: true
 [18-Jan-2025 11:08:09 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 11:16:55 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 11:16:55 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 11:16:55 Europe/Berlin] Request method: GET
+[18-Jan-2025 11:16:55 Europe/Berlin] User ID: 104
+[18-Jan-2025 11:16:55 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 11:16:55 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 11:16:55 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 11:16:55 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 11:16:55 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 11:16:55 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 11:16:55 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}

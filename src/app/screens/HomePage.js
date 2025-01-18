@@ -33,7 +33,7 @@ const HomePage = ({ navigation, route }) => {
 			// Set up auto refresh every 30 seconds
 			refreshIntervalRef.current = setInterval(() => {
 				fetchUserPets();
-			}, 30000);
+			}, 10000);
 			
 			// Cleanup function
 			return () => {
