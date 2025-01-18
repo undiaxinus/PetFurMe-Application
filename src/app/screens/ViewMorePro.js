@@ -103,6 +103,12 @@ const ProductPage = ({ navigation }) => {
 			image: require("../../assets/images/meowmix.png"),
 		},
 	]);
+	const [searchQuery, setSearchQuery] = useState('');
+
+	// Filter products based on search query
+	const filteredProducts = products.filter(product => 
+		product.name.toLowerCase().includes(searchQuery.toLowerCase())
+	);
 
 	const renderProduct = ({ item }) => (
 		<View style={styles.productCard}>
@@ -131,26 +137,33 @@ const ProductPage = ({ navigation }) => {
 		<View style={styles.container}>
 			{/* Header */}
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => navigation.openDrawer()}>
+				<TouchableOpacity 
+					style={styles.menuButton}
+					onPress={() => navigation.openDrawer()}
+				>
 					<Ionicons name="menu" size={30} color="#FFFFFF" />
 				</TouchableOpacity>
 
-				<TextInput
-					style={styles.searchBar}
-					placeholder="Search"
-					placeholderTextColor="#888888"
-				/>
-				<TouchableOpacity>
-					<Image
-						source={require("../../assets/images/search.png")}
-						style={styles.search}
+				<View style={styles.searchContainer}>
+					<TextInput
+						style={styles.searchBar}
+						placeholder="Search"
+						placeholderTextColor="#888888"
+						value={searchQuery}
+						onChangeText={setSearchQuery}
 					/>
-				</TouchableOpacity>
+					<TouchableOpacity style={styles.searchButton}>
+						<Image
+							source={require("../../assets/images/search.png")}
+							style={styles.search}
+						/>
+					</TouchableOpacity>
+				</View>
 			</View>
 
-			{/* Product List */}
+			{/* Product List - Updated to use filteredProducts */}
 			<FlatList
-				data={products}
+				data={filteredProducts}
 				keyExtractor={(item) => item.id}
 				renderItem={renderProduct}
 				contentContainerStyle={styles.productList}
@@ -159,33 +172,38 @@ const ProductPage = ({ navigation }) => {
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
-				<TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
-					<Image
-						source={require("../../assets/images/homee.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('HomePage')}
+        >
+            <Ionicons name="home-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
-					<Image
-						source={require("../../assets/images/message.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
-				
-				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
-					<Image
-						source={require("../../assets/images/notif.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={() => navigation.navigate('Help')}>
-					<Image
-						source={require("../../assets/images/faq.png")}
-						style={styles.navIcon}
-					/>
-				</TouchableOpacity>
-			</View>
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('ChatScreen')}
+        >
+            <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Chat</Text>
+        </TouchableOpacity>
+
+		<TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('NotificationScreen')}
+        >
+			<Ionicons name="notifications-outline" size={24} color="#8146C1" />
+			<Text style={styles.navText}>Notifications</Text>
+		</TouchableOpacity>
+
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Help')}
+        >
+            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Help</Text>
+        </TouchableOpacity>
+      </View>
 		</View>
 	);
 };
@@ -194,36 +212,47 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
+		paddingTop: 40,
 	},
 	header: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 20,
-		paddingTop: 10,
+		padding: 15,
 		backgroundColor: '#8146C1',
-		bottom: 10,
+		height: 100,
+		paddingTop: 20,
+		top: -40,
+	},
+	menuButton: {
+		padding: 5,
+	},
+	searchContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 10,
+		backgroundColor: '#D9D9D9',
+		borderRadius: 8,
+		paddingRight: 10,
 	},
 	searchBar: {
 		flex: 1,
-		backgroundColor: "#D9D9D9",
-		borderRadius: 8,
-		paddingHorizontal: 20,
-		marginLeft: 10,
+		paddingHorizontal: 15,
+		paddingVertical: 8,
 		fontSize: 14,
 		color: "#000",
 		fontWeight: "bold",
-		top: 70,
+	},
+	searchButton: {
+		padding: 5,
 	},
 	search: {
-		width: 25,
-		height: 25,
+		width: 20,
+		height: 20,
 		resizeMode: "contain",
-		right: 293,
-		top: 70,
 	},
 	productList: {
 		padding: 10,
-		top: 80,
 	},
 	productCard: {
 		flex: 1,
@@ -232,10 +261,9 @@ const styles = StyleSheet.create({
 		elevation: 3,
 		alignItems: "center",
 		justifyContent: "center",
-		marginBottom: 30,
+		marginBottom: 15,
 		marginHorizontal: 5,
 		padding: 10,
-		top: 30,
 	},
 	tagContainer: {
 		flexDirection: "row",
@@ -301,11 +329,26 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	bottomNav: {
-		flexDirection: "row",
-		justifyContent: "space-around",
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 		paddingVertical: 10,
-		backgroundColor: "#8146C1",
-	},
+		backgroundColor: '#FFFFFF',
+		borderTopWidth: 1,
+		borderTopColor: 'rgba(0,0,0,0.1)',
+	  },
+	  navItem: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	  },
+	  navText: {
+		fontSize: 12,
+		color: '#8146C1',
+		marginTop: 4,
+	  },
 	navIcon: {
 		width: 30,
 		height: 30,
