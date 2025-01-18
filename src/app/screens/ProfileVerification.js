@@ -53,20 +53,8 @@ const ProfileVerification = ({ navigation, route }) => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // Get the raw response text first
-            const responseText = await response.text();
-            console.log("Raw response:", responseText);
-
-            // Try to parse it as JSON
-            let data;
-            try {
-                data = JSON.parse(responseText);
-                console.log("Parsed data:", data);
-            } catch (parseError) {
-                console.error("JSON Parse Error:", parseError);
-                console.error("Received non-JSON response:", responseText);
-                throw new Error("Server returned invalid JSON");
-            }
+            const data = await response.json();
+            console.log("User data response:", data);
 
             if (data.success) {
                 const userData = data.profile || data.data;
@@ -75,6 +63,17 @@ const ProfileVerification = ({ navigation, route }) => {
                 setAddress(userData.address || '');
                 setPhoneNumber(userData.phone || '');
                 setEmail(userData.email || '');
+
+                // Handle the photo data
+                if (userData.photo) {
+                    try {
+                        const photoUri = `data:image/jpeg;base64,${userData.photo}`;
+                        setProfilePhoto({ uri: photoUri });
+                        console.log("Photo loaded successfully");
+                    } catch (error) {
+                        console.error("Error setting photo:", error);
+                    }
+                }
             } else {
                 throw new Error(data.message || 'Failed to fetch user data');
             }
@@ -139,7 +138,7 @@ const ProfileVerification = ({ navigation, route }) => {
             const formData = new FormData();
             
             // Add photo if selected
-            if (profilePhoto) {
+            if (profilePhoto && profilePhoto.uri && !profilePhoto.uri.startsWith('data:image')) {
                 const localUri = profilePhoto.uri;
                 const filename = localUri.split('/').pop();
                 
@@ -180,27 +179,17 @@ const ProfileVerification = ({ navigation, route }) => {
                 }
             );
 
-            // Log response headers and status
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
-
-            const responseText = await response.text();
-            console.log('Raw response:', responseText);
-
-            try {
-                const data = JSON.parse(responseText);
-                if (data.success) {
-                    Alert.alert('Success', 'Profile updated successfully');
-                    navigation.goBack();
-                } else {
-                    Alert.alert('Error', data.message || 'Failed to update profile');
-                }
-            } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                Alert.alert('Error', 'Invalid server response');
+            const result = await response.json();
+            
+            if (result.success) {
+                Alert.alert('Success', 'Profile updated successfully');
+                // Refresh the user data
+                await fetchUserData();
+            } else {
+                throw new Error(result.message || 'Failed to update profile');
             }
         } catch (error) {
-            console.error('Error updating user data:', error);
+            console.error('Error updating profile:', error);
             Alert.alert('Error', 'Failed to update profile. Please try again.');
         } finally {
             setIsLoading(false);
@@ -276,20 +265,22 @@ const ProfileVerification = ({ navigation, route }) => {
 
             {/* Profile Image Section */}
             <View style={styles.profileImageContainer}>
-                <TouchableOpacity onPress={handleSelectPhoto}>
                     <View style={styles.profileImage}>
-                        {profilePhoto ? (
                             <Image
-                                source={{ uri: profilePhoto.uri }}
+                        source={
+                            profilePhoto 
+                                ? { ...profilePhoto, cache: 'reload' }
+                                : require('../../assets/images/profile.png')
+                        }
                                 style={styles.profilePhotoImage}
+                        resizeMode="cover"
                             />
-                        ) : (
-                            <Ionicons name="person-circle-outline" size={100} color="#8146C1" />
-                        )}
                     </View>
-                    <View style={styles.editPhotoButton}>
+                <TouchableOpacity
+                    style={styles.editPhotoButton}
+                    onPress={handleSelectPhoto}
+                >
                         <Ionicons name="camera" size={20} color="#8146C1" />
-                    </View>
                 </TouchableOpacity>
             </View>
 
@@ -418,76 +409,125 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 16,
-        paddingTop: 40,
+        paddingTop: 60,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E0E0E0',
+        backgroundColor: '#FFFFFF',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
     },
     backButton: {
         padding: 8,
+        marginLeft: 8,
     },
     headerTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 30,
+        fontSize: 24,
+        fontWeight: '600',
+        marginLeft: 24,
+        color: '#333333',
     },
     profileImageContainer: {
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 24,
     },
     profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: '#F0F0F0',
-    },
-    editImageButton: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 15,
-        padding: 8,
-        borderWidth: 1,
-        borderColor: '#FF1493',
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        backgroundColor: '#F5F5F5',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 3,
+        borderColor: '#8146C1',
     },
     formContainer: {
-        padding: 16,
+        padding: 20,
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
     },
     inputGroup: {
-        marginBottom: 16,
+        marginBottom: 20,
     },
     label: {
-        fontSize: 16,
-        color: '#333333',
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#666666',
         marginBottom: 8,
+        marginLeft: 4,
     },
     input: {
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: '#E0E0E0',
-        borderRadius: 8,
-        padding: 12,
+        borderRadius: 12,
+        padding: 14,
         fontSize: 16,
+        backgroundColor: '#FAFAFA',
     },
     emailContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: '#FAFAFA',
+        borderWidth: 1.5,
+        borderColor: '#E0E0E0',
+        borderRadius: 12,
+        paddingRight: 8,
     },
     emailInput: {
         flex: 1,
-        marginRight: 8,
+        borderWidth: 0,
+        backgroundColor: 'transparent',
     },
     editButton: {
         padding: 8,
+        backgroundColor: '#F0E6FA',
+        borderRadius: 8,
     },
     updateButton: {
-        backgroundColor: '#D52FFF',
+        backgroundColor: '#8146C1',
         padding: 16,
-        borderRadius: 8,
+        borderRadius: 12,
         alignItems: 'center',
         marginTop: 24,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
     },
     updateButtonText: {
         color: '#FFFFFF',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
+    },
+    editPhotoButton: {
+        position: 'absolute',
+        right: 120,
+        bottom: 0,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        padding: 10,
+        borderWidth: 2,
+        borderColor: '#8146C1',
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+    },
+    profilePhotoImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 60,
     },
     loadingOverlay: {
         position: 'absolute',
@@ -500,21 +540,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         zIndex: 1000,
     },
-    profilePhotoImage: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 75,
-    },
-    editPhotoButton: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        backgroundColor: '#fff',
-        borderRadius: 15,
-        padding: 5,
-        borderWidth: 1,
-        borderColor: '#8146C1',
-    }
 });
 
 export default ProfileVerification; 
