@@ -214,28 +214,28 @@ const HomePage = ({ navigation, route }) => {
 			label: "Consultation",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			image: require("../../assets/images/consultation.png"),
+			icon: "medical-outline",
 		},
 		{
 			id: "2",
 			label: "Vaccination",
 			backgroundColor: "#8146C1",
 			screen: "Consultation",
-			image: require("../../assets/images/vaccination.png"),
+			icon: "fitness-outline",
 		},
 		{
 			id: "3",
 			label: "Deworming",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			image: require("../../assets/images/deworming.png"),
+			icon: "bug-outline",
 		},
 		{
 			id: "4",
 			label: "Grooming",
 			backgroundColor: "#8146C1",
 			screen: "Consultation",
-			image: require("../../assets/images/grooming.png"),
+			icon: "cut-outline",
 		},
 	];
 
@@ -320,27 +320,36 @@ const HomePage = ({ navigation, route }) => {
 					<ActivityIndicator size="large" color="#8146C1" />
 				</View>
 			)}
-			{/* Main Scrollable Content */}
-			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{/* Header Section */}
-				<View style={styles.header}>
-					<TouchableOpacity onPress={() => navigation.openDrawer()}>
-						<Image
-							source={require("../../assets/images/burger.png")}
-							style={styles.burger}
-						/>
-					</TouchableOpacity>
+			{/* Fixed Header */}
+			<View style={styles.header}>
+				<TouchableOpacity 
+					style={styles.menuButton} 
+					onPress={() => navigation.openDrawer()}
+				>
+					<Image
+						source={require("../../assets/images/burger.png")}
+						style={styles.menuIcon}
+					/>
+				</TouchableOpacity>
 
-					<View style={styles.headerTextContainer}>
-						<Text style={styles.greetingText}>Hey! Your pet's happiness starts here!</Text>
+				<View style={styles.headerContent}>
+					<Text style={styles.welcomeText}>
+						Hey! Your pet's happiness starts here!
+					</Text>
+					<View style={styles.searchSection}>
 						<Image
 							source={require("../../assets/images/lookingfor.png")}
-							style={styles.look}
+							style={styles.searchIcon}
 						/>
-						<Text style={styles.questionText}>What are you looking for?</Text>
+						<Text style={styles.searchText}>
+							What are you looking for?
+						</Text>
 					</View>
 				</View>
+			</View>
 
+			{/* Add paddingTop to scrollContent to account for fixed header */}
+			<ScrollView contentContainerStyle={styles.scrollContent}>
 				{/* Categories Section */}
 				<View style={styles.categoriesContainer}>
 					{categories.map((category) => (
@@ -357,18 +366,20 @@ const HomePage = ({ navigation, route }) => {
 								})
 							}
 						>
-							<Image source={category.image} style={styles.categoryImage} />
-							<Text style={styles.categoryLabel}>{category.label}</Text>
+							<View style={styles.categoryContent}>
+								<Ionicons name={category.icon} size={30} color="#FFFFFF" />
+								<Text style={styles.categoryLabel}>{category.label}</Text>
+							</View>
 						</TouchableOpacity>
 					))}
 				</View>
 
-				{/* Pets Section */}
+				{/* Pets Section - Moved up */}
 				{isLoading ? (
 					<ActivityIndicator size="large" color="#8146C1" />
 				) : (
-					<View>
-						<Text style={styles.sectionTitle}>My Pets</Text>
+					<View style={styles.petsSection}>
+						<Text style={[styles.sectionTitle, { marginTop: -40 }]}>My Pets</Text>
 						<ScrollView 
 							horizontal 
 							showsHorizontalScrollIndicator={false}
@@ -516,70 +527,92 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#FFFFFF",
 	},
-	scrollContent: {
-		paddingBottom: 100, // Space for bottom navigation
-	},
 	header: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 20,
-		paddingTop: 10,
+		padding: 16,
+		paddingTop: 20,
 		backgroundColor: '#8146C1',
-		bottom: 10,
+		height: 120,
+		zIndex: 1000,
+		elevation: 3,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
 	},
-	burger: {
-		width: 25,
-		height: 25,
-		resizeMode: "contain",
-		top: 25,
+	scrollContent: {
+		paddingTop: 120,
+		paddingBottom: 100,
 	},
-	look: {
-		width: 25,
-		height: 25,
-		top: 80,
-		right: 30,
-		resizeMode: "contain",
+	menuButton: {
+		padding: 8,
 	},
-	headerTextContainer: {
+	menuIcon: {
+		width: 24,
+		height: 24,
+		resizeMode: 'contain',
+	},
+	headerContent: {
 		flex: 1,
-		marginLeft: 10,
-		top: 20,
+		marginLeft: 12,
 	},
-	greetingText: {
-		fontSize: 15,
-		color: "#9134A9",
-		fontWeight: "bold",
-		top: 73,
-		left: -40,
+	welcomeText: {
+		fontSize: 16,
+		color: '#FFFFFF',
+		fontWeight: 'bold',
+		marginBottom: 12,
 	},
-	questionText: {
+	searchSection: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#FFFFFF',
+		borderRadius: 8,
+		padding: 8,
+	},
+	searchIcon: {
+		width: 20,
+		height: 20,
+		resizeMode: 'contain',
+		marginRight: 8,
+	},
+	searchText: {
 		fontSize: 14,
-		color: "#141415",
-		fontWeight: "bold",
-		top: 60,
-		left: 0,
+		color: '#666666',
 	},
 	categoriesContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		marginVertical: 65,
 		paddingHorizontal: 10,
-		top: 5,
+		top: -50,
 	},
 	categoryItem: {
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 		borderRadius: 10,
-		width: 80, // Increased size
-		height: 90, // Increased size
+		width: 80,
+		height: 90,
+		padding: 5,
+	},
+	categoryContent: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		gap: 8,
 	},
 	categoryImage: {
-		width: 60, // Adjusted size
-		height: 60, // Adjusted size
+		width: 60,
+		height: 60,
 		marginBottom: 9,
 		top: 5,
 	},
 	categoryLabel: {
-		fontSize: 12, // Adjusted font size
+		fontSize: 12,
 		color: "#FFFFFF",
 		textAlign: "center",
 		fontWeight: "bold",
@@ -612,6 +645,7 @@ const styles = StyleSheet.create({
 		marginBottom: 30,
 		marginTop: 15,
 		elevation: 3,
+		top: -50,
 	},
 	sectionHeader: {
 		flexDirection: "row",
@@ -695,6 +729,7 @@ const styles = StyleSheet.create({
 	sectionContainer: {
 		marginHorizontal: 20,
 		marginBottom: -100,
+		top: -50,
 	},
 	vetCard: {
 		flexDirection: "row",
@@ -704,6 +739,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 		bottom: 10,
 		elevation: 2,
+		marginBottom: 80,
 	},
 	vetImage: {
 		width: 60,
@@ -779,7 +815,7 @@ const styles = StyleSheet.create({
 	},
 	petItem: {
 		alignItems: 'center',
-		marginRight: 15, // Space between pets
+		marginRight: 15,
 		marginTop: -10,
 	},
 	petImage: {
@@ -878,6 +914,10 @@ const styles = StyleSheet.create({
 		color: '#8146C1',
 		fontSize: 16,
 		fontWeight: 'bold',
+	},
+	petsSection: {
+		top: -50,
+		marginBottom: 20,
 	},
 });
 
