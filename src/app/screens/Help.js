@@ -77,7 +77,7 @@ const HelpScreen = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color="#FFFFFF" top={15}/>
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>Help Center</Text>
@@ -139,24 +139,29 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: Platform.OS === 'ios' ? 50 : 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#DDD',
-    backgroundColor: '#FFF',
+    backgroundColor: '#8146C1',
+    height: 120,
   },
   headerTitleContainer: {
     marginLeft: 16,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
+    left: 65,
+    top: 18,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#cccccc',
     marginTop: 2,
+    top: 15,
+    left: 40,
   },
   listContainer: {
     paddingHorizontal: 20,
+    marginTop: 30,
   },
   section: {
     backgroundColor: '#EDEDF5',

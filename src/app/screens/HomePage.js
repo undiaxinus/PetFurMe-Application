@@ -566,6 +566,7 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
 		fontWeight: 'bold',
 		marginBottom: 12,
+		top: 13,
 	},
 	searchSection: {
 		flexDirection: 'row',
@@ -573,6 +574,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FFFFFF',
 		borderRadius: 8,
 		padding: 8,
+		top: 10,
 	},
 	searchIcon: {
 		width: 20,
@@ -739,7 +741,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 		bottom: 10,
 		elevation: 2,
-		marginBottom: 80,
+		marginBottom: 20,
 	},
 	vetImage: {
 		width: 60,

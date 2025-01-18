@@ -257,7 +257,7 @@ const ChatScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color="#FFFFFF" top={15}/>
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>Chat with PetFurMe</Text>
@@ -341,20 +341,25 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? 50 : 16,
     borderBottomWidth: 1,
     borderBottomColor: '#DDD',
-    backgroundColor: '#FFF',
+    backgroundColor: '#8146C1',
+    height: 120,
   },
   headerTitleContainer: {
     marginLeft: 16,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
+    left: 45,
+    top: 18,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#cccccc',
     marginTop: 2,
+    top: 15,
+    left: 65,
   },
   chatWrapper: {
     flex: 1,
@@ -372,11 +377,11 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: '#A259B5',
+    backgroundColor: '#cc66ff',
   },
   otherBubble: {
     alignSelf: 'flex-start', 
-    backgroundColor: '#8146C1',
+    backgroundColor: '#9999e6',
   },
   messageText: {
     color: '#FFFFFF',
