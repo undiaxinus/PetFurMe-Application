@@ -9,6 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 const API_BASE_URL = 'http://192.168.0.108';
 
 const HomePage = ({ navigation, route }) => {
@@ -475,36 +476,35 @@ const HomePage = ({ navigation, route }) => {
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
-				<TouchableOpacity>
-					<Image
-						source={require("../../assets/images/homee.png")}
-						style={styles.navIcon}
-					/>
+				<TouchableOpacity style={styles.navItem}>
+					<Ionicons name="home" size={24} color="#8146C1" />
+					<Text style={styles.navText}>Home</Text>
 				</TouchableOpacity>
 
 				<TouchableOpacity 
+					style={styles.navItem}
 					onPress={() => navigation.navigate('ChatScreen', { 
 						user_id: user_id 
 					})}
 				>
-					<Image
-						source={require("../../assets/images/message.png")}
-						style={styles.navIcon}
-					/>
+					<Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
+					<Text style={styles.navText}>Chat</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
-					<Image
-						source={require("../../assets/images/notif.png")}
-						style={styles.navIcon}
-					/>
+				<TouchableOpacity 
+					style={styles.navItem}
+					onPress={() => navigation.navigate('NotificationScreen')}
+				>
+					<Ionicons name="notifications-outline" size={24} color="#8146C1" />
+					<Text style={styles.navText}>Notifications</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate('Help')}>
-					<Image
-						source={require("../../assets/images/faq.png")}
-						style={styles.navIcon}
-					/>
+				<TouchableOpacity 
+					style={styles.navItem}
+					onPress={() => navigation.navigate('Help')}
+				>
+					<Ionicons name="help-circle-outline" size={24} color="#8146C1" />
+					<Text style={styles.navText}>Help</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -741,8 +741,23 @@ const styles = StyleSheet.create({
 	bottomNav: {
 		flexDirection: "row",
 		justifyContent: "space-around",
-		paddingVertical: 15,
-		backgroundColor: "#8146C1",
+		paddingVertical: 10,
+		backgroundColor: "#FFFFFF",
+		borderTopWidth: 1,
+		borderTopColor: "#E5E5E5",
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+	},
+	navItem: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	navText: {
+		fontSize: 12,
+		color: '#8146C1',
+		marginTop: 4,
 	},
 	loadingContainer: {
 		position: 'absolute',

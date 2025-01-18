@@ -56,32 +56,33 @@ const NotificationScreen = ({ navigation }) => {
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
-          <Image
-            source={require("../../assets/images/homee.png")}
-            style={styles.navIcon}
-          />
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('HomePage')}
+        >
+            <Ionicons name="home-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
-          <Image
-            source={require("../../assets/images/message.png")}
-            style={styles.navIcon}
-          />
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('ChatScreen')}
+        >
+            <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Chat</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Image
-            source={require("../../assets/images/notif.png")}
-            style={styles.navIcon}
-          />
+        <TouchableOpacity style={styles.navItem}>
+            <Ionicons name="notifications" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Help')}>
-          <Image
-            source={require("../../assets/images/faq.png")}
-            style={styles.navIcon}
-          />
+        <TouchableOpacity 
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Help')}
+        >
+            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Help</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -145,7 +146,6 @@ const styles = StyleSheet.create({
     color: '#aaa',
     marginTop: 20,
   },
-  // Added bottom navigation styles
   bottomNav: {
     position: 'absolute',
     bottom: 0,
@@ -153,13 +153,19 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 15,
-    backgroundColor: '#8146C1',
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
   },
-  navIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navText: {
+    fontSize: 12,
+    color: '#8146C1',
+    marginTop: 4,
   },
 });
 

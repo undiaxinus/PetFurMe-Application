@@ -93,6 +93,38 @@ const HelpScreen = ({ navigation }) => {
         renderItem={renderSection}
         contentContainerStyle={styles.listContainer}
       />
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('HomePage')}
+        >
+          <Ionicons name="home-outline" size={24} color="#8146C1" />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('ChatScreen')}
+        >
+          <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
+          <Text style={styles.navText}>Chat</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => navigation.navigate('NotificationScreen')}
+        >
+          <Ionicons name="notifications-outline" size={24} color="#8146C1" />
+          <Text style={styles.navText}>Notifications</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.navItem}>
+          <Ionicons name="help-circle" size={24} color="#8146C1" />
+          <Text style={styles.navText}>Help</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -167,6 +199,27 @@ const styles = StyleSheet.create({
     color: '#000000',
     lineHeight: 20,
     alignItems: 'justify',
+  },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
+  },
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navText: {
+    fontSize: 12,
+    color: '#8146C1',
+    marginTop: 4,
   },
 });
 

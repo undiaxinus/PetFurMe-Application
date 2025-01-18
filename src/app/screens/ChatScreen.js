@@ -293,37 +293,32 @@ const ChatScreen = ({ navigation, route }) => {
 
       <View style={styles.bottomNav}>
         <TouchableOpacity 
-          onPress={() => navigation.navigate('HomePage', { user_id })}
+            style={styles.navItem}
+            onPress={() => navigation.navigate('HomePage', { user_id })}
         >
-          <Image
-            source={require("../../assets/images/homee.png")}
-            style={styles.navIcon}
-          />
+            <Ionicons name="home-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Image
-            source={require("../../assets/images/message.png")}
-            style={styles.navIcon}
-          />
+        <TouchableOpacity style={styles.navItem}>
+            <Ionicons name="chatbubble" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Chat</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('NotificationScreen', { user_id })}
+            style={styles.navItem}
+            onPress={() => navigation.navigate('NotificationScreen', { user_id })}
         >
-          <Image
-            source={require("../../assets/images/notif.png")}
-            style={styles.navIcon}
-          />
+            <Ionicons name="notifications-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Notifications</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('Help', { user_id })}
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Help', { user_id })}
         >
-          <Image
-            source={require("../../assets/images/faq.png")}
-            style={styles.navIcon}
-          />
+            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
+            <Text style={styles.navText}>Help</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -403,11 +398,26 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   bottomNav: {
-    ...baseStyles.bottomNav
+		flexDirection: "row",
+		justifyContent: "space-around",
+		paddingVertical: 10,
+		backgroundColor: "#FFFFFF",
+		borderTopWidth: 1,
+		borderTopColor: "#E5E5E5",
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+	},
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  navIcon: {
-    ...baseStyles.navIcon
-  }
+  navText: {
+		fontSize: 12,
+		color: '#8146C1',
+		marginTop: 4,
+	},
 });
 
 export default ChatScreen;
