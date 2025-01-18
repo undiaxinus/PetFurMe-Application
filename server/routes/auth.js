@@ -9,8 +9,8 @@ const bcrypt = require('bcryptjs');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'anonuevojamille@gmail.com', // Replace with your Gmail
-    pass: 'nnwvglfhbdtbekll' // Replace with your app-specific password
+    user: 'petmanagementt@gmail.com', // Replace with your Gmail
+    pass: 'ajlwvhzglwasoqku' // Replace with your app-specific password
   }
 });
 
@@ -136,7 +136,7 @@ router.post('/send-otp', async (req, res) => {
 
       // Send email with OTP
       const mailOptions = {
-        from: 'anonuevojamille@gmail.com',
+        from: 'petmanagementt@gmail.com',
         to: email.trim(),
         subject: 'Password Reset OTP',
         html: `
