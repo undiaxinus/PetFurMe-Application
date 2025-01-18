@@ -14,7 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
-const API_BASE_URL = 'http://192.168.0.108';
+const API_BASE_URL = 'http://192.168.0.110';
 
 const ProfileVerification = ({ navigation, route }) => {
     const { user_id } = route.params;

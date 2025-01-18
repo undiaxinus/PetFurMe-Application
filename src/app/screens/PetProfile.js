@@ -55,7 +55,7 @@ const PetProfile = ({ route, navigation }) => {
 	const fetchPetDetails = async () => {
 		try {
 			const response = await fetch(
-				`http://192.168.0.108/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${petId}`
+				`http://192.168.0.110/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${petId}`
 			);
 			
 			if (!response.ok) {

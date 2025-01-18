@@ -25,8 +25,8 @@ try {
     // Debug log
     error_log("Fetching user data for user_id: " . $user_id);
 
-    // Updated query to include email_verified_at
-    $query = "SELECT username, name, email, phone, age, store_address, photo, email_verified_at FROM users WHERE id = ?";
+    // Updated query to include photo and role
+    $query = "SELECT username, name, email, phone, age, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
     $stmt = $db->prepare($query);
 
     if (!$stmt) {
@@ -44,6 +44,13 @@ try {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
+        // Handle BLOB photo data
+        $photoBase64 = null;
+        if ($row['photo'] !== null) {
+            // Convert BLOB to base64
+            $photoBase64 = base64_encode($row['photo']);
+        }
+        
         $response = [
             'success' => true,
             'profile' => [
@@ -53,15 +60,16 @@ try {
                 'phone' => $row['phone'],
                 'age' => $row['age'],
                 'address' => $row['store_address'],
-                'hasPhoto' => !empty($row['photo']),
+                'photo' => $photoBase64, // Send base64 encoded photo
+                'role' => $row['role'],
                 'email_verified_at' => $row['email_verified_at']
             ]
         ];
+        
+        echo json_encode($response);
     } else {
         throw new Exception("User not found");
     }
-
-    echo json_encode($response);
 
 } catch (Exception $e) {
     error_log("Error in get_user_data.php: " . $e->getMessage());

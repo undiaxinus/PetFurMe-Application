@@ -21,7 +21,7 @@ const PET_SIZES = ['Small', 'Medium', 'Large'];
 const PET_GENDERS = ['Male', 'Female'];
 
 // Add this constant at the top of the file with other imports
-const API_BASE_URL = 'http://192.168.0.108';
+const API_BASE_URL = 'http://192.168.0.110';
 
 const UpdatePetProfile = ({ navigation, route }) => {
   console.log("Route params:", route.params);

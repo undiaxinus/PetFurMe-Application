@@ -28,7 +28,7 @@ const RegistrationScreen = ({ navigation }) => {
 
 	const API_URL = Platform.select({
 		ios: "http://localhost:3001",
-		android: "http://192.168.0.108:3001"
+		android: "http://192.168.0.110:3001"
 	});
 
 	const handleSendOTP = async () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -12,29 +12,82 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
+const API_BASE_URL = 'http://192.168.0.110';
+
 const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-	const getUserData = () => {
+	const [userData, setUserData] = useState(null);
+	
+	const getUserData = async () => {
 		if (!state?.routes) return null;
 		
 		for (const route of state.routes) {
 			if (route.params?.user_id) {
-				return {
-					user_id: route.params.user_id,
-					userName: route.params.userName || "Guest",
-					userRole: route.params.userRole || "User"
-				};
+				try {
+					// Single API call for all user data including photo
+					const response = await fetch(
+						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}`
+					);
+					
+					if (!response.ok) {
+						throw new Error('Failed to fetch user data');
+					}
+					
+					const data = await response.json();
+					console.log("User data response:", data);
+					
+					if (data.success) {
+						let photoSource = require("../../assets/images/profile.png");
+						
+						// Handle base64 photo data if available
+						if (data.profile.photo) {
+							try {
+								photoSource = {
+									uri: `data:image/jpeg;base64,${data.profile.photo}`,
+									cache: 'reload'
+								};
+								console.log("Photo source created successfully");
+							} catch (error) {
+								console.error("Error creating photo source:", error);
+							}
+						} else {
+							console.log("No photo data available");
+						}
+
+						const userData = {
+							user_id: route.params.user_id,
+							userName: data.profile.name || "Guest",
+							userRole: data.profile.role || "pet_owner",
+							profileImage: photoSource
+						};
+						console.log("Final userData created with photo:", !!photoSource.uri);
+						return userData;
+					}
+				} catch (error) {
+					console.error("Error in getUserData:", error);
+					return {
+						user_id: route.params.user_id,
+						userName: "Guest",
+						userRole: "pet_owner",
+						profileImage: require("../../assets/images/profile.png")
+					};
+				}
 			}
 		}
-		
-		console.log("No user_id found in any route");
 		return null;
 	};
 
-	const userData = getUserData();
-	console.log("Drawer user data:", userData);
+	useEffect(() => {
+		const loadUserData = async () => {
+			const data = await getUserData();
+			if (data) {
+				setUserData(data);
+			}
+		};
+		
+		loadUserData();
+	}, [state?.routes]);
 
 	const handleLogout = () => {
 		setIsLogoutModalVisible(true);
@@ -75,29 +128,38 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const renderProfileSection = () => {
-		const defaultUser = {
-			userName: "Guest",
-			userRole: "User",
-			profileImage: require("../../assets/images/profile.png")
-		};
-
 		return (
 			<View style={styles.profileSection}>
 				<Image
-					source={defaultUser.profileImage}
+					source={userData?.profileImage}
+					defaultSource={require("../../assets/images/profile.png")}
 					style={styles.profileImage}
+					onError={(error) => {
+						console.error("Image loading error:", error);
+						console.log("Current photoSource:", userData?.profileImage);
+					}}
 				/>
 				<View style={styles.profileTextContainer}>
 					<Text style={styles.profileName}>
-						{userData?.userName || defaultUser.userName}
+						{userData?.userName || "Guest"}
 					</Text>
 					<Text style={styles.profileRole}>
-						{userData?.userRole || defaultUser.userRole}
+						{userData?.userRole || "User"}
 					</Text>
 				</View>
 			</View>
 		);
 	};
+
+	useEffect(() => {
+		if (userData) {
+			console.log("userData updated:", {
+				hasPhoto: !!userData.profileImage?.uri,
+				photoType: typeof userData.profileImage,
+				photoDetails: userData.profileImage
+			});
+		}
+	}, [userData]);
 
 	return (
 		<View style={styles.container}>
@@ -230,6 +292,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		borderBottomWidth: 1,
 		borderBottomColor: '#F0F0F0',
+		top: 20,
 	},
 	profileImage: {
 		width: 60,
