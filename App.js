@@ -35,11 +35,14 @@ function DrawerNavigator() {
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <CustomDrawerContent {...props} />}
-			screenOptions={{ headerShown: false }} // Hide headers for drawer screens
+			screenOptions={{ headerShown: false }}
 		>
 			<Drawer.Screen name="HomePage" component={HomePage} />
+			<Drawer.Screen name="ChatScreen" component={ChatScreen} />
+			<Drawer.Screen name="NotificationScreen" component={NotificationScreen} />
 			<Drawer.Screen name="ProfileVerification" component={ProfileVerification} />
 			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
+			<Drawer.Screen name="Help" component={Help} />
 		</Drawer.Navigator>
 	);
 }
@@ -50,7 +53,7 @@ export default function App() {
 		<NavigationContainer>
 			<Stack.Navigator
 				initialRouteName="HomeScreen"
-				screenOptions={{ headerShown: false }} // Hide headers globally
+				screenOptions={{ headerShown: false }}
 			>
 				{/* Authentication and Landing Screens */}
 				<Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -58,21 +61,17 @@ export default function App() {
 				<Stack.Screen name="Register" component={RegistrationScreen} />
 				<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 				<Stack.Screen name="LandingPage" component={LandingPage} />
+
+				{/* Remove duplicate screens that are in DrawerNavigator */}
 				<Stack.Screen name="PetProfile" component={PetProfile} />
-				<Stack.Screen name="ChatScreen" component={ChatScreen} />
-				<Stack.Screen name="HomePage" component={HomePage} />
-				<Stack.Screen name="Profile" component={ProfileScreen} />
-				<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
 				<Stack.Screen name="AddPetName" component={AddPetName} />
 				<Stack.Screen name="AddPetSize" component={AddPetSize} />
-				<Stack.Screen name="ViewMorePro" component={ViewMorePro} />
 				<Stack.Screen name="BookAppointment" component={BookAppointment} />
 				<Stack.Screen name="Consultation" component={Consultation} />
 				<Stack.Screen name="Vaccination" component={Vaccination} />
 				<Stack.Screen name="Deworming" component={Deworming} />
 				<Stack.Screen name="Grooming" component={Grooming} />
 				<Stack.Screen name="Help" component={Help} />
-				<Stack.Screen name="ProfileVerification" component={ProfileVerification} />
 				<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
 
 				{/* Drawer Navigator */}

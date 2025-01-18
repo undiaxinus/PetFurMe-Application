@@ -1,8 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
-const ChatScreen = ({ navigation }) => {
+const baseStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    backgroundColor: '#8146C1',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+  }
+});
+
+const ChatScreen = ({ navigation, route }) => {
+  const user_id = route.params?.user_id;
+  
+  // Add this useEffect to log the user_id
+  useEffect(() => {
+    console.log("ChatScreen user_id:", user_id);
+  }, [user_id]);
+
   const [messages, setMessages] = useState([
     { id: '1', text: 'Hello! How can I help you today? You can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments', sender: 'other' },
   ]);
@@ -213,7 +254,19 @@ const ChatScreen = ({ navigation }) => {
   );
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Ionicons name="menu" size={24} color="#333" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Chat</Text>
+      </View>
+
+      <KeyboardAvoidingView 
+        style={styles.keyboardAvoidingView} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
       <FlatList
         ref={flatListRef}
         data={messages}
@@ -236,10 +289,12 @@ const ChatScreen = ({ navigation }) => {
           <MaterialIcons name="send" size={24} color="white" />
         </TouchableOpacity>
       </View>
+      </KeyboardAvoidingView>
 
-      {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('HomePage', { user_id })}
+        >
           <Image
             source={require("../../assets/images/homee.png")}
             style={styles.navIcon}
@@ -253,33 +308,56 @@ const ChatScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('NotificationScreen', { user_id })}
+        >
           <Image
             source={require("../../assets/images/notif.png")}
             style={styles.navIcon}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Help')}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('Help', { user_id })}
+        >
           <Image
             source={require("../../assets/images/faq.png")}
             style={styles.navIcon}
           />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFFFFF',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    paddingTop: Platform.OS === 'ios' ? 50 : 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDD',
+    backgroundColor: '#FFF',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 16,
+    color: '#333',
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    marginBottom: 60, // Height of bottom navigation
+    marginTop: Platform.OS === 'ios' ? 0 : 0, // Adjusted for header
   },
   chatContainer: {
     padding: 15,
-    top: 100,
-    paddingBottom: 60, // Added padding to prevent messages from being hidden behind the bottom nav
+    paddingTop: 10, // Reduced since we now have a header
   },
   messageBubble: {
     padding: 12,
@@ -292,7 +370,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#A259B5',
   },
   otherBubble: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start', 
     backgroundColor: '#8146C1',
   },
   messageText: {
@@ -300,17 +378,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
   },
-  otherMessageText: {
-    color: '#FFFFFF',
-  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    backgroundColor: '#FFF',
     borderTopWidth: 1,
     borderTopColor: '#DDD',
-    backgroundColor: '#FFF',
-    marginBottom: 25, // Added margin to prevent overlap with bottom nav
   },
   textInput: {
     flex: 1,
@@ -328,22 +402,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-  // Added bottom navigation styles
   bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 15,
-    backgroundColor: '#8146C1',
+    ...baseStyles.bottomNav
   },
   navIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
+    ...baseStyles.navIcon
+  }
 });
 
 export default ChatScreen;

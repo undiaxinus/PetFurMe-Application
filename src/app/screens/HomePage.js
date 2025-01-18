@@ -482,7 +482,11 @@ const HomePage = ({ navigation, route }) => {
 					/>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
+				<TouchableOpacity 
+					onPress={() => navigation.navigate('ChatScreen', { 
+						user_id: user_id 
+					})}
+				>
 					<Image
 						source={require("../../assets/images/message.png")}
 						style={styles.navIcon}
@@ -490,20 +494,18 @@ const HomePage = ({ navigation, route }) => {
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')}>
-  				<Image
-    			source={require("../../assets/images/notif.png")}
-    			style={styles.navIcon}
-				/>
-			</TouchableOpacity>
+					<Image
+						source={require("../../assets/images/notif.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
 
-
-			<TouchableOpacity onPress={() => navigation.navigate('Help')}>
-  <Image
-    source={require("../../assets/images/faq.png")}
-    style={styles.navIcon}
-  />
-			</TouchableOpacity>
-
+				<TouchableOpacity onPress={() => navigation.navigate('Help')}>
+					<Image
+						source={require("../../assets/images/faq.png")}
+						style={styles.navIcon}
+					/>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);

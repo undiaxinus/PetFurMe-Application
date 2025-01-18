@@ -19,14 +19,18 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const getUserData = () => {
 		if (!state?.routes) return null;
 		
-		const homeRoute = state.routes.find(route => route.name === "HomePage");
-		if (!homeRoute?.params) {
-			console.log("No params in HomePage route");
-			return null;
+		for (const route of state.routes) {
+			if (route.params?.user_id) {
+				return {
+					user_id: route.params.user_id,
+					userName: route.params.userName || "Guest",
+					userRole: route.params.userRole || "User"
+				};
+			}
 		}
 		
-		console.log("Found user data in route:", homeRoute.params);
-		return homeRoute.params;
+		console.log("No user_id found in any route");
+		return null;
 	};
 
 	const userData = getUserData();
@@ -70,24 +74,35 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		});
 	};
 
-	const renderProfileSection = () => (
-		<View style={styles.profileSection} onclick >
-			<Image 
-				source={require("../../assets/images/profile.png")}
-				style={styles.profileImage}
-			/>
-			<View style={styles.profileTextContainer}>
-				<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
-				<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
+	const renderProfileSection = () => {
+		const defaultUser = {
+			userName: "Guest",
+			userRole: "User",
+			profileImage: require("../../assets/images/profile.png")
+		};
+
+		return (
+			<View style={styles.profileSection}>
+				<Image
+					source={defaultUser.profileImage}
+					style={styles.profileImage}
+				/>
+				<View style={styles.profileTextContainer}>
+					<Text style={styles.profileName}>
+						{userData?.userName || defaultUser.userName}
+					</Text>
+					<Text style={styles.profileRole}>
+						{userData?.userRole || defaultUser.userRole}
+					</Text>
+				</View>
 			</View>
-		</View>
-	);
+		);
+	};
 
 	return (
 		<View style={styles.container}>
 			{renderProfileSection()}
 			
-			{/* Navigation Items */}
 			<View style={styles.navigationContainer}>
 				{/* Home Section */}
 				<TouchableOpacity 
@@ -98,22 +113,37 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					<Text style={styles.navText}>Home</Text>
 				</TouchableOpacity>
 
-				{/* Pets Section */}
+				{/* Pets Section - Always show but handle auth in onPress */}
 				<TouchableOpacity 
-					onPress={handleAddNewPet} 
+					onPress={() => {
+						if (!userData?.user_id) {
+							Alert.alert(
+								"Login Required",
+								"Please login to add a pet",
+								[
+									{
+										text: "OK",
+										onPress: () => navigation.navigate("LoginScreen")
+									}
+								]
+							);
+							return;
+						}
+						handleAddNewPet();
+					}} 
 					style={styles.navigationItem}
 				>
 					<MaterialIcons name="pets" size={24} color="#808080" />
 					<Text style={styles.navText}>Add Pet</Text>
 				</TouchableOpacity>
 
-				{/* Settings Section */}
+				{/* Settings Section - Always show but handle auth in onPress */}
 				<TouchableOpacity 
 					onPress={() => {
-						if (!userData || !userData.user_id) {
+						if (!userData?.user_id) {
 							Alert.alert(
-								"Error",
-								"Please login again to access settings",
+								"Login Required",
+								"Please login to access settings",
 								[
 									{
 										text: "OK",
@@ -136,11 +166,21 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				{/* Divider */}
 				<View style={styles.divider} />
 
-				{/* Logout Section */}
-				<TouchableOpacity onPress={handleLogout} style={styles.navigationItem}>
-					<MaterialIcons name="logout" size={24} color="#808080" />
-					<Text style={styles.navText}>Logout</Text>
-				</TouchableOpacity>
+				{/* Login/Logout Section */}
+				{userData?.user_id ? (
+					<TouchableOpacity onPress={handleLogout} style={styles.navigationItem}>
+						<MaterialIcons name="logout" size={24} color="#808080" />
+						<Text style={styles.navText}>Logout</Text>
+					</TouchableOpacity>
+				) : (
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('LoginScreen')} 
+						style={styles.navigationItem}
+					>
+						<MaterialIcons name="login" size={24} color="#808080" />
+						<Text style={styles.navText}>Login</Text>
+					</TouchableOpacity>
+				)}
 			</View>
 
 			{/* Logout Confirmation Modal */}
