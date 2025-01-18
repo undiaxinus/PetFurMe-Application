@@ -9,7 +9,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-const API_BASE_URL = 'http://192.168.1.5';
+const API_BASE_URL = 'http://192.168.0.110';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -431,10 +431,10 @@ const HomePage = ({ navigation, route }) => {
 
 								<TouchableOpacity
 									onPress={() =>
-										navigation.navigate("BookAppointment", { vetId: vet.id })
+										navigation.navigate("Consultation", { vetId: vet.id })
 									}>
 									<Text style={styles.bookAppointmentText}>
-										Book Appointment →
+										Book Appointment ➔
 									</Text>
 								</TouchableOpacity>
 							</View>

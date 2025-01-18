@@ -25,7 +25,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const API_URL = Platform.select({
     ios: 'http://localhost:3001',
-    android: 'http://192.168.1.5:3001',
+    android: 'http://192.168.0.110:3001',
   });
 
   const handleSendOTP = async () => {
@@ -296,7 +296,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           }
         }}
       >
-        <Text style={styles.backButtonText}>← Back</Text>
+        <Text style={styles.backButtonText}>⬅ Back</Text>
       </TouchableOpacity>
     </View>
   );
