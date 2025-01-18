@@ -25,6 +25,7 @@ import Help from "./src/app/screens/Help";
 import AddPetSize from "./src/app/screens/AddPetSize";
 import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
 import ProfileVerification from "./src/app/screens/ProfileVerification";
+import UpdatePetProfile from "./src/app/screens/UpdatePetProfile";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -72,6 +73,7 @@ export default function App() {
 				<Stack.Screen name="Grooming" component={Grooming} />
 				<Stack.Screen name="Help" component={Help} />
 				<Stack.Screen name="ProfileVerification" component={ProfileVerification} />
+				<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
 
 				{/* Drawer Navigator */}
 				<Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />

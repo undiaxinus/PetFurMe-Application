@@ -296,7 +296,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           }
         }}
       >
-        <Text style={styles.backButtonText}>← Back</Text>
+        <Text style={styles.backButtonText}>⬅ Back</Text>
       </TouchableOpacity>
     </View>
   );

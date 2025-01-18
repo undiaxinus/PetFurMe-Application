@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -43,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
 			console.log("Login response:", response.data);
 
 			if (response.data.success) {
+				await AsyncStorage.setItem('user_id', response.data.user.id.toString());
 				navigation.navigate("DrawerNavigator", { 
 					screen: 'HomePage',
 					params: { user_id: response.data.user.id }
