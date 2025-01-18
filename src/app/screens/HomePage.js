@@ -520,18 +520,18 @@ const styles = StyleSheet.create({
 		paddingBottom: 100, // Space for bottom navigation
 	},
 	header: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		backgroundColor: "#8146C1",
-		width: "100%",
-		paddingHorizontal: 20,
-		top: 35,
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 20,
+		paddingTop: 10,
+		backgroundColor: '#8146C1',
+		bottom: 10,
 	},
 	burger: {
 		width: 25,
 		height: 25,
 		resizeMode: "contain",
+		top: 25,
 	},
 	look: {
 		width: 25,
@@ -543,6 +543,7 @@ const styles = StyleSheet.create({
 	headerTextContainer: {
 		flex: 1,
 		marginLeft: 10,
+		top: 20,
 	},
 	greetingText: {
 		fontSize: 15,
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		marginVertical: 65,
 		paddingHorizontal: 10,
-		top: 45,
+		top: 5,
 	},
 	categoryItem: {
 		alignItems: "center",
@@ -608,8 +609,8 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		padding: 15,
 		marginHorizontal: 20,
-		marginBottom: 20,
-		marginTop: 5,
+		marginBottom: 30,
+		marginTop: 15,
 		elevation: 3,
 	},
 	sectionHeader: {
@@ -641,6 +642,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		color: "#8146C1",
 		left: 30,
+		marginTop: 30,
 	},
 	petproducts: {
 		fontSize: 18,
@@ -773,10 +775,12 @@ const styles = StyleSheet.create({
 	petsScrollContainer: {
 		paddingHorizontal: 20,
 		paddingVertical: 10,
+
 	},
 	petItem: {
 		alignItems: 'center',
 		marginRight: 15, // Space between pets
+		marginTop: -10,
 	},
 	petImage: {
 		width: 50,
@@ -793,8 +797,8 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: 'bold',
 		marginLeft: 20,
-		marginBottom: 10,
 		color: '#808080',
+		bottom: 10,
 	},
 	popupOverlay: {
 		position: 'absolute',
