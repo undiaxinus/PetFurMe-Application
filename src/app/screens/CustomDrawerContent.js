@@ -17,12 +17,12 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 	const getUserData = () => {
-		if (!state?.routes) return {};
+		if (!state?.routes) return null;
 		
 		const homeRoute = state.routes.find(route => route.name === "HomePage");
 		if (!homeRoute?.params) {
 			console.log("No params in HomePage route");
-			return {};
+			return null;
 		}
 		
 		console.log("Found user data in route:", homeRoute.params);
@@ -50,14 +50,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const handleAddNewPet = () => {
-		const userId = userData.user_id;
-		console.log("Attempting to add new pet with user ID:", userId);
-		
-		if (userId) {
-			navigation.navigate("AddPetName", {
-				user_id: userId
-			});
-		} else {
+		if (!userData || !userData.user_id) {
 			console.error("No user ID available");
 			Alert.alert(
 				"Error",
@@ -69,7 +62,12 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					}
 				]
 			);
+			return;
 		}
+
+		navigation.navigate("AddPetName", {
+			user_id: userData.user_id
+		});
 	};
 
 	const renderProfileSection = () => (
@@ -78,21 +76,72 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				source={require("../../assets/images/profile.png")}
 				style={styles.profileImage}
 			/>
-			<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
-			<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
+			<View style={styles.profileTextContainer}>
+				<Text style={styles.profileName}>{userData.userName || "Guest"}</Text>
+				<Text style={styles.profileRole}>{userData.userRole || "User"}</Text>
+			</View>
 		</View>
 	);
 
 	return (
 		<View style={styles.container}>
 			{renderProfileSection()}
-			{/* Logout Section */}
-			<TouchableOpacity onPress={handleLogout}>
-				<View style={styles.logoutSection}>
+			
+			{/* Navigation Items */}
+			<View style={styles.navigationContainer}>
+				{/* Home Section */}
+				<TouchableOpacity 
+					onPress={() => navigation.navigate('HomePage')} 
+					style={styles.navigationItem}
+				>
+					<Ionicons name="home-outline" size={24} color="#808080" />
+					<Text style={styles.navText}>Home</Text>
+				</TouchableOpacity>
+
+				{/* Pets Section */}
+				<TouchableOpacity 
+					onPress={handleAddNewPet} 
+					style={styles.navigationItem}
+				>
+					<MaterialIcons name="pets" size={24} color="#808080" />
+					<Text style={styles.navText}>Add Pet</Text>
+				</TouchableOpacity>
+
+				{/* Settings Section */}
+				<TouchableOpacity 
+					onPress={() => {
+						if (!userData || !userData.user_id) {
+							Alert.alert(
+								"Error",
+								"Please login again to access settings",
+								[
+									{
+										text: "OK",
+										onPress: () => navigation.navigate("LoginScreen")
+									}
+								]
+							);
+							return;
+						}
+						navigation.navigate('ProfileVerification', { 
+							user_id: userData.user_id 
+						});
+					}} 
+					style={styles.navigationItem}
+				>
+					<Ionicons name="settings-outline" size={24} color="#808080" />
+					<Text style={styles.navText}>Settings</Text>
+				</TouchableOpacity>
+
+				{/* Divider */}
+				<View style={styles.divider} />
+
+				{/* Logout Section */}
+				<TouchableOpacity onPress={handleLogout} style={styles.navigationItem}>
 					<MaterialIcons name="logout" size={24} color="#808080" />
 					<Text style={styles.navText}>Logout</Text>
-				</View>
-			</TouchableOpacity>
+				</TouchableOpacity>
+			</View>
 
 			{/* Logout Confirmation Modal */}
 			<Modal
@@ -133,20 +182,22 @@ const CustomDrawerContent = ({ navigation, state }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 40,
 		backgroundColor: "#FFFFFF",
 	},
 	profileSection: {
-		alignItems: "flex-start",
-		marginBottom: 50,
-		marginTop: 20,
-		left: -20,
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 20,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
 	},
 	profileImage: {
-		width: 70,
-		height: 70,
-		borderRadius: 35,
-		marginBottom: 10,
+		width: 60,
+		height: 60,
+		borderRadius: 30,
+	},
+	profileTextContainer: {
+		marginLeft: 15,
 	},
 	profileName: {
 		fontSize: 18,
@@ -156,12 +207,31 @@ const styles = StyleSheet.create({
 	profileRole: {
 		fontSize: 14,
 		color: "#888888",
+		marginTop: 4,
 	},
-	logoutSection: {
+	navigationContainer: {
+		padding: 15,
+		marginTop: 10,
+	},
+	navigationItem: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginTop: 30,
-		left: -15,
+		paddingVertical: 15,
+		paddingHorizontal: 15,
+		borderRadius: 8,
+		marginBottom: 5,
+	},
+	navText: {
+		marginLeft: 15,
+		fontSize: 16,
+		color: "#333333",
+		fontWeight: "500",
+	},
+	divider: {
+		height: 1,
+		backgroundColor: '#F0F0F0',
+		marginVertical: 15,
+		width: '100%',
 	},
 	modalContainer: {
 		flex: 1,
