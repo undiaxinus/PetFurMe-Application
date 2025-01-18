@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -76,13 +77,11 @@ const HelpScreen = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#000" style={styles.backIcon} />
+          <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.headerTitle}>FAQ'S</Text>
-          <Text style={styles.faqText}>
-            Here's our frequently asked questions from our application.
-          </Text>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle}>Help Center</Text>
+          <Text style={styles.headerSubtitle}>Frequently Asked Questions</Text>
         </View>
       </View>
 
@@ -133,29 +132,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingTop: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    padding: 16,
+    paddingTop: Platform.OS === 'ios' ? 50 : 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDD',
+    backgroundColor: '#FFF',
   },
-  backIcon: {
-    marginRight: 10,
-  },
-  headerTextContainer: {
-    flex: 1,
+  headerTitleContainer: {
+    marginLeft: 16,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#333',
   },
-  faqText: {
+  headerSubtitle: {
     fontSize: 14,
-    color: '#808080',
-    marginTop: 5,
+    color: '#666',
+    marginTop: 2,
   },
   listContainer: {
     paddingHorizontal: 20,

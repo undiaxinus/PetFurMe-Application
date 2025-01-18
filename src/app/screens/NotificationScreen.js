@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 const NotificationScreen = ({ navigation }) => {
@@ -36,11 +36,14 @@ const NotificationScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.headerContainer}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.header}>Notifications</Text>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle}>Notifications</Text>
+          <Text style={styles.headerSubtitle}>Stay Updated</Text>
+        </View>
       </View>
 
       {notifications.length === 0 ? (
@@ -93,20 +96,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
-    padding: 20,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 25,
   },
   header: {
-    fontSize: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    paddingTop: Platform.OS === 'ios' ? 50 : 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDD',
+    backgroundColor: '#FFF',
+  },
+  headerTitleContainer: {
+    marginLeft: 16,
+  },
+  headerTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    left: 65,
-    top: 10,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
   },
   notificationItem: {
     flexDirection: 'row',

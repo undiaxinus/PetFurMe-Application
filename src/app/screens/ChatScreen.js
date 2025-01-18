@@ -256,39 +256,43 @@ const ChatScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Ionicons name="menu" size={24} color="#333" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Chat</Text>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle}>Chat with PetFurMe</Text>
+          <Text style={styles.headerSubtitle}>Customer Service</Text>
+        </View>
       </View>
 
-      <KeyboardAvoidingView 
-        style={styles.keyboardAvoidingView} 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <View style={styles.chatWrapper}>
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.chatContainer}
+          onContentSizeChange={() => flatListRef.current.scrollToEnd()}
+        />
+      </View>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'position' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.chatContainer}
-        onContentSizeChange={() => flatListRef.current.scrollToEnd()}
-      />
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Type a message..."
-          value={input}
-          onChangeText={setInput}
-          onSubmitEditing={sendMessage}
-          returnKeyType="send"
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <MaterialIcons name="send" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Type a message..."
+            value={input}
+            onChangeText={setInput}
+            onSubmitEditing={sendMessage}
+            returnKeyType="send"
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+            <MaterialIcons name="send" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
 
       <View style={styles.bottomNav}>
@@ -339,16 +343,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#DDD',
     backgroundColor: '#FFF',
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  headerTitleContainer: {
     marginLeft: 16,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#333',
   },
-  keyboardAvoidingView: {
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
+  },
+  chatWrapper: {
     flex: 1,
-    marginBottom: 60, // Height of bottom navigation
-    marginTop: Platform.OS === 'ios' ? 0 : 0, // Adjusted for header
+    marginBottom: 100, // Account for input container and bottom nav
   },
   chatContainer: {
     padding: 15,
@@ -380,6 +390,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderTopWidth: 1,
     borderTopColor: '#DDD',
+    position: 'absolute',
+    bottom: 60, // Height of bottom nav
+    left: 0,
+    right: 0,
   },
   textInput: {
     flex: 1,
@@ -398,17 +412,20 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   bottomNav: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		paddingVertical: 10,
-		backgroundColor: "#FFFFFF",
-		borderTopWidth: 1,
-		borderTopColor: "#E5E5E5",
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-	},
+    height: 60,  // Explicit height
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",  // Center items vertically
+    paddingVertical: 8,
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#E5E5E5",
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,  // Ensure it stays on top
+  },
   navItem: {
     alignItems: 'center',
     justifyContent: 'center',
