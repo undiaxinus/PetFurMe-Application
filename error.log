@@ -2715,3 +2715,1455 @@
 [18-Jan-2025 16:39:17 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
 [18-Jan-2025 16:39:17 Europe/Berlin] Profile complete status: true
 [18-Jan-2025 16:39:17 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 17:02:48 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:02:48 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:02:48 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:02:48 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:02:48 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:02:48 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:02:48 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:02:48 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:02:48 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:02:48 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:02:48 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:04:02 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:04:02 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:04:02 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:04:02 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:04:02 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:04:02 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:04:02 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:04:03 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:04:03 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:04:03 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:04:03 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:06:43 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:06:43 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:06:43 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:06:43 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:06:43 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:06:43 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:06:43 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:06:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:06:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:06:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:06:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:14:33 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:14:33 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 17:14:33 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:14:33 Europe/Berlin] User ID: 104
+[18-Jan-2025 17:14:33 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:14:33 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 17:14:33 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:14:33 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:14:33 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 17:14:33 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:14:33 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 17:24:05 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:24:05 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:24:05 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:24:05 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:24:05 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:24:05 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:24:05 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:24:05 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:24:05 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:24:05 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:24:05 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:24:59 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:24:59 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:24:59 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:24:59 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:24:59 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:24:59 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:24:59 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:24:59 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:24:59 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:24:59 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:24:59 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:25:42 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:25:42 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:25:42 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:25:42 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:25:42 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:25:42 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:25:42 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:25:42 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:25:42 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:25:42 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:25:42 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:26:17 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:26:17 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:26:17 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:26:17 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:26:17 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:26:17 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:26:17 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:26:17 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:26:17 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:26:17 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:26:17 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:28:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:28:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:28:04 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:28:04 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:28:04 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:28:04 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:28:04 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:28:04 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:28:04 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:28:04 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:28:04 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:32:44 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:32:44 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:32:44 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:32:44 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:32:44 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:32:44 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:32:44 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:32:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:32:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:32:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:32:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:33:49 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:33:49 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:33:49 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:33:49 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:33:49 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:33:49 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:33:49 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:33:49 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:33:49 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:33:49 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:33:49 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:34:13 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:34:13 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:34:13 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:34:13 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:34:13 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:34:13 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:34:13 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:34:13 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:34:13 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:34:13 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:34:13 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:34:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:34:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:34:19 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:34:19 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:34:19 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:34:19 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:34:19 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:34:19 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:34:19 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:34:19 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:34:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:34:56 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:34:56 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:34:56 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:34:56 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:34:56 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:34:56 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:34:56 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:34:56 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:34:56 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:34:56 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:34:56 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:35:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:35:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:35:04 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:35:04 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:35:04 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:35:04 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:35:04 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:35:04 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:35:04 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:35:04 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:35:04 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:36:06 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:36:06 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:36:06 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:36:06 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:36:06 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:36:06 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:36:06 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:36:06 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:36:06 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:36:06 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:36:06 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:36:24 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:36:24 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:36:24 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:36:24 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:36:24 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:36:24 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:36:24 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:36:24 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:36:24 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:36:24 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:36:24 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:37:07 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:37:07 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:37:07 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:37:07 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:37:07 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:37:07 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:37:07 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:37:07 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:37:07 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:37:07 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:37:07 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:37:39 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:37:39 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:37:39 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:37:39 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:37:39 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:37:39 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:37:39 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:37:39 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:37:39 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:37:39 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:37:39 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:37:45 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:37:45 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:37:45 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:37:45 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:37:45 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:37:45 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:37:45 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:37:45 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:37:45 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:37:45 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:37:45 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:37:55 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:37:55 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:37:55 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:37:55 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:37:55 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:37:55 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:37:55 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:37:55 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:37:55 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:37:55 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:37:55 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:38:27 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:38:27 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:38:27 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:38:27 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:38:27 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:38:27 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:38:27 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:38:27 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:38:27 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:38:27 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:38:27 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:39:05 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:39:05 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:39:05 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:39:05 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:39:05 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:39:05 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:39:05 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:39:05 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:39:05 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:39:05 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:39:05 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:39:20 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:39:20 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:39:20 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:39:20 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:39:20 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:39:20 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:39:20 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:39:20 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:39:20 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:39:20 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:39:20 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:40:20 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:40:20 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:40:20 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:40:20 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:40:20 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:40:20 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:40:20 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:40:20 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:40:20 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:40:20 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:40:20 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:40:26 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:40:26 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:40:26 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:40:26 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:40:26 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:40:26 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:40:26 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:40:26 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:40:26 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:40:26 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:40:26 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:40:35 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:40:35 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:40:35 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:40:35 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:40:35 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:40:35 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:40:35 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:40:36 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:40:36 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:40:36 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:40:36 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:40:46 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:40:46 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:40:46 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:40:46 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:40:46 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:40:46 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:40:46 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:40:46 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:40:46 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:40:46 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:40:46 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:40:56 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:40:56 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:40:56 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:40:56 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:40:56 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:40:56 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:40:56 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:40:56 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:40:56 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:40:56 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:40:56 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:41:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:41:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:41:04 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:41:04 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:41:04 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:41:04 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:41:04 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:41:04 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:41:04 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:41:04 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:41:04 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:41:16 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:41:16 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:41:16 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:41:16 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:41:16 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:41:16 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:41:16 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:41:16 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:41:16 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:41:16 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:41:16 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:41:25 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:41:25 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:41:25 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:41:25 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:41:25 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:41:25 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:41:25 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:41:25 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:41:25 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:41:25 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:41:25 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:41:32 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:41:32 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:41:32 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:41:32 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:41:32 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:41:32 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:41:32 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:41:32 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:41:32 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:41:32 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:41:32 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:46:48 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:46:48 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:46:48 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:46:48 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:46:48 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:46:48 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:46:48 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:46:48 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:46:48 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:46:48 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:46:48 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:01 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:01 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:01 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:01 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:01 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:01 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:01 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:01 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:01 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:01 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:01 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:09 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:09 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:09 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:09 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:09 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:09 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:09 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:09 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:09 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:09 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:09 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:19 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:19 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:19 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:19 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:19 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:19 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:19 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:19 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:23 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:23 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:23 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:23 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:23 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:23 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:23 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:23 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:23 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:23 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:23 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:28 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:28 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:28 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:28 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:28 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:28 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:28 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:29 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:29 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:29 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:29 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:31 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:31 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:31 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:31 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:31 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:31 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:31 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:31 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:31 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:31 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:31 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:47:37 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:47:37 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:47:37 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:47:37 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:47:37 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:47:37 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:47:37 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:47:37 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:47:37 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:47:37 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:47:37 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:48:54 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:48:54 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:48:54 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:48:54 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:48:54 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:48:54 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:48:54 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:48:54 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:48:54 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:48:54 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:48:54 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:49:01 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:49:01 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:49:01 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:49:01 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:49:01 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:49:01 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:49:01 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:49:02 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:49:02 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:49:02 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:49:02 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:49:09 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:49:09 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:49:09 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:49:09 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:49:09 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:49:09 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:49:09 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:49:09 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:49:09 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:49:09 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:49:09 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:49:11 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:49:11 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:49:11 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:49:11 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:49:11 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:49:11 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:49:11 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:49:12 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:49:12 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:49:12 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:49:12 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:50:30 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:50:30 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:50:30 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:50:30 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:50:30 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:50:30 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:50:30 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:50:30 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:50:30 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:50:30 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:50:30 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:50:37 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:50:37 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:50:37 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:50:37 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:50:38 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:50:38 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:50:38 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:50:38 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:50:38 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:50:38 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:50:38 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:52:16 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:52:16 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:52:16 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:52:16 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:52:16 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:52:16 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:52:16 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:52:17 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:52:17 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:52:17 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:52:17 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:52:26 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:52:26 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:52:26 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:52:26 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:52:26 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:52:26 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:52:26 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:52:26 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:52:26 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:52:26 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:52:26 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:52:54 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:52:54 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:52:54 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:52:54 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:52:54 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:52:54 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:52:54 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:52:55 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:52:55 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:52:55 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:52:55 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:53:03 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:53:03 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:53:03 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:53:03 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:53:03 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:53:03 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:53:03 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:53:03 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:53:03 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:53:03 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:53:03 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:53:40 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:53:40 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:53:40 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:53:40 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:53:40 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:53:40 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:53:40 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:53:40 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:53:40 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:53:40 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:53:40 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:53:50 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:53:50 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:53:50 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:53:50 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:53:50 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:53:50 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:53:50 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:53:50 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:53:50 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:53:50 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:53:50 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:54:02 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:54:02 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:54:02 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:54:02 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:54:02 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:54:02 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:54:02 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:54:02 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:54:02 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:54:02 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:54:02 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:54:11 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:54:11 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:54:11 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:54:11 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:54:11 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:54:11 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:54:11 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:54:11 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:54:11 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:54:11 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:54:11 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:54:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:54:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:54:19 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:54:19 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:54:19 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:54:19 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:54:19 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:54:19 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:54:19 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:54:19 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:54:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:55:24 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:55:24 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:55:24 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:55:24 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:55:24 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:55:24 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:55:24 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:55:24 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:55:24 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:55:24 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:55:24 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:55:29 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:55:29 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:55:29 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:55:29 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:55:29 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:55:29 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:55:29 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:55:29 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:55:29 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:55:29 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:55:29 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:55:41 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:55:41 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:55:41 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:55:41 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:55:41 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:55:41 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:55:41 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:55:41 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:55:41 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:55:41 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:55:41 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:00 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:00 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:00 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:00 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:00 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:00 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:00 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:00 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:00 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:00 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:00 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:08 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:08 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:08 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:08 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:08 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:08 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:08 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:08 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:08 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:08 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:08 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:25 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:25 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:25 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:25 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:25 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:25 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:25 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:25 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:25 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:25 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:25 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:31 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:31 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:31 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:31 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:31 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:31 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:31 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:31 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:31 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:31 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:31 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:35 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:35 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:35 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:35 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:35 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:35 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:35 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:35 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:35 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:35 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:35 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:39 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:39 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:39 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:39 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:39 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:39 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:39 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:39 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:39 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:39 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:39 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:44 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:44 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:44 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:44 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:44 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:44 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:44 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:56:50 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:56:50 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:56:50 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:56:50 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:56:50 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:56:50 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:56:50 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:56:50 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:56:50 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:56:50 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:56:50 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:57:05 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:57:05 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:57:05 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:57:05 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:57:05 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:57:05 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:57:05 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:57:05 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:57:05 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:57:05 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:57:05 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:57:21 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:57:21 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:57:21 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:57:21 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:57:21 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:57:21 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:57:21 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:57:21 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:57:21 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:57:21 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:57:21 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:57:42 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:57:42 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:57:42 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:57:42 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:57:42 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:57:42 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:57:42 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:57:42 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:57:42 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:57:42 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:57:42 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:57:46 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:57:46 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:57:46 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:57:46 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:57:46 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:57:46 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:57:46 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:57:47 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:57:47 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:57:47 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:57:47 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:57:49 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:57:49 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:57:49 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:57:49 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:57:49 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:57:49 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:57:49 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:57:49 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:57:49 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:57:49 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:57:49 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:58:26 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:58:26 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:58:26 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:58:26 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:58:26 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:58:26 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:58:26 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:58:26 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:58:26 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:58:26 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:58:26 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:59:20 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:59:20 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:59:20 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:59:20 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:59:20 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:59:20 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:59:20 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:59:20 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:59:20 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:59:20 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:59:20 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:59:51 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:59:51 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:59:51 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:59:51 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:59:51 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:59:51 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:59:51 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:59:51 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:59:51 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:59:51 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:59:51 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 17:59:56 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 17:59:56 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 17:59:56 Europe/Berlin] Request method: GET
+[18-Jan-2025 17:59:56 Europe/Berlin] User ID: 129
+[18-Jan-2025 17:59:56 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 17:59:56 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 17:59:56 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 17:59:56 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 17:59:56 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 17:59:56 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 17:59:56 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:00:12 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:00:12 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:00:12 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:00:12 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:00:12 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:00:12 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:00:12 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:00:12 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:00:12 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:00:12 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:00:12 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:00:21 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:00:21 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:00:21 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:00:21 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:00:21 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:00:21 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:00:21 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:00:21 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:00:21 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:00:21 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:00:21 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:01:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:01:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:01:19 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:01:19 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:01:19 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:01:19 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:01:19 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:01:19 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:01:19 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:01:19 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:01:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:01:28 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:01:28 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:01:28 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:01:28 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:01:28 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:01:28 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:01:28 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:01:28 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:01:28 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:01:28 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:01:28 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:01:38 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:01:38 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:01:38 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:01:38 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:01:38 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:01:38 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:01:38 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:01:38 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:01:38 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:01:38 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:01:38 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:01:47 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:01:47 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:01:47 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:01:47 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:01:47 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:01:47 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:01:47 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:01:47 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:01:47 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:01:47 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:01:47 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:02:33 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:02:33 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:02:33 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:02:33 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:02:33 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:02:33 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:02:33 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:02:33 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:02:33 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:02:33 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:02:33 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:02:38 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:02:38 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:02:38 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:02:38 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:02:38 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:02:38 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:02:38 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:02:38 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:02:38 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:02:38 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:02:38 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:02:44 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:02:44 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:02:44 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:02:44 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:02:44 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:02:44 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:02:44 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:02:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:02:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:02:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:02:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:02:53 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:02:53 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:02:53 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:02:53 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:02:53 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:02:53 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:02:53 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:02:53 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:02:53 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:02:53 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:02:53 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:02:57 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:02:57 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:02:57 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:02:57 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:02:57 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:02:57 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:02:57 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:02:58 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:02:58 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:02:58 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:02:58 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:01 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:01 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:01 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:01 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:01 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:01 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:01 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:01 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:01 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:01 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:01 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:25 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:25 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:25 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:25 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:25 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:25 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:25 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:25 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:25 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:25 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:25 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:29 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:29 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:29 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:29 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:29 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:29 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:29 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:29 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:29 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:29 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:29 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:32 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:32 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:32 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:32 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:32 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:32 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:32 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:32 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:32 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:32 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:32 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:33 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:33 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:33 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:33 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:33 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:33 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:33 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:33 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:33 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:33 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:33 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:35 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:35 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:35 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:35 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:35 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:35 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:35 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:35 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:35 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:35 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:35 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:44 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:44 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:44 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:44 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:44 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:44 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:44 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:49 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:49 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:49 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:49 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:49 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:49 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:49 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:49 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:49 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:49 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:49 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:03:53 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:03:53 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:03:53 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:03:53 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:03:53 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:03:53 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:03:53 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:03:53 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:03:53 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:03:53 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:03:53 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:04:53 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:04:53 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:04:53 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:04:53 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:04:53 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:04:53 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:04:53 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:04:53 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:04:53 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:04:53 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:04:53 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:04:57 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:04:57 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:04:57 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:04:57 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:04:57 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:04:57 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:04:57 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:04:57 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:04:57 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:04:57 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:04:57 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:05:24 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:05:24 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:05:24 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:05:24 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:05:24 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:05:24 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:05:24 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:05:24 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:05:24 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:05:24 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:05:24 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:05:29 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:05:29 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:05:29 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:05:29 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:05:29 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:05:29 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:05:29 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:05:29 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:05:29 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:05:29 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:05:29 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:05:32 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:05:32 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:05:32 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:05:32 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:05:32 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:05:32 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:05:32 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:05:32 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:05:32 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:05:32 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:05:32 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:08:58 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:08:58 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:08:58 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:08:58 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:08:58 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:08:58 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:08:58 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:08:58 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:08:58 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:08:58 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:08:58 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:09:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:09:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:09:04 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:09:04 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:09:04 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:09:04 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:09:04 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:09:04 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:09:04 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:09:04 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:09:04 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:09:06 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:09:06 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:09:06 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:09:06 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:09:06 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:09:06 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:09:06 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:09:06 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:09:06 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:09:06 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:09:06 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:09:15 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:09:15 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:09:15 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:09:15 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:09:15 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:09:15 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:09:15 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:09:15 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:09:15 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:09:15 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:09:15 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:09:23 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:09:23 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:09:23 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:09:23 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:09:23 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:09:23 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:09:23 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:09:23 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:09:23 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:09:23 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:09:23 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:17 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:17 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:17 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:17 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:17 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:17 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:17 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:17 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:17 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:17 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:17 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:25 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:25 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:25 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:25 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:25 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:25 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:25 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:25 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:25 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:25 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:25 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:28 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:28 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:28 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:28 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:28 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:28 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:28 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:28 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:28 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:28 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:28 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:30 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:30 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:30 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:30 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:30 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:30 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:30 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:30 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:30 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:30 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:30 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:43 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:43 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:43 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:43 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:43 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:43 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:43 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:43 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:43 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:43 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:43 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:47 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:47 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:10:47 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:47 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:10:47 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:47 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:10:47 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:48 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:48 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:10:48 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:48 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:10:56 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:10:56 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:10:56 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:10:56 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:10:56 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:10:56 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:10:56 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:10:56 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:10:56 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:10:56 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:10:56 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:11:02 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:02 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:02 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:02 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:02 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:02 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:02 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:02 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:02 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:02 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:02 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:12 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:12 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:12 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:12 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:12 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:12 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:12 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:12 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:12 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:12 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:12 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:13 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:13 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:13 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:13 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:13 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:13 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:13 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:13 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:13 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:13 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:13 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:19 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:19 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:19 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:19 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:19 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:19 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:19 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:19 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:20 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:20 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:20 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:20 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:20 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:20 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:20 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:20 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:20 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:20 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:20 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:22 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:22 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:11:22 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:22 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:11:22 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:22 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:11:22 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:22 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:22 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:11:22 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:22 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:11:48 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:11:48 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:11:48 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:11:48 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:11:48 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:11:48 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:11:48 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:11:49 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:11:49 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:11:49 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:11:49 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:13:44 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:13:44 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:13:44 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:13:44 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:13:44 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:13:44 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:13:44 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:13:44 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:13:44 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:13:44 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:13:44 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:16:13 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:16:13 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:16:13 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:16:13 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:16:13 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:16:13 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:16:13 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:16:13 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:16:13 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:16:13 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:16:13 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:29:03 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:29:03 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:29:03 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:29:03 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:29:03 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:29:03 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:29:03 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:29:03 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:29:03 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:29:03 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:29:03 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:36:18 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:36:18 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:36:18 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:36:18 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:36:18 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:36:18 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:36:18 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:36:18 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:36:18 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:36:18 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:36:18 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:44:55 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:44:55 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:44:55 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:44:55 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:44:55 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:44:55 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:44:55 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:44:55 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:44:55 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:44:55 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:44:55 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:45:15 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:45:15 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:45:15 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:45:15 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:45:15 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:45:15 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:45:15 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:45:15 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:45:15 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:45:15 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:45:15 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:48:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:48:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:48:04 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:48:04 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:48:04 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:48:04 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:48:04 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:48:04 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:48:04 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:48:04 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:48:04 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:48:57 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:48:57 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:48:57 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:48:57 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:48:57 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:48:57 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:48:57 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:48:57 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:48:57 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:48:57 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:48:57 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:50:47 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:50:47 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:50:47 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:50:47 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:50:47 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:50:47 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:50:47 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:50:47 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:50:47 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:50:47 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:50:47 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:51:00 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:51:00 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104
+[18-Jan-2025 18:51:00 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:51:00 Europe/Berlin] User ID: 104
+[18-Jan-2025 18:51:00 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:51:00 Europe/Berlin] Processing request for user_id: 104
+[18-Jan-2025 18:51:00 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:51:00 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:51:00 Europe/Berlin] Profile data retrieved: {"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}
+[18-Jan-2025 18:51:00 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:51:00 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"104","profile":{"name":"jamzzz","email":"undiaxinus@gmail.com","phone":"9864619598","hasPhoto":true}}
+[18-Jan-2025 18:51:05 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:51:05 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:51:05 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:51:05 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:51:05 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:51:05 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:51:05 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:51:05 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:51:05 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:51:05 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:51:05 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}
+[18-Jan-2025 18:52:26 Europe/Berlin] === New Request to check_profile_status.php ===
+[18-Jan-2025 18:52:26 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=129
+[18-Jan-2025 18:52:26 Europe/Berlin] Request method: GET
+[18-Jan-2025 18:52:26 Europe/Berlin] User ID: 129
+[18-Jan-2025 18:52:26 Europe/Berlin] Database config loaded successfully from: C:\xampp\htdocs\PetFurMe-Application\api\users/../config/database.php
+[18-Jan-2025 18:52:26 Europe/Berlin] Processing request for user_id: 129
+[18-Jan-2025 18:52:26 Europe/Berlin] Database connection established successfully
+[18-Jan-2025 18:52:26 Europe/Berlin] User count check completed: 1
+[18-Jan-2025 18:52:26 Europe/Berlin] Profile data retrieved: {"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}
+[18-Jan-2025 18:52:26 Europe/Berlin] Profile complete status: true
+[18-Jan-2025 18:52:26 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"129","profile":{"name":"Erica ","email":"ericaloveranespoche@gmail.com","phone":"09093717983","hasPhoto":true}}

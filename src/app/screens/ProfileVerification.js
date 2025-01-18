@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginLeft: 16,
+        marginLeft: 30,
     },
     profileImageContainer: {
         alignItems: 'center',
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     updateButton: {
-        backgroundColor: '#FF1493',
+        backgroundColor: '#D52FFF',
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',

@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
 		fontSize: 20,
 		fontWeight: 'bold',
+		left: 40,
 	},
 	profileContainer: {
 		alignItems: 'center',

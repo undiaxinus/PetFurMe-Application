@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -63,12 +64,7 @@ const HelpScreen = ({ navigation }) => {
         />
       </TouchableOpacity>
       {expandedSections.includes(index) && (
-        <View
-          style={[
-            styles.sectionContent,
-            styles.expandedContentBorder, // Violet border for the content section
-          ]}
-        >
+        <View style={[styles.sectionContent, styles.expandedContentBorder]}>
           <Text style={styles.sectionText}>{item.answer}</Text>
         </View>
       )}
@@ -82,8 +78,12 @@ const HelpScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#000" style={styles.backIcon} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>FAQ'S</Text>
-        <Text style={styles.faq}>Here's our frequently asked question from our application.</Text>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerTitle}>FAQ'S</Text>
+          <Text style={styles.faqText}>
+            Here's our frequently asked questions from our application.
+          </Text>
+        </View>
       </View>
 
       {/* Help Sections */}
@@ -93,6 +93,37 @@ const HelpScreen = ({ navigation }) => {
         renderItem={renderSection}
         contentContainerStyle={styles.listContainer}
       />
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomePage')}>
+          <Image
+            source={require('../../assets/images/homee.png')}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')}>
+          <Image
+            source={require('../../assets/images/message.png')}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Image
+            source={require('../../assets/images/notif.png')}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Help')}>
+          <Image
+            source={require('../../assets/images/faq.png')}
+            style={styles.navIcon}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -101,44 +132,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 20,
+    paddingTop: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
-				top: 22, // Add space below the header
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   backIcon: {
-    marginRight: 10, // Add space to the left of the back icon
-    marginTop: 15,
+    marginRight: 10,
+  },
+  headerTextContainer: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#000000',
-    marginLeft: 105,
-    top: 10, // Adjust the position of the title
+  },
+  faqText: {
+    fontSize: 14,
+    color: '#808080',
+    marginTop: 5,
   },
   listContainer: {
-    paddingTop: 100, // Add space above the sections
-  },
-  faq: {
-    right: 190,
-    fontSize: 15,
-    top: 75,
-    color: '#808080',
+    paddingHorizontal: 20,
   },
   section: {
     backgroundColor: '#EDEDF5',
     borderRadius: 8,
-    marginBottom: 25, // Add space between sections
-    overflow: 'hidden',
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#EDEDF5',
+    overflow: 'hidden',
   },
   sectionExpanded: {
-    borderColor: '#8146C1', // Violet border when expanded
+    borderColor: '#8146C1',
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -149,8 +179,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    color: '#000000',
     fontWeight: 'bold',
+    color: '#000',
   },
   sectionContent: {
     paddingHorizontal: 15,
@@ -158,15 +188,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   expandedContentBorder: {
-    borderWidth: 1,
-    borderColor: '#8146C1', // Violet border for the content section
-    borderRadius: 8,
+    borderTopWidth: 1,
+    borderColor: '#8146C1',
   },
   sectionText: {
-    fontSize: 15,
-    color: '#000000',
+    fontSize: 14,
     lineHeight: 20,
-    alignItems: 'justify',
+    color: '#000',
+  },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    backgroundColor: '#8146C1',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
 });
 
