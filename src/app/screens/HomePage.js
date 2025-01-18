@@ -20,12 +20,27 @@ const HomePage = ({ navigation, route }) => {
 	const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 	const [isProfileComplete, setIsProfileComplete] = useState(false);
 
+	// Add refresh interval reference
+	const refreshIntervalRef = React.useRef(null);
+
 	console.log("HomePage user_id:", user_id);
 
 	useEffect(() => {
 		if (user_id) {
-			console.log("Fetching pets...", { user_id, refresh });
+			// Initial fetch
 			fetchUserPets();
+			
+			// Set up auto refresh every 30 seconds
+			refreshIntervalRef.current = setInterval(() => {
+				fetchUserPets();
+			}, 30000);
+			
+			// Cleanup function
+			return () => {
+				if (refreshIntervalRef.current) {
+					clearInterval(refreshIntervalRef.current);
+				}
+			};
 		}
 	}, [user_id, refresh]);
 
@@ -38,7 +53,12 @@ const HomePage = ({ navigation, route }) => {
 	}, [user_id]);
 
 	const fetchUserPets = async () => {
-		setIsLoading(true);
+		// Don't set loading state for auto refresh to avoid UI flicker
+		const isAutoRefresh = isLoading === false;
+		if (!isAutoRefresh) {
+			setIsLoading(true);
+		}
+		
 		try {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
 			console.log("Attempting to fetch from:", url);
@@ -95,7 +115,9 @@ const HomePage = ({ navigation, route }) => {
 				`${errorMessage}\n${error.message}`
 			);
 		} finally {
-			setIsLoading(false);
+			if (!isAutoRefresh) {
+				setIsLoading(false);
+			}
 		}
 	};
 
