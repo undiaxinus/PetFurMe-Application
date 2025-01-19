@@ -21,7 +21,7 @@ const ProfileVerification = ({ navigation, route }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
-    const [address, setAddress] = useState('');
+    const [store_address, setStoreAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('••••••••••');
@@ -38,14 +38,16 @@ const ProfileVerification = ({ navigation, route }) => {
     const fetchUserData = async () => {
         setIsLoading(true);
         try {
-            const url = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${user_id}`;
+            const url = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${user_id}&t=${Date.now()}`;
             console.log("Fetching user data from:", url);
             
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache'
                 },
             });
 
@@ -60,40 +62,35 @@ const ProfileVerification = ({ navigation, route }) => {
                 const userData = data.profile || data.data;
                 setName(userData.name || '');
                 setAge(userData.age ? userData.age.toString() : '');
-                setAddress(userData.address || '');
+                setStoreAddress(userData.store_address || userData.address || '');
                 setPhoneNumber(userData.phone || '');
                 setEmail(userData.email || '');
 
                 // Handle the photo data
                 if (userData.photo) {
-                    try {
-                        const cleanBase64 = userData.photo.replace(/[\r\n\s]/g, '');
-                        
-                        // Check if it's a valid base64 string
-                        if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
-                            setProfilePhoto({
-                                uri: `data:image/jpeg;base64,${cleanBase64}`,
-                                base64: cleanBase64,
-                                width: 120,
-                                height: 120
-                            });
-                            console.log("Photo loaded successfully as base64");
-                        } else {
-                            // If not base64, treat as URL
-                            const photoUrl = cleanBase64.startsWith('http') 
-                                ? cleanBase64 
-                                : `${API_BASE_URL}/PetFurMe-Application/${cleanBase64}`;
-                            
-                            setProfilePhoto({
-                                uri: photoUrl,
-                                width: 120,
-                                height: 120
-                            });
-                            console.log("Photo loaded successfully as URL:", photoUrl);
-                        }
-                    } catch (error) {
-                        console.error("Error setting photo:", error);
-                        setProfilePhoto(null);
+                    if (userData.photo.startsWith('data:image')) {
+                        // It's a base64 image
+                        setProfilePhoto({
+                            uri: userData.photo,
+                            isBase64: true,
+                            width: 120,
+                            height: 120
+                        });
+                    } else if (userData.photo.startsWith('http')) {
+                        // It's a URL
+                        setProfilePhoto({
+                            uri: userData.photo,
+                            width: 120,
+                            height: 120
+                        });
+                    } else {
+                        // It's a relative path
+                        const photoUrl = `${API_BASE_URL}/PetFurMe-Application/uploads/${userData.photo}`;
+                        setProfilePhoto({
+                            uri: photoUrl,
+                            width: 120,
+                            height: 120
+                        });
                     }
                 } else {
                     setProfilePhoto(null);
@@ -123,25 +120,12 @@ const ProfileVerification = ({ navigation, route }) => {
                 allowsEditing: true,
                 aspect: [1, 1],
                 quality: 0.5,
-                base64: true,
             });
 
             if (!result.canceled) {
-                const base64Size = result.assets[0].base64.length * 0.75;
-                const maxSize = 2 * 1024 * 1024;
-
-                if (base64Size > maxSize) {
-                    Alert.alert(
-                        'Image Too Large',
-                        'Please select an image smaller than 2MB',
-                        [{ text: 'OK' }]
-                    );
-                    return;
-                }
-
+                const asset = result.assets[0];
                 setProfilePhoto({
-                    uri: result.assets[0].uri,
-                    base64: result.assets[0].base64,
+                    uri: asset.uri,
                     width: 120,
                     height: 120
                 });
@@ -158,53 +142,81 @@ const ProfileVerification = ({ navigation, route }) => {
             const formData = new FormData();
             
             // Add photo if selected
-            if (profilePhoto?.base64) {
-                // Create a Blob from base64
-                const imageData = profilePhoto.base64;
+            if (profilePhoto?.uri && !profilePhoto.uri.startsWith('data:image')) {
+                const localUri = profilePhoto.uri;
+                const filename = localUri.split('/').pop();
+                
                 formData.append('photo', {
-                    uri: profilePhoto.uri,
+                    uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
                     type: 'image/jpeg',
-                    name: 'profile_photo.jpg'
+                    name: filename || 'profile_photo.jpg'
                 });
             }
 
             // Add user data
             const userData = {
-                user_id,
-                name,
+                user_id: user_id,
+                name: name.trim(),
                 age: age ? parseInt(age) : null,
-                address,
-                phone: phoneNumber,
-                email
+                store_address: store_address.trim(),
+                phone: phoneNumber.trim(),
+                email: email.trim()
             };
-            formData.append('data', JSON.stringify(userData));
 
-            console.log('Sending form data:', formData._parts);
+            formData.append('data', JSON.stringify(userData));
+            console.log('Sending form data:', JSON.stringify(userData));
 
             const response = await fetch(
                 `${API_BASE_URL}/PetFurMe-Application/api/users/update_user_data.php`,
                 {
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                    }
+                    body: formData
                 }
             );
 
-            const result = await response.json();
-            console.log('Update response:', result);
+            const responseText = await response.text();
+            console.log('Raw server response:', responseText);
+
+            let result;
+            try {
+                result = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Failed to parse server response:', e);
+                throw new Error('Invalid server response');
+            }
 
             if (result.success) {
-                Alert.alert('Success', 'Profile updated successfully');
-                navigation.goBack();
+                // Fetch fresh data immediately after update
+                await fetchUserData();
+                
+                Alert.alert('Success', 'Profile updated successfully', [
+                    {
+                        text: 'OK',
+                        onPress: async () => {
+                            try {
+                                // Fetch updated data one more time to ensure we have latest
+                                await fetchUserData();
+                                
+                                // Go back first
+                                navigation.goBack();
+                                
+                                // Then update HomePage with refresh parameter
+                                navigation.navigate('HomePage', {
+                                    user_id: user_id,
+                                    refresh: Date.now()
+                                });
+                            } catch (error) {
+                                console.error('Error refreshing data:', error);
+                            }
+                        }
+                    }
+                ]);
             } else {
                 throw new Error(result.message || 'Failed to update profile');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', 'Failed to update profile');
+            Alert.alert('Error', 'Failed to update profile: ' + error.message);
         } finally {
             setIsLoading(false);
         }
@@ -279,33 +291,33 @@ const ProfileVerification = ({ navigation, route }) => {
 
             {/* Profile Image Section */}
             <View style={styles.profileImageContainer}>
-                    <View style={styles.profileImage}>
-                            <Image
+                <View style={styles.profileImage}>
+                    <Image
                         source={
-                            profilePhoto?.uri
-                                ? {
-                                    uri: profilePhoto.uri,
-                                    cache: 'force-cache',
-                                    headers: {
-                                        Pragma: 'no-cache'
-                                    }
-                                }
-                                : require('../../assets/images/profile.png')
+                            profilePhoto?.isBase64 
+                                ? { uri: profilePhoto.uri }
+                                : profilePhoto?.uri 
+                                    ? { 
+                                        uri: profilePhoto.uri,
+                                        headers: {
+                                            'Cache-Control': 'no-cache'
+                                        }
+                                    } 
+                                    : require('../../assets/images/profile.png')
                         }
-                                style={styles.profilePhotoImage}
+                        style={styles.profilePhotoImage}
                         resizeMode="cover"
-                        defaultSource={require('../../assets/images/profile.png')}
                         onError={(error) => {
-                            console.error('Image loading error:', error.nativeEvent);
-                            console.log('Current photoSource:', profilePhoto);
+                            console.error('Image loading error:', error.nativeEvent.error);
+                            setProfilePhoto(null); // Reset on error
                         }}
-                            />
-                    </View>
+                    />
+                </View>
                 <TouchableOpacity
                     style={styles.editPhotoButton}
                     onPress={pickImage}
                 >
-                        <Ionicons name="camera" size={20} color="#8146C1" />
+                    <Ionicons name="camera" size={20} color="#8146C1" />
                 </TouchableOpacity>
             </View>
 
@@ -334,8 +346,8 @@ const ProfileVerification = ({ navigation, route }) => {
                     <Text style={styles.label}>Address</Text>
                     <TextInput
                         style={styles.input}
-                        value={address}
-                        onChangeText={setAddress}
+                        value={store_address}
+                        onChangeText={setStoreAddress}
                     />
                 </View>
 

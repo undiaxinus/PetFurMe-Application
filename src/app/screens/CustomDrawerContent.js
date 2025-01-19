@@ -26,7 +26,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			if (route.params?.user_id) {
 				try {
 					const response = await fetch(
-						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}`
+						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}&t=${Date.now()}`
 					);
 					
 					if (!response.ok) {
@@ -43,16 +43,11 @@ const CustomDrawerContent = ({ navigation, state }) => {
 							try {
 								const cleanBase64 = data.profile.photo.replace(/[\r\n\s]/g, '');
 								
-								// Check if it's already a complete data URI
 								if (cleanBase64.startsWith('data:image')) {
 									photoUri = cleanBase64;
-								}
-								// Check if it's a base64 string
-								else if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
+								} else if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
 									photoUri = `data:image/jpeg;base64,${cleanBase64}`;
-								}
-								// If not base64, treat as URL
-								else {
+								} else {
 									photoUri = cleanBase64.startsWith('http') 
 										? cleanBase64 
 										: `${API_BASE_URL}/PetFurMe-Application/${cleanBase64}`;
@@ -72,12 +67,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					}
 				} catch (error) {
 					console.error("Error in getUserData:", error);
-					return {
-						user_id: route.params.user_id,
-						name: "Guest",
-						role: "User",
-						photo: null
-					};
 				}
 			}
 		}
@@ -92,7 +81,14 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			}
 		};
 		
+		// Initial load
 		loadUserData();
+		
+		// Set up auto refresh interval
+		const refreshInterval = setInterval(loadUserData, 10000); // Refresh every 10 seconds
+		
+		// Cleanup interval on unmount
+		return () => clearInterval(refreshInterval);
 	}, [state?.routes]);
 
 	const handleLogout = () => {
@@ -100,12 +96,16 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const confirmLogout = () => {
-		setIsLoggingOut(true); // Show the spinner
+		setIsLoggingOut(true);
 		setTimeout(() => {
-			setIsLoggingOut(false); // Hide the spinner
+			setIsLoggingOut(false);
 			setIsLogoutModalVisible(false);
-			navigation.navigate("HomeScreen"); // Navigate after logout
-		}, 2000); // Simulate a delay for the logout process
+			setUserData(null);
+			navigation.reset({
+				index: 0,
+				routes: [{ name: 'LoginScreen' }],
+			});
+		}, 1000);
 	};
 
 	const cancelLogout = () => {
@@ -172,7 +172,10 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			<View style={styles.navigationContainer}>
 				{/* Home Section */}
 				<TouchableOpacity 
-					onPress={() => navigation.navigate('HomePage')} 
+					onPress={() => navigation.navigate('HomePage', { 
+						user_id: userData?.user_id,
+						refresh: Date.now()
+					})} 
 					style={styles.navigationItem}
 				>
 					<Ionicons name="home-outline" size={24} color="#808080" />
@@ -181,22 +184,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 
 				{/* Pets Section - Always show but handle auth in onPress */}
 				<TouchableOpacity 
-					onPress={() => {
-						if (!userData?.user_id) {
-							Alert.alert(
-								"Login Required",
-								"Please login to add a pet",
-								[
-									{
-										text: "OK",
-										onPress: () => navigation.navigate("LoginScreen")
-									}
-								]
-							);
-							return;
-						}
-						handleAddNewPet();
-					}} 
+					onPress={handleAddNewPet}
 					style={styles.navigationItem}
 				>
 					<MaterialIcons name="pets" size={24} color="#808080" />

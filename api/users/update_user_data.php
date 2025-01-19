@@ -95,25 +95,43 @@ try {
               age = ?, 
               store_address = ?, 
               phone = ?, 
-              email = ?,
-              photo = ?
-            WHERE id = ?";
+              email = ?";
+
+    // Add photo to query only if it exists
+    if ($photo_data !== null) {
+        $query .= ", photo = ?";
+    }
+
+    $query .= " WHERE id = ?";
 
     $stmt = $db->prepare($query);
     if (!$stmt) {
         throw new Exception("Prepare failed: " . $db->error);
     }
 
-    $stmt->bind_param(
-        "sissssi",
-        $data->name,
-        $data->age,
-        $data->address,
-        $data->phone,
-        $data->email,
-        $photo_data,
-        $data->user_id
-    );
+    // Bind parameters based on whether photo exists
+    if ($photo_data !== null) {
+        $stmt->bind_param(
+            "sissssi",
+            $data->name,
+            $data->age,
+            $data->store_address,
+            $data->phone,
+            $data->email,
+            $photo_data,
+            $data->user_id
+        );
+    } else {
+        $stmt->bind_param(
+            "sisssi",
+            $data->name,
+            $data->age,
+            $data->store_address,
+            $data->phone,
+            $data->email,
+            $data->user_id
+        );
+    }
 
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
