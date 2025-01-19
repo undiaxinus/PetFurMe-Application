@@ -14,7 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
-const API_BASE_URL = 'http://192.168.0.110';
+const API_BASE_URL = 'http://192.168.1.3';
 
 const ProfileVerification = ({ navigation, route }) => {
     const { user_id } = route.params;
@@ -67,28 +67,49 @@ const ProfileVerification = ({ navigation, route }) => {
                 // Handle the photo data
                 if (userData.photo) {
                     try {
-                        const photoUri = `data:image/jpeg;base64,${userData.photo}`;
-                        setProfilePhoto({ uri: photoUri });
-                        console.log("Photo loaded successfully");
+                        const cleanBase64 = userData.photo.replace(/[\r\n\s]/g, '');
+                        
+                        // Check if it's a valid base64 string
+                        if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
+                            setProfilePhoto({
+                                uri: `data:image/jpeg;base64,${cleanBase64}`,
+                                base64: cleanBase64,
+                                width: 120,
+                                height: 120
+                            });
+                            console.log("Photo loaded successfully as base64");
+                        } else {
+                            // If not base64, treat as URL
+                            const photoUrl = cleanBase64.startsWith('http') 
+                                ? cleanBase64 
+                                : `${API_BASE_URL}/PetFurMe-Application/${cleanBase64}`;
+                            
+                            setProfilePhoto({
+                                uri: photoUrl,
+                                width: 120,
+                                height: 120
+                            });
+                            console.log("Photo loaded successfully as URL:", photoUrl);
+                        }
                     } catch (error) {
                         console.error("Error setting photo:", error);
+                        setProfilePhoto(null);
                     }
+                } else {
+                    setProfilePhoto(null);
                 }
             } else {
-                throw new Error(data.message || 'Failed to fetch user data');
+                throw new Error(data.message || 'Failed to load user data');
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
-            Alert.alert(
-                'Error',
-                'Failed to load user information. Please check your connection and try again.'
-            );
+            Alert.alert('Error', 'Failed to fetch user data');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleSelectPhoto = async () => {
+    const pickImage = async () => {
         try {
             const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
             
@@ -102,33 +123,32 @@ const ProfileVerification = ({ navigation, route }) => {
                 allowsEditing: true,
                 aspect: [1, 1],
                 quality: 0.5,
+                base64: true,
             });
 
             if (!result.canceled) {
-                // Check file size
-                const response = await fetch(result.assets[0].uri);
-                const blob = await response.blob();
-                const fileSize = blob.size;
-                const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+                const base64Size = result.assets[0].base64.length * 0.75;
+                const maxSize = 2 * 1024 * 1024;
 
-                if (fileSize > maxSize) {
+                if (base64Size > maxSize) {
                     Alert.alert(
                         'Image Too Large',
-                        'Please select an image smaller than 2MB. You can try reducing the image size or selecting a different image.',
+                        'Please select an image smaller than 2MB',
                         [{ text: 'OK' }]
                     );
                     return;
                 }
 
-                console.log('Selected photo:', {
+                setProfilePhoto({
                     uri: result.assets[0].uri,
-                    size: fileSize / 1024 / 1024 + 'MB'
+                    base64: result.assets[0].base64,
+                    width: 120,
+                    height: 120
                 });
-                setProfilePhoto(result.assets[0]);
             }
         } catch (error) {
             console.error('Error picking image:', error);
-            Alert.alert('Error', 'Failed to pick image. Please try again with a smaller image.');
+            Alert.alert('Error', 'Failed to pick image');
         }
     };
 
@@ -138,20 +158,13 @@ const ProfileVerification = ({ navigation, route }) => {
             const formData = new FormData();
             
             // Add photo if selected
-            if (profilePhoto && profilePhoto.uri && !profilePhoto.uri.startsWith('data:image')) {
-                const localUri = profilePhoto.uri;
-                const filename = localUri.split('/').pop();
-                
+            if (profilePhoto?.base64) {
+                // Create a Blob from base64
+                const imageData = profilePhoto.base64;
                 formData.append('photo', {
-                    uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                    uri: profilePhoto.uri,
                     type: 'image/jpeg',
-                    name: filename
-                });
-                
-                console.log('Photo being uploaded:', {
-                    uri: localUri,
-                    type: 'image/jpeg',
-                    name: filename
+                    name: 'profile_photo.jpg'
                 });
             }
 
@@ -175,22 +188,23 @@ const ProfileVerification = ({ navigation, route }) => {
                     body: formData,
                     headers: {
                         'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                     }
                 }
             );
 
             const result = await response.json();
-            
+            console.log('Update response:', result);
+
             if (result.success) {
                 Alert.alert('Success', 'Profile updated successfully');
-                // Refresh the user data
-                await fetchUserData();
+                navigation.goBack();
             } else {
                 throw new Error(result.message || 'Failed to update profile');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', 'Failed to update profile. Please try again.');
+            Alert.alert('Error', 'Failed to update profile');
         } finally {
             setIsLoading(false);
         }
@@ -268,17 +282,28 @@ const ProfileVerification = ({ navigation, route }) => {
                     <View style={styles.profileImage}>
                             <Image
                         source={
-                            profilePhoto 
-                                ? { ...profilePhoto, cache: 'reload' }
+                            profilePhoto?.uri
+                                ? {
+                                    uri: profilePhoto.uri,
+                                    cache: 'force-cache',
+                                    headers: {
+                                        Pragma: 'no-cache'
+                                    }
+                                }
                                 : require('../../assets/images/profile.png')
                         }
                                 style={styles.profilePhotoImage}
                         resizeMode="cover"
+                        defaultSource={require('../../assets/images/profile.png')}
+                        onError={(error) => {
+                            console.error('Image loading error:', error.nativeEvent);
+                            console.log('Current photoSource:', profilePhoto);
+                        }}
                             />
                     </View>
                 <TouchableOpacity
                     style={styles.editPhotoButton}
-                    onPress={handleSelectPhoto}
+                    onPress={pickImage}
                 >
                         <Ionicons name="camera" size={20} color="#8146C1" />
                 </TouchableOpacity>

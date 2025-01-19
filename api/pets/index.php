@@ -19,21 +19,18 @@ try {
     
     // Handle photo upload
     $photo_path = null;
-    if (isset($_FILES['photo'])) {
-        $target_dir = "../../uploads/pet_photos/";
-        if (!file_exists($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
+    if (isset($_POST['photo'])) {
+        $base64_string = $_POST['photo'];
+        $binary_data = base64_decode($base64_string);
         
-        $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $new_filename = uniqid() . '.' . $file_extension;
-        $target_file = $target_dir . $new_filename;
+        // Generate unique filename
+        $new_filename = uniqid() . '.jpg';
+        $upload_path = 'uploads/pet_photos/' . $new_filename;
         
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_file)) {
-            // Store only the relative path in database
-            $photo_path = 'uploads/pet_photos/' . $new_filename;
+        if (file_put_contents($upload_path, $binary_data)) {
+            $photo_path = $upload_path;
         } else {
-            throw new Exception("Failed to move uploaded file");
+            throw new Exception("Failed to save photo");
         }
     }
 

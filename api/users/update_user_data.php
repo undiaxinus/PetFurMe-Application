@@ -39,7 +39,7 @@ try {
     }
 
     // Handle photo upload
-    $photo_path = null;
+    $photo_data = null;
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         error_log("Processing photo upload");
         
@@ -65,9 +65,11 @@ try {
         
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $full_path)) {
             error_log("File successfully moved to: " . $full_path);
+            // Store the binary data in the database
+            $photo_data = file_get_contents($full_path);
         } else {
             error_log("Failed to move uploaded file. Upload error: " . $_FILES['photo']['error']);
-            throw new Exception("Failed to save uploaded file. Please try again with a smaller image.");
+            throw new Exception("Failed to save uploaded file");
         }
     } else if (isset($_FILES['photo'])) {
         switch ($_FILES['photo']['error']) {
@@ -93,56 +95,25 @@ try {
               age = ?, 
               store_address = ?, 
               phone = ?, 
-              email = ?";
-
-    if ($photo_path !== null) {
-        $query .= ", photo = ?";
-    }
-
-    $query .= " WHERE id = ?";
+              email = ?,
+              photo = ?
+            WHERE id = ?";
 
     $stmt = $db->prepare($query);
     if (!$stmt) {
         throw new Exception("Prepare failed: " . $db->error);
     }
 
-    // Create params array
-    $params = array(
+    $stmt->bind_param(
+        "sissssi",
         $data->name,
         $data->age,
         $data->address,
         $data->phone,
-        $data->email
+        $data->email,
+        $photo_data,
+        $data->user_id
     );
-
-    // Set types string
-    $types = "sisss";
-
-    // Add photo path if exists
-    if ($photo_path !== null) {
-        $params[] = $photo_path;
-        $types .= "s"; // string for photo path
-        error_log("Added photo path to params array: " . $photo_path);
-    }
-
-    // Add user_id
-    $params[] = $data->user_id;
-    $types .= "i";
-
-    // Debug log
-    error_log("Final query: " . $query);
-    error_log("Types string: " . $types);
-    error_log("Number of params: " . count($params));
-
-    // Create bind_params array with references
-    $bind_params = array($types);
-    foreach ($params as $key => $value) {
-        $bind_params[] = &$params[$key];
-    }
-
-    if (!call_user_func_array(array($stmt, 'bind_param'), $bind_params)) {
-        throw new Exception("Failed to bind parameters: " . $stmt->error);
-    }
 
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);

@@ -12,7 +12,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-const API_BASE_URL = 'http://192.168.0.110';
+const API_BASE_URL = 'http://192.168.1.3';
 
 const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
@@ -25,7 +25,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		for (const route of state.routes) {
 			if (route.params?.user_id) {
 				try {
-					// Single API call for all user data including photo
 					const response = await fetch(
 						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}`
 					);
@@ -38,39 +37,46 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					console.log("User data response:", data);
 					
 					if (data.success) {
-						let photoSource = require("../../assets/images/profile.png");
+						let photoUri = null;
 						
-						// Handle base64 photo data if available
 						if (data.profile.photo) {
 							try {
-								photoSource = {
-									uri: `data:image/jpeg;base64,${data.profile.photo}`,
-									cache: 'reload'
-								};
-								console.log("Photo source created successfully");
+								const cleanBase64 = data.profile.photo.replace(/[\r\n\s]/g, '');
+								
+								// Check if it's already a complete data URI
+								if (cleanBase64.startsWith('data:image')) {
+									photoUri = cleanBase64;
+								}
+								// Check if it's a base64 string
+								else if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
+									photoUri = `data:image/jpeg;base64,${cleanBase64}`;
+								}
+								// If not base64, treat as URL
+								else {
+									photoUri = cleanBase64.startsWith('http') 
+										? cleanBase64 
+										: `${API_BASE_URL}/PetFurMe-Application/${cleanBase64}`;
+								}
 							} catch (error) {
-								console.error("Error creating photo source:", error);
+								console.error("Error processing photo:", error);
+								photoUri = null;
 							}
-						} else {
-							console.log("No photo data available");
 						}
 
-						const userData = {
+						return {
 							user_id: route.params.user_id,
-							userName: data.profile.name || "Guest",
-							userRole: data.profile.role || "pet_owner",
-							profileImage: photoSource
+							name: data.profile.name || "Guest",
+							role: data.profile.role || "User",
+							photo: photoUri
 						};
-						console.log("Final userData created with photo:", !!photoSource.uri);
-						return userData;
 					}
 				} catch (error) {
 					console.error("Error in getUserData:", error);
 					return {
 						user_id: route.params.user_id,
-						userName: "Guest",
-						userRole: "pet_owner",
-						profileImage: require("../../assets/images/profile.png")
+						name: "Guest",
+						role: "User",
+						photo: null
 					};
 				}
 			}
@@ -130,21 +136,19 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const renderProfileSection = () => {
 		return (
 			<View style={styles.profileSection}>
-				<Image
-					source={userData?.profileImage}
-					defaultSource={require("../../assets/images/profile.png")}
-					style={styles.profileImage}
-					onError={(error) => {
-						console.error("Image loading error:", error);
-						console.log("Current photoSource:", userData?.profileImage);
-					}}
-				/>
+				<View style={styles.profileImageContainer}>
+					<Image
+						source={userData?.photo ? { uri: userData.photo } : require("../../assets/images/profile.png")}
+						style={styles.profileImage}
+						defaultSource={require("../../assets/images/profile.png")}
+					/>
+				</View>
 				<View style={styles.profileTextContainer}>
 					<Text style={styles.profileName}>
-						{userData?.userName || "Guest"}
+						{userData?.name || "Guest"}
 					</Text>
 					<Text style={styles.profileRole}>
-						{userData?.userRole || "User"}
+						{userData?.role || "User"}
 					</Text>
 				</View>
 			</View>
@@ -154,9 +158,9 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	useEffect(() => {
 		if (userData) {
 			console.log("userData updated:", {
-				hasPhoto: !!userData.profileImage?.uri,
-				photoType: typeof userData.profileImage,
-				photoDetails: userData.profileImage
+				hasPhoto: !!userData.photo,
+				photoType: typeof userData.photo,
+				photoDetails: userData.photo
 			});
 		}
 	}, [userData]);
@@ -294,10 +298,16 @@ const styles = StyleSheet.create({
 		borderBottomColor: '#F0F0F0',
 		top: 20,
 	},
-	profileImage: {
+	profileImageContainer: {
 		width: 60,
 		height: 60,
 		borderRadius: 30,
+		backgroundColor: '#F0F0F0',
+		overflow: 'hidden',
+	},
+	profileImage: {
+		width: '100%',
+		height: '100%',
 	},
 	profileTextContainer: {
 		marginLeft: 15,

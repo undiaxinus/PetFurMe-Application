@@ -25,7 +25,7 @@ const SignupScreen = ({ navigation }) => {
 
   const API_URL = Platform.select({
     ios: 'http://localhost:3001',
-    android: 'http://192.168.0.110:3001'
+    android: 'http://192.168.1.3:3001'
   });
 
   // Add debug logging

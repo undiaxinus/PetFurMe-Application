@@ -80,15 +80,38 @@ const AddPetProfile = ({ navigation, route }) => {
 
 	const pickImage = async () => {
 		try {
+			const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			
+			if (!permissionResult.granted) {
+				Alert.alert('Permission Required', 'You need to grant access to your photos to upload a profile picture.');
+				return;
+			}
+
 			const result = await ImagePicker.launchImageLibraryAsync({
 				mediaTypes: ImagePicker.MediaTypeOptions.Images,
 				allowsEditing: true,
 				aspect: [1, 1],
-				quality: 1,
+				quality: 0.5,
+				base64: true,
 			});
 
 			if (!result.canceled) {
-				setPhoto(result.assets[0].uri);
+				const base64Size = result.assets[0].base64.length * 0.75;
+				const maxSize = 2 * 1024 * 1024;
+
+				if (base64Size > maxSize) {
+					Alert.alert(
+						'Image Too Large',
+						'Please select an image smaller than 2MB',
+						[{ text: 'OK' }]
+					);
+					return;
+				}
+
+				setPhoto({
+					uri: result.assets[0].uri,
+					base64: result.assets[0].base64
+				});
 			}
 		} catch (error) {
 			console.error('Error picking image:', error);
@@ -121,13 +144,8 @@ const AddPetProfile = ({ navigation, route }) => {
 			const formData = new FormData();
 			
 			// Handle photo
-			if (photo) {
-				const filename = photo.split('/').pop();
-				formData.append('photo', {
-					uri: photo,
-					type: 'image/jpeg',
-					name: filename
-				});
+			if (photo?.base64) {
+				formData.append('photo', photo.base64);
 			}
 
 			const petData = {
@@ -149,7 +167,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			console.log('Sending form data:', formData);
 
-			const response = await fetch('http://192.168.0.110/PetFurMe-Application/api/pets/index.php', {
+			const response = await fetch('http://192.168.1.3/PetFurMe-Application/api/pets/index.php', {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
@@ -222,8 +240,9 @@ const AddPetProfile = ({ navigation, route }) => {
 				<View style={styles.imageContainer}>
 					<View style={styles.imageCircle}>
 						<Image
-							source={photo ? { uri: photo } : require("../../assets/images/doprof.png")}
+							source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
 							style={styles.petImage}
+							defaultSource={require("../../assets/images/doprof.png")}
 						/>
 						<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
 							<Ionicons name="camera" size={20} color="#FFFFFF" />
