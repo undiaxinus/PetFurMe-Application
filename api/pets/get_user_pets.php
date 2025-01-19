@@ -26,8 +26,8 @@ try {
     // Debug log
     error_log("Fetching pets for user_id: " . $user_id);
 
-    // Fetch pets for the specific user_id
-    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo 
+    // Fetch pets with BLOB data
+    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo, allergies, notes 
              FROM pets 
              WHERE user_id = ?";
              
@@ -44,14 +44,30 @@ try {
         $pets = array();
         
         while ($row = $result->fetch_assoc()) {
-            // Debug log
-            error_log("Found pet: " . json_encode($row));
+            error_log("Processing pet: " . $row['name']);
             
-            // Handle photo path
+            // Handle photo
             $photoUrl = null;
             if (!empty($row['photo'])) {
-                // Construct the full URL to the photo
-                $photoUrl = $API_BASE_URL . '/PetFurMe-Application/' . $row['photo'];
+                try {
+                    // Get the file path from database
+                    $photo_path = $row['photo'];
+                    
+                    // Get the absolute server path to verify file exists
+                    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/PetFurMe-Application/api/pets/' . $photo_path;
+                    error_log("Checking file at: " . $absolute_path);
+                    
+                    if (file_exists($absolute_path)) {
+                        // Construct the full URL using the correct path
+                        $photoUrl = 'http://192.168.1.3/PetFurMe-Application/api/pets/' . $photo_path;
+                        error_log("Photo URL created: " . $photoUrl);
+                    } else {
+                        error_log("Photo file not found at: " . $absolute_path);
+                    }
+                    
+                } catch (Exception $e) {
+                    error_log("Error processing photo for " . $row['name'] . ": " . $e->getMessage());
+                }
             }
             
             $pets[] = array(
@@ -63,19 +79,19 @@ try {
                 'gender' => $row['gender'] ?? '',
                 'weight' => $row['weight'] ?? '',
                 'size' => $row['size'] ?? '',
-                'photo' => $photoUrl // Send the full URL to the image
+                'photo' => $photoUrl,
+                'allergies' => $row['allergies'] ?? '',
+                'notes' => $row['notes'] ?? ''
             );
         }
         
         $stmt->close();
-        
-        // Debug log
         error_log("Total pets found: " . count($pets));
         
         echo json_encode(array(
             'success' => true,
             'pets' => $pets,
-            'user_id' => $user_id // Include user_id in response for verification
+            'user_id' => $user_id
         ));
     } else {
         throw new Exception("Execute failed: " . $stmt->error);
