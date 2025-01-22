@@ -10,7 +10,8 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-const API_BASE_URL = 'http://192.168.1.3';
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -91,7 +92,11 @@ const HomePage = ({ navigation, route }) => {
 			console.log("Successfully parsed response data:", data);
 			
 			if (data.success) {
-				console.log("Pets data received:", data.data?.pets);
+				const loggablePets = data.pets.map(pet => ({
+					...pet,
+					photo: pet.photo ? '[Photo Data]' : null // Replace base64 data with placeholder
+				}));
+				console.log("Pets data received:", loggablePets);
 				setUserPets(data.pets || []);
 			} else {
 				throw new Error(data.message || 'Failed to load pets data');

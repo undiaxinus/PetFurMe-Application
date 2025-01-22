@@ -14,14 +14,14 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import CustomDropdown from '../components/CustomDropdown';
-
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 // Constants for dropdown options
 const PET_TYPES = ['Dog', 'Cat', 'Bird', 'Others'];
 const PET_SIZES = ['Small', 'Medium', 'Large'];
 const PET_GENDERS = ['Male', 'Female'];
 
 // Add this constant at the top of the file with other imports
-const API_BASE_URL = 'http://192.168.1.3';
+const API_BASE_URL = `http://${SERVER_IP}`;
 
 const UpdatePetProfile = ({ navigation, route }) => {
   console.log("Route params:", route.params);
@@ -118,30 +118,22 @@ const UpdatePetProfile = ({ navigation, route }) => {
         pet_id: parseInt(pet_id),
         user_id: parseInt(user_id),
         name: petName.trim(),
-        age: petAge ? parseInt(petAge) : null,
+        age: parseInt(petAge),
         type: petType.toLowerCase(),
         breed: petBreed.trim(),
-        size: petSize ? petSize.toLowerCase() : null,
-        weight: petWeight ? parseFloat(petWeight) : null,
-        allergies: petAllergies?.trim() || null,
-        notes: petNotes?.trim() || null,
+        size: petSize.toLowerCase(),
+        weight: parseFloat(petWeight),
+        allergies: petAllergies?.trim() || '',
+        notes: petNotes?.trim() || '',
         gender: petGender.toLowerCase(),
-        category: 'Mammal'
       };
 
       console.log('Sending pet data:', petData);
       formData.append('data', JSON.stringify(petData));
 
-      // Test the API endpoint first
-      try {
-        const testResponse = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/test.php`);
-        console.log('Test endpoint response:', await testResponse.text());
-      } catch (testError) {
-        console.error('Test endpoint failed:', testError);
-      }
-
-      const updateUrl = `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`;
-      console.log('Attempting to fetch from:', updateUrl);
+      // Use the correct endpoint URL
+      const updateUrl = `${API_BASE_URL}/PetFurMe-Application/api/pets/edit_pet.php`;
+      console.log('Sending update request to:', updateUrl);
 
       const response = await fetch(updateUrl, {
         method: 'POST',
@@ -152,27 +144,17 @@ const UpdatePetProfile = ({ navigation, route }) => {
       });
 
       console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Server error response:', errorText);
-        throw new Error(`Server returned error ${response.status}: ${errorText}`);
-      }
-
       const responseText = await response.text();
       console.log('Raw server response:', responseText);
-
-      if (!responseText) {
-        throw new Error('Empty response from server');
-      }
 
       let data;
       try {
         data = JSON.parse(responseText);
+        console.log('Parsed response:', data); // Add this line to see parsed response
       } catch (e) {
         console.error('Failed to parse response:', responseText);
-        throw new Error(`Invalid JSON response: ${responseText.substring(0, 100)}`);
+        throw new Error('Invalid response from server');
       }
 
       if (data.success) {
@@ -183,11 +165,8 @@ const UpdatePetProfile = ({ navigation, route }) => {
             {
               text: 'OK',
               onPress: () => {
-                navigation.navigate('PetProfile', {
-                  petId: pet_id,
-                  user_id: user_id,
-                  refresh: true
-                });
+                // Navigate back twice to reach HomePage
+                navigation.pop(2); // This will pop both UpdatePetProfile and PetProfile screens
               }
             }
           ]
@@ -199,7 +178,7 @@ const UpdatePetProfile = ({ navigation, route }) => {
       console.error('Error updating pet profile:', error);
       Alert.alert(
         'Error',
-        error.message || 'Failed to update pet profile. Please try again.',
+        'Failed to update pet profile. Please try again.',
         [{ text: 'OK' }]
       );
     } finally {
@@ -215,32 +194,53 @@ const UpdatePetProfile = ({ navigation, route }) => {
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${pet_id}`
-      );
+      // First, get all pets for the user
+      const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
+      console.log('Fetching from URL:', url);
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error('Failed to fetch pet details');
       }
 
       const data = await response.json();
-      if (data.success) {
-        const petData = data.pet;
-        setPetName(petData.name || '');
-        setPetAge(petData.age?.toString() || '');
-        setPetType(petData.type || '');
-        setPetBreed(petData.breed || '');
-        setPetSize(petData.size || '');
-        setPetWeight(petData.weight?.toString() || '');
-        setPetAllergies(petData.allergies || '');
-        setPetNotes(petData.notes || '');
-        setPetGender(petData.gender || '');
-        setPhoto(petData.photo || null);
+      console.log('All pets data:', data);
+
+      if (data.success && data.pets) {
+        // Find the specific pet we want to edit
+        const petData = data.pets.find(pet => pet.id === parseInt(pet_id));
+        console.log('Found pet data:', petData);
+
+        if (petData) {
+          // Set all the pet data
+          setPetName(petData.name || '');
+          setPetAge(petData.age?.toString() || '');
+          setPetType(petData.type ? petData.type.charAt(0).toUpperCase() + petData.type.slice(1) : '');
+          setPetBreed(petData.breed || '');
+          setPetSize(petData.size ? petData.size.charAt(0).toUpperCase() + petData.size.slice(1) : '');
+          setPetWeight(petData.weight?.toString() || '');
+          setPetGender(petData.gender ? petData.gender.charAt(0).toUpperCase() + petData.gender.slice(1) : '');
+          
+          // Handle allergies and notes
+          console.log('Setting allergies:', petData.allergies);
+          console.log('Setting notes:', petData.notes);
+          
+          setPetAllergies(petData.allergies || '');
+          setPetNotes(petData.notes || '');
+
+          // Handle photo
+          if (petData.photo) {
+            setPhoto(petData.photo);
+          }
+        } else {
+          throw new Error('Pet not found in user\'s pets');
+        }
       } else {
-        throw new Error(data.message || 'Failed to load pet details');
+        throw new Error(data.message || 'Failed to load pets data');
       }
     } catch (error) {
-      console.error('Error fetching pet data:', error);
+      console.error('Error in fetchPetData:', error);
       Alert.alert('Error', 'Failed to fetch pet data. Please check your connection.');
     } finally {
       setLoading(false);

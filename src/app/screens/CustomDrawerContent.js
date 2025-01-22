@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
-const API_BASE_URL = 'http://192.168.1.3';
+const API_BASE_URL = `http://${SERVER_IP}`;
 
 const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);

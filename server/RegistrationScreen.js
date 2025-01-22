@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -25,7 +26,7 @@ const SignupScreen = ({ navigation }) => {
 
   const API_URL = Platform.select({
     ios: 'http://localhost:3001',
-    android: 'http://192.168.1.3:3001'
+    android: `http://${SERVER_IP}:3001`
   });
 
   // Add debug logging

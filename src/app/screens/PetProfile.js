@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
 
 const PetProfile = ({ route, navigation }) => {
@@ -55,7 +56,7 @@ const PetProfile = ({ route, navigation }) => {
 	const fetchPetDetails = async () => {
 		try {
 			const response = await fetch(
-				`http://192.168.1.3/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${petId}`
+				`http://${SERVER_IP}/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${petId}`
 			);
 			
 			if (!response.ok) {
@@ -76,6 +77,18 @@ const PetProfile = ({ route, navigation }) => {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const handleEditPress = () => {
+		if (!userId) {
+			Alert.alert('Error', 'Please login again');
+			navigation.navigate('LoginScreen');
+			return;
+		}
+		navigation.navigate('UpdatePetProfile', { 
+			pet_id: petId,
+			user_id: userId
+		});
 	};
 
 	if (loading) {
@@ -126,17 +139,7 @@ const PetProfile = ({ route, navigation }) => {
 
 			<TouchableOpacity 
 				style={styles.updateButton}
-				onPress={() => {
-					if (!userId) {
-						Alert.alert('Error', 'Please login again');
-						navigation.navigate('LoginScreen');
-						return;
-					}
-					navigation.navigate('UpdatePetProfile', { 
-						pet_id: petId,
-						user_id: userId
-					});
-				}}
+				onPress={handleEditPress}
 			>
 				<Text style={styles.updateButtonText}>Update Pet's Profile</Text>
 			</TouchableOpacity>

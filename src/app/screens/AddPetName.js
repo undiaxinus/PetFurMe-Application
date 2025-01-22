@@ -13,7 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
 import * as ImagePicker from 'expo-image-picker';
-
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 const PET_TYPES = [
 	"Dog",
 	"Cat",
@@ -167,7 +167,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			console.log('Sending form data:', formData);
 
-			const response = await fetch('http://192.168.1.3/PetFurMe-Application/api/pets/index.php', {
+			const response = await fetch(`http://${SERVER_IP}/PetFurMe-Application/api/pets/index.php`, {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',

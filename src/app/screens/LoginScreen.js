@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -21,8 +22,8 @@ const LoginScreen = ({ navigation }) => {
 	const [error, setError] = useState("");
 
 	const API_URL = Platform.select({
-		ios: "http://localhost:3001",
-		android: "http://192.168.1.3:3001",
+		ios: `http://localhost:${SERVER_PORT}`,
+		android: `http://${SERVER_IP}:${SERVER_PORT}`
 	});
 
 	const handleLogin = async () => {

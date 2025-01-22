@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 const AddAppointment = ({ route, navigation }) => {
   const { reason } = route.params || {}; // Get the reason from navigation params
   const [owner_name, setOwnerName] = useState('');
@@ -33,7 +33,7 @@ const AddAppointment = ({ route, navigation }) => {
     ) {
       setLoading(true);
       try {
-        const response = await fetch('http://192.168.1.3:3000/saveAppointment', {
+        const response = await fetch(`http://${SERVER_IP}:3001/saveAppointment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

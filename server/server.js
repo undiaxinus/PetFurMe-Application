@@ -5,7 +5,8 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require("uuid");
 const path = require('path');
 const authRoutes = require('./routes/auth');
-
+const { BASE_URL, SERVER_IP, SERVER_PORT } = require('./config/constants');
+	
 // Server configuration
 const PORT = 3001;
 const HOST = "0.0.0.0";
@@ -331,7 +332,7 @@ const startServer = async () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
-			console.log(`- Network: http://192.168.1.3:${PORT}`);
+			console.log(`- Network: http://${SERVER_IP}:${PORT}`);
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");

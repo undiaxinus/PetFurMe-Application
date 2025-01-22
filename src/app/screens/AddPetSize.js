@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 const AddPetSize = ({ navigation, route }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const pet_id = route.params?.pet_id;
@@ -22,7 +22,7 @@ const AddPetSize = ({ navigation, route }) => {
 
   const handleSizeSelect = async (size) => {
     try {
-      const response = await fetch('http://192.168.1.3:3001/api/pets/update-size', {
+      const response = await fetch(`http://${SERVER_IP}:3001/api/pets/update-size`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
