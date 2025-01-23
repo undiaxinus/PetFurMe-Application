@@ -157,7 +157,7 @@ const AddPetProfile = ({ navigation, route }) => {
 				owner_name: null,
 				allergies: petAllergies?.trim() || null,
 				notes: petNotes?.trim() || null,
-				category: 'Mammal',
+				category: petType.toLowerCase(),
 				gender: petGender.toLowerCase(),
 				weight: parseFloat(petWeight),
 				size: petSize?.toLowerCase() || null
