@@ -40,7 +40,7 @@ try {
         if ($row = $result->fetch_assoc()) {
             // Handle photo path
             if (!empty($row['photo'])) {
-                $row['photo'] = 'http://192.168.1.4/PetFurMe-Application/' . $row['photo'];
+                $row['photo'] = 'http://10.0.0.96/PetFurMe-Application/' . $row['photo'];
             }
             
             echo json_encode([
