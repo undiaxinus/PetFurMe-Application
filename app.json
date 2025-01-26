@@ -12,20 +12,36 @@
 				"image": "./src/assets/images/splash.png",
 				"resizeMode": "contain",
 				"backgroundColor": "#ffffff"
+			},
+			"eas": {
+				"projectId": "your-project-id-here"
 			}
 		},
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"infoPlist": {
+				"UIBackgroundModes": ["remote-notification"]
+			}
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/images/adaptive-icon.png",
+				"foregroundImage": "./assets/images/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
-			}
+			},
+			"permissions": ["NOTIFICATIONS", "VIBRATE"]
 		},
 		"web": {
 			"favicon": "./src/assets/favicon.png"
 		},
-		"plugins": ["expo-font"]
+		"plugins": [
+			"expo-font",
+			[
+				"expo-notifications",
+				{
+					"icon": "./assets/notification-icon.png",
+					"color": "#ffffff"
+				}
+			]
+		]
 	}
 }

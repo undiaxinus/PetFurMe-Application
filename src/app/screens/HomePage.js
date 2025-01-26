@@ -513,7 +513,7 @@ const HomePage = ({ navigation, route }) => {
 
 				<TouchableOpacity 
 					style={styles.navItem}
-					onPress={() => navigation.navigate('NotificationScreen')}
+					onPress={() => navigation.navigate('NotificationScreen', { user_id: user_id })}
 				>
 					<Ionicons name="notifications-outline" size={24} color="#8146C1" />
 					<Text style={styles.navText}>Notifications</Text>
