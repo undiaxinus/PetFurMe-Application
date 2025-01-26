@@ -126,7 +126,7 @@ const PetProfile = ({ route, navigation }) => {
 		<ScrollView style={styles.container}>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => navigation.goBack()}>
-					<Text style={styles.backButton}>← Back</Text>
+					<Ionicons name="arrow-back" size={24} color="#FFFFFF" />
 				</TouchableOpacity>
 				<Text style={styles.title}>Pet Profile</Text>
 			</View>

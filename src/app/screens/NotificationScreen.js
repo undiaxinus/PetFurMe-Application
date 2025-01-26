@@ -52,12 +52,13 @@ const NotificationScreen = ({ navigation, route }) => {
     // Initial fetch
     getUserIdAndFetch();
 
-    // Set up auto refresh every 30 seconds
+    // Set up auto refresh every 1 minute (60000ms)
     refreshIntervalRef.current = setInterval(() => {
       if (user_id && !isRefreshing) {
+        console.log('Auto-refreshing notifications...');
         fetchNotifications(user_id);
       }
-    }, 30000);
+    }, 60000);
 
     // Request notification permissions
     requestNotificationPermissions();
@@ -329,7 +330,9 @@ const styles = StyleSheet.create({
     height: 120,
   },
   headerTitleContainer: {
-    marginLeft: 16,
+    marginLeft: -30,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
