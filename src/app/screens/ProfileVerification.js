@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const ProfileVerification = ({ navigation, route }) => {
@@ -186,33 +187,29 @@ const ProfileVerification = ({ navigation, route }) => {
             }
 
             if (result.success) {
-                // Fetch fresh data immediately after update
-                await fetchUserData();
-                
-                Alert.alert('Success', 'Profile updated successfully', [
+                // Log the profile update activity
+                await logActivity(
+                    ACTIVITY_TYPES.PROFILE_UPDATED,
+                    user_id,
                     {
-                        text: 'OK',
-                        onPress: async () => {
-                            try {
-                                // Fetch updated data one more time to ensure we have latest
-                                await fetchUserData();
-                                
-                                // Go back first
-                                navigation.goBack();
-                                
-                                // Then update HomePage with refresh parameter
-                                navigation.navigate('HomePage', {
-                                    user_id: user_id,
-                                    refresh: Date.now()
-                                });
-                            } catch (error) {
-                                console.error('Error refreshing data:', error);
-                            }
-                        }
+                        name: name.trim(),
+                        updatedFields: [
+                            'name',
+                            age && 'age',
+                            store_address && 'address',
+                            phoneNumber && 'phone number',
+                            profilePhoto && 'profile photo'
+                        ].filter(Boolean)
                     }
-                ]);
+                );
+
+                Alert.alert('Success', 'Profile updated successfully');
+                if (route.params?.onComplete) {
+                    route.params.onComplete();
+                }
+                navigation.goBack();
             } else {
-                throw new Error(result.message || 'Failed to update profile');
+                Alert.alert('Error', result.message || 'Failed to update profile');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -254,6 +251,18 @@ const ProfileVerification = ({ navigation, route }) => {
             const data = await response.json();
             
             if (data.success) {
+                // Log the credentials update activity
+                await logActivity(
+                    ACTIVITY_TYPES.PROFILE_UPDATED,
+                    user_id,
+                    {
+                        updatedFields: [
+                            isEditingEmail && 'email',
+                            isEditingPassword && 'password'
+                        ].filter(Boolean)
+                    }
+                );
+
                 Alert.alert('Success', 'Credentials updated successfully');
                 setIsEditingEmail(false);
                 setIsEditingPassword(false);

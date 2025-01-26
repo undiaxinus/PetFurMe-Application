@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
@@ -198,11 +199,13 @@ const HomePage = ({ navigation, route }) => {
 		}
 	};
 
-	const handleSetUpNow = () => {
+	const handleSetUpNow = async () => {
+		await logActivity('Started profile setup', user_id);
 		setShowWelcomePopup(false);
 		navigation.navigate('ProfileVerification', { 
 			user_id: user_id,
-			onComplete: () => {
+			onComplete: async () => {
+				await logActivity(ACTIVITY_TYPES.PROFILE_UPDATED, user_id);
 				setIsProfileComplete(true);
 				fetchUserPets();
 			}
@@ -274,12 +277,13 @@ const HomePage = ({ navigation, route }) => {
 		},
 	];
 
-	const handleAddNewPet = () => {
+	const handleAddNewPet = async () => {
 		if (!user_id) {
 			Alert.alert("Error", "User ID is missing. Please try logging in again.");
 			navigation.navigate("LoginScreen");
 			return;
 		}
+		await logActivity(ACTIVITY_TYPES.PET_ADDED, user_id);
 		navigation.navigate("AddPetName", { user_id: user_id });
 	};
 

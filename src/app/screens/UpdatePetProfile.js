@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import CustomDropdown from '../components/CustomDropdown';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 // Constants for dropdown options
 const PET_TYPES = ['Dog', 'Cat', 'Bird', 'Others'];
 const PET_SIZES = ['Small', 'Medium', 'Large'];
@@ -106,10 +107,14 @@ const UpdatePetProfile = ({ navigation, route }) => {
         const localUri = photo;
         const filename = localUri.split('/').pop();
         
+        // Create a unique filename with timestamp
+        const timestamp = new Date().getTime();
+        const uniqueFilename = `pet_${pet_id}_${timestamp}_${filename}`;
+        
         formData.append('photo', {
           uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
           type: 'image/jpeg',
-          name: filename
+          name: uniqueFilename
         });
       }
 
@@ -131,56 +136,48 @@ const UpdatePetProfile = ({ navigation, route }) => {
       console.log('Sending pet data:', petData);
       formData.append('data', JSON.stringify(petData));
 
-      // Use the correct endpoint URL
-      const updateUrl = `${API_BASE_URL}/PetFurMe-Application/api/pets/edit_pet.php`;
-      console.log('Sending update request to:', updateUrl);
-
-      const response = await fetch(updateUrl, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json',
+      const response = await fetch(
+        `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
         }
-      });
+      );
 
-      console.log('Response status:', response.status);
-      
+      // Log the raw response for debugging
       const responseText = await response.text();
-      console.log('Raw server response:', responseText);
+      console.log('Raw response:', responseText);
 
-      let data;
+      let result;
       try {
-        data = JSON.parse(responseText);
-        console.log('Parsed response:', data); // Add this line to see parsed response
-      } catch (e) {
-        console.error('Failed to parse response:', responseText);
+        result = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Parse error:', parseError);
+        console.error('Response that failed to parse:', responseText);
         throw new Error('Invalid response from server');
       }
 
-      if (data.success) {
-        Alert.alert(
-          'Success',
-          'Pet profile updated successfully!',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                // Navigate back twice to reach HomePage
-                navigation.pop(2); // This will pop both UpdatePetProfile and PetProfile screens
-              }
+      if (result.success) {
+        Alert.alert('Success', 'Pet profile updated successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Log the activity with local storage
+              logActivity(user_id, ACTIVITY_TYPES.PET_UPDATED, `Updated ${petName}'s profile`);
+              navigation.goBack();
             }
-          ]
-        );
+          }
+        ]);
       } else {
-        throw new Error(data.message || 'Failed to update pet profile');
+        throw new Error(result.message || 'Failed to update pet profile');
       }
     } catch (error) {
-      console.error('Error updating pet profile:', error);
-      Alert.alert(
-        'Error',
-        'Failed to update pet profile. Please try again.',
-        [{ text: 'OK' }]
-      );
+      console.error('Error updating pet:', error);
+      Alert.alert('Error', error.message || 'Failed to update pet profile');
     } finally {
       setLoading(false);
     }

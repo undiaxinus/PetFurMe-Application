@@ -1,0 +1,158 @@
+[26-Jan-2025 10:11:43 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:11:43 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:11:43 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:11:43 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:11:43 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Database::getConnection() in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:37
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 37
+[26-Jan-2025 10:11:50 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:11:50 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:11:50 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:11:50 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:11:50 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Database::getConnection() in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:37
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 37
+[26-Jan-2025 10:13:20 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:13:20 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:13:20 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:13:20 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:13:20 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:13:20 Europe/Berlin] General error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':pet_id' at line 1
+[26-Jan-2025 10:13:20 Europe/Berlin] Stack trace: #0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(49): mysqli->prepare('SELECT * FROM p...')
+#1 {main}
+[26-Jan-2025 10:13:34 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:13:34 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:13:34 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:13:34 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:13:34 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:13:34 Europe/Berlin] General error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':pet_id' at line 1
+[26-Jan-2025 10:13:34 Europe/Berlin] Stack trace: #0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(49): mysqli->prepare('SELECT * FROM p...')
+#1 {main}
+[26-Jan-2025 10:15:07 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:15:07 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:15:07 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:15:07 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:15:07 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:15:07 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::rowCount() in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:62
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 62
+[26-Jan-2025 10:15:21 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:15:21 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:15:21 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:15:21 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:15:21 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:15:21 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::rowCount() in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:62
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 62
+[26-Jan-2025 10:23:38 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:23:38 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:23:38 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:23:38 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:23:38 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:23:38 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:23:38 Europe/Berlin] Photo path processed: 6795faa7b930f.jpg
+[26-Jan-2025 10:25:52 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:25:52 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:25:52 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:25:52 Europe/Berlin] PHP Warning:  Undefined variable $conn in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:25:52 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: mysqli_real_escape_string(): Argument #1 ($mysql) must be of type mysqli, null given in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:33
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(33): mysqli_real_escape_string(NULL, '212')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:25:57 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:25:57 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:25:57 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:25:57 Europe/Berlin] PHP Warning:  Undefined variable $conn in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:25:57 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: mysqli_real_escape_string(): Argument #1 ($mysql) must be of type mysqli, null given in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:33
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(33): mysqli_real_escape_string(NULL, '212')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:01 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:27:01 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:27:01 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:27:01 Europe/Berlin] PHP Warning:  Undefined variable $conn in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:01 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: mysqli_real_escape_string(): Argument #1 ($mysql) must be of type mysqli, null given in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:33
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(33): mysqli_real_escape_string(NULL, '212')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:09 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:27:09 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:27:09 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:27:09 Europe/Berlin] PHP Warning:  Undefined variable $conn in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:09 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: mysqli_real_escape_string(): Argument #1 ($mysql) must be of type mysqli, null given in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:33
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(33): mysqli_real_escape_string(NULL, '212')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:15 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:27:15 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:27:15 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:27:15 Europe/Berlin] PHP Warning:  Undefined variable $conn in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:15 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: mysqli_real_escape_string(): Argument #1 ($mysql) must be of type mysqli, null given in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php:33
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php(33): mysqli_real_escape_string(NULL, '212')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\get_pet_details.php on line 33
+[26-Jan-2025 10:27:54 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:27:54 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:27:54 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:27:54 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:27:54 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:27:54 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:27:54 Europe/Berlin] Photo path processed: 6795faa7b930f.jpg
+[26-Jan-2025 10:28:28 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:28:28 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:28:28 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:28:28 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:28:28 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:28:28 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:28:28 Europe/Berlin] Photo path processed: 6795faa7b930f.jpg
+[26-Jan-2025 10:30:03 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:30:03 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:30:03 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:30:03 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:30:03 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:30:03 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:30:03 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:30:35 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:30:35 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:30:35 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:30:35 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:30:35 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:30:35 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:30:35 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:33:32 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:33:32 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:33:32 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:33:32 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:33:32 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:33:32 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:33:32 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:33:37 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:33:37 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:33:37 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:33:37 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:33:37 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:33:37 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:33:37 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:34:14 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:34:14 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:34:14 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:34:14 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:34:14 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:34:14 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:34:14 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:35:13 Europe/Berlin] Pet details script started
+[26-Jan-2025 10:35:13 Europe/Berlin] Request method: GET
+[26-Jan-2025 10:35:13 Europe/Berlin] GET params: {"pet_id":"212"}
+[26-Jan-2025 10:35:13 Europe/Berlin] Processing request for pet_id: 212
+[26-Jan-2025 10:35:13 Europe/Berlin] Database connection successful
+[26-Jan-2025 10:35:13 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
+[26-Jan-2025 10:35:13 Europe/Berlin] Photo URL constructed: http://192.168.1.8/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg

@@ -15,6 +15,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Picker } from '@react-native-picker/picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 
 const AddAppointment = ({ route, navigation }) => {
   const { reason, user_id } = route.params || {}; // Get both reason and user_id from params
@@ -87,7 +88,7 @@ const AddAppointment = ({ route, navigation }) => {
         const appointmentData = {
           user_id: user_id,
           pet_id: selectedPet,
-          pet_name: selectedPetDetails.name, // Add pet name to the data
+          pet_name: selectedPetDetails.name,
           owner_name: owner_name.trim(),
           reason_for_visit: reason_for_visit,
           other_reason: reason_for_visit === 'Other' ? custom_reason.trim() : null,
@@ -95,7 +96,7 @@ const AddAppointment = ({ route, navigation }) => {
           appointment_time: appointment_time.trim(),
         };
 
-        console.log('Sending appointment data:', appointmentData); // Debug log
+        console.log('Sending appointment data:', appointmentData);
 
         const response = await fetch(`http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`, {
           method: 'POST',
@@ -107,9 +108,21 @@ const AddAppointment = ({ route, navigation }) => {
         });
 
         const result = await response.json();
-        console.log('API Response:', result); // Debug log
+        console.log('API Response:', result);
 
         if (result.success) {
+          // Log the appointment activity
+          await logActivity(
+            ACTIVITY_TYPES.APPOINTMENT_BOOKED,
+            user_id,
+            {
+              petName: selectedPetDetails.name,
+              reason: reason_for_visit === 'Other' ? custom_reason : reason_for_visit,
+              date: appointment_date,
+              time: appointment_time
+            }
+          );
+          
           Alert.alert('Success', 'Appointment saved successfully');
           navigation.goBack();
         } else {

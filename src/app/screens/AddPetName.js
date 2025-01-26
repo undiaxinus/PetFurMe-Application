@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
 import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 const PET_TYPES = [
 	"Dog",
 	"Cat",
@@ -188,6 +189,13 @@ const AddPetProfile = ({ navigation, route }) => {
 			}
 
 			if (data.success) {
+				// Log the activity for adding new pet
+				await logActivity(
+					user_id, 
+					ACTIVITY_TYPES.PET_ADDED, 
+					`Added a new pet named ${petName}`
+				);
+
 				Alert.alert(
 					"Success",
 					"Pet profile created successfully!",

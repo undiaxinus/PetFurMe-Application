@@ -26,6 +26,7 @@ import AddPetSize from "./src/app/screens/AddPetSize";
 import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
 import ProfileVerification from "./src/app/screens/ProfileVerification";
 import UpdatePetProfile from "./src/app/screens/UpdatePetProfile";
+import ActivityHistoryScreen from "./src/app/screens/ActivityHistoryScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,6 +44,7 @@ function DrawerNavigator() {
 			<Drawer.Screen name="ProfileVerification" component={ProfileVerification} />
 			<Drawer.Screen name="ViewMorePro" component={ViewMorePro} />
 			<Drawer.Screen name="Help" component={Help} />
+			<Drawer.Screen name="ActivityHistory" component={ActivityHistoryScreen} />
 		</Drawer.Navigator>
 	);
 }

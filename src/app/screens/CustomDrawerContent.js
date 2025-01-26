@@ -12,6 +12,8 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logActivity } from '../utils/activityLogger';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -19,6 +21,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
 	const [userData, setUserData] = useState(null);
+	const [activityLogs, setActivityLogs] = useState([]);
 	
 	const getUserData = async () => {
 		if (!state?.routes) return null;
@@ -74,12 +77,24 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		return null;
 	};
 
+	const loadActivityLogs = async () => {
+		try {
+			const logs = await AsyncStorage.getItem('activityLogs');
+			if (logs) {
+				setActivityLogs(JSON.parse(logs));
+			}
+		} catch (error) {
+			console.error('Error loading activity logs:', error);
+		}
+	};
+
 	useEffect(() => {
 		const loadUserData = async () => {
 			const data = await getUserData();
 			if (data) {
 				setUserData(data);
 			}
+			loadActivityLogs();
 		};
 		
 		// Initial load
@@ -96,8 +111,9 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		setIsLogoutModalVisible(true);
 	};
 
-	const confirmLogout = () => {
+	const confirmLogout = async () => {
 		setIsLoggingOut(true);
+		await logActivity('Logged out', userData?.user_id);
 		setTimeout(() => {
 			setIsLoggingOut(false);
 			setIsLogoutModalVisible(false);
@@ -113,7 +129,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		setIsLogoutModalVisible(false);
 	};
 
-	const handleAddNewPet = () => {
+	const handleAddNewPet = async () => {
 		if (!userData || !userData.user_id) {
 			console.error("No user ID available");
 			Alert.alert(
@@ -129,6 +145,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			return;
 		}
 
+		await logActivity('Started adding a new pet', userData.user_id);
 		navigation.navigate("AddPetName", {
 			user_id: userData.user_id
 		});
@@ -152,6 +169,58 @@ const CustomDrawerContent = ({ navigation, state }) => {
 						{userData?.role || "User"}
 					</Text>
 				</View>
+			</View>
+		);
+	};
+
+	const renderActivityLogs = () => {
+		// Get only the 5 most recent activities
+		const recentActivities = activityLogs.slice(0, 5);
+		
+		return (
+			<View style={styles.activityLogsSection}>
+				<View style={styles.activityLogsHeader}>
+					<MaterialIcons name="history" size={24} color="#808080" />
+					<Text style={styles.activityLogsTitle}>Recent Activity</Text>
+				</View>
+				
+				{recentActivities.length > 0 ? (
+					<View style={styles.activityLogsList}>
+						{/* Latest Activity */}
+						<View style={[styles.activityLogItem, styles.latestActivity]}>
+							<Text style={[styles.activityLogText, styles.latestActivityText]}>
+								{recentActivities[0].action}
+							</Text>
+							<Text style={[styles.activityLogTime, styles.latestActivityTime]}>
+								Just now • {new Date(recentActivities[0].timestamp).toLocaleTimeString()}
+							</Text>
+						</View>
+						
+						{/* Other Recent Activities */}
+						{/* {recentActivities.slice(1).map((log, index) => (
+							<View key={index} style={styles.activityLogItem}>
+								<Text style={styles.activityLogText}>
+									{log.action}
+								</Text>
+								<Text style={styles.activityLogTime}>
+									{new Date(log.timestamp).toLocaleString()}
+								</Text>
+							</View>
+						))} */}
+					</View>
+				) : (
+					<Text style={styles.noActivityText}>No recent activity</Text>
+				)}
+				
+				<TouchableOpacity 
+					style={styles.viewAllButton}
+					onPress={() => {
+						navigation.navigate('ActivityHistory');
+						navigation.closeDrawer();
+					}}
+				>
+					<Text style={styles.viewAllButtonText}>View All History</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	};
@@ -218,7 +287,11 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					<Text style={styles.navText}>Settings</Text>
 				</TouchableOpacity>
 
-				{/* Divider */}
+				{/* Add this before the divider */}
+				<View style={styles.divider} />
+				
+				{renderActivityLogs()}
+				
 				<View style={styles.divider} />
 
 				{/* Login/Logout Section */}
@@ -398,6 +471,78 @@ const styles = StyleSheet.create({
 	addNewPetButton: {
 		marginTop: 10,
 		marginLeft: 10,
+	},
+	activityLogsSection: {
+		marginVertical: 10,
+	},
+	activityLogsHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 15,
+		marginBottom: 10,
+	},
+	activityLogsTitle: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: '#333333',
+		marginLeft: 10,
+	},
+	activityLogsList: {
+		paddingHorizontal: 15,
+	},
+	activityLogItem: {
+		marginBottom: 12,
+		padding: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
+	},
+	activityLogText: {
+		fontSize: 14,
+		color: '#333333',
+	},
+	activityLogTime: {
+		fontSize: 12,
+		color: '#888888',
+		marginTop: 2,
+	},
+	noActivityText: {
+		fontSize: 14,
+		color: '#888888',
+		fontStyle: 'italic',
+		textAlign: 'center',
+		paddingVertical: 15,
+		paddingHorizontal: 15,
+	},
+	viewAllButton: {
+		backgroundColor: '#F0F0F0',
+		padding: 10,
+		borderRadius: 8,
+		marginTop: 10,
+		marginHorizontal: 15,
+		alignItems: 'center',
+	},
+	viewAllButtonText: {
+		color: '#8146C1',
+		fontSize: 14,
+		fontWeight: '500',
+	},
+	latestActivity: {
+		backgroundColor: '#F0F0FF', // Light purple background for latest activity
+		padding: 12,
+		borderRadius: 8,
+		borderLeftWidth: 4,
+		borderLeftColor: '#8146C1',
+		marginBottom: 15,
+	},
+	latestActivityText: {
+		fontSize: 15,
+		fontWeight: '600',
+		color: '#333333',
+	},
+	latestActivityTime: {
+		fontSize: 12,
+		color: '#8146C1',
+		marginTop: 4,
 	},
 });
 

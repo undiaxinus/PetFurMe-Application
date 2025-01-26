@@ -7,12 +7,14 @@ import {
 	StyleSheet,
 	FlatList,
 	ActivityIndicator,
-	Alert
+	Alert,
+	ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
-
+import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
+import defaultPetImage from '../../assets/images/doprof.png';
 
 const PetProfile = ({ route, navigation }) => {
 	const [pet, setPet] = useState(null);
@@ -55,36 +57,50 @@ const PetProfile = ({ route, navigation }) => {
 
 	const fetchPetDetails = async () => {
 		try {
-			const response = await fetch(
-				`http://${SERVER_IP}/PetFurMe-Application/api/pets/get_pet_details.php?pet_id=${petId}`
-			);
-			
-			if (!response.ok) {
-				throw new Error('Failed to fetch pet details');
+			if (!petId) {
+				console.error('No pet ID provided');
+				throw new Error('Pet ID is required');
 			}
 
-			const data = await response.json();
-			console.log('Pet details response:', data);
+			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${userId}`;
+			console.log('Fetching from URL:', url);
 
-			if (data.success && data.pet) {
-				setPet(data.pet);
+			const response = await fetch(url);
+			console.log('Response status:', response.status);
+			
+			const data = await response.json();
+			console.log('Parsed pets data:', data);
+
+			if (data.success && data.pets) {
+				const petData = data.pets.find(pet => pet.id === parseInt(petId));
+				console.log('Found pet data:', petData);
+
+				if (petData) {
+					setPet(petData);
+					console.log('Set pet data:', petData);
+				} else {
+					console.error('Pet not found in user\'s pets');
+					throw new Error('Pet not found');
+				}
 			} else {
+				console.error('API error:', data.message || 'Unknown error');
 				throw new Error(data.message || 'Failed to load pet details');
 			}
 		} catch (error) {
-			Alert.alert('Error', 'Failed to load pet details');
-			console.error('Error fetching pet details:', error);
+			console.error('Error in fetchPetDetails:', error);
+			Alert.alert('Error', error.message || 'Failed to load pet details');
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const handleEditPress = () => {
+	const handleEditPress = async () => {
 		if (!userId) {
 			Alert.alert('Error', 'Please login again');
 			navigation.navigate('LoginScreen');
 			return;
 		}
+		await logActivity(ACTIVITY_TYPES.PET_UPDATED, userId, { petName: pet.name });
 		navigation.navigate('UpdatePetProfile', { 
 			pet_id: petId,
 			user_id: userId
@@ -108,7 +124,7 @@ const PetProfile = ({ route, navigation }) => {
 	}
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => navigation.goBack()}>
 					<Text style={styles.backButton}>← Back</Text>
@@ -117,14 +133,28 @@ const PetProfile = ({ route, navigation }) => {
 			</View>
 
 			<View style={styles.profileContainer}>
-				<Image
-					source={
-						pet.photo
-							? { uri: pet.photo }
-							: require('../../assets/images/lena.png')
-					}
-					style={styles.profileImage}
-				/>
+				<View style={styles.imageContainer}>
+					<Image
+						source={
+							pet?.photo
+								? { 
+									uri: pet.photo,
+									headers: {
+										'Cache-Control': 'no-cache',
+										'Pragma': 'no-cache',
+										'Expires': '0',
+									},
+									cache: 'reload'
+								}
+								: defaultPetImage
+						}
+						style={styles.profileImage}
+						onError={(error) => {
+							console.error('Image loading error:', error);
+							console.log('Failed photo URL:', pet?.photo);
+						}}
+					/>
+				</View>
 				<Text style={styles.petName}>{pet.name}</Text>
 			</View>
 
@@ -143,7 +173,7 @@ const PetProfile = ({ route, navigation }) => {
 			>
 				<Text style={styles.updateButtonText}>Update Pet's Profile</Text>
 			</TouchableOpacity>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -186,11 +216,19 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		padding: 20,
 	},
+	imageContainer: {
+		width: 150,
+		height: 150,
+		borderRadius: 75,
+		overflow: 'hidden',
+		marginBottom: 20,
+		backgroundColor: '#F0F0F0',
+		alignSelf: 'center',
+	},
 	profileImage: {
-		width: 120,
-		height: 120,
-		borderRadius: 60,
-		marginBottom: 10,
+		width: '100%',
+		height: '100%',
+		resizeMode: 'cover',
 	},
 	petName: {
 		fontSize: 24,
