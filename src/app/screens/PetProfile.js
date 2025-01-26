@@ -100,7 +100,6 @@ const PetProfile = ({ route, navigation }) => {
 			navigation.navigate('LoginScreen');
 			return;
 		}
-		await logActivity(ACTIVITY_TYPES.PET_UPDATED, userId, { petName: pet.name });
 		navigation.navigate('UpdatePetProfile', { 
 			pet_id: petId,
 			user_id: userId

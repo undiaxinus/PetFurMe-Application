@@ -11,22 +11,23 @@ export const ACTIVITY_TYPES = {
     LOGOUT: 'Logged out'
 };
 
-export const logActivity = async (userId, activityType, details = null) => {
+export const logActivity = async (type, userId, details) => {
     try {
+        const timestamp = new Date().toISOString();
+        const activity = {
+            userId: userId,
+            action: type,
+            details: details,
+            timestamp: timestamp
+        };
+        
+        console.log('Activity logged:', activity);
         // Get existing logs
         const existingLogsString = await AsyncStorage.getItem('activityLogs');
         const existingLogs = existingLogsString ? JSON.parse(existingLogsString) : [];
 
-        // Create new log entry
-        const newLog = {
-            userId,
-            action: activityType,
-            details,
-            timestamp: new Date().toISOString()
-        };
-
         // Add new log to the beginning of the array
-        const updatedLogs = [newLog, ...existingLogs];
+        const updatedLogs = [activity, ...existingLogs];
 
         // Keep only the latest MAX_LOGS entries
         const trimmedLogs = updatedLogs.slice(0, MAX_LOGS);
@@ -34,7 +35,6 @@ export const logActivity = async (userId, activityType, details = null) => {
         // Save back to AsyncStorage
         await AsyncStorage.setItem('activityLogs', JSON.stringify(trimmedLogs));
 
-        console.log('Activity logged:', newLog);
         return true;
     } catch (error) {
         console.error('Error logging activity:', error);

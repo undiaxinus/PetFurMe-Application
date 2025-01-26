@@ -45,43 +45,15 @@ try {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
-        // Handle BLOB photo data
-        $photoBase64 = null;
+        // Handle photo path
+        $photoUrl = null;
         if ($row['photo'] !== null && $row['photo'] !== '') {
-            try {
-                $binaryData = $row['photo'];
-                
-                // If it's a file path (starts with 'uploads/')
-                if (is_string($binaryData) && (strpos($binaryData, 'uploads/') === 0)) {
-                    // Fix the path resolution
-                    $fullPath = dirname(dirname(__DIR__)) . '/' . $binaryData;
-                    if (file_exists($fullPath)) {
-                        $photoBase64 = base64_encode(file_get_contents($fullPath));
-                        error_log("Loading image from file: " . $fullPath);
-                    } else {
-                        error_log("File not found: " . $fullPath);
-                        $photoBase64 = null;
-                    }
-                } else {
-                    // It's binary data from the BLOB
-                    $photoBase64 = base64_encode($binaryData);
-                }
-                
-                // Validate the base64 string
-                if ($photoBase64 !== null && base64_decode($photoBase64, true) !== false) {
-                    error_log("Valid base64 image data, length: " . strlen($photoBase64));
-                    // Return the complete data URI
-                    $photoBase64 = 'data:image/jpeg;base64,' . $photoBase64;
-                } else {
-                    error_log("Invalid base64 encoding");
-                    $photoBase64 = null;
-                }
-            } catch (Exception $e) {
-                error_log("Error processing image: " . $e->getMessage());
-                $photoBase64 = null;
+            // Check if it's a path starting with 'uploads/'
+            if (strpos($row['photo'], 'uploads/') === 0) {
+                // Construct the full URL
+                $photoUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/PetFurMe-Application/api/users/' . $row['photo'];
+                error_log("Photo URL constructed: " . $photoUrl);
             }
-        } else {
-            $photoBase64 = null;
         }
         
         $response = [
@@ -93,10 +65,10 @@ try {
                 'phone' => $row['phone'],
                 'age' => $row['age'],
                 'address' => $row['store_address'],
-                'photo' => $photoBase64,
+                'photo' => $photoUrl,
                 'role' => $row['role'],
                 'email_verified_at' => $row['email_verified_at'],
-                'has_photo' => $photoBase64 !== null
+                'has_photo' => $photoUrl !== null
             ]
         ];
         

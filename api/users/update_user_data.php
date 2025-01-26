@@ -28,47 +28,60 @@ try {
     }
 
     // Decode JSON data
-    $data = json_decode($_POST['data']);
+    $data = json_decode($_POST['data'], true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         throw new Exception("Invalid JSON data: " . json_last_error_msg());
     }
 
     // Validate user_id
-    if (!isset($data->user_id)) {
+    if (!isset($data['user_id'])) {
         throw new Exception("User ID is required");
     }
 
     // Handle photo upload
-    $photo_data = null;
+    $photo_path = null;
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         error_log("Processing photo upload");
         
         // Check file size (2MB limit)
-        $maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+        $maxFileSize = 2 * 1024 * 1024;
         if ($_FILES['photo']['size'] > $maxFileSize) {
             throw new Exception("File size too large. Please upload an image smaller than 2MB.");
         }
         
         // Create uploads directory if it doesn't exist
-        $upload_dir = '../uploads/profile_photos';
+        $upload_dir = 'C:/xampp/htdocs/PetFurMe-Application/api/users/uploads/profile_photos/';
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
         
         // Generate unique filename
-        $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $new_filename = uniqid() . '.' . $file_extension;
-        $photo_path = 'uploads/profile_photos/' . $new_filename;
-        $full_path = '../' . $photo_path;
+        $file_extension = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+        // Validate file extension
+        $allowed_extensions = ['jpg', 'jpeg', 'png'];
+        if (!in_array($file_extension, $allowed_extensions)) {
+            throw new Exception("Only JPG, JPEG and PNG files are allowed.");
+        }
         
-        error_log("Attempting to move uploaded file to: " . $full_path);
+        $new_filename = 'profile_' . uniqid() . '.' . $file_extension;
+        $full_path = $upload_dir . $new_filename;
+        $photo_path = 'uploads/profile_photos/' . $new_filename; // This is what gets stored in DB
+        
+        error_log("Full path for upload: " . $full_path);
+        
+        // Ensure the file is an actual image
+        if (!getimagesize($_FILES['photo']['tmp_name'])) {
+            throw new Exception("File is not a valid image");
+        }
         
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $full_path)) {
             error_log("File successfully moved to: " . $full_path);
-            // Store the binary data in the database
-            $photo_data = file_get_contents($full_path);
+            // Set proper permissions
+            chmod($full_path, 0644);
         } else {
             error_log("Failed to move uploaded file. Upload error: " . $_FILES['photo']['error']);
+            error_log("Upload path exists: " . (file_exists(dirname($full_path)) ? 'Yes' : 'No'));
+            error_log("Upload path is writable: " . (is_writable(dirname($full_path)) ? 'Yes' : 'No'));
             throw new Exception("Failed to save uploaded file");
         }
     } else if (isset($_FILES['photo'])) {
@@ -89,7 +102,7 @@ try {
     error_log("Received POST data: " . print_r($_POST, true));
     error_log("Received FILES data: " . print_r($_FILES, true));
 
-    // Build query
+    // Build query with proper path format
     $query = "UPDATE users SET 
               name = ?, 
               age = ?, 
@@ -98,7 +111,7 @@ try {
               email = ?";
 
     // Add photo to query only if it exists
-    if ($photo_data !== null) {
+    if ($photo_path !== null) {
         $query .= ", photo = ?";
     }
 
@@ -110,26 +123,26 @@ try {
     }
 
     // Bind parameters based on whether photo exists
-    if ($photo_data !== null) {
+    if ($photo_path !== null) {
         $stmt->bind_param(
             "sissssi",
-            $data->name,
-            $data->age,
-            $data->store_address,
-            $data->phone,
-            $data->email,
-            $photo_data,
-            $data->user_id
+            $data['name'],
+            $data['age'],
+            $data['store_address'],
+            $data['phone'],
+            $data['email'],
+            $photo_path,
+            $data['user_id']
         );
     } else {
         $stmt->bind_param(
             "sisssi",
-            $data->name,
-            $data->age,
-            $data->store_address,
-            $data->phone,
-            $data->email,
-            $data->user_id
+            $data['name'],
+            $data['age'],
+            $data['store_address'],
+            $data['phone'],
+            $data['email'],
+            $data['user_id']
         );
     }
 
@@ -140,7 +153,7 @@ try {
     $response = [
         'success' => true,
         'message' => 'Profile updated successfully',
-        'affected_rows' => $stmt->affected_rows
+        'photo_path' => $photo_path
     ];
 
     echo json_encode($response);

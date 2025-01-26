@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const ProfileVerification = ({ navigation, route }) => {
@@ -175,19 +176,10 @@ const ProfileVerification = ({ navigation, route }) => {
                 }
             );
 
-            const responseText = await response.text();
-            console.log('Raw server response:', responseText);
-
-            let result;
-            try {
-                result = JSON.parse(responseText);
-            } catch (e) {
-                console.error('Failed to parse server response:', e);
-                throw new Error('Invalid server response');
-            }
+            const result = await response.json();
 
             if (result.success) {
-                // Log the profile update activity
+                // Log the activity
                 await logActivity(
                     ACTIVITY_TYPES.PROFILE_UPDATED,
                     user_id,
@@ -203,13 +195,56 @@ const ProfileVerification = ({ navigation, route }) => {
                     }
                 );
 
-                Alert.alert('Success', 'Profile updated successfully');
-                if (route.params?.onComplete) {
-                    route.params.onComplete();
+                // Fetch updated user data
+                const updatedDataResponse = await fetch(
+                    `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${user_id}&t=${Date.now()}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        }
+                    }
+                );
+
+                const updatedData = await updatedDataResponse.json();
+                
+                if (updatedData.success) {
+                    // Store the updated profile data in local storage
+                    try {
+                        const storedUserData = await AsyncStorage.getItem('userData');
+                        const currentUserData = storedUserData ? JSON.parse(storedUserData) : {};
+                        
+                        const newUserData = {
+                            ...currentUserData,
+                            user_id: user_id, // Ensure user_id is included
+                            ...updatedData.profile,
+                            photo: updatedData.profile.photo || currentUserData.photo
+                        };
+
+                        console.log('Storing updated user data:', newUserData);
+                        
+                        await AsyncStorage.setItem('userData', JSON.stringify(newUserData));
+                        console.log('Updated profile stored in local storage');
+                    } catch (storageError) {
+                        console.error('Error storing updated profile:', storageError);
+                    }
                 }
-                navigation.goBack();
+
+                Alert.alert('Success', 'Profile updated successfully', [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            if (route.params?.onComplete) {
+                                route.params.onComplete();
+                            }
+                            navigation.goBack();
+                        }
+                    }
+                ]);
             } else {
-                Alert.alert('Error', result.message || 'Failed to update profile');
+                throw new Error(result.message || 'Failed to update profile');
             }
         } catch (error) {
             console.error('Error updating profile:', error);

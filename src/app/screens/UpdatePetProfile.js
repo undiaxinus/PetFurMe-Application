@@ -25,6 +25,7 @@ const PET_GENDERS = ['Male', 'Female'];
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const UpdatePetProfile = ({ navigation, route }) => {
+  const { pet_id, user_id } = route.params;  // Make sure user_id is passed in route.params
   console.log("Route params:", route.params);
   console.log("Pet ID:", route.params?.pet_id);
   console.log("User ID:", route.params?.user_id);
@@ -40,10 +41,6 @@ const UpdatePetProfile = ({ navigation, route }) => {
   const [petGender, setPetGender] = useState('');
   const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
-
-  // Get user_id and existing pet data from route params
-  const user_id = route.params?.user_id;
-  const pet_id = route.params?.pet_id;
 
   // Add useEffect to fetch pet data when component mounts
   useEffect(() => {
@@ -92,96 +89,94 @@ const UpdatePetProfile = ({ navigation, route }) => {
   };
 
   const handleUpdate = async () => {
-    // Validate required fields first
-    if (!petName.trim() || !petAge || !petType || !petBreed.trim() || !petGender || !petWeight) {
-      Alert.alert('Error', 'Please fill in all required fields');
-      return;
-    }
-
     setLoading(true);
     try {
-      const formData = new FormData();
-      
-      // Add photo if selected
-      if (photo && !photo.startsWith('http')) {
-        const localUri = photo;
-        const filename = localUri.split('/').pop();
+        const formData = new FormData();
         
-        // Create a unique filename with timestamp
-        const timestamp = new Date().getTime();
-        const uniqueFilename = `pet_${pet_id}_${timestamp}_${filename}`;
-        
-        formData.append('photo', {
-          uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-          type: 'image/jpeg',
-          name: uniqueFilename
-        });
-      }
-
-      // Add pet data
-      const petData = {
-        pet_id: parseInt(pet_id),
-        user_id: parseInt(user_id),
-        name: petName.trim(),
-        age: parseInt(petAge),
-        type: petType.toLowerCase(),
-        breed: petBreed.trim(),
-        size: petSize.toLowerCase(),
-        weight: parseFloat(petWeight),
-        allergies: petAllergies?.trim() || '',
-        notes: petNotes?.trim() || '',
-        gender: petGender.toLowerCase(),
-      };
-
-      console.log('Sending pet data:', petData);
-      formData.append('data', JSON.stringify(petData));
-
-      const response = await fetch(
-        `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData,
+        // Add photo if selected
+        if (photo?.uri && !photo.uri.startsWith('data:image')) {
+            const localUri = photo.uri;
+            const filename = localUri.split('/').pop();
+            
+            formData.append('photo', {
+                uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                type: 'image/jpeg',
+                name: filename || 'pet_photo.jpg'
+            });
         }
-      );
 
-      // Log the raw response for debugging
-      const responseText = await response.text();
-      console.log('Raw response:', responseText);
+        // Add pet data
+        const petData = {
+            pet_id: pet_id,
+            user_id: user_id,  // Make sure user_id is included
+            name: petName.trim(),
+            age: petAge ? parseInt(petAge) : null,
+            type: petType.toLowerCase(),
+            breed: petBreed.trim(),
+            gender: petGender.toLowerCase(),
+            weight: petWeight ? parseFloat(petWeight) : null,
+            size: petSize.toLowerCase(),
+            allergies: petAllergies.trim(),
+            notes: petNotes.trim()
+        };
 
-      let result;
-      try {
-        result = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('Parse error:', parseError);
-        console.error('Response that failed to parse:', responseText);
-        throw new Error('Invalid response from server');
-      }
+        console.log('Sending pet data:', petData);
+        formData.append('data', JSON.stringify(petData));
 
-      if (result.success) {
-        Alert.alert('Success', 'Pet profile updated successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              // Log the activity with local storage
-              logActivity(user_id, ACTIVITY_TYPES.PET_UPDATED, `Updated ${petName}'s profile`);
-              navigation.goBack();
+        const response = await fetch(
+            `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
+            {
+                method: 'POST',
+                body: formData
             }
-          }
-        ]);
-      } else {
-        throw new Error(result.message || 'Failed to update pet profile');
-      }
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Log activity only after successful update
+            await logActivity(
+                ACTIVITY_TYPES.PET_UPDATED,
+                user_id,
+                {
+                    pet_id: pet_id,
+                    name: petName.trim(),
+                    updatedFields: [
+                        'name',
+                        petAge && 'age',
+                        petType && 'type',
+                        petBreed && 'breed',
+                        petGender && 'gender',
+                        petWeight && 'weight',
+                        petSize && 'size',
+                        petAllergies && 'allergies',
+                        petNotes && 'notes',
+                        photo && 'photo'
+                    ].filter(Boolean)
+                }
+            );
+
+            Alert.alert('Success', 'Pet profile updated successfully', [
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        if (route.params?.onComplete) {
+                            route.params.onComplete();
+                        }
+                        navigation.goBack();
+                    }
+                }
+            ]);
+        } else {
+            throw new Error(result.message || 'Failed to update pet profile');
+        }
     } catch (error) {
-      console.error('Error updating pet:', error);
-      Alert.alert('Error', error.message || 'Failed to update pet profile');
+        console.error('Error updating pet profile:', error);
+        Alert.alert('Error', 'Failed to update pet profile: ' + error.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   const fetchPetData = async () => {
     if (!pet_id) {
