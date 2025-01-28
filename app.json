@@ -31,7 +31,7 @@
 			"permissions": ["NOTIFICATIONS", "VIBRATE"]
 		},
 		"web": {
-			"favicon": "./src/assets/favicon.png"
+			"favicon": "./assets/favicon.png"
 		},
 		"plugins": [
 			"expo-font",
@@ -42,6 +42,11 @@
 					"color": "#ffffff"
 				}
 			]
+		],
+		"platforms": [
+			"ios",
+			"android",
+			"web"
 		]
 	}
 }

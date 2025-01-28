@@ -10,7 +10,7 @@ import {
 	Alert,
 	Platform,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
@@ -65,6 +65,8 @@ const LoginScreen = ({ navigation }) => {
 		navigation.navigate('ForgotPassword'); // Make sure this matches the screen name in App.js
 	};
 
+	console.log('Navigation prop:', navigation);
+
 	return (
 		<View style={styles.container}>
 			{loading && (
@@ -75,55 +77,49 @@ const LoginScreen = ({ navigation }) => {
 
 			<View style={styles.logoContainer}>
 				<Image
-					source={require("../../assets/images/vetcare.png")}
+					source={require("../../assets/images/logo.png")}
 					style={styles.logo}
 				/>
+				<Text style={styles.logoText}>VetCare</Text>
+				<Text style={styles.subText}>Animal Clinic</Text>
+				<Text style={styles.tagline}>Where caring means more.</Text>
 			</View>
 
 			<View style={styles.formContainer}>
-				<View style={styles.inputWrapper}>
-					<Ionicons
-						name="mail-outline"
-						size={20}
-						color="#8146C1"
-						style={styles.icon}
-					/>
+				<View style={styles.inputContainer}>
+					<MaterialCommunityIcons name="email" size={20} color="#666" />
 					<TextInput
 						style={styles.input}
 						placeholder="Email"
 						value={email}
 						onChangeText={setEmail}
 						keyboardType="email-address"
-						placeholderTextColor="#8146C1"
 						autoCapitalize="none"
 					/>
 				</View>
 
-				<View style={styles.inputWrapper}>
-					<Ionicons
-						name="lock-closed-outline"
-						size={20}
-						color="#8146C1"
-						style={styles.icon}
-					/>
+				<View style={styles.inputContainer}>
+					<MaterialCommunityIcons name="lock" size={20} color="#666" />
 					<TextInput
 						style={styles.input}
 						placeholder="Password"
 						value={password}
 						onChangeText={setPassword}
 						secureTextEntry={!showPassword}
-						placeholderTextColor="#8146C1"
 					/>
 					<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-						<Ionicons
-							name={showPassword ? "eye-outline" : "eye-off-outline"}
+						<MaterialCommunityIcons
+							name={showPassword ? "eye-off" : "eye"}
 							size={20}
-							color="#8146C1"
+							color="#666"
 						/>
 					</TouchableOpacity>
 				</View>
 
-				<TouchableOpacity onPress={handleForgotPassword}>
+				<TouchableOpacity 
+					style={styles.forgotPassword}
+					onPress={handleForgotPassword}
+				>
 					<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
 				</TouchableOpacity>
 
@@ -137,15 +133,17 @@ const LoginScreen = ({ navigation }) => {
 					<Text style={styles.loginButtonText}>LOGIN</Text>
 				</TouchableOpacity>
 
-				<Text style={styles.footerText}>
-					Don't have an account?{" "}
-					<Text
-						style={styles.signUpText}
-						onPress={() => navigation.navigate("Register")}
+				<View style={styles.signupContainer}>
+					<Text style={styles.signupText}>Don't have an account? </Text>
+					<TouchableOpacity 
+						onPress={() => {
+							console.log('Sign Up pressed');
+							navigation.navigate('RegistrationScreen');
+						}}
 					>
-						Sign Up
-					</Text>
-				</Text>
+						<Text style={styles.signupLink}>Sign Up</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		</View>
 	);
@@ -171,68 +169,72 @@ const styles = StyleSheet.create({
 		marginBottom: 40,
 	},
 	logo: {
-		width: 180,
-		height: 180,
-		resizeMode: "contain",
+		width: 120,
+		height: 120,
+		marginBottom: 20,
+	},
+	logoText: {
+		fontSize: 32,
+		fontWeight: 'bold',
+		color: '#4A4A8F',
+	},
+	subText: {
+		fontSize: 18,
+		color: '#4A4A8F',
+		marginTop: 5,
+	},
+	tagline: {
+		fontSize: 14,
+		color: '#666',
+		marginTop: 5,
 	},
 	formContainer: {
 		width: "100%",
-		padding: 20,
-		backgroundColor: "#D1ACDA",
-		borderRadius: 20,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.2,
-		shadowRadius: 5,
-		elevation: 8,
-		marginBottom: 20,
-		height: 'auto',
-		paddingBottom: 30,
 	},
-	inputWrapper: {
+	inputContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 15,
-		borderWidth: 1,
-		borderColor: "#8146C1",
-		borderRadius: 12,
 		backgroundColor: "#F5F5F5",
+		borderRadius: 10,
 		paddingHorizontal: 15,
-		paddingVertical: 8,
-		marginTop: 10,
-	},
-	icon: {
-		marginRight: 12,
+		marginBottom: 15,
+		height: 50,
 	},
 	input: {
 		flex: 1,
-		fontSize: 16,
-		color: "#8146C1",
-		paddingVertical: 8,
+		marginLeft: 10,
+		color: "#333",
+	},
+	forgotPassword: {
+		alignSelf: "flex-end",
+		marginBottom: 20,
+	},
+	forgotPasswordText: {
+		color: "#4A4A8F",
+		fontSize: 14,
 	},
 	loginButton: {
 		backgroundColor: "#8146C1",
-		borderRadius: 12,
-		paddingVertical: 12,
+		borderRadius: 10,
+		height: 50,
+		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 20,
 		marginBottom: 20,
-		width: "50%",
-		alignSelf: "center",
 	},
 	loginButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
 		fontWeight: "bold",
 	},
-	footerText: {
-		textAlign: "center",
-		color: "#000000",
-		marginTop: 20,
-		fontSize: 15,
+	signupContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
 	},
-	signUpText: {
-		color: "#8146C1",
+	signupText: {
+		color: "#666",
+	},
+	signupLink: {
+		color: "#4A4A8F",
 		fontWeight: "bold",
 	},
 	errorText: {
@@ -243,14 +245,6 @@ const styles = StyleSheet.create({
 	},
 	disabledButton: {
 		opacity: 0.7,
-	},
-	forgotPasswordText: {
-		color: '#8146C1',
-		textAlign: 'right',
-		fontSize: 14,
-		marginTop: 5,
-		marginBottom: 15,
-		fontWeight: '500',
 	},
 });
 

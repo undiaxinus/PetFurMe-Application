@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import AppNavigator from './src/app/navigation/AppNavigator';
 
 // Import all screens
 import HomeScreen from "./src/app/screens/HomeScreen";
@@ -53,32 +54,7 @@ function DrawerNavigator() {
 export default function App() {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator
-				initialRouteName="HomeScreen"
-				screenOptions={{ headerShown: false }}
-			>
-				{/* Authentication and Landing Screens */}
-				<Stack.Screen name="HomeScreen" component={HomeScreen} />
-				<Stack.Screen name="LoginScreen" component={LoginScreen} />
-				<Stack.Screen name="Register" component={RegistrationScreen} />
-				<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-				<Stack.Screen name="LandingPage" component={LandingPage} />
-
-				{/* Remove duplicate screens that are in DrawerNavigator */}
-				<Stack.Screen name="PetProfile" component={PetProfile} />
-				<Stack.Screen name="AddPetName" component={AddPetName} />
-				<Stack.Screen name="AddPetSize" component={AddPetSize} />
-				<Stack.Screen name="BookAppointment" component={BookAppointment} />
-				<Stack.Screen name="Consultation" component={Consultation} />
-				<Stack.Screen name="Vaccination" component={Vaccination} />
-				<Stack.Screen name="Deworming" component={Deworming} />
-				<Stack.Screen name="Grooming" component={Grooming} />
-				<Stack.Screen name="Help" component={Help} />
-				<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
-
-				{/* Drawer Navigator */}
-				<Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
-			</Stack.Navigator>
+			<AppNavigator />
 		</NavigationContainer>
 	);
 }
