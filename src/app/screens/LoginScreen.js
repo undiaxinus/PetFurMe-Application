@@ -14,6 +14,14 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 
+const axiosInstance = axios.create({
+	timeout: 10000,
+	headers: {
+		'Content-Type': 'application/json',
+		'Accept': 'application/json'
+	}
+});
+
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -22,9 +30,10 @@ const LoginScreen = ({ navigation }) => {
 	const [error, setError] = useState("");
 
 	const API_URL = Platform.select({
+		web: `http://${SERVER_IP}:${SERVER_PORT}`,
 		ios: `http://localhost:${SERVER_PORT}`,
 		android: `http://${SERVER_IP}:${SERVER_PORT}`
-	});
+	}) || `http://${SERVER_IP}:${SERVER_PORT}`;
 
 	const handleLogin = async () => {
 		try {
@@ -36,7 +45,9 @@ const LoginScreen = ({ navigation }) => {
 				return;
 			}
 
-			const response = await axios.post(`${API_URL}/api/login`, {
+			console.log('Attempting login with URL:', `${API_URL}/api/login`);
+			
+			const response = await axiosInstance.post(`${API_URL}/api/login`, {
 				username: email,
 				password: password,
 			});
@@ -52,9 +63,15 @@ const LoginScreen = ({ navigation }) => {
 				setError(response.data.error || "Login failed");
 			}
 		} catch (error) {
-			console.error("Login error:", error);
+			console.error("Login error details:", {
+				message: error.message,
+				response: error.response?.data,
+				status: error.response?.status,
+				config: error.config
+			});
 			setError(
-				error.response?.data?.error || "Login failed. Please try again."
+				error.response?.data?.error || 
+				`Login failed: ${error.message}. Please try again.`
 			);
 		} finally {
 			setLoading(false);
