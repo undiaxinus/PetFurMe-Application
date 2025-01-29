@@ -34,14 +34,17 @@ const app = express();
 app.use('/api', express.static(API_PATH));
 
 // CORS configuration
-app.use(
-	cors({
-		origin: "*",
-		methods: ["GET", "POST", "PUT", "DELETE"],
-		allowedHeaders: ["Content-Type", "Authorization"],
-		credentials: true
-	})
-);
+app.use(cors({
+	origin: [
+		`http://${SERVER_IP}:19006`,  // Expo web default port
+		`http://localhost:19006`,
+		`http://${SERVER_IP}:${SERVER_PORT}`,
+		'http://localhost:3000'
+	],
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+	credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -212,9 +215,10 @@ app.post("/api/register", async (req, res) => {
 
 // Login endpoint with bcrypt comparison
 app.post("/api/login", async (req, res) => {
-	const { username, password } = req.body;
-
 	try {
+		const { username, password } = req.body;
+		console.log('Login attempt for:', username);
+
 		const [users] = await db.query(
 			"SELECT * FROM users WHERE email = ? OR username = ?",
 			[username, username]
@@ -223,7 +227,7 @@ app.post("/api/login", async (req, res) => {
 		if (users.length === 0) {
 			return res.status(401).json({
 				success: false,
-				error: "User not found",
+				error: "User not found"
 			});
 		}
 
@@ -233,7 +237,7 @@ app.post("/api/login", async (req, res) => {
 		if (!match) {
 			return res.status(401).json({
 				success: false,
-				error: "Invalid password",
+				error: "Invalid password"
 			});
 		}
 
@@ -243,14 +247,14 @@ app.post("/api/login", async (req, res) => {
 				id: user.id,
 				name: user.name,
 				email: user.email,
-				role: user.role,
-			},
+				role: user.role
+			}
 		});
 	} catch (error) {
-		console.error("Login error:", error);
+		console.error('Login error:', error);
 		res.status(500).json({
 			success: false,
-			error: "Login failed. Please try again.",
+			error: "Login failed. Please try again."
 		});
 	}
 });
@@ -318,6 +322,9 @@ app.use((err, req, res, next) => {
 		error: 'Internal server error'
 	});
 });
+
+// Add OPTIONS handling
+app.options('*', cors());
 
 const startServer = async () => {
 	try {

@@ -22,6 +22,7 @@ const LoginScreen = ({ navigation }) => {
 	const [error, setError] = useState("");
 
 	const API_URL = Platform.select({
+		web: `http://${SERVER_IP}:${SERVER_PORT}`,
 		ios: `http://localhost:${SERVER_PORT}`,
 		android: `http://${SERVER_IP}:${SERVER_PORT}`
 	});
@@ -36,9 +37,16 @@ const LoginScreen = ({ navigation }) => {
 				return;
 			}
 
+			console.log('Attempting login with URL:', `${API_URL}/api/login`);
+			
 			const response = await axios.post(`${API_URL}/api/login`, {
 				username: email,
 				password: password,
+			}, {
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				}
 			});
 
 			console.log("Login response:", response.data);
@@ -52,9 +60,10 @@ const LoginScreen = ({ navigation }) => {
 				setError(response.data.error || "Login failed");
 			}
 		} catch (error) {
-			console.error("Login error:", error);
+			console.error("Login error:", error.response || error);
 			setError(
-				error.response?.data?.error || "Login failed. Please try again."
+				error.response?.data?.error || 
+				"Login failed. Please check your credentials and try again."
 			);
 		} finally {
 			setLoading(false);

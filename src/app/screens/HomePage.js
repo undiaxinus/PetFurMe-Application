@@ -66,27 +66,16 @@ const HomePage = ({ navigation, route }) => {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
 			console.log("Attempting to fetch from:", url);
 			
-			const controller = new AbortController();
-			const timeoutId = setTimeout(() => controller.abort(), 5000);
-			
 			const response = await fetch(url, {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
-				},
-				signal: controller.signal
+				}
 			});
 			
-			clearTimeout(timeoutId);
-			
-			console.log("Response status:", response.status);
-			console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-			
 			if (!response.ok) {
-				const errorText = await response.text();
-				console.error("Error response body:", errorText);
-				throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 			
 			const data = await response.json();
@@ -95,32 +84,16 @@ const HomePage = ({ navigation, route }) => {
 			if (data.success) {
 				const loggablePets = data.pets.map(pet => ({
 					...pet,
-					photo: pet.photo ? '[Photo Data]' : null // Replace base64 data with placeholder
+					photo: pet.photo ? pet.photo : null // Use the photo URL directly
 				}));
 				console.log("Pets data received:", loggablePets);
-				setUserPets(data.pets || []);
+				setUserPets(loggablePets); // Update state with the correct pet data
 			} else {
 				throw new Error(data.message || 'Failed to load pets data');
 			}
 		} catch (error) {
 			console.error("Error fetching pets:", error);
-			console.error("Error details:", {
-				message: error.message,
-				stack: error.stack,
-				name: error.name
-			});
-			
-			let errorMessage = 'Unable to load pets';
-			if (error.name === 'AbortError') {
-				errorMessage = 'Request timed out. Please check your connection.';
-			} else if (error.message.includes('Network request failed')) {
-				errorMessage = 'Network error. Please check if the server is running.';
-			}
-			
-			Alert.alert(
-				"Connection Error",
-				`${errorMessage}\n${error.message}`
-			);
+			Alert.alert("Error", "Unable to load pets. Please try again.");
 		} finally {
 			if (!isAutoRefresh) {
 				setIsLoading(false);
@@ -292,26 +265,30 @@ const HomePage = ({ navigation, route }) => {
 			{showWelcomePopup && (
 				<View style={styles.popupOverlay}>
 					<View style={styles.popupContainer}>
-						<Text style={styles.popupTitle}>Welcome to Pet Fur Me!</Text>
+						<Ionicons name="paw" size={50} color="#8146C1" style={styles.welcomeIcon} />
+						<Text style={styles.popupTitle}>Welcome!</Text>
 						<Text style={styles.popupText}>
-							Hi Angelica, we're so excited to have you here. To make the most of your
-							experience, let's personalize your profile.
+							Join our pet-loving community and unlock amazing features for you and your furry friend.
 						</Text>
 						
 						<View style={styles.popupFeatures}>
-							<Text style={styles.popupFeatureItem}>• Tailored recommendations</Text>
-							<Text style={styles.popupFeatureItem}>• Exclusive features</Text>
-							<Text style={styles.popupFeatureItem}>• A smoother experience</Text>
+							<Text style={styles.popupFeatureItem}>
+								<Ionicons name="heart-outline" size={16} /> Personalized Care Tips
+							</Text>
+							<Text style={styles.popupFeatureItem}>
+								<Ionicons name="star-outline" size={16} /> Premium Features
+							</Text>
+							<Text style={styles.popupFeatureItem}>
+								<Ionicons name="people-outline" size={16} /> Expert Support
+							</Text>
 						</View>
-						
-						<Text style={styles.popupQuestion}>What would you like to do?</Text>
 						
 						<View style={styles.popupButtons}>
 							<TouchableOpacity 
 								style={styles.setupButton} 
 								onPress={handleSetUpNow}
 							>
-								<Text style={styles.setupButtonText}>Set Up Now</Text>
+								<Text style={styles.setupButtonText}>Get Started</Text>
 							</TouchableOpacity>
 							
 							<TouchableOpacity 
@@ -396,30 +373,31 @@ const HomePage = ({ navigation, route }) => {
 						>
 							{userPets.map((pet) => (
 								<TouchableOpacity onPress={() => navigation.navigate('PetProfile', { petId: pet.id, user_id: user_id })} key={pet.id} style={styles.petItem}>
-									<Image
-										source={
-											pet.photo 
-												? { 
-													uri: pet.photo,
-													headers: {
-														'Accept': 'image/jpeg',
-														'Cache-Control': 'no-cache'
-													}
+								<Image
+									source={
+										pet.photo 
+											? { 
+												uri: pet.photo, // This should be the full URL from the backend
+												headers: {
+													'Accept': 'image/jpeg',
+													'Cache-Control': 'no-cache'
 												}
-												: require("../../assets/images/lena.png")
-										}
-										style={styles.petImage}
-										defaultSource={require("../../assets/images/lena.png")}
-										onError={(error) => {
-											console.log('Image load error for pet:', pet.id, error.nativeEvent);
-											setImageLoadErrors(prev => ({
-												...prev,
-												[pet.id]: true
-											}));
-										}}
-									/>
-									<Text style={styles.petName}>{pet.name}</Text>
-								</TouchableOpacity>
+											}
+											: require("../../assets/images/lena.png") // Fallback image
+									}
+									style={styles.petImage}
+									defaultSource={require("../../assets/images/lena.png")}
+									
+									onError={(error) => {
+										console.log('Image load error for pet:', pet.id, error.nativeEvent);
+										setImageLoadErrors(prev => ({
+											...prev,
+											[pet.id]: true
+										}));
+									}}
+								/>
+								<Text style={styles.petName}>{pet.name}</Text>
+							</TouchableOpacity>
 							))}
 							<TouchableOpacity onPress={handleAddNewPet} style={styles.petItem}>
 								<Image
@@ -866,10 +844,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	popupTitle: {
-		fontSize: 24,
+		fontSize: 28,
 		fontWeight: 'bold',
 		color: '#8146C1',
-		marginBottom: 15,
+		marginBottom: 10,
 		textAlign: 'center',
 	},
 	popupText: {
@@ -877,16 +855,19 @@ const styles = StyleSheet.create({
 		color: '#666',
 		textAlign: 'center',
 		marginBottom: 20,
-		lineHeight: 22,
+		paddingHorizontal: 10,
 	},
 	popupFeatures: {
-		alignSelf: 'flex-start',
-		marginBottom: 20,
+		alignSelf: 'stretch',
+		marginBottom: 25,
+		paddingLeft: 20,
 	},
 	popupFeatureItem: {
 		fontSize: 16,
 		color: '#666',
-		marginBottom: 8,
+		marginBottom: 12,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	popupQuestion: {
 		fontSize: 18,
@@ -929,6 +910,9 @@ const styles = StyleSheet.create({
 	petsSection: {
 		top: -50,
 		marginBottom: 20,
+	},
+	welcomeIcon: {
+		marginBottom: 10,
 	},
 });
 

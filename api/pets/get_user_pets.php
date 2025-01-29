@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../config/Database.php';
 
-$API_BASE_URL = 'http://192.168.1.8'; // Make sure this matches your React Native API_BASE_URL
+$API_BASE_URL = 'http://192.168.1.13'; // Make sure this matches your React Native API_BASE_URL
 
 try {
     $database = new Database();
@@ -54,15 +54,17 @@ try {
                     $photo_path = $row['photo'];
                     
                     // Get the absolute server path to verify file exists
-                    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/PetFurMe-Application/api/pets/' . $photo_path;
+                    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/PetFurMe-Application/uploads/' . $photo_path;
                     error_log("Checking file at: " . $absolute_path);
                     
                     if (file_exists($absolute_path)) {
                         // Construct the full URL using the correct path
-                        $photoUrl = 'http://192.168.1.8/PetFurMe-Application/api/pets/' . $photo_path;
+                        $photoUrl = 'http://192.168.1.13/PetFurMe-Application/uploads/' . $photo_path;
                         error_log("Photo URL created: " . $photoUrl);
                     } else {
                         error_log("Photo file not found at: " . $absolute_path);
+                        // Log the photo path from the database for debugging
+                        error_log("Database photo path: " . $photo_path);
                     }
                     
                 } catch (Exception $e) {
