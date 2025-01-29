@@ -143,13 +143,14 @@ const styles = StyleSheet.create({
     height: 120,
   },
   headerTitleContainer: {
-    marginLeft: 16,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    left: 65,
+    left: 85,
     top: 18,
   },
   headerSubtitle: {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     color: '#cccccc',
     marginTop: 2,
     top: 15,
-    left: 40,
+    left: 85,
   },
   listContainer: {
     paddingHorizontal: 20,

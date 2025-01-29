@@ -347,7 +347,7 @@ const ProfileVerification = ({ navigation, route }) => {
                                             'Cache-Control': 'no-cache'
                                         }
                                     } 
-                                    : require('../../assets/images/profile.png')
+                                    : require('../../assets/images/defphoto.png')
                         }
                         style={styles.profilePhotoImage}
                         resizeMode="cover"

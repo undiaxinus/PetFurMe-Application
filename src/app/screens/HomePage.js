@@ -222,7 +222,8 @@ const HomePage = ({ navigation, route }) => {
 			label: "Consultation",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			icon: "medical-outline",
+			icon: "medkit-outline",
+			
 		},
 		{
 			id: "2",
@@ -236,7 +237,7 @@ const HomePage = ({ navigation, route }) => {
 			label: "Deworming",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			icon: "bug-outline",
+			icon: "medical-outline",
 		},
 		{
 			id: "4",

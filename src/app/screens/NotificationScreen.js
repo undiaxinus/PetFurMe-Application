@@ -330,7 +330,6 @@ const styles = StyleSheet.create({
     height: 120,
   },
   headerTitleContainer: {
-    marginLeft: -30,
     alignContent: 'center',
     alignItems: 'center',
   },

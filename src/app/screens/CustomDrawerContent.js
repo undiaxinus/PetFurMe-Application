@@ -156,9 +156,9 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			<View style={styles.profileSection}>
 				<View style={styles.profileImageContainer}>
 					<Image
-						source={userData?.photo ? { uri: userData.photo } : require("../../assets/images/profile.png")}
+						source={userData?.photo ? { uri: userData.photo } : require("../../assets/images/defphoto.png")}
 						style={styles.profileImage}
-						defaultSource={require("../../assets/images/profile.png")}
+						defaultSource={require("../../assets/images/defphoto.png")}
 					/>
 				</View>
 				<View style={styles.profileTextContainer}>

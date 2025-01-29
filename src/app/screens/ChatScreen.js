@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    left: 45,
+    left: 85,
     top: 18,
   },
   headerSubtitle: {
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     color: '#cccccc',
     marginTop: 2,
     top: 15,
-    left: 65,
+    left: 100,
   },
   chatWrapper: {
     flex: 1,
@@ -381,12 +381,17 @@ const styles = StyleSheet.create({
   },
   otherBubble: {
     alignSelf: 'flex-start', 
-    backgroundColor: '#9999e6',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,  // Adding a border to make it visible against white background
+    borderColor: '#E5E5E5',
   },
   messageText: {
-    color: '#FFFFFF',
+    color: '#FFFFFF',  // This is for user messages
     fontSize: 16,
     lineHeight: 22,
+  },
+  otherMessageText: {
+    color: '#000000',  // Black text for "other" messages
   },
   inputContainer: {
     flexDirection: 'row',
