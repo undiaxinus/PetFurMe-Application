@@ -240,7 +240,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			{renderProfileSection()}
 			
 			<View style={styles.navigationContainer}>
-				{/* Home Section */}
+				{/* Home Section
 				<TouchableOpacity 
 					onPress={() => navigation.navigate('HomePage', { 
 						user_id: userData?.user_id,
@@ -250,7 +250,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				>
 					<Ionicons name="home-outline" size={24} color="#808080" />
 					<Text style={styles.navText}>Home</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 				{/* Pets Section - Always show but handle auth in onPress */}
 				<TouchableOpacity 

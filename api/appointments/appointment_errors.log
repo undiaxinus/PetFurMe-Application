@@ -1,0 +1,46 @@
+[30-Jan-2025 17:20:35 Europe/Berlin] Received data: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"grvrrv","reason_for_visit":"Vaccination","vaccination_types":"Other","other_vaccination_type":"rgvrvvr","other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:18","status":"Pending"}
+[30-Jan-2025 17:20:35 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:81
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(81): mysqli_stmt->bind_param('iissssssss', 107, 219, 'dgg', 'grvrrv', 'Vaccination', 'Other', 'rgvrvvr', NULL, '2025-01-31', '00:18')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 81
+[30-Jan-2025 17:22:00 Europe/Berlin] Received data: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, Other","other_vaccination_type":"vrvtrvtv","other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:22:00 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:81
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(81): mysqli_stmt->bind_param('iissssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, Oth...', 'vrvtrvtv', NULL, '2025-01-31', '00:21')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 81
+[30-Jan-2025 17:23:48 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, Other","other_vaccination_type":"vrvtrvtv","other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:23:48 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:79
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(79): mysqli_stmt->bind_param('iissssssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, Oth...', 'vrvtrvtv', NULL, '2025-01-31', '00:21', 'Pending')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 79
+[30-Jan-2025 17:23:51 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, Other","other_vaccination_type":"vrvtrvtv","other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:23:51 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:79
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(79): mysqli_stmt->bind_param('iissssssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, Oth...', 'vrvtrvtv', NULL, '2025-01-31', '00:21', 'Pending')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 79
+[30-Jan-2025 17:24:00 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, DHPPiL","other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:24:00 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:79
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(79): mysqli_stmt->bind_param('iissssssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, DHP...', NULL, NULL, '2025-01-31', '00:21', 'Pending')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 79
+[30-Jan-2025 17:24:35 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, DHPPiL","other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:24:35 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:79
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(79): mysqli_stmt->bind_param('iissssssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, DHP...', NULL, NULL, '2025-01-31', '00:21', 'Pending')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 79
+[30-Jan-2025 17:24:38 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, DHPPiL","other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:24:38 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php:79
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php(79): mysqli_stmt->bind_param('iissssssssss', 107, 219, 'dgg', 'crcrrc', 'Consultation, V...', 'Bordetella, DHP...', NULL, NULL, '2025-01-31', '00:21', 'Pending')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\appointments\save.php on line 79
+[30-Jan-2025 17:25:57 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":219,"pet_name":"dgg","owner_name":"crcrrc","reason_for_visit":"Consultation, Vaccination","vaccination_types":"Bordetella, DHPPiL","other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:21","status":"Pending"}
+[30-Jan-2025 17:26:42 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":220,"pet_name":"dbdbbf","owner_name":"rvvrrvvr","reason_for_visit":"Consultation, Other, Vaccination","vaccination_types":"Other","other_vaccination_type":"fecrrcvr","other_reason":"vfcfcd","appointment_date":"2025-01-31","appointment_time":"00:26","status":"Pending"}
+[30-Jan-2025 17:31:10 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":220,"pet_name":"dbdbbf","owner_name":"dff","reason_for_visit":"Consultation","consultation_types":"Complaints","vaccination_types":null,"other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:31","status":"Pending"}
+[30-Jan-2025 17:34:02 Europe/Berlin] Raw data received: {"user_id":107,"pet_id":215,"pet_name":"eggge","owner_name":"vrvt","reason_for_visit":"Consultation","consultation_types":"Other","other_consultation_reason":"crcdrcrc","vaccination_types":null,"other_vaccination_type":null,"other_reason":null,"appointment_date":"2025-01-31","appointment_time":"00:33","status":"Pending"}
