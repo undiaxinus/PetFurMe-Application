@@ -24,6 +24,7 @@ const HomePage = ({ navigation, route }) => {
 	const [isProfileComplete, setIsProfileComplete] = useState(false);
 	const [petProducts, setPetProducts] = useState([]);
 	const [isProductsLoading, setIsProductsLoading] = useState(false);
+	const [userName, setUserName] = useState('');
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -171,6 +172,7 @@ const HomePage = ({ navigation, route }) => {
 			if (data.success) {
 				setIsProfileComplete(data.isProfileComplete);
 				setShowWelcomePopup(!data.isProfileComplete);
+				setUserName(data.profile?.name || 'there');
 			} else {
 				console.error("Profile check failed:", data.message);
 				setIsProfileComplete(false);
@@ -318,7 +320,7 @@ const HomePage = ({ navigation, route }) => {
 					<View style={styles.popupContainer}>
 						<Text style={styles.popupTitle}>Welcome to Pet Fur Me!</Text>
 						<Text style={styles.popupText}>
-							Hi Angelica, we're so excited to have you here. To make the most of your
+							Hi {userName}, we're so excited to have you here. To make the most of your
 							experience, let's personalize your profile.
 						</Text>
 						
