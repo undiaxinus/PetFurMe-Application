@@ -373,7 +373,7 @@ const AddAppointment = ({ route, navigation }) => {
             />
           )}
 
-          {reasons_for_visit.includes('Vaccination') && (
+          {/* {reasons_for_visit.includes('Vaccination') && (
             <View style={styles.vaccineTypesContainer}>
               <Text style={styles.subLabel}>Select Vaccination Type(s)</Text>
               <View style={styles.vaccineButtonsContainer}>
@@ -408,9 +408,9 @@ const AddAppointment = ({ route, navigation }) => {
                 />
               )}
             </View>
-          )}
+          )} */}
 
-          {reasons_for_visit.includes('Consultation') && (
+          {/* {reasons_for_visit.includes('Consultation') && (
             <View style={styles.consultationContainer}>
               <Text style={styles.subLabel}>Select Consultation Type(s)</Text>
               <View style={styles.reasonButtonsContainer}>
@@ -445,7 +445,7 @@ const AddAppointment = ({ route, navigation }) => {
                 />
               )}
             </View>
-          )}
+          )} */}
 
           {/* Date Picker with Icon */}
           <Text style={styles.inputLabel}>Appointment Date</Text>
