@@ -177,23 +177,33 @@ const ProfileVerification = ({ navigation, route }) => {
             );
 
             const result = await response.json();
+            console.log('Profile update response:', result); // Debug log
 
             if (result.success) {
-                // Log the activity
-                await logActivity(
+                // Log the activity with proper structure
+                const activityResult = await logActivity(
                     ACTIVITY_TYPES.PROFILE_UPDATED,
                     user_id,
                     {
                         name: name.trim(),
-                        updatedFields: [
-                            'name',
-                            age && 'age',
-                            store_address && 'address',
-                            phoneNumber && 'phone number',
-                            profilePhoto && 'profile photo'
-                        ].filter(Boolean)
+                        email: email,
+                        phone: phoneNumber,
+                        age: age,
+                        address: store_address,
+                        hasPhoto: !!profilePhoto,
+                        updatedFields: Object.entries({
+                            name: name.trim(),
+                            age: age,
+                            address: store_address,
+                            phone: phoneNumber,
+                            email: email,
+                            photo: profilePhoto ? 'photo' : null
+                        })
+                        .filter(([_, value]) => value)
+                        .map(([key]) => key)
                     }
                 );
+                console.log('Activity logging result:', activityResult); // Debug log
 
                 // Fetch updated user data
                 const updatedDataResponse = await fetch(
@@ -248,7 +258,7 @@ const ProfileVerification = ({ navigation, route }) => {
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', 'Failed to update profile: ' + error.message);
+            Alert.alert('Error', 'Failed to update profile');
         } finally {
             setIsLoading(false);
         }

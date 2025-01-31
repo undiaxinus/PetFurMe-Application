@@ -81,7 +81,16 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		try {
 			const logs = await AsyncStorage.getItem('activityLogs');
 			if (logs) {
-				setActivityLogs(JSON.parse(logs));
+				const parsedLogs = JSON.parse(logs);
+				console.log('All activity logs:', parsedLogs);
+				
+				// Filter logs for current user
+				const userLogs = parsedLogs.filter(log => 
+					String(log.userId) === String(userData?.user_id)
+				);
+				
+				console.log('Filtered user logs:', userLogs);
+				setActivityLogs(userLogs);
 			}
 		} catch (error) {
 			console.error('Error loading activity logs:', error);
@@ -93,15 +102,15 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			const data = await getUserData();
 			if (data) {
 				setUserData(data);
+				loadActivityLogs();
 			}
-			loadActivityLogs();
 		};
 		
 		// Initial load
 		loadUserData();
 		
 		// Set up auto refresh interval
-		const refreshInterval = setInterval(loadUserData, 10000); // Refresh every 10 seconds
+		const refreshInterval = setInterval(loadUserData, 10000);
 		
 		// Cleanup interval on unmount
 		return () => clearInterval(refreshInterval);
@@ -174,8 +183,8 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const renderActivityLogs = () => {
-		// Get only the 5 most recent activities
-		const recentActivities = activityLogs.slice(0, 5);
+		// Get only the latest activity
+		const latestActivity = activityLogs[0];
 		
 		return (
 			<View style={styles.activityLogsSection}>
@@ -184,29 +193,18 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					<Text style={styles.activityLogsTitle}>Recent Activity</Text>
 				</View>
 				
-				{recentActivities.length > 0 ? (
+				{latestActivity ? (
 					<View style={styles.activityLogsList}>
 						{/* Latest Activity */}
 						<View style={[styles.activityLogItem, styles.latestActivity]}>
 							<Text style={[styles.activityLogText, styles.latestActivityText]}>
-								{recentActivities[0].action}
+								{latestActivity.action}
 							</Text>
 							<Text style={[styles.activityLogTime, styles.latestActivityTime]}>
-								Just now • {new Date(recentActivities[0].timestamp).toLocaleTimeString()}
+								{new Date(latestActivity.timestamp).toLocaleTimeString()} • 
+								{latestActivity.type || 'Action'}
 							</Text>
 						</View>
-						
-						{/* Other Recent Activities */}
-						{/* {recentActivities.slice(1).map((log, index) => (
-							<View key={index} style={styles.activityLogItem}>
-								<Text style={styles.activityLogText}>
-									{log.action}
-								</Text>
-								<Text style={styles.activityLogTime}>
-									{new Date(log.timestamp).toLocaleString()}
-								</Text>
-							</View>
-						))} */}
 					</View>
 				) : (
 					<Text style={styles.noActivityText}>No recent activity</Text>
@@ -215,7 +213,9 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				<TouchableOpacity 
 					style={styles.viewAllButton}
 					onPress={() => {
-						navigation.navigate('ActivityHistory');
+						navigation.navigate('ActivityHistory', {
+							user_id: userData?.user_id
+						});
 						navigation.closeDrawer();
 					}}
 				>
@@ -234,6 +234,10 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			});
 		}
 	}, [userData]);
+
+	useEffect(() => {
+		console.log('Current activity logs:', activityLogs);
+	}, [activityLogs]);
 
 	return (
 		<View style={styles.container}>
