@@ -139,20 +139,21 @@ const UpdatePetProfile = ({ navigation, route }) => {
                 ACTIVITY_TYPES.PET_UPDATED,
                 user_id,
                 {
-                    pet_id: pet_id,
                     name: petName.trim(),
-                    updatedFields: [
-                        'name',
-                        petAge && 'age',
-                        petType && 'type',
-                        petBreed && 'breed',
-                        petGender && 'gender',
-                        petWeight && 'weight',
-                        petSize && 'size',
-                        petAllergies && 'allergies',
-                        petNotes && 'notes',
-                        photo && 'photo'
-                    ].filter(Boolean)
+                    updatedFields: Object.entries({
+                        name: petName.trim(),
+                        age: petAge,
+                        type: petType,
+                        breed: petBreed,
+                        gender: petGender,
+                        weight: petWeight,
+                        size: petSize,
+                        allergies: petAllergies,
+                        notes: petNotes,
+                        photo: photo ? 'photo' : null
+                    })
+                    .filter(([_, value]) => value)
+                    .map(([key]) => key)
                 }
             );
 

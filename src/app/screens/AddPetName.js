@@ -191,9 +191,21 @@ const AddPetProfile = ({ navigation, route }) => {
 			if (data.success) {
 				// Log the activity for adding new pet
 				await logActivity(
-					user_id, 
-					ACTIVITY_TYPES.PET_ADDED, 
-					`Added a new pet named ${petName}`
+					ACTIVITY_TYPES.PET_ADDED,
+					user_id,
+					{
+						petName: petName.trim(),
+						petType: petType,
+						petBreed: petBreed,
+						petAge: petAge,
+						petGender: petGender,
+						details: {
+							size: petSize || 'Not specified',
+							weight: petWeight,
+							allergies: petAllergies || 'None',
+							notes: petNotes || 'None'
+						}
+					}
 				);
 
 				Alert.alert(

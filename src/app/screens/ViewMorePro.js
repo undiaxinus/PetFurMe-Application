@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -7,103 +7,72 @@ import {
 	Image,
 	StyleSheet,
 	FlatList,
+	Alert,
+	ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { API_BASE_URL } from "../../utils/config"; // Make sure this path is correct
 
 const ProductPage = ({ navigation }) => {
-	const [products, setProducts] = useState([
-		{
-			id: "1",
-			name: "Special Dog",
-			price: "380.00",
-			weight: "20lbs",
-			image: require("../../assets/images/specialdog.png"),
-			tag: "Furry",
-		},
-		{
-			id: "2",
-			name: "Bowl",
-			price: "530.00",
-			weight: "3kg",
-			image: require("../../assets/images/bowl.png"),
-			tag: "Bestseller",
-			discount: "-15%",
-		},
-		{
-			id: "3",
-			name: "Toys",
-			price: "3500.00",
-			weight: "3kg",
-			image: require("../../assets/images/toys.png"),
-		},
-		{
-			id: "4",
-			name: "Products",
-			price: "11450.00",
-			weight: "3kg",
-			image: require("../../assets/images/products.png"),
-		},
-		{
-			id: "5",
-			name: "Vetality",
-			price: "800.00",
-			weight: "5kg",
-			image: require("../../assets/images/vetality.png"),
-		},
-		{
-			id: "6",
-			name: "Collars",
-			price: "700.00",
-			weight: "3kg",
-			image: require("../../assets/images/collars.png"),
-		},
-		{
-			id: "7",
-			name: "Purina Pro Plan",
-			price: "2200.00",
-			weight: "2kg",
-			image: require("../../assets/images/vitamins.png"),
-			tag: "Premium",
-		},
-		{
-			id: "8",
-			name: "Hill’s Science Diet",
-			price: "4500.00",
-			weight: "4kg",
-			image: require("../../assets/images/meowmix.png"),
-			discount: "-10%",
-		},
-		{
-			id: "9",
-			name: "Iams Proactive Health",
-			price: "3200.00",
-			weight: "6kg",
-			image: require("../../assets/images/meowmix.png"),
-		},
-		{
-			id: "10",
-			name: "Blue Buffalo Life",
-			price: "5600.00",
-			weight: "2.5kg",
-			image: require("../../assets/images/meowmix.png"),
-		},
-		{
-			id: "11",
-			name: "Taste of the Wild",
-			price: "4800.00",
-			weight: "2kg",
-			image: require("../../assets/images/meowmix.png"),
-			tag: "New Arrival",
-		},
-		{
-			id: "12",
-			name: "Canidae Pure",
-			price: "5200.00",
-			weight: "3kg",
-			image: require("../../assets/images/meowmix.png"),
-		},
-	]);
+	const [products, setProducts] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		fetchProducts();
+	}, []);
+
+	const fetchProducts = async () => {
+		try {
+			setIsLoading(true);
+			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/products/get_products.php`);
+			
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json();
+			console.log("Products data:", data); // For debugging
+			
+			if (data.success) {
+				if (!data.products || data.products.length === 0) {
+					console.log("No products found");
+					return;
+				}
+
+				console.log(`Found ${data.products.length} products`);
+				
+				const transformedProducts = data.products.map(product => {
+					console.log("Processing product:", product); // Debug individual product
+					return {
+						id: product.id.toString(),
+						name: product.name || '',
+						price: product.selling_price ? product.selling_price.toString() : '0',
+						weight: product.notes || 'N/A',
+						image: product.product_image 
+							? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
+							: require("../../assets/images/meowmix.png"),
+						tag: product.category_name || null,
+						discount: null,
+						quantity: product.quantity || 0
+					};
+				});
+				
+				console.log("Transformed products:", transformedProducts);
+				setProducts(transformedProducts);
+			} else {
+				throw new Error(data.message || 'Failed to fetch products');
+			}
+		} catch (error) {
+			console.error('Error fetching products:', error);
+			Alert.alert(
+				'Error',
+				'Failed to load products. Please try again later.'
+			);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	// Filter products based on search query
 	const filteredProducts = products.filter(product => 
@@ -124,9 +93,8 @@ const ProductPage = ({ navigation }) => {
 			{item.weight && <Text style={styles.productWeight}>{item.weight}</Text>}
 			<View style={styles.actionContainer}>
 				<TouchableOpacity style={styles.addToCartButton}>
-					<Text
-						style={styles.addToCartText}>
-						Stocks: 100
+					<Text style={styles.addToCartText}>
+						Stocks: {item.quantity || 0}
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -161,14 +129,24 @@ const ProductPage = ({ navigation }) => {
 				</View>
 			</View>
 
-			{/* Product List - Updated to use filteredProducts */}
-			<FlatList
-				data={filteredProducts}
-				keyExtractor={(item) => item.id}
-				renderItem={renderProduct}
-				contentContainerStyle={styles.productList}
-				numColumns={2}
-			/>
+			{/* Show loading indicator */}
+			{isLoading ? (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" color="#8146C1" />
+				</View>
+			) : products.length === 0 ? (
+				<View style={styles.noProductsContainer}>
+					<Text style={styles.noProductsText}>No products found</Text>
+				</View>
+			) : (
+				<FlatList
+					data={filteredProducts}
+					keyExtractor={(item) => item.id}
+					renderItem={renderProduct}
+					contentContainerStyle={styles.productList}
+					numColumns={2}
+				/>
+			)}
 
 			{/* Bottom Navigation */}
 			<View style={styles.bottomNav}>
@@ -353,6 +331,20 @@ const styles = StyleSheet.create({
 		width: 30,
 		height: 30,
 		resizeMode: "contain",
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	noProductsContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	noProductsText: {
+		fontSize: 16,
+		color: '#666',
 	},
 });
 

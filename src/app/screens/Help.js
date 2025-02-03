@@ -11,21 +11,17 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 const HelpScreen = ({ navigation }) => {
-  const [expandedSections, setExpandedSections] = useState([]);
+  const [expandedSection, setExpandedSection] = useState(null);
 
   const toggleSection = (index) => {
-    if (expandedSections.includes(index)) {
-      setExpandedSections(expandedSections.filter((i) => i !== index));
-    } else {
-      setExpandedSections([...expandedSections, index]);
-    }
+    setExpandedSection(expandedSection === index ? null : index);
   };
 
   const helpSections = [
     {
       question: 'What is "Pet Fur Me"?',
       answer:
-        'Pet Fur Me is an app designed to help you manage your pet’s needs, including medical records, appointments, and more.',
+        'Pet Fur Me is an app designed to help you manage your pet\'s needs, including medical records, appointments, and more.',
     },
     {
       question: 'Can I add multiple pets?',
@@ -33,7 +29,7 @@ const HelpScreen = ({ navigation }) => {
         'Yes, you can add multiple pets to your account and manage their information individually.',
     },
     {
-      question: 'Can I edit or delete a pet’s information?',
+      question: 'Can I edit or delete a pet\'s information?',
       answer:
         'Absolutely! You can edit or delete pet information anytime from the app.',
     },
@@ -42,13 +38,38 @@ const HelpScreen = ({ navigation }) => {
       answer:
         'We prioritize your privacy by using secure servers and encrypting your data to ensure its safety.',
     },
+    {
+      question: 'How do I schedule a vet appointment?',
+      answer:
+        'Go to your pet\'s profile, tap on "Appointments," and click the "+" button to schedule a new appointment. You can select the date, time, and vet clinic from the available options.',
+    },
+    {
+      question: 'Can I share my pet\'s profile with others?',
+      answer:
+        'Yes! You can share your pet\'s profile with family members, pet sitters, or veterinarians. Just go to your pet\'s profile settings and use the "Share Profile" option.',
+    },
+    {
+      question: 'How do I set medication reminders?',
+      answer:
+        'Navigate to your pet\'s "Health" section, select "Medications," and tap "Add Reminder." You can set the medication name, dosage, frequency, and reminder times.',
+    },
+    {
+      question: 'What should I do if I forget my password?',
+      answer:
+        'Click on the "Forgot Password" link on the login screen. Enter your registered email address, and we\'ll send you instructions to reset your password.',
+    },
+    {
+      question: 'How can I contact customer support?',
+      answer:
+        'You can reach our support team through the "Contact Us" section in the app, or email us at petfurme@gmail.com. We typically respond within 24 hours.',
+    },
   ];
 
   const renderSection = ({ item, index }) => (
     <View
       style={[
         styles.section,
-        expandedSections.includes(index) && styles.sectionExpanded,
+        expandedSection === index && styles.sectionExpanded,
       ]}
     >
       <TouchableOpacity
@@ -58,13 +79,13 @@ const HelpScreen = ({ navigation }) => {
         <Text style={styles.sectionTitle}>{item.question}</Text>
         <Ionicons
           name={
-            expandedSections.includes(index) ? 'chevron-up' : 'chevron-down'
+            expandedSection === index ? 'chevron-up' : 'chevron-down'
           }
           size={20}
           color="#888888"
         />
       </TouchableOpacity>
-      {expandedSections.includes(index) && (
+      {expandedSection === index && (
         <View style={[styles.sectionContent, styles.expandedContentBorder]}>
           <Text style={styles.sectionText}>{item.answer}</Text>
         </View>
@@ -143,13 +164,14 @@ const styles = StyleSheet.create({
     height: 120,
   },
   headerTitleContainer: {
-    marginLeft: 16,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    left: 65,
+    left: 85,
     top: 18,
   },
   headerSubtitle: {
@@ -157,7 +179,7 @@ const styles = StyleSheet.create({
     color: '#cccccc',
     marginTop: 2,
     top: 15,
-    left: 40,
+    left: 85,
   },
   listContainer: {
     paddingHorizontal: 20,

@@ -22,6 +22,9 @@ const HomePage = ({ navigation, route }) => {
 	const [imageLoadErrors, setImageLoadErrors] = useState({});
 	const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 	const [isProfileComplete, setIsProfileComplete] = useState(false);
+	const [petProducts, setPetProducts] = useState([]);
+	const [isProductsLoading, setIsProductsLoading] = useState(false);
+	const [userName, setUserName] = useState('');
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -142,6 +145,7 @@ const HomePage = ({ navigation, route }) => {
 			if (data.success) {
 				setIsProfileComplete(data.isProfileComplete);
 				setShowWelcomePopup(!data.isProfileComplete);
+				setUserName(data.profile?.name || 'there');
 			} else {
 				console.error("Profile check failed:", data.message);
 				setIsProfileComplete(false);
@@ -195,45 +199,28 @@ const HomePage = ({ navigation, route }) => {
 			label: "Consultation",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			icon: "medical-outline",
+			image: require("../../assets/images/consultation.png"),
 		},
 		{
 			id: "2",
 			label: "Vaccination",
 			backgroundColor: "#8146C1",
 			screen: "Consultation",
-			icon: "fitness-outline",
+			image: require("../../assets/images/vaccination.png"),
 		},
 		{
 			id: "3",
 			label: "Deworming",
 			backgroundColor: "#FF8ACF",
 			screen: "Consultation",
-			icon: "bug-outline",
+			image: require("../../assets/images/deworming.png"),
 		},
 		{
 			id: "4",
 			label: "Grooming",
 			backgroundColor: "#8146C1",
 			screen: "Consultation",
-			icon: "cut-outline",
-		},
-	];
-
-	const petProducts = [
-		{
-			id: "1",
-			name: "Pedigree Adult",
-			weight: "3kg",
-			image: require("../../assets/images/pedigree.png"),
-			type: "Dog",
-		},
-		{
-			id: "2",
-			name: "Meow Mix",
-			weight: "726g",
-			image: require("../../assets/images/meowmix.png"),
-			type: "Cat",
+			image: require("../../assets/images/grooming.png"),
 		},
 	];
 
@@ -260,6 +247,45 @@ const HomePage = ({ navigation, route }) => {
 		navigation.navigate("AddPetName", { user_id: user_id });
 	};
 
+	const fetchPetProducts = async () => {
+		try {
+			setIsProductsLoading(true);
+			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
+			
+			if (!response.ok) {
+				throw new Error('Failed to fetch products');
+			}
+
+			const data = await response.json();
+			console.log('Received products data:', data);
+
+			if (data.success) {
+				const transformedProducts = data.products.map(product => {
+					console.log('Processing product:', product);
+					return {
+						id: product.id.toString(),
+						name: product.name,
+						weight: product.notes || 'N/A',
+						image: product.product_image 
+							? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
+							: require("../../assets/images/meowmix.png"),
+						type: product.category_name || 'Pet Product'
+					};
+				});
+				console.log('Transformed products:', transformedProducts);
+				setPetProducts(transformedProducts);
+			}
+		} catch (error) {
+			console.error('Error fetching products:', error);
+		} finally {
+			setIsProductsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchPetProducts();
+	}, []);
+
 	return (
 		<View style={styles.container}>
 			{showWelcomePopup && (
@@ -268,7 +294,12 @@ const HomePage = ({ navigation, route }) => {
 						<Ionicons name="paw" size={50} color="#8146C1" style={styles.welcomeIcon} />
 						<Text style={styles.popupTitle}>Welcome!</Text>
 						<Text style={styles.popupText}>
+<<<<<<< HEAD
 							Join our pet-loving community and unlock amazing features for you and your furry friend.
+=======
+							Hi {userName}, we're so excited to have you here. To make the most of your
+							experience, let's personalize your profile.
+>>>>>>> user-auth
 						</Text>
 						
 						<View style={styles.popupFeatures}>
@@ -322,7 +353,13 @@ const HomePage = ({ navigation, route }) => {
 					<Text style={styles.welcomeText}>
 						Hey! Your pet's happiness starts here!
 					</Text>
-					<View style={styles.searchSection}>
+					
+				</View>
+			</View>
+
+			{/* Add paddingTop to scrollContent to account for fixed header */}
+			<ScrollView contentContainerStyle={styles.scrollContent}>
+			<View style={styles.searchSection}>
 						<Image
 							source={require("../../assets/images/lookingfor.png")}
 							style={styles.searchIcon}
@@ -331,11 +368,6 @@ const HomePage = ({ navigation, route }) => {
 							What are you looking for?
 						</Text>
 					</View>
-				</View>
-			</View>
-
-			{/* Add paddingTop to scrollContent to account for fixed header */}
-			<ScrollView contentContainerStyle={styles.scrollContent}>
 				{/* Categories Section */}
 				<View style={styles.categoriesContainer}>
 					{categories.map((category) => (
@@ -353,7 +385,10 @@ const HomePage = ({ navigation, route }) => {
 							}
 						>
 							<View style={styles.categoryContent}>
-								<Ionicons name={category.icon} size={30} color="#FFFFFF" />
+								<Image 
+									source={category.image} 
+									style={styles.categoryImage} 
+								/>
 								<Text style={styles.categoryLabel}>{category.label}</Text>
 							</View>
 						</TouchableOpacity>
@@ -425,18 +460,22 @@ const HomePage = ({ navigation, route }) => {
 						</TouchableOpacity>
 					</View>
 
-					{petProducts.map((item) => (
-						<View key={item.id} style={styles.petProductCard}>
-							<Image source={item.image} style={styles.productImage} />
-							<View style={styles.productDetails}>
-								<Text style={styles.productName}>{item.name}</Text>
-								<Text style={styles.productWeight}>{item.weight}</Text>
-								<View style={styles.badge}>
-									<Text style={styles.badgeText}>{item.type}</Text>
+					{isProductsLoading ? (
+						<ActivityIndicator size="small" color="#8146C1" />
+					) : (
+						petProducts.map((item) => (
+							<View key={item.id} style={styles.petProductCard}>
+								<Image source={item.image} style={styles.productImage} />
+								<View style={styles.productDetails}>
+									<Text style={styles.productName}>{item.name}</Text>
+									<Text style={styles.productWeight}>{item.weight}</Text>
+									<View style={styles.badge}>
+										<Text style={styles.badgeText}>{item.type}</Text>
+									</View>
 								</View>
 							</View>
-						</View>
-					))}
+						))
+					)}
 				</View>
 
 				{/* Vets Section */}
@@ -460,7 +499,7 @@ const HomePage = ({ navigation, route }) => {
 
 								<TouchableOpacity
 									onPress={() =>
-										navigation.navigate("Consultation", { vetId: vet.id })
+										navigation.navigate("Consultation", { user_id: user_id })
 									}>
 									<Text style={styles.bookAppointmentText}>
 										Book Appointment ➔
@@ -522,9 +561,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		padding: 16,
-		paddingTop: 20,
+		paddingTop: 50,
 		backgroundColor: '#8146C1',
-		height: 120,
+		height: 100,
 		zIndex: 1000,
 		elevation: 3,
 		shadowColor: '#000',
@@ -533,11 +572,12 @@ const styles = StyleSheet.create({
 		shadowRadius: 3.84,
 	},
 	scrollContent: {
-		paddingTop: 120,
+		paddingTop: 100,
 		paddingBottom: 100,
 	},
 	menuButton: {
 		padding: 8,
+		marginTop: -15,
 	},
 	menuIcon: {
 		width: 24,
@@ -553,7 +593,7 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
 		fontWeight: 'bold',
 		marginBottom: 12,
-		top: 13,
+		marginTop: -15,
 	},
 	searchSection: {
 		flexDirection: 'row',
@@ -605,6 +645,7 @@ const styles = StyleSheet.create({
 		color: "#FFFFFF",
 		textAlign: "center",
 		fontWeight: "bold",
+		top: -10,
 	},
 	petsContainer: {
 		flexDirection: "row",

@@ -20,8 +20,8 @@ import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 const AddAppointment = ({ route, navigation }) => {
   const { reason, user_id } = route.params || {}; // Get both reason and user_id from params
   const [owner_name, setOwnerName] = useState('');
-  const [reason_for_visit, setReason] = useState(reason || ''); // Initialize with the passed reason
-  const [custom_reason, setCustomReason] = useState(''); // Add this line
+  const [reasons_for_visit, setReasons] = useState([]);
+  const [custom_reason, setCustomReason] = useState('');
   const [appointment_date, setDate] = useState('');
   const [appointment_time, setTime] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,10 +30,32 @@ const AddAppointment = ({ route, navigation }) => {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
   const [availableSlots, setAvailableSlots] = useState(null);
+  const [selectedVaccineTypes, setSelectedVaccineTypes] = useState([]);
+  const [otherVaccinationType, setOtherVaccinationType] = useState('');
+  const [selectedConsultationReasons, setSelectedConsultationReasons] = useState([]);
+  const [consultationReason, setConsultationReason] = useState('');
+
+  const VACCINATION_TYPES = [
+    'Anti-Rabies',
+    'DHPPiL',
+    'Bordetella',
+    'Deworming',
+    'Heartworm Prevention',
+    'Other'
+  ];
+
+  const CONSULTATION_REASONS = [
+    'Complaints',
+    'Symptoms',
+    'Check-up',
+    'Follow-up',
+    'Emergency',
+    'Other'
+  ];
 
   useEffect(() => {
     if (reason) {
-      setReason(reason); // Set the reason if passed as a parameter
+      setReasons(reason.split(',').map(r => r.trim())); // Set the reasons if passed as a parameter
     }
   }, [reason]);
 
@@ -63,10 +85,40 @@ const AddAppointment = ({ route, navigation }) => {
     }
   };
 
+  const handleReasonToggle = (reasonOption) => {
+    setReasons(prevReasons => {
+      if (prevReasons.includes(reasonOption)) {
+        return prevReasons.filter(r => r !== reasonOption);
+      } else {
+        return [...prevReasons, reasonOption];
+      }
+    });
+  };
+
+  const handleVaccineTypeToggle = (vaccineType) => {
+    setSelectedVaccineTypes(prevTypes => {
+      if (prevTypes.includes(vaccineType)) {
+        return prevTypes.filter(type => type !== vaccineType);
+      } else {
+        return [...prevTypes, vaccineType];
+      }
+    });
+  };
+
+  const handleConsultationReasonToggle = (consultReason) => {
+    setSelectedConsultationReasons(prevReasons => {
+      if (prevReasons.includes(consultReason)) {
+        return prevReasons.filter(r => r !== consultReason);
+      } else {
+        return [...prevReasons, consultReason];
+      }
+    });
+  };
+
   const handleSaveAppointment = async () => {
     if (
       owner_name.trim() &&
-      (reason_for_visit === 'Other' ? custom_reason.trim() : reason_for_visit) &&
+      (reasons_for_visit.length > 0 || custom_reason.trim()) &&
       appointment_date.trim() &&
       appointment_time.trim() &&
       selectedPet
@@ -85,15 +137,23 @@ const AddAppointment = ({ route, navigation }) => {
 
       setLoading(true);
       try {
+        // Format the reasons array to a comma-separated string
+        const formattedReasons = reasons_for_visit.join(', ');
+        
         const appointmentData = {
           user_id: user_id,
           pet_id: selectedPet,
           pet_name: selectedPetDetails.name,
           owner_name: owner_name.trim(),
-          reason_for_visit: reason_for_visit,
-          other_reason: reason_for_visit === 'Other' ? custom_reason.trim() : null,
+          reason_for_visit: formattedReasons,
+          consultation_types: reasons_for_visit.includes('Consultation') ? selectedConsultationReasons.join(', ') : null,
+          other_consultation_reason: selectedConsultationReasons.includes('Other') ? consultationReason.trim() : null,
+          vaccination_types: reasons_for_visit.includes('Vaccination') ? selectedVaccineTypes.join(', ') : null,
+          other_vaccination_type: selectedVaccineTypes.includes('Other') ? otherVaccinationType.trim() : null,
+          other_reason: reasons_for_visit.includes('Other') ? custom_reason.trim() : null,
           appointment_date: appointment_date.trim(),
           appointment_time: appointment_time.trim(),
+          status: 'Pending'
         };
 
         console.log('Sending appointment data:', appointmentData);
@@ -111,13 +171,12 @@ const AddAppointment = ({ route, navigation }) => {
         console.log('API Response:', result);
 
         if (result.success) {
-          // Log the appointment activity
           await logActivity(
             ACTIVITY_TYPES.APPOINTMENT_BOOKED,
             user_id,
             {
               petName: selectedPetDetails.name,
-              reason: reason_for_visit === 'Other' ? custom_reason : reason_for_visit,
+              reasons: formattedReasons,
               date: appointment_date,
               time: appointment_time
             }
@@ -286,14 +345,14 @@ const AddAppointment = ({ route, navigation }) => {
                 key={reasonOption}
                 style={[
                   styles.reasonButton,
-                  reason_for_visit === reasonOption && styles.selectedReasonButton,
+                  reasons_for_visit.includes(reasonOption) && styles.selectedReasonButton,
                 ]}
-                onPress={() => setReason(reasonOption)}
+                onPress={() => handleReasonToggle(reasonOption)}
               >
                 <Text
                   style={[
                     styles.reasonButtonText,
-                    reason_for_visit === reasonOption && styles.selectedReasonButtonText,
+                    reasons_for_visit.includes(reasonOption) && styles.selectedReasonButtonText,
                   ]}
                 >
                   {reasonOption}
@@ -303,7 +362,7 @@ const AddAppointment = ({ route, navigation }) => {
           </View>
 
           {/* Add custom reason input field */}
-          {reason_for_visit === 'Other' && (
+          {reasons_for_visit.includes('Other') && (
             <TextInput
               style={[styles.input, styles.customReasonInput]}
               value={custom_reason}
@@ -313,6 +372,80 @@ const AddAppointment = ({ route, navigation }) => {
               multiline
             />
           )}
+
+          {/* {reasons_for_visit.includes('Vaccination') && (
+            <View style={styles.vaccineTypesContainer}>
+              <Text style={styles.subLabel}>Select Vaccination Type(s)</Text>
+              <View style={styles.vaccineButtonsContainer}>
+                {VACCINATION_TYPES.map((vaccineType) => (
+                  <TouchableOpacity
+                    key={vaccineType}
+                    style={[
+                      styles.vaccineButton,
+                      selectedVaccineTypes.includes(vaccineType) && styles.selectedVaccineButton,
+                    ]}
+                    onPress={() => handleVaccineTypeToggle(vaccineType)}
+                  >
+                    <Text
+                      style={[
+                        styles.vaccineButtonText,
+                        selectedVaccineTypes.includes(vaccineType) && styles.selectedVaccineButtonText,
+                      ]}
+                    >
+                      {vaccineType}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {selectedVaccineTypes.includes('Other') && (
+                <TextInput
+                  style={[styles.input, styles.customReasonInput]}
+                  value={otherVaccinationType}
+                  onChangeText={setOtherVaccinationType}
+                  placeholder="Please specify vaccination type"
+                  placeholderTextColor="#b3b3b3"
+                  multiline
+                />
+              )}
+            </View>
+          )} */}
+
+          {/* {reasons_for_visit.includes('Consultation') && (
+            <View style={styles.consultationContainer}>
+              <Text style={styles.subLabel}>Select Consultation Type(s)</Text>
+              <View style={styles.reasonButtonsContainer}>
+                {CONSULTATION_REASONS.map((consultReason) => (
+                  <TouchableOpacity
+                    key={consultReason}
+                    style={[
+                      styles.reasonButton,
+                      selectedConsultationReasons.includes(consultReason) && styles.selectedReasonButton,
+                    ]}
+                    onPress={() => handleConsultationReasonToggle(consultReason)}
+                  >
+                    <Text
+                      style={[
+                        styles.reasonButtonText,
+                        selectedConsultationReasons.includes(consultReason) && styles.selectedReasonButtonText,
+                      ]}
+                    >
+                      {consultReason}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {selectedConsultationReasons.includes('Other') && (
+                <TextInput
+                  style={[styles.input, styles.customReasonInput]}
+                  value={consultationReason}
+                  onChangeText={setConsultationReason}
+                  placeholder="Please specify consultation reason"
+                  placeholderTextColor="#b3b3b3"
+                  multiline
+                />
+              )}
+            </View>
+          )} */}
 
           {/* Date Picker with Icon */}
           <Text style={styles.inputLabel}>Appointment Date</Text>
@@ -608,6 +741,44 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  vaccineTypesContainer: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  subLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666666',
+    marginBottom: 10,
+  },
+  vaccineButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  vaccineButton: {
+    width: '48%',
+    backgroundColor: '#F5F5F5',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 8,
+    alignItems: 'center',
+  },
+  selectedVaccineButton: {
+    backgroundColor: '#CC38F2',
+  },
+  vaccineButtonText: {
+    color: '#000000',
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  selectedVaccineButtonText: {
+    color: '#FFFFFF',
+  },
+  consultationContainer: {
+    marginTop: 10,
+    marginBottom: 20,
   },
 });
 
