@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "Thesis",
-		"slug": "Thesis",
+		"name": "PetFurMe",
+		"slug": "PetFurMe",
 		"version": "1.0.0",
 		"newArchEnabled": true,
 		"extra": {
@@ -32,7 +32,12 @@
 		},
 		"web": {
 			"favicon": "./src/assets/favicon.png",
-			"bundler": "metro"
+			"bundler": "metro",
+			"build": {
+				"babel": {
+					"include": ["@expo/vector-icons"]
+				}
+			}
 		},
 		"plugins": [
 			"expo-font",

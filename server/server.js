@@ -30,22 +30,15 @@ const db = mysql.createPool(dbConfig);
 
 const app = express();
 
-// Serve static files from the API directory
-app.use('/api', express.static(API_PATH));
-
-// CORS configuration
+// CORS configuration - this must come BEFORE other middleware
 app.use(cors({
-	origin: [
-		`http://${SERVER_IP}:19006`,  // Expo web default port
-		`http://localhost:19006`,
-		`http://${SERVER_IP}:${SERVER_PORT}`,
-		'http://localhost:3000'
-	],
+	origin: ['http://localhost:8081', 'http://localhost:19006', `http://${SERVER_IP}:3001`],
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 	credentials: true
 }));
 
+// Remove any other CORS-related middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -241,15 +234,15 @@ app.post("/api/login", async (req, res) => {
 			});
 		}
 
-		res.json({
-			success: true,
-			user: {
-				id: user.id,
-				name: user.name,
-				email: user.email,
-				role: user.role
-			}
-		});
+	res.json({
+		success: true,
+		user: {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			role: user.role
+		}
+	});
 	} catch (error) {
 		console.error('Login error:', error);
 		res.status(500).json({
@@ -323,8 +316,30 @@ app.use((err, req, res, next) => {
 	});
 });
 
-// Add OPTIONS handling
-app.options('*', cors());
+// Add this test endpoint
+app.get('/api/cors-test', (req, res) => {
+	res.json({
+		message: 'CORS is working',
+		origin: req.headers.origin,
+		headers: req.headers
+	});
+});
+
+// Add this near the top of your routes
+app.use((req, res, next) => {
+	console.log('Incoming request:', {
+		method: req.method,
+		path: req.path,
+		headers: req.headers,
+		body: req.body
+	});
+	next();
+});
+
+// Add a test endpoint
+app.get('/api/test-cors', (req, res) => {
+	res.json({ message: 'CORS is working' });
+});
 
 const startServer = async () => {
 	try {

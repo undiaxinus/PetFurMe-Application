@@ -37,16 +37,19 @@ const LoginScreen = ({ navigation }) => {
 				return;
 			}
 
-			console.log('Attempting login with URL:', `${API_URL}/api/login`);
-			
-			const response = await axios.post(`${API_URL}/api/login`, {
-				username: email,
-				password: password,
-			}, {
+			const response = await axios({
+				method: 'post',
+				url: `${API_URL}/api/login`,
+				data: {
+					username: email,
+					password: password
+				},
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
-				}
+				},
+				// Remove withCredentials if you're not using cookies
+				// withCredentials: true
 			});
 
 			console.log("Login response:", response.data);
@@ -60,11 +63,14 @@ const LoginScreen = ({ navigation }) => {
 				setError(response.data.error || "Login failed");
 			}
 		} catch (error) {
-			console.error("Login error:", error.response || error);
-			setError(
-				error.response?.data?.error || 
-				"Login failed. Please check your credentials and try again."
-			);
+			console.error("Login error:", error);
+			if (error.response) {
+				setError(error.response.data?.error || "Server error occurred");
+			} else if (error.request) {
+				setError("Unable to connect to server. Please check your connection.");
+			} else {
+				setError("An unexpected error occurred");
+			}
 		} finally {
 			setLoading(false);
 		}

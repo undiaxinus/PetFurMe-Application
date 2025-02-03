@@ -294,12 +294,7 @@ const HomePage = ({ navigation, route }) => {
 						<Ionicons name="paw" size={50} color="#8146C1" style={styles.welcomeIcon} />
 						<Text style={styles.popupTitle}>Welcome!</Text>
 						<Text style={styles.popupText}>
-<<<<<<< HEAD
-							Join our pet-loving community and unlock amazing features for you and your furry friend.
-=======
-							Hi {userName}, we're so excited to have you here. To make the most of your
-							experience, let's personalize your profile.
->>>>>>> user-auth
+							Hi {userName}, we're so excited to have you here. To make the most of your experience, join our pet-loving community and unlock amazing features for you and your furry friend.
 						</Text>
 						
 						<View style={styles.popupFeatures}>

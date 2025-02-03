@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -50,9 +51,27 @@ function DrawerNavigator() {
 }
 
 // Main Stack Navigator
-export default function App() {
+const App = () => {
+	// Add web-specific navigation container config
+	const navigationConfig = Platform.select({
+		web: {
+			linking: {
+				enabled: true,
+				config: {
+					screens: {
+						Home: '',
+						Login: 'login',
+						Register: 'register',
+						// ... add other routes
+					}
+				}
+			}
+		},
+		default: {}
+	});
+
 	return (
-		<NavigationContainer>
+		<NavigationContainer {...navigationConfig}>
 			<Stack.Navigator
 				initialRouteName="HomeScreen"
 				screenOptions={{ headerShown: false }}
@@ -81,4 +100,6 @@ export default function App() {
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
-}
+};
+
+export default App;
