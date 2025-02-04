@@ -149,18 +149,19 @@ const LoginScreen = ({ navigation }) => {
 					onPress={handleLogin}
 					disabled={loading}
 				>
-					<Text style={styles.loginButtonText}>LOGIN</Text>
+					{loading ? (
+						<ActivityIndicator size="small" color="#FFFFFF" />
+					) : (
+						<Text style={styles.loginButtonText}>LOGIN</Text>
+					)}
 				</TouchableOpacity>
 
-				<Text style={styles.footerText}>
-					Don't have an account?{" "}
-					<Text
-						style={styles.signUpText}
-						onPress={() => navigation.navigate("Register")}
-					>
-						Sign Up
-					</Text>
-				</Text>
+				<View style={styles.registerContainer}>
+					<Text style={styles.registerText}>Don't have an account?</Text>
+					<TouchableOpacity onPress={() => navigation.navigate('Register')}>
+						<Text style={styles.registerLink}>Register</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		</View>
 	);
@@ -266,6 +267,22 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 15,
 		fontWeight: '500',
+	},
+	registerContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 20,
+	},
+	registerText: {
+		color: '#666666',
+		fontSize: 14,
+	},
+	registerLink: {
+		color: '#8146C1',
+		fontSize: 14,
+		fontWeight: 'bold',
+		marginLeft: 5,
 	},
 });
 

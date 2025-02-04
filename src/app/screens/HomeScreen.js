@@ -16,6 +16,7 @@ const HomeScreen = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     Fredoka_400Regular,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Animated.loop(
@@ -27,12 +28,23 @@ const HomeScreen = ({ navigation }) => {
     ).start();
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      navigateToLogin();
+    }, 3000);
+  }, []);
+
   if (!fontsLoaded) {
     return null;
   }
 
+  const navigateToLogin = () => {
+    setLoading(false);
+    navigation.replace('LoginScreen');
+  };
+
   const handlePress = () => {
-    navigation.navigate("Register");
+    navigation.navigate("LoginScreen");
   };
 
   const backgroundColor1 = gradientAnimation.interpolate({
