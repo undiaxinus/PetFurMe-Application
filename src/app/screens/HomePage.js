@@ -12,6 +12,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
+import BottomNavigation from '../components/BottomNavigation';
+import CustomHeader from '../components/CustomHeader';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
@@ -260,6 +262,16 @@ const HomePage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
+			<CustomHeader
+				title={`Hey ${userName}!`}
+				subtitle="Your pet's happiness starts here!"
+				navigation={navigation}
+				showDrawerButton={true}
+				showProfileButton={true}
+				userPhoto={userPhoto}
+				user_id={user_id}
+			/>
+
 			{showWelcomePopup && (
 				<View style={styles.popupOverlay}>
 					<View style={styles.popupContainer}>
@@ -305,35 +317,6 @@ const HomePage = ({ navigation, route }) => {
 				</View>
 			)}
 			{/* Fixed Header */}
-			<View style={styles.header}>
-				<TouchableOpacity 
-					style={styles.menuButton} 
-					onPress={() => navigation.openDrawer()}
-				>
-					<Image
-						source={require("../../assets/images/burger.png")}
-						style={styles.menuIcon}
-					/>
-				</TouchableOpacity>
-
-				<View style={styles.headerContent}>
-					<Text style={styles.welcomeText}>
-						Hey {userName}! Your pet's happiness starts here!
-					</Text>
-				</View>
-				
-				<TouchableOpacity 
-					style={styles.profilePhotoContainer}
-					onPress={() => navigation.navigate('ProfileVerification', { user_id: user_id })}
-				>
-					<Image
-						source={userPhoto ? { uri: userPhoto } : require("../../assets/images/doprof.png")}
-						style={styles.profilePhoto}
-					/>
-				</TouchableOpacity>
-			</View>
-
-			{/* Add paddingTop to scrollContent to account for fixed header */}
 			<ScrollView contentContainerStyle={styles.scrollContent}>
 			<View style={styles.searchSection}>
 						<Image
@@ -484,38 +467,10 @@ const HomePage = ({ navigation, route }) => {
 			</ScrollView>
 
 			{/* Bottom Navigation */}
-			<View style={styles.bottomNav}>
-				<TouchableOpacity style={styles.navItem}>
-					<Ionicons name="home" size={24} color="#8146C1" />
-					<Text style={styles.navText}>Home</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity 
-					style={styles.navItem}
-					onPress={() => navigation.navigate('ChatScreen', { 
-						user_id: user_id 
-					})}
-				>
-					<Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
-					<Text style={styles.navText}>Chat</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity 
-					style={styles.navItem}
-					onPress={() => navigation.navigate('NotificationScreen', { user_id: user_id })}
-				>
-					<Ionicons name="notifications-outline" size={24} color="#8146C1" />
-					<Text style={styles.navText}>Notifications</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity 
-					style={styles.navItem}
-					onPress={() => navigation.navigate('Help')}
-				>
-					<Ionicons name="help-circle-outline" size={24} color="#8146C1" />
-					<Text style={styles.navText}>Help</Text>
-				</TouchableOpacity>
-			</View>
+			<BottomNavigation 
+				activeScreen="HomePage" 
+				user_id={user_id}
+			/>
 		</View>
 	);
 };
@@ -525,47 +480,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#FFFFFF",
 	},
-	header: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 16,
-		paddingTop: 50,
-		backgroundColor: '#8146C1',
-		height: 100,
-		zIndex: 1000,
-		elevation: 3,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-	},
 	scrollContent: {
-		paddingTop: 100,
-		paddingBottom: 100,
-	},
-	menuButton: {
-		padding: 8,
-		marginTop: -15,
-	},
-	menuIcon: {
-		width: 24,
-		height: 24,
-		resizeMode: 'contain',
-	},
-	headerContent: {
-		flex: 1,
-		marginLeft: 12,
-	},
-	welcomeText: {
-		fontSize: 16,
-		color: '#FFFFFF',
-		fontWeight: 'bold',
-		marginBottom: 12,
-		marginTop: -15,
+		paddingTop: 120,
+		paddingBottom: 90,
 	},
 	searchSection: {
 		flexDirection: 'row',
@@ -790,27 +707,6 @@ const styles = StyleSheet.create({
 		color: "#8146C1",
 		fontWeight: "bold",
 	},
-	bottomNav: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		paddingVertical: 10,
-		backgroundColor: "#FFFFFF",
-		borderTopWidth: 1,
-		borderTopColor: "#E5E5E5",
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-	},
-	navItem: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	navText: {
-		fontSize: 12,
-		color: '#8146C1',
-		marginTop: 4,
-	},
 	loadingContainer: {
 		position: 'absolute',
 		top: 0,
@@ -826,6 +722,95 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		paddingVertical: 10,
 
+	},
+	popupOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		zIndex: 1000,
+	},
+	popupContainer: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 20,
+		padding: 20,
+		width: '85%',
+		alignItems: 'center',
+	},
+	popupTitle: {
+		fontSize: 28,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 10,
+		textAlign: 'center',
+	},
+	popupText: {
+		fontSize: 16,
+		color: '#666',
+		textAlign: 'center',
+		marginBottom: 20,
+		paddingHorizontal: 10,
+	},
+	popupFeatures: {
+		alignSelf: 'stretch',
+		marginBottom: 25,
+		paddingLeft: 20,
+	},
+	popupFeatureItem: {
+		fontSize: 16,
+		color: '#666',
+		marginBottom: 12,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	popupQuestion: {
+		fontSize: 18,
+		color: '#333',
+		fontWeight: '600',
+		marginBottom: 20,
+	},
+	popupButtons: {
+		width: '100%',
+		gap: 10,
+	},
+	setupButton: {
+		backgroundColor: '#8146C1',
+		paddingVertical: 12,
+		paddingHorizontal: 30,
+		borderRadius: 25,
+		width: '100%',
+		alignItems: 'center',
+	},
+	setupButtonText: {
+		color: '#FFFFFF',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	laterButton: {
+		backgroundColor: '#FFFFFF',
+		paddingVertical: 12,
+		paddingHorizontal: 30,
+		borderRadius: 25,
+		width: '100%',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: '#8146C1',
+	},
+	laterButtonText: {
+		color: '#8146C1',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	petsSection: {
+		top: -50,
+		marginBottom: 20,
+	},
+	welcomeIcon: {
+		marginBottom: 10,
 	},
 	popupOverlay: {
 		position: 'absolute',

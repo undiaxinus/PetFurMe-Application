@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import BottomNavigation from '../components/BottomNavigation';
+import CustomHeader from '../components/CustomHeader';
 
 const baseStyles = StyleSheet.create({
   container: {
@@ -16,23 +18,6 @@ const baseStyles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 20,
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 15,
-    backgroundColor: '#8146C1',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
-  },
-  navIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
   }
 });
 
@@ -255,76 +240,66 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" top={15}/>
-        </TouchableOpacity>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Chat with PetFurMe</Text>
-          <Text style={styles.headerSubtitle}>Customer Service</Text>
-        </View>
-      </View>
+      <CustomHeader
+        title="Chat Support"
+        subtitle="Ask us anything about pet care"
+        navigation={navigation}
+        showBackButton={true}
+      />
 
       <View style={styles.chatWrapper}>
         <FlatList
           ref={flatListRef}
           data={messages}
-          renderItem={renderMessage}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.chatContainer}
-          onContentSizeChange={() => flatListRef.current.scrollToEnd()}
+          renderItem={({ item }) => (
+            <View
+              style={[
+                styles.messageBubble,
+                item.sender === 'user' ? styles.userBubble : styles.otherBubble,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.messageText,
+                  item.sender === 'other' && styles.otherMessageText,
+                ]}
+              >
+                {item.text}
+              </Text>
+            </View>
+          )}
         />
       </View>
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'position' : null}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        style={styles.inputContainer}
       >
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Type a message..."
-            value={input}
-            onChangeText={setInput}
-            onSubmitEditing={sendMessage}
-            returnKeyType="send"
+        <TextInput
+          style={styles.textInput}
+          value={input}
+          onChangeText={setInput}
+          placeholder="Type your message..."
+          placeholderTextColor="#999"
+          multiline
+        />
+        <TouchableOpacity
+          style={[styles.sendButton, !input.trim() && styles.sendButtonDisabled]}
+          onPress={sendMessage}
+          disabled={!input.trim()}
+        >
+          <MaterialIcons
+            name="send"
+            size={24}
+            color={input.trim() ? '#FFFFFF' : '#CCCCCC'}
           />
-          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-            <MaterialIcons name="send" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
 
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('HomePage', { user_id })}
-        >
-            <Ionicons name="home-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-            <Ionicons name="chatbubble" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('NotificationScreen', { user_id })}
-        >
-            <Ionicons name="notifications-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('Help', { user_id })}
-        >
-            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Help</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNavigation activeScreen="Chat" navigation={navigation} user_id={user_id} />
     </View>
   );
 };
@@ -334,40 +309,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: Platform.OS === 'ios' ? 50 : 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DDD',
-    backgroundColor: '#8146C1',
-    height: 120,
-  },
-  headerTitleContainer: {
-    marginLeft: 16,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    left: 85,
-    top: 18,
-  },
-  headerSubtitle: {
-    fontSize: 15,
-    color: '#cccccc',
-    marginTop: 2,
-    top: 15,
-    left: 100,
-  },
   chatWrapper: {
     flex: 1,
-    marginBottom: 100, // Account for input container and bottom nav
+    marginBottom: 90,
   },
   chatContainer: {
     padding: 15,
-    paddingTop: 10, // Reduced since we now have a header
+    paddingTop: 10,
   },
   messageBubble: {
     padding: 12,
@@ -380,18 +328,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#cc66ff',
   },
   otherBubble: {
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,  // Adding a border to make it visible against white background
+    borderWidth: 1,
     borderColor: '#E5E5E5',
   },
   messageText: {
-    color: '#FFFFFF',  // This is for user messages
+    color: '#FFFFFF',
     fontSize: 16,
     lineHeight: 22,
   },
   otherMessageText: {
-    color: '#000000',  // Black text for "other" messages
+    color: '#000000',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -401,9 +349,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#DDD',
     position: 'absolute',
-    bottom: 60, // Height of bottom nav
+    bottom: 90,
     left: 0,
     right: 0,
+    zIndex: 1,
   },
   textInput: {
     flex: 1,
@@ -421,30 +370,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-  bottomNav: {
-    height: 60,  // Explicit height
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",  // Center items vertically
-    paddingVertical: 8,
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E5E5E5",
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000,  // Ensure it stays on top
+  sendButtonDisabled: {
+    backgroundColor: '#E0E0E0',
   },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navText: {
-		fontSize: 12,
-		color: '#8146C1',
-		marginTop: 4,
-	},
 });
 
 export default ChatScreen;

@@ -9,6 +9,8 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import BottomNavigation from '../components/BottomNavigation';
+import CustomHeader from '../components/CustomHeader';
 
 const HelpScreen = ({ navigation }) => {
   const [expandedSection, setExpandedSection] = useState(null);
@@ -95,16 +97,12 @@ const HelpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" top={15}/>
-        </TouchableOpacity>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Help Center</Text>
-          <Text style={styles.headerSubtitle}>Frequently Asked Questions</Text>
-        </View>
-      </View>
+      <CustomHeader
+        title="Help Center"
+        subtitle="Frequently Asked Questions"
+        navigation={navigation}
+        showBackButton={true}
+      />
 
       {/* Help Sections */}
       <FlatList
@@ -115,36 +113,7 @@ const HelpScreen = ({ navigation }) => {
       />
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('HomePage')}
-        >
-          <Ionicons name="home-outline" size={24} color="#8146C1" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('ChatScreen')}
-        >
-          <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
-          <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('NotificationScreen')}
-        >
-          <Ionicons name="notifications-outline" size={24} color="#8146C1" />
-          <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="help-circle" size={24} color="#8146C1" />
-          <Text style={styles.navText}>Help</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNavigation activeScreen="Help" />
     </View>
   );
 };
@@ -153,33 +122,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: Platform.OS === 'ios' ? 50 : 16,
-    borderBottomWidth: 1,
-    backgroundColor: '#8146C1',
-    height: 120,
-  },
-  headerTitleContainer: {
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    left: 85,
-    top: 18,
-  },
-  headerSubtitle: {
-    fontSize: 15,
-    color: '#cccccc',
-    marginTop: 2,
-    top: 15,
-    left: 85,
+    paddingBottom: 90,
   },
   listContainer: {
     paddingHorizontal: 20,
@@ -221,42 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: '#000',
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 15,
-    backgroundColor: '#8146C1',
-  },
-  navIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navText: {
-    fontSize: 12,
-    color: '#8146C1',
-    marginTop: 4,
   },
 });
 

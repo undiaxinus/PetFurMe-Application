@@ -6,6 +6,8 @@ import { BASE_URL, SERVER_IP } from '../config/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import BottomNavigation from '../components/BottomNavigation';
+import CustomHeader from '../components/CustomHeader';
 
 // Configure notifications for local only
 Notifications.setNotificationHandler({
@@ -242,16 +244,12 @@ const NotificationScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" top={15}/>
-        </TouchableOpacity>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Notifications</Text>
-          <Text style={styles.headerSubtitle}>Stay updated with your activities</Text>
-        </View>
-      </View>
+      <CustomHeader
+        title="Notifications"
+        subtitle="Stay updated with your activities"
+        navigation={navigation}
+        showBackButton={true}
+      />
 
       {loading && !isRefreshing ? (
         <ActivityIndicator size="large" color="#8146C1" style={styles.centerContent} />
@@ -280,36 +278,7 @@ const NotificationScreen = ({ navigation, route }) => {
       )}
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('HomePage')}
-        >
-            <Ionicons name="home-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('ChatScreen')}
-        >
-            <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-            <Ionicons name="notifications" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Notifications</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('Help')}
-        >
-            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Help</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNavigation activeScreen="NotificationScreen" />
     </View>
   );
 };
@@ -318,34 +287,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: Platform.OS === 'ios' ? 50 : 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DDD',
-    backgroundColor: '#8146C1',
-    height: 120,
-  },
-  headerTitleContainer: {
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    left: 65,
-    top: 18,
-  },
-  headerSubtitle: {
-    fontSize: 15,
-    color: '#cccccc',
-    marginTop: 2,
-    top: 15,
-    left: 75,
+    paddingBottom: 90,
   },
   notificationItem: {
     flexDirection: 'row',
@@ -385,27 +327,6 @@ const styles = StyleSheet.create({
     color: '#aaa',
     marginTop: 20,
   },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navText: {
-    fontSize: 12,
-    color: '#8146C1',
-    marginTop: 4,
-  },
   centerContent: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -425,7 +346,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 16,
     paddingTop: 10,
-    paddingBottom: 80,
+    paddingBottom: 90,
+    zIndex: 1,
   },
 });
 
