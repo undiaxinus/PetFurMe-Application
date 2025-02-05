@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     height: 120,
   },
   headerTitleContainer: {
-    marginLeft: 16,
+    marginLeft: -20,
   },
   headerTitle: {
     fontSize: 20,

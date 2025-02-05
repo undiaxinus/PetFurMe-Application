@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $db_name = 'pet-management';
+    private $db_name = 'pet';
     private $username = 'root';
     private $password = '';
     private $conn;

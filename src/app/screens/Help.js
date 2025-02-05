@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const HelpScreen = ({ navigation }) => {
+const HelpScreen = ({ navigation, route }) => {
   const [expandedSection, setExpandedSection] = useState(null);
+  const user_id = route.params?.user_id;
 
   const toggleSection = (index) => {
     setExpandedSection(expandedSection === index ? null : index);
@@ -118,7 +119,7 @@ const HelpScreen = ({ navigation }) => {
       <View style={styles.bottomNav}>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('HomePage')}
+          onPress={() => navigation.navigate('HomePage', { user_id })}
         >
           <Ionicons name="home-outline" size={24} color="#8146C1" />
           <Text style={styles.navText}>Home</Text>
@@ -126,7 +127,7 @@ const HelpScreen = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('ChatScreen')}
+          onPress={() => navigation.navigate('ChatScreen', { user_id })}
         >
           <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
           <Text style={styles.navText}>Chat</Text>
@@ -134,7 +135,7 @@ const HelpScreen = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => navigation.navigate('NotificationScreen')}
+          onPress={() => navigation.navigate('NotificationScreen', { user_id })}
         >
           <Ionicons name="notifications-outline" size={24} color="#8146C1" />
           <Text style={styles.navText}>Notifications</Text>
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    left: 85,
+    left: 50,
     top: 18,
   },
   headerSubtitle: {
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     color: '#cccccc',
     marginTop: 2,
     top: 15,
-    left: 85,
+    left: 55,
   },
   listContainer: {
     paddingHorizontal: 20,

@@ -25,6 +25,7 @@ const HomePage = ({ navigation, route }) => {
 	const [petProducts, setPetProducts] = useState([]);
 	const [isProductsLoading, setIsProductsLoading] = useState(false);
 	const [userName, setUserName] = useState('');
+	const [areFeaturesDisabled, setAreFeaturesDisabled] = useState(false);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -57,6 +58,12 @@ const HomePage = ({ navigation, route }) => {
 	useEffect(() => {
 		checkProfileStatus();
 	}, [user_id]);
+
+	useEffect(() => {
+		if (isProfileComplete) {
+			setAreFeaturesDisabled(false);
+		}
+	}, [isProfileComplete]);
 
 	const fetchUserPets = async () => {
 		// Don't set loading state for auto refresh to avoid UI flicker
@@ -173,10 +180,12 @@ const HomePage = ({ navigation, route }) => {
 				setIsProfileComplete(data.isProfileComplete);
 				setShowWelcomePopup(!data.isProfileComplete);
 				setUserName(data.profile?.name || 'there');
+				setAreFeaturesDisabled(!data.isProfileComplete);
 			} else {
 				console.error("Profile check failed:", data.message);
 				setIsProfileComplete(false);
 				setShowWelcomePopup(true);
+				setAreFeaturesDisabled(true);
 			}
 		} catch (error) {
 			console.error("Profile check error:", error);
@@ -200,6 +209,7 @@ const HomePage = ({ navigation, route }) => {
 			
 			setIsProfileComplete(false);
 			setShowWelcomePopup(true);
+			setAreFeaturesDisabled(true);
 		}
 	};
 
@@ -211,6 +221,7 @@ const HomePage = ({ navigation, route }) => {
 			onComplete: async () => {
 				await logActivity(ACTIVITY_TYPES.PROFILE_UPDATED, user_id);
 				setIsProfileComplete(true);
+				setAreFeaturesDisabled(false);
 				fetchUserPets();
 			}
 		});
@@ -218,6 +229,7 @@ const HomePage = ({ navigation, route }) => {
 
 	const handleMaybeLater = () => {
 		setShowWelcomePopup(false);
+		setAreFeaturesDisabled(true);
 	};
 
 	const categories = [
@@ -393,19 +405,28 @@ const HomePage = ({ navigation, route }) => {
 							key={category.id}
 							style={[
 								styles.categoryItem,
-								{ backgroundColor: category.backgroundColor },
+								{ 
+									backgroundColor: category.backgroundColor,
+									opacity: areFeaturesDisabled ? 0.5 : 1
+								},
 							]}
-							onPress={() =>
-								navigation.navigate(category.screen, { 
-									reason: category.label,
-									user_id: user_id
-								})
-							}
+							onPress={() => {
+								if (!areFeaturesDisabled) {
+									navigation.navigate(category.screen, { 
+										reason: category.label,
+										user_id: user_id
+									});
+								}
+							}}
+							disabled={areFeaturesDisabled}
 						>
 							<View style={styles.categoryContent}>
 								<Image 
 									source={category.image} 
-									style={styles.categoryImage} 
+									style={[
+										styles.categoryImage,
+										{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+									]} 
 								/>
 								<Text style={styles.categoryLabel}>{category.label}</Text>
 							</View>
@@ -451,12 +472,25 @@ const HomePage = ({ navigation, route }) => {
 									<Text style={styles.petName}>{pet.name}</Text>
 								</TouchableOpacity>
 							))}
-							<TouchableOpacity onPress={handleAddNewPet} style={styles.petItem}>
+							<TouchableOpacity 
+								onPress={handleAddNewPet} 
+								style={[
+									styles.petItem,
+									{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+								]}
+								disabled={areFeaturesDisabled}
+							>
 								<Image
 									source={require("../../assets/images/addnew.png")}
-									style={styles.petImage}
+									style={[
+										styles.petImage,
+										{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+									]}
 								/>
-								<Text style={styles.petName}>Add New</Text>
+								<Text style={[
+									styles.petName,
+									{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+								]}>Add New</Text>
 							</TouchableOpacity>
 						</ScrollView>
 					</View>
@@ -497,13 +531,22 @@ const HomePage = ({ navigation, route }) => {
 
 				{/* Vets Section */}
 				<View style={styles.sectionContainer}>
-				<Image
-					source={require("../../assets/images/vet.png")}
-					style={styles.vet}
-				/>
-					<Text style={styles.vets}>Vets</Text>
+					<Image
+						source={require("../../assets/images/vet.png")}
+						style={[
+							styles.vet,
+							{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+						]}
+					/>
+					<Text style={[
+						styles.vets,
+						{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+					]}>Vets</Text>
 					{vets.map((vet) => (
-						<View key={vet.id} style={styles.vetCard}>
+						<View key={vet.id} style={[
+							styles.vetCard,
+							{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+						]}>
 							<Image source={vet.image} style={styles.vetImage} />
 							<View style={styles.vetDetails}>
 								<Text style={styles.vetName}>{vet.name}</Text>
@@ -515,10 +558,21 @@ const HomePage = ({ navigation, route }) => {
 								<Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
 
 								<TouchableOpacity
-									onPress={() =>
-										navigation.navigate("Consultation", { user_id: user_id })
-									}>
-									<Text style={styles.bookAppointmentText}>
+									onPress={() => {
+										if (!areFeaturesDisabled) {
+											navigation.navigate("Consultation", { user_id: user_id });
+										}
+									}}
+									disabled={areFeaturesDisabled}
+									style={[
+										styles.bookAppointmentButton,
+										{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+									]}
+								>
+									<Text style={[
+										styles.bookAppointmentText,
+										{ opacity: areFeaturesDisabled ? 0.5 : 1 }
+									]}>
 										Book Appointment ➔
 									</Text>
 								</TouchableOpacity>
@@ -555,7 +609,7 @@ const HomePage = ({ navigation, route }) => {
 
 				<TouchableOpacity 
 					style={styles.navItem}
-					onPress={() => navigation.navigate('Help')}
+					onPress={() => navigation.navigate('Help', { user_id: user_id })}
 				>
 					<Ionicons name="help-circle-outline" size={24} color="#8146C1" />
 					<Text style={styles.navText}>Help</Text>
@@ -580,7 +634,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		paddingTop: 50,
 		backgroundColor: '#8146C1',
-		height: 100,
+		height: 120,
 		zIndex: 1000,
 		elevation: 3,
 		shadowColor: '#000',
@@ -609,8 +663,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: '#FFFFFF',
 		fontWeight: 'bold',
-		marginBottom: 12,
-		marginTop: -15,
+		Top: 10,
 	},
 	searchSection: {
 		flexDirection: 'row',
@@ -629,6 +682,8 @@ const styles = StyleSheet.create({
 	searchText: {
 		fontSize: 14,
 		color: '#666666',
+		marginBottom: 20,
+		top: 10,
 	},
 	categoriesContainer: {
 		flexDirection: "row",
@@ -965,6 +1020,9 @@ const styles = StyleSheet.create({
 	petsSection: {
 		top: -50,
 		marginBottom: 20,
+	},
+	bookAppointmentButton: {
+		marginTop: 5,
 	},
 });
 
