@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once '../config/Database.php';
+require_once '../config/constants.php';
 
 try {
     if (!isset($_GET['pet_id'])) {
@@ -68,14 +69,29 @@ try {
         
         // Clean up the photo path
         if ($pet['photo']) {
-            // Get the base filename from the full path
-            $photo = basename($pet['photo']);
+            // Clean up the photo path
+            $photo = $pet['photo'];
             
-            // Construct the full URL for the photo
-            $photo_url = 'http://' . $_SERVER['HTTP_HOST'] . '/PetFurMe-Application/uploads/pet_photos/' . $photo;
-            $pet['photo'] = $photo_url;
-            
-            error_log("Photo URL constructed: " . $photo_url);
+            // Check if it's already a full URL
+            if (!filter_var($photo, FILTER_VALIDATE_URL)) {
+                // Check different possible path formats
+                if (strpos($photo, 'uploads/') === 0) {
+                    $photo_url = $API_BASE_URL . '/PetFurMe-Application/' . $photo;
+                } else if (strpos($photo, '/uploads/') === 0) {
+                    $photo_url = $API_BASE_URL . '/PetFurMe-Application' . $photo;
+                } else {
+                    $photo_url = $API_BASE_URL . '/PetFurMe-Application/uploads/' . basename($photo);
+                }
+                
+                // Verify file exists
+                $absolute_path = UPLOADS_ABSOLUTE_PATH . '/' . basename($photo);
+                if (file_exists($absolute_path)) {
+                    $pet['photo'] = $photo_url;
+                } else {
+                    error_log("Photo file not found at: " . $absolute_path);
+                    $pet['photo'] = null;
+                }
+            }
         }
         
         ob_clean();

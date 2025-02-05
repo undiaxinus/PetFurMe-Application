@@ -9,6 +9,7 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
 include_once '../config/Database.php';
+require_once '../utils/image_handler.php';
 
 try {
     $database = new Database();
@@ -43,45 +44,8 @@ try {
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         error_log("Processing photo upload");
         
-        // Check file size (2MB limit)
-        $maxFileSize = 2 * 1024 * 1024;
-        if ($_FILES['photo']['size'] > $maxFileSize) {
-            throw new Exception("File size too large. Please upload an image smaller than 2MB.");
-        }
-        
-        // Create uploads directory if it doesn't exist
-        $upload_dir = 'C:/xampp/htdocs/PetFurMe-Application/api/users/uploads/profile_photos/';
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        // Generate unique filename
-        $file_extension = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-        // Validate file extension
-        $allowed_extensions = ['jpg', 'jpeg', 'png'];
-        if (!in_array($file_extension, $allowed_extensions)) {
-            throw new Exception("Only JPG, JPEG and PNG files are allowed.");
-        }
-        
-        $new_filename = 'profile_' . uniqid() . '.' . $file_extension;
-        $full_path = $upload_dir . $new_filename;
-        $photo_path = 'uploads/profile_photos/' . $new_filename; // This is what gets stored in DB
-        
-        error_log("Full path for upload: " . $full_path);
-        
-        // Ensure the file is an actual image
-        if (!getimagesize($_FILES['photo']['tmp_name'])) {
-            throw new Exception("File is not a valid image");
-        }
-        
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $full_path)) {
-            error_log("File successfully moved to: " . $full_path);
-            // Set proper permissions
-            chmod($full_path, 0644);
-        } else {
-            error_log("Failed to move uploaded file. Upload error: " . $_FILES['photo']['error']);
-            error_log("Upload path exists: " . (file_exists(dirname($full_path)) ? 'Yes' : 'No'));
-            error_log("Upload path is writable: " . (is_writable(dirname($full_path)) ? 'Yes' : 'No'));
+        $photo_path = ImageHandler::saveImage($_FILES['photo'], 'user_photos', 'user');
+        if (!$photo_path) {
             throw new Exception("Failed to save uploaded file");
         }
     } else if (isset($_FILES['photo'])) {

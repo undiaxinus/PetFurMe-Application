@@ -6,6 +6,7 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 header('Cache-Control: public, max-age=3600');
 
 include_once '../config/Database.php';
+include_once '../config/constants.php';
 
 try {
     // Get database connection
@@ -48,11 +49,27 @@ try {
         // Handle photo path
         $photoUrl = null;
         if ($row['photo'] !== null && $row['photo'] !== '') {
-            // Check if it's a path starting with 'uploads/'
-            if (strpos($row['photo'], 'uploads/') === 0) {
-                // Construct the full URL
-                $photoUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/PetFurMe-Application/api/users/' . $row['photo'];
-                error_log("Photo URL constructed: " . $photoUrl);
+            // Check if it's already a full URL
+            if (!filter_var($row['photo'], FILTER_VALIDATE_URL)) {
+                // Handle different path formats
+                if (strpos($row['photo'], 'uploads/') === 0) {
+                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application/' . $row['photo'];
+                } else if (strpos($row['photo'], '/uploads/') === 0) {
+                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application' . $row['photo'];
+                } else {
+                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application/uploads/' . basename($row['photo']);
+                }
+                
+                // Verify file exists
+                $absolute_path = UPLOADS_ABSOLUTE_PATH . '/' . basename($row['photo']);
+                if (file_exists($absolute_path)) {
+                    $response['profile']['photo'] = $photoUrl;
+                } else {
+                    error_log("Photo file not found at: " . $absolute_path);
+                    $response['profile']['photo'] = null;
+                }
+            } else {
+                $response['profile']['photo'] = $row['photo'];
             }
         }
         

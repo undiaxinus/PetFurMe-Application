@@ -16,12 +16,15 @@ import { Path, Svg } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
 
-// Update the PET_PATHS with more pet-like silhouettes
+// Update the PET_PATHS with more recognizable pet icons
 const PET_PATHS = {
-  pawPrint: "M17.5,12.5c2.5,0,4.5-2,4.5-4.5c0-2.5-2-4.5-4.5-4.5C15,3.5,13,5.5,13,8C13,10.5,15,12.5,17.5,12.5z M6.5,12.5 c2.5,0,4.5-2,4.5-4.5c0-2.5-2-4.5-4.5-4.5C4,3.5,2,5.5,2,8C2,10.5,4,12.5,6.5,12.5z M6.5,14.5C4,14.5,0,16.5,0,19v2h13v-2 C13,16.5,9,14.5,6.5,14.5z M17.5,14.5c-0.3,0-0.7,0-1.1,0.1c1.3,1,2.1,2.4,2.1,3.9v2h6v-2C24.5,16.5,20.5,14.5,17.5,14.5z",
-  dogFace: "M12,2C6.5,2,2,6.5,2,12c0,5.5,4.5,10,10,10s10-4.5,10-10C22,6.5,17.5,2,12,2z M7.5,9c0.8,0,1.5,0.7,1.5,1.5S8.3,12,7.5,12 S6,11.3,6,10.5S6.7,9,7.5,9z M16.5,9c0.8,0,1.5,0.7,1.5,1.5S17.3,12,16.5,12S15,11.3,15,10.5S15.7,9,16.5,9z M12,17.5 c-2.3,0-4.3-1.5-5.1-3.5h10.2C16.3,16,14.3,17.5,12,17.5z",
-  catFace: "M12,2C6.5,2,2,6.5,2,12c0,5.5,4.5,10,10,10s10-4.5,10-10C22,6.5,17.5,2,12,2z M8,13c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S9.1,13,8,13z M12,18c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2S13.1,18,12,18z M16,13c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S17.1,13,16,13z",
-  bone: "M20.5,3.5c-1.4-1.4-3.6-1.4-5,0c-0.6,0.6-1,1.5-1,2.5H9.5c0-0.9-0.4-1.8-1-2.5c-1.4-1.4-3.6-1.4-5,0s-1.4,3.6,0,5 c0.6,0.6,1.5,1,2.5,1v5c-0.9,0-1.8,0.4-2.5,1c-1.4,1.4-1.4,3.6,0,5s3.6,1.4,5,0c0.6-0.6,1-1.5,1-2.5h5c0,0.9,0.4,1.8,1,2.5 c1.4,1.4,3.6,1.4,5,0s1.4-3.6,0-5c-0.6-0.6-1.5-1-2.5-1v-5c0.9,0,1.8-0.4,2.5-1C21.9,7.1,21.9,4.9,20.5,3.5z",
+  dogFace: "M12,2C6.5,2,2,6.5,2,12c0,5.5,4.5,10,10,10s10-4.5,10-10C22,6.5,17.5,2,12,2z M8.5,9C9.3,9,10,9.7,10,10.5 S9.3,12,8.5,12S7,11.3,7,10.5S7.7,9,8.5,9z M15.5,9c0.8,0,1.5,0.7,1.5,1.5s-0.7,1.5-1.5,1.5s-1.5-0.7-1.5-1.5S14.7,9,15.5,9z M12,18 c-2.2,0-4-1.8-4-4h8C16,16.2,14.2,18,12,18z",
+  catFace: "M12,2C6.5,2,2,6.5,2,12c0,5.5,4.5,10,10,10s10-4.5,10-10C22,6.5,17.5,2,12,2z M8,11c0.6,0,1,0.4,1,1s-0.4,1-1,1s-1-0.4-1-1 S7.4,11,8,11z M16,11c0.6,0,1,0.4,1,1s-0.4,1-1,1s-1-0.4-1-1S15.4,11,16,11z M12,17c-1.7,0-3-1.3-3-3h6C15,15.7,13.7,17,12,17z",
+  bone: "M20.5,4.5c-1.5-1.5-3.8-1.5-5.3,0L14,5.7l-4-4L8.8,3C7.3,1.5,5,1.5,3.5,3S1.5,6.8,3,8.3L5.7,11l-4,4l1.2,1.2 c-1.5,1.5-1.5,3.8,0,5.3s3.8,1.5,5.3,0l4-4l4,4c1.5,1.5,3.8,1.5,5.3,0s1.5-3.8,0-5.3L20.5,15l-4-4l1.2-1.2 C19.2,8.3,22,5.5,20.5,4.5z",
+  bunny: "M12,2C9.2,2,7,4.2,7,7c0,1.9,1.1,3.5,2.6,4.3L7,14.8V19c0,1.1,0.9,2,2,2h6c1.1,0,2-0.9,2-2v-4.2l-2.6-3.5 C15.9,10.5,17,8.9,17,7C17,4.2,14.8,2,12,2z M9.5,8C8.7,8,8,7.3,8,6.5S8.7,5,9.5,5s1.5,0.7,1.5,1.5S10.3,8,9.5,8z M14.5,8 C13.7,8,13,7.3,13,6.5S13.7,5,14.5,5S16,5.7,16,6.5S15.3,8,14.5,8z",
+  bird: "M20,12c0-4.4-3.6-8-8-8s-8,3.6-8,8s3.6,8,8,8S20,16.4,20,12z M11,9c0.6,0,1,0.4,1,1s-0.4,1-1,1s-1-0.4-1-1S10.4,9,11,9z M8,12 c0-1.1,0.9-2,2-2s2,0.9,2,2s-0.9,2-2,2S8,13.1,8,12z M12,18c-2.2,0-4-1.8-4-4h8C16,16.2,14.2,18,12,18z",
+  pawPrint: "M17,4c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S19.2,4,17,4z M7,4C4.8,4,3,5.8,3,8s1.8,4,4,4s4-1.8,4-4S9.2,4,7,4z M12,10 c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S14.2,10,12,10z",
+  fishBowl: "M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M12,18c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6 S15.3,18,12,18z M14,11c-0.6,0-1,0.4-1,1s0.4,1,1,1s1-0.4,1-1S14.6,11,14,11z"
 };
 
 const HomeScreen = ({ navigation }) => {
@@ -110,12 +113,12 @@ const HomeScreen = ({ navigation }) => {
     const pets = [];
     const usedPositions = new Set();
     
-    // Generate 12 random pets
-    for (let i = 0; i < 12; i++) {
+    // Generate 15 random pets
+    for (let i = 0; i < 15; i++) {
       let position;
       do {
-        const gridX = Math.floor(Math.random() * 5);
-        const gridY = Math.floor(Math.random() * 5);
+        const gridX = Math.floor(Math.random() * 6);
+        const gridY = Math.floor(Math.random() * 6);
         position = `${gridX},${gridY}`;
       } while (usedPositions.has(position));
       
@@ -124,10 +127,10 @@ const HomeScreen = ({ navigation }) => {
       
       pets.push({
         type: petTypes[Math.floor(Math.random() * petTypes.length)],
-        top: (gridY * 20) + Math.random() * 15,
-        left: (gridX * 20) + Math.random() * 15,
+        top: (gridY * 16.66) + Math.random() * 10,
+        left: (gridX * 16.66) + Math.random() * 10,
         rotation: Math.random() * 360,
-        size: Math.random() * 20 + 30, // Slightly smaller for better look
+        size: Math.random() * 15 + 25,
       });
     }
     return pets;
@@ -156,8 +159,8 @@ const HomeScreen = ({ navigation }) => {
           <Path
             d={PET_PATHS[pet.type]}
             fill="#FFFFFF"
-            opacity={0.12}
-            strokeWidth="0.5"
+            opacity={0.15}
+            strokeWidth="0.3"
             stroke="#FFFFFF"
           />
         </Svg>
@@ -166,9 +169,14 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.background}>
+    <LinearGradient
+      colors={["#A259B5", "#8245A5", "#5E3B96"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.background}
+    >
       <LinearGradient
-        colors={["transparent", "rgba(0,0,0,0.2)"]}
+        colors={["rgba(255,255,255,0.1)", "rgba(0,0,0,0.2)"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientOverlay}
@@ -201,18 +209,32 @@ const HomeScreen = ({ navigation }) => {
             />
           </Animated.View>
           
-          <Image
-            source={require("../../assets/images/animal.png")}
-            style={styles.vetcare}
-          />
+          <View style={styles.vetcareContainer}>
+            <LinearGradient
+              colors={['rgba(255,255,255,0.15)', 'rgba(255,255,255,0.05)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.vetcareBackground}
+            />
+            <Image
+              source={require("../../assets/images/animal.png")}
+              style={styles.vetcare}
+            />
+          </View>
         </View>
 
         <View style={styles.swipeContainer}>
+          <LinearGradient
+            colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0.1)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.vetcareBackground}
+          />
           <MaterialIcons name="keyboard-arrow-up" size={32} color="#fff" />
           <Text style={styles.swipeText}>SWIPE UP TO START</Text>
         </View>
       </Animated.View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -221,13 +243,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#A259B5', // Solid background color
   },
   gradientOverlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    opacity: 0.6,
+    opacity: 0.5,
   },
   backgroundPets: {
     position: 'absolute',
@@ -239,12 +260,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 0.15,
+    opacity: 0.12,
   },
   petIcon: {
     shadowColor: '#FFFFFF',
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
   },
   container: {
     flex: 1,
@@ -280,20 +301,38 @@ const styles = StyleSheet.create({
     height: "90%",
     resizeMode: "contain",
   },
+  vetcareContainer: {
+    position: 'relative',
+    marginTop: height * 0.02,
+    padding: 15,
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+  },
+  vetcareBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 15,
+    opacity: 0.5,
+  },
   vetcare: {
-    width: width * 0.75, // Larger text
+    width: width * 0.75,
     height: height * 0.1,
     resizeMode: "contain",
-    marginTop: height * 0.02,
-    opacity: 0.95, // Slightly more visible
+    opacity: 1,
   },
   swipeContainer: {
+    position: 'relative',
     alignItems: "center",
     marginBottom: height * 0.08,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    paddingVertical: 10,
+    padding: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   swipeText: {
     fontSize: width * 0.035,
@@ -301,9 +340,6 @@ const styles = StyleSheet.create({
     fontFamily: "Fredoka_400Regular",
     letterSpacing: 2,
     marginTop: 5,
-    textShadowColor: 'rgba(0,0,0,0.3)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
   },
 });
 

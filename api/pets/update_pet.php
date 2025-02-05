@@ -28,6 +28,7 @@ try {
 
     // Handle file upload if photo is included
     $photo_path = null;
+    $photo_blob = null;
     if (isset($_FILES['photo'])) {
         $upload_dir = 'uploads/pet_photos/';
         
@@ -42,9 +43,11 @@ try {
         $file_tmp = $_FILES['photo']['tmp_name'];
         $target_path = $upload_dir . $unique_filename;
         
-        // Move uploaded file
+        // Read file contents for database storage
+        $photo_blob = file_get_contents($file_tmp);
+        
+        // Move uploaded file to filesystem
         if (move_uploaded_file($file_tmp, $target_path)) {
-            // Store relative path in database
             $photo_path = $target_path;
         } else {
             throw new Exception("Failed to upload photo");
@@ -67,9 +70,10 @@ try {
 
     // Add photo to update if uploaded
     if ($photo_path) {
-        $query .= ", photo = ?";
+        $query .= ", photo = ?, photo_blob = ?";
         $params[] = $photo_path;
-        $types .= "s";
+        $params[] = $photo_blob;
+        $types .= "sb"; // 's' for string path, 'b' for blob data
     }
 
     $query .= " WHERE id = ? AND user_id = ?";

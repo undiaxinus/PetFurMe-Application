@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Enable headers module
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+    </IfModule>
+    
+    # Allow direct access to PHP files in api directory
+    RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/api/.*\.php$ [NC]
+    RewriteRule ^ - [L]
+    
+    # Allow direct access to uploads directory
+    RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/uploads/.*$ [NC]
+    RewriteRule ^ - [L]
+    
+    # All other routes go to React app
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [L]
+</IfModule> 

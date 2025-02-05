@@ -360,20 +360,21 @@ CREATE TABLE `pets` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `gender` varchar(20) DEFAULT NULL,
   `weight` float DEFAULT NULL,
-  `photo` varchar(255) DEFAULT NULL
+  `photo` varchar(255) DEFAULT NULL COMMENT 'Stores relative path to image from uploads directory',
+  `photo_data` MEDIUMBLOB DEFAULT NULL COMMENT 'Binary image data backup'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `pets`
 --
 
-INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`) VALUES
-(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL),
-(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png'),
-(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL),
-(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png'),
-(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL),
-(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL);
+INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`, `photo_data`) VALUES
+(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL, NULL),
+(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png', NULL),
+(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL, NULL),
+(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png', NULL),
+(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL),
+(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -396,6 +397,7 @@ CREATE TABLE `products` (
   `tax_type` tinyint(4) DEFAULT NULL,
   `notes` text DEFAULT NULL,
   `product_image` varchar(255) DEFAULT NULL,
+  `product_image_data` MEDIUMBLOB DEFAULT NULL COMMENT 'Binary image data backup',
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `unit_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -406,12 +408,12 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `uuid`, `user_id`, `name`, `slug`, `code`, `quantity`, `buying_price`, `selling_price`, `quantity_alert`, `tax`, `tax_type`, `notes`, `product_image`, `category_id`, `unit_id`, `created_at`, `updated_at`) VALUES
-(1, '75b5b410-da75-4615-bb75-0c413a2a4ee3', 1, 'iPhone 14 Pro', 'iphone-14-pro', '1', 10, 90000, 140000, 10, 24, 1, NULL, 'assets/img/products/ip14.png', 3, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
-(2, 'a8b7b043-2db8-4480-8ef5-a395cb3f400b', 1, 'ASUS Laptop', 'asus-laptop', '2', 10, 90000, 140000, 10, 24, 1, NULL, 'assets/img/products/ip14.png', 1, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
-(3, 'd344998d-f607-46e4-9c4c-3d05e10419af', 1, 'Logitech Keyboard', 'logitech-keyboard', '3', 10, 90000, 140000, 10, 24, 1, NULL, 'assets/img/products/keyboard.jpg', 2, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
-(4, '62f5cd0a-bf2f-4bf0-bd2a-a0b926c28f9b', 1, 'Logitech Speakers', 'logitech-speakers', '4', 10, 90000, 140000, 10, 24, 1, NULL, 'assets/img/products/speaker.png', 4, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
-(5, '8c4be278-a94b-4e76-8448-6d91945f1fab', 1, 'AutoCAD v7.0', 'autocad-v7.0', '5', 10, 90000, 140000, 10, 24, 1, NULL, 'assets/img/products/autocard.png', 5, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37');
+INSERT INTO `products` (`id`, `uuid`, `user_id`, `name`, `slug`, `code`, `quantity`, `buying_price`, `selling_price`, `quantity_alert`, `tax`, `tax_type`, `notes`, `product_image`, `product_image_data`, `category_id`, `unit_id`, `created_at`, `updated_at`) VALUES
+(1, '75b5b410-da75-4615-bb75-0c413a2a4ee3', 1, 'iPhone 14 Pro', 'iphone-14-pro', '1', 10, 90000, 140000, 10, 24, 1, NULL, NULL, 3, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
+(2, 'a8b7b043-2db8-4480-8ef5-a395cb3f400b', 1, 'ASUS Laptop', 'asus-laptop', '2', 10, 90000, 140000, 10, 24, 1, NULL, NULL, 1, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
+(3, 'd344998d-f607-46e4-9c4c-3d05e10419af', 1, 'Logitech Keyboard', 'logitech-keyboard', '3', 10, 90000, 140000, 10, 24, 1, NULL, NULL, 2, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
+(4, '62f5cd0a-bf2f-4bf0-bd2a-a0b926c28f9b', 1, 'Logitech Speakers', 'logitech-speakers', '4', 10, 90000, 140000, 10, 24, 1, NULL, NULL, 4, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37'),
+(5, '8c4be278-a94b-4e76-8448-6d91945f1fab', 1, 'AutoCAD v7.0', 'autocad-v7.0', '5', 10, 90000, 140000, 10, 24, 1, NULL, NULL, 5, 3, '2024-11-20 20:57:37', '2024-11-20 20:57:37');
 
 -- --------------------------------------------------------
 
@@ -620,7 +622,8 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `photo` varchar(255) DEFAULT NULL,
+  `photo` varchar(255) DEFAULT NULL COMMENT 'Stores relative path to image from uploads directory',
+  `photo_data` MEDIUMBLOB DEFAULT NULL COMMENT 'Binary image data backup',
   `role` varchar(255) NOT NULL DEFAULT 'pet_owner'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -628,13 +631,13 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `uuid`, `username`, `name`, `email`, `pet_name`, `pet_type`, `phone`, `email_verified_at`, `password`, `store_name`, `store_address`, `store_email`, `remember_token`, `created_at`, `updated_at`, `photo`, `role`) VALUES
-(1, '954b74b3-1e08-4db4-bd98-ce7f9c4d03fc', 'Admin', 'Admin', 'admin@admin.com', NULL, NULL, '09214017593', '2024-11-20 20:57:36', '$2y$10$8psTGGwkaOu5juVhBNGHRePZois1LgmGWfRelYwhpnFh7j9Iu5J/2', NULL, NULL, NULL, NULL, '2024-11-20 20:57:36', '2025-01-10 21:21:53', 'user_photos/8MSa9boRg63FKEq4QUZSfECadwB4u0bxXagmllwa.jpg', 'admin'),
-(2, '36d9100e-dcc4-41cb-9321-d0e23c32c46a', NULL, 'quest', 'quest@quest.com', NULL, NULL, NULL, '2024-11-20 20:57:37', '$2y$10$t93o8YHnSdEInKg7R3RdA.NTVGuo8pqyITgaHtLY.2E5g5iI8s6gW', NULL, NULL, NULL, NULL, '2024-11-20 20:57:37', NULL, 'admin.jpg', 'sub_admin'),
-(3, '8f745adf-54a4-4c05-a66f-f68322b98605', NULL, 'user', 'user@user.com', NULL, NULL, NULL, '2024-11-20 20:57:37', '$2y$10$cvqO4XSwU/01ihBLTeSP8OKpkkumrOT7d55Ecc8ufXcw60JwPizu.', NULL, NULL, NULL, NULL, '2024-11-20 20:57:37', NULL, 'admin.jpg', 'pet_owner'),
-(4, 'f2358a7e-cfa5-11ef-8cfa-80fa5b80768d', NULL, 'Raizel', 'how@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$I8imNvafC.yodfZ1TPqI0eeTIEQjhZRarxdUL2ENsR9sEt1FOPqv2', NULL, NULL, NULL, NULL, '2025-01-10 14:55:11', '2025-01-10 14:55:11', NULL, 'pet_owner'),
-(101, 'f367acb9-d194-11ef-9398-80fa5b80768d', NULL, 'John Doe', 'johndoe@example.com', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '2025-01-13 09:58:34', '2025-01-13 09:58:34', NULL, 'pet_owner'),
-(102, 'f367bf64-d194-11ef-9398-80fa5b80768d', NULL, 'Jane Smith', 'janesmith@example.com', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '2025-01-13 09:58:34', '2025-01-13 09:58:34', NULL, 'pet_owner');
+INSERT INTO `users` (`id`, `uuid`, `username`, `name`, `email`, `pet_name`, `pet_type`, `phone`, `email_verified_at`, `password`, `store_name`, `store_address`, `store_email`, `remember_token`, `created_at`, `updated_at`, `photo`, `photo_data`, `role`) VALUES
+(1, '954b74b3-1e08-4db4-bd98-ce7f9c4d03fc', 'Admin', 'Admin', 'admin@admin.com', NULL, NULL, '09214017593', '2024-11-20 20:57:36', '$2y$10$8psTGGwkaOu5juVhBNGHRePZois1LgmGWfRelYwhpnFh7j9Iu5J/2', NULL, NULL, NULL, NULL, '2024-11-20 20:57:36', '2025-01-10 21:21:53', 'user_photos/8MSa9boRg63FKEq4QUZSfECadwB4u0bxXagmllwa.jpg', NULL, 'admin'),
+(2, '36d9100e-dcc4-41cb-9321-d0e23c32c46a', NULL, 'quest', 'quest@quest.com', NULL, NULL, NULL, '2024-11-20 20:57:37', '$2y$10$t93o8YHnSdEInKg7R3RdA.NTVGuo8pqyITgaHtLY.2E5g5iI8s6gW', NULL, NULL, NULL, NULL, '2024-11-20 20:57:37', NULL, 'admin.jpg', NULL, 'sub_admin'),
+(3, '8f745adf-54a4-4c05-a66f-f68322b98605', NULL, 'user', 'user@user.com', NULL, NULL, NULL, '2024-11-20 20:57:37', '$2y$10$cvqO4XSwU/01ihBLTeSP8OKpkkumrOT7d55Ecc8ufXcw60JwPizu.', NULL, NULL, NULL, NULL, '2024-11-20 20:57:37', NULL, 'admin.jpg', NULL, 'pet_owner'),
+(4, 'f2358a7e-cfa5-11ef-8cfa-80fa5b80768d', NULL, 'Raizel', 'how@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$I8imNvafC.yodfZ1TPqI0eeTIEQjhZRarxdUL2ENsR9sEt1FOPqv2', NULL, NULL, NULL, NULL, '2025-01-10 14:55:11', '2025-01-10 14:55:11', NULL, NULL, 'pet_owner'),
+(101, 'f367acb9-d194-11ef-9398-80fa5b80768d', NULL, 'John Doe', 'johndoe@example.com', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '2025-01-13 09:58:34', '2025-01-13 09:58:34', NULL, NULL, 'pet_owner'),
+(102, 'f367bf64-d194-11ef-9398-80fa5b80768d', NULL, 'Jane Smith', 'janesmith@example.com', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, '2025-01-13 09:58:34', '2025-01-13 09:58:34', NULL, NULL, 'pet_owner');
 
 --
 -- Indexes for dumped tables
