@@ -84,10 +84,13 @@ const HomePage = ({ navigation, route }) => {
 			console.log("Raw response data:", data);
 			
 			if (data.success) {
-				const loggablePets = data.pets.map(pet => ({
-					...pet,
-					photo: pet.photo ? pet.photo : null
-				}));
+				const loggablePets = data.pets.map(pet => {
+					console.log(`Processing pet ${pet.name} with photo URL:`, pet.photo);
+					return {
+						...pet,
+						photo: pet.photo ? pet.photo : null
+					};
+				});
 				console.log("Active pets found:", loggablePets);
 				setUserPets(loggablePets);
 			} else {
@@ -406,23 +409,19 @@ const HomePage = ({ navigation, route }) => {
 									source={
 										pet.photo 
 											? { 
-												uri: pet.photo, // This should be the full URL from the backend
+												uri: pet.photo,
 												headers: {
-													'Accept': 'image/jpeg',
 													'Cache-Control': 'no-cache'
 												}
 											}
-											: require("../../assets/images/lena.png") // Fallback image
+											: require("../../assets/images/doprof.png")
 									}
 									style={styles.petImage}
-									defaultSource={require("../../assets/images/lena.png")}
-									
-									onError={(error) => {
-										console.log('Image load error for pet:', pet.id, error.nativeEvent);
-										setImageLoadErrors(prev => ({
-											...prev,
-											[pet.id]: true
-										}));
+									defaultSource={require("../../assets/images/doprof.png")}
+									resizeMode="contain"
+									onError={(e) => {
+										console.log('Image loading error:', e.nativeEvent.error);
+										setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
 									}}
 								/>
 								<Text style={styles.petName}>{pet.name}</Text>
@@ -649,17 +648,29 @@ const styles = StyleSheet.create({
 		width: 70,
 		height: 70,
 	},
+	petItem: {
+		alignItems: 'center',
+		marginRight: 15,
+		marginTop: 5,
+		padding: 5,
+		overflow: 'visible',
+	},
 	petImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 35,
+		width: 65,
+		height: 65,
+		borderRadius: 32.5,
 		marginBottom: 5,
+		resizeMode: 'contain',
+		borderWidth: 2,
+		borderColor: '#8146C1',
+		backgroundColor: '#FFFFFF',
 	},
 	petName: {
-		textAlign: "center",
-		color: "#8146C1",
-		fontWeight: "bold",
 		fontSize: 12,
+		color: '#333',
+		textAlign: 'center',
+		marginTop: 5,
+		width: '100%',
 	},
 	petProductsBox: {
 		backgroundColor: "#F7F7F7",
@@ -836,29 +847,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		paddingVertical: 10,
 
-	},
-	petItem: {
-		alignItems: 'center',
-		marginRight: 15,
-		marginTop: -10,
-	},
-	petImage: {
-		width: 50,
-		height: 50,
-		borderRadius: 40,
-		marginBottom: 5,
-	},
-	petName: {
-		fontSize: 12,
-		color: '#333',
-		textAlign: 'center',
-	},
-	sectionTitle: {
-		fontSize: 18,
-		fontWeight: 'bold',
-		marginLeft: 20,
-		color: '#808080',
-		bottom: 10,
 	},
 	popupOverlay: {
 		position: 'absolute',
