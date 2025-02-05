@@ -10,12 +10,25 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
   // If user_id is not passed as prop, try to get it from route params
   const currentUserId = user_id || route.params?.user_id;
 
+  // Add this function to normalize screen names
+  const normalizeScreenName = (screenName) => {
+    const screenMap = {
+      'ChatSupport': 'ChatScreen',
+      'Chat': 'ChatScreen',
+      // Add other screen name mappings if needed
+    };
+    return screenMap[screenName] || screenName;
+  };
+
+  // Update the activeScreen check to use normalized names
+  const currentScreen = normalizeScreenName(activeScreen || route.name);
+
   // Create animation values with useRef to persist across re-renders
   const animations = React.useRef({
-    HomePage: new Animated.Value(activeScreen === 'HomePage' ? 1 : 0),
-    ChatScreen: new Animated.Value(activeScreen === 'ChatScreen' ? 1 : 0),
-    NotificationScreen: new Animated.Value(activeScreen === 'NotificationScreen' ? 1 : 0),
-    Help: new Animated.Value(activeScreen === 'Help' ? 1 : 0),
+    HomePage: new Animated.Value(currentScreen === 'HomePage' ? 1 : 0),
+    ChatScreen: new Animated.Value(currentScreen === 'ChatScreen' ? 1 : 0),
+    NotificationScreen: new Animated.Value(currentScreen === 'NotificationScreen' ? 1 : 0),
+    Help: new Animated.Value(currentScreen === 'Help' ? 1 : 0),
   }).current;
 
   // Reset animations when activeScreen changes
@@ -30,14 +43,14 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
     });
 
     // Animate the active screen
-    if (animations[activeScreen]) {
-      Animated.timing(animations[activeScreen], {
+    if (animations[currentScreen]) {
+      Animated.timing(animations[currentScreen], {
         toValue: 1,
         duration: 200,
         useNativeDriver: true,
       }).start();
     }
-  }, [activeScreen, animations]);
+  }, [currentScreen, animations]);
 
   const handleNavigation = (screen) => {
     try {
@@ -98,13 +111,13 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
           >
             <Animated.View style={[styles.iconContainer, getTabStyle(screen)]}>
               <Ionicons 
-                name={activeScreen === screen ? icon : `${icon}-outline`}
+                name={currentScreen === screen ? icon : `${icon}-outline`}
                 size={24} 
                 color="#8146C1" 
               />
               <Text style={[
                 styles.navText, 
-                activeScreen === screen && styles.activeText
+                currentScreen === screen && styles.activeText
               ]}>{label}</Text>
             </Animated.View>
           </TouchableOpacity>

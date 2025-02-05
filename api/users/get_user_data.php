@@ -1,9 +1,14 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json; charset=UTF-8');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
-header('Cache-Control: public, max-age=3600');
+header('Content-Type: application/json');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Accept, Authorization, X-Requested-With, Cache-Control, Pragma');
+
+// Handle preflight OPTIONS request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 include_once '../config/Database.php';
 include_once '../config/constants.php';
@@ -17,18 +22,19 @@ try {
         throw new Exception("Database connection failed");
     }
 
-    // Get user_id from query parameter
-    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+    // Get user_id from GET or POST
+    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 
+              (isset($_POST['user_id']) ? $_POST['user_id'] : null);
 
     // Debug log for user_id
-    error_log("Attempting to fetch data for user_id: " . $user_id);
+    error_log("Received request for user_id: " . $user_id);
 
     if (!$user_id) {
         throw new Exception("User ID is required");
     }
 
-    // Updated query to include photo and role
-    $query = "SELECT username, name, email, phone, age, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
+    // Updated query to include all necessary fields
+    $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
     
     // Debug log for query
     error_log("Executing query: " . $query);
@@ -53,34 +59,19 @@ try {
         // Debug log for raw data
         error_log("Raw data from database: " . json_encode($row));
         
-        // Handle photo path
-        $photoUrl = null;
-        if ($row['photo'] !== null && $row['photo'] !== '') {
-            error_log("Photo value from database: " . $row['photo']);
-            
-            // Check if it's already a full URL
-            if (!filter_var($row['photo'], FILTER_VALIDATE_URL)) {
-                error_log("Photo is not a URL, constructing path...");
-                
-                $photoUrl = $row['photo'];  // Use the raw photo value
-                error_log("Constructed photoUrl: " . $photoUrl);
-            } else {
-                $photoUrl = $row['photo'];
-                error_log("Using original photo URL: " . $photoUrl);
-            }
-        }
-        
         $response = [
             'success' => true,
             'profile' => [
+                'id' => $row['id'],
+                'uuid' => $row['uuid'],
                 'username' => $row['username'],
                 'name' => $row['name'],
                 'email' => $row['email'],
                 'phone' => $row['phone'],
                 'age' => $row['age'],
-                'address' => $row['store_address'],
-                'photo' => $photoUrl,  // Use the photoUrl we constructed
-                'role' => $row['role'] ?: 'pet_owner',
+                'address' => $row['address'] ?? $row['store_address'],
+                'photo' => $row['photo'],
+                'role' => $row['role'] ?? 'pet_owner',
                 'email_verified_at' => $row['email_verified_at']
             ]
         ];

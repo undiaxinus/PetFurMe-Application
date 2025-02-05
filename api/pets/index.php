@@ -6,6 +6,11 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 include_once '../config/Database.php';
 
+error_log('Received POST data: ' . print_r($_POST, true));
+error_log('Received FILES data: ' . print_r($_FILES, true));
+
+error_log("Starting pet creation process");
+
 try {
     $database = new Database();
     $db = $database->connect();
@@ -16,6 +21,7 @@ try {
 
     // Get the form data
     $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
+    $created_by = isset($_POST['created_by']) ? intval($_POST['created_by']) : null;
     $name = isset($_POST['name']) ? $_POST['name'] : null;
     $type = isset($_POST['type']) ? $_POST['type'] : null;
     $breed = isset($_POST['breed']) ? $_POST['breed'] : null;
@@ -48,13 +54,47 @@ try {
         }
     }
 
-    // Prepare the query
-    $query = "INSERT INTO pets (user_id, name, type, breed, age, gender, weight, size, allergies, notes, category, photo, created_at, updated_at) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+    // Prepare the query - note the correct number of placeholders (13)
+    $query = "INSERT INTO pets (user_id, created_by, name, type, breed, age, gender, weight, size, allergies, notes, category, photo) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
+    error_log("Query to execute: " . $query);
+    error_log("Parameters: " . json_encode([
+        'user_id' => $user_id,
+        'created_by' => $created_by,
+        'name' => $name,
+        'type' => $type,
+        'breed' => $breed,
+        'age' => $age,
+        'gender' => $gender,
+        'weight' => $weight,
+        'size' => $size,
+        'allergies' => $allergies,
+        'notes' => $notes,
+        'category' => $category,
+        'photo_path' => $photo_path
+    ]));
+
     $stmt = $db->prepare($query);
-    $stmt->bind_param("isssisdsssss", 
-        $user_id, $name, $type, $breed, $age, $gender, $weight, $size, $allergies, $notes, $category, $photo_path
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $db->error);
+    }
+
+    // Note the correct number of types (13) - "iisssissssss" -> "iisssisssssss"
+    $stmt->bind_param("iisssisssssss",
+        $user_id,
+        $created_by,
+        $name,
+        $type,
+        $breed,
+        $age,
+        $gender,
+        $weight,
+        $size,
+        $allergies,
+        $notes,
+        $category,
+        $photo_path
     );
 
     if ($stmt->execute()) {

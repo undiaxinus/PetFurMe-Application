@@ -249,6 +249,7 @@ const NotificationScreen = ({ navigation, route }) => {
         subtitle="Stay updated with your activities"
         navigation={navigation}
         showBackButton={true}
+        showDrawerButton={true}
       />
 
       {loading && !isRefreshing ? (

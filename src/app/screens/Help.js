@@ -102,6 +102,7 @@ const HelpScreen = ({ navigation }) => {
         subtitle="Frequently Asked Questions"
         navigation={navigation}
         showBackButton={true}
+        showDrawerButton={true}
       />
 
       {/* Help Sections */}

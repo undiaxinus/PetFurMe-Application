@@ -245,6 +245,7 @@ const ChatScreen = ({ navigation, route }) => {
         subtitle="Ask us anything about pet care"
         navigation={navigation}
         showBackButton={true}
+        showDrawerButton={true}
       />
 
       <View style={styles.chatWrapper}>

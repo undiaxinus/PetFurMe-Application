@@ -361,20 +361,21 @@ CREATE TABLE `pets` (
   `gender` varchar(20) DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL COMMENT 'Stores relative path to image from uploads directory',
-  `photo_data` MEDIUMBLOB DEFAULT NULL COMMENT 'Binary image data backup'
+  `photo_data` MEDIUMBLOB DEFAULT NULL COMMENT 'Binary image data backup',
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `pets`
 --
 
-INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`, `photo_data`) VALUES
-(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL, NULL),
-(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png', NULL),
-(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL, NULL),
-(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png', NULL),
-(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL),
-(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL);
+INSERT INTO `pets` (`id`, `user_id`, `name`, `type`, `breed`, `age`, `owner_name`, `allergies`, `notes`, `category`, `created_at`, `updated_at`, `gender`, `weight`, `photo`, `photo_data`, `created_by`) VALUES
+(7, 3, 'Doggy', 'Dog', 'Shitzu', 3, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:37:14', '2025-01-11 21:37:14', 'Male', 50, NULL, NULL, NULL),
+(8, 4, 'Doggy', 'Dog', 'Shitzu', 4, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:44:27', '2025-01-11 21:44:27', 'Male', 50, 'pet_photos/wBUL8fjPFkFdQWWQDRtHFvgC2EyJ5JtRaVj7Ugcg.png', NULL, NULL),
+(9, 4, 'Raizel2', 'Dog', 'Shitzu', 5, NULL, NULL, NULL, 'Mammal', '2025-01-11 21:53:50', '2025-01-11 21:53:50', 'Male', 50, NULL, NULL, NULL),
+(10, 3, 'Doggy', 'Dog', 'Shitzu', 5, NULL, 'None', 'None', 'Mammal', '2025-01-11 21:57:34', '2025-01-11 22:16:40', 'Male', 50, 'pet_photos/m4qgC7J1W60QQeIXoYxrRGXRHlTMkhYpioVSq6Dj.png', NULL, NULL),
+(201, 101, 'Buddy', 'Dog', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL, NULL),
+(202, 102, 'Mittens', 'Cat', NULL, NULL, NULL, NULL, NULL, '', '2025-01-13 09:59:59', '2025-01-13 09:59:59', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

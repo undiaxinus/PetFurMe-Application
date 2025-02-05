@@ -3,6 +3,7 @@ import {
 	View,
 	Text,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	Image,
 	StyleSheet,
 	ScrollView,
@@ -28,6 +29,7 @@ const HomePage = ({ navigation, route }) => {
 	const [isProductsLoading, setIsProductsLoading] = useState(false);
 	const [userName, setUserName] = useState('');
 	const [userPhoto, setUserPhoto] = useState(null);
+	const [showProfileTutorial, setShowProfileTutorial] = useState(false);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -165,6 +167,7 @@ const HomePage = ({ navigation, route }) => {
 
 	const handleMaybeLater = () => {
 		setShowWelcomePopup(false);
+		setShowProfileTutorial(true);
 	};
 
 	const categories = [
@@ -201,13 +204,8 @@ const HomePage = ({ navigation, route }) => {
 	const vets = [
 		{
 			id: "1",
-			name: "Dr. Iwan",
-			specialty: "Bachelor of Veterinary Science",
-			rating: "5.0",
-			reviews: "100 reviews",
-			lastVisit: "25/07/2024",
-			distance: "2.5km",
-			image: require("../../assets/images/doctor.png"),
+			title: "Ready to book an appointment?",
+			subtitle: "Connect with our trusted veterinarians for your pet's health needs",
 		},
 	];
 
@@ -311,6 +309,27 @@ const HomePage = ({ navigation, route }) => {
 					</View>
 				</View>
 			)}
+			{showProfileTutorial && !isProfileComplete && (
+				<TouchableWithoutFeedback>
+					<View style={styles.tutorialOverlay}>
+						<View style={styles.tutorialCutoutContainer}>
+							<View style={styles.tutorialCutout} />
+							<View style={styles.tutorialTextContainer}>
+								<Text style={styles.tutorialTitle}>One More Thing!</Text>
+								<Text style={styles.tutorialText}>
+									Complete your profile to unlock all features and get personalized care for your pets
+								</Text>
+								<TouchableOpacity 
+									style={styles.tutorialButton}
+									onPress={() => setShowProfileTutorial(false)}
+								>
+									<Text style={styles.tutorialButtonText}>Got it!</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			)}
 			{isLoading && (
 				<View style={styles.loadingContainer}>
 					<ActivityIndicator size="large" color="#8146C1" />
@@ -318,15 +337,36 @@ const HomePage = ({ navigation, route }) => {
 			)}
 			{/* Fixed Header */}
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-			<View style={styles.searchSection}>
-						<Image
-							source={require("../../assets/images/lookingfor.png")}
-							style={styles.searchIcon}
-						/>
-						<Text style={styles.searchText}>
-							What are you looking for?
-						</Text>
-					</View>
+				{!isProfileComplete && (
+					<TouchableOpacity 
+						style={[styles.setupBanner, styles.setupBannerHighlight]}
+						onPress={() => navigation.navigate('ProfileVerification', { user_id: user_id })}
+					>
+						<View style={styles.setupBannerContent}>
+							<View style={styles.setupIconContainer}>
+								<Ionicons name="person-circle-outline" size={40} color="#8146C1" />
+								<View style={styles.setupIconBadge}>
+									<Ionicons name="alert-circle" size={20} color="#FF8ACF" />
+								</View>
+							</View>
+							<View style={styles.setupTextContainer}>
+								<Text style={styles.setupTitle}>Complete Profile</Text>
+								<Text style={styles.setupSubtitle}>Required to access all features</Text>
+							</View>
+							<Ionicons name="chevron-forward-circle" size={24} color="#8146C1" />
+						</View>
+					</TouchableOpacity>
+				)}
+				
+				<View style={styles.searchSection}>
+					<Image
+						source={require("../../assets/images/lookingfor.png")}
+						style={styles.searchIcon}
+					/>
+					<Text style={styles.searchText}>
+						What are you looking for?
+					</Text>
+				</View>
 				{/* Categories Section */}
 				<View style={styles.categoriesContainer}>
 					{categories.map((category) => (
@@ -440,25 +480,15 @@ const HomePage = ({ navigation, route }) => {
 					style={styles.vet}
 				/>
 					<Text style={styles.vets}>Vets</Text>
-					{vets.map((vet) => (
-						<View key={vet.id} style={styles.vetCard}>
-							<Image source={vet.image} style={styles.vetImage} />
+					{vets.map((item) => (
+						<View key={item.id} style={styles.vetCard}>
 							<View style={styles.vetDetails}>
-								<Text style={styles.vetName}>{vet.name}</Text>
-								<Text style={styles.vetSpecialty}>{vet.specialty}</Text>
-								<Text style={styles.vetRating}>
-									⭐ {vet.rating} ({vet.reviews})
-								</Text>
-								<Text style={styles.vetDistance}>{vet.distance}</Text>
-								<Text style={styles.lastVisit}>Last Visit: {vet.lastVisit}</Text>
-
+								<Text style={styles.vetCardTitle}>{item.title}</Text>
+								<Text style={styles.vetCardSubtitle}>{item.subtitle}</Text>
 								<TouchableOpacity
-									onPress={() =>
-										navigation.navigate("Consultation", { user_id: user_id })
-									}>
-									<Text style={styles.bookAppointmentText}>
-										Book Appointment ➔
-									</Text>
+									style={styles.bookAppointmentButton}
+									onPress={() => navigation.navigate("Consultation", { user_id: user_id })}>
+									<Text style={styles.bookAppointmentText}>Book Appointment →</Text>
 								</TouchableOpacity>
 							</View>
 						</View>
@@ -466,10 +496,14 @@ const HomePage = ({ navigation, route }) => {
 				</View>
 			</ScrollView>
 
-			{/* Bottom Navigation */}
+			{/* Bottom Navigation - Always present but with pointer-events disabled */}
 			<BottomNavigation 
 				activeScreen="HomePage" 
 				user_id={user_id}
+				style={[
+					styles.bottomNav,
+					(showWelcomePopup || showProfileTutorial) && styles.bottomNavDisabled
+				]}
 			/>
 		</View>
 	);
@@ -481,8 +515,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	scrollContent: {
-		paddingTop: 120,
-		paddingBottom: 90,
+		paddingBottom: 120,
 	},
 	searchSection: {
 		flexDirection: 'row',
@@ -663,48 +696,47 @@ const styles = StyleSheet.create({
 		top: -50,
 	},
 	vetCard: {
-		flexDirection: "row",
-		alignItems: "center",
 		backgroundColor: "#FFFFFF",
-		borderRadius: 10,
-		padding: 15,
+		borderRadius: 15,
+		padding: 20,
 		bottom: 10,
 		elevation: 2,
 		marginBottom: 20,
-	},
-	vetImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 30,
-		marginRight: 15,
+		borderWidth: 2,
+		borderColor: '#8146C1',
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
 	},
 	vetDetails: {
-		flex: 1,
+		width: '100%',
 	},
-	vetName: {
-		fontSize: 16,
+	vetCardTitle: {
+		fontSize: 18,
 		fontWeight: "bold",
+		color: "#8146C1",
+		marginBottom: 8,
 	},
-	vetSpecialty: {
-		fontSize: 12,
-		color: "#888888",
+	vetCardSubtitle: {
+		fontSize: 14,
+		color: "#666666",
+		marginBottom: 16,
+		lineHeight: 20,
 	},
-	vetRating: {
-		fontSize: 12,
-		color: "#FFD700",
-	},
-	vetDistance: {
-		fontSize: 12,
-		color: "#888888",
-	},
-	lastVisit: {
-		fontSize: 12,
-		color: "#888888",
-		marginVertical: 5,
+	bookAppointmentButton: {
+		backgroundColor: "#8146C1",
+		padding: 12,
+		borderRadius: 25,
+		alignItems: "center",
+		marginTop: 5,
 	},
 	bookAppointmentText: {
-		fontSize: 14,
-		color: "#8146C1",
+		fontSize: 16,
+		color: "#FFFFFF",
 		fontWeight: "bold",
 	},
 	loadingContainer: {
@@ -732,96 +764,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		justifyContent: 'center',
 		alignItems: 'center',
-		zIndex: 1000,
-	},
-	popupContainer: {
-		backgroundColor: '#FFFFFF',
-		borderRadius: 20,
-		padding: 20,
-		width: '85%',
-		alignItems: 'center',
-	},
-	popupTitle: {
-		fontSize: 28,
-		fontWeight: 'bold',
-		color: '#8146C1',
-		marginBottom: 10,
-		textAlign: 'center',
-	},
-	popupText: {
-		fontSize: 16,
-		color: '#666',
-		textAlign: 'center',
-		marginBottom: 20,
-		paddingHorizontal: 10,
-	},
-	popupFeatures: {
-		alignSelf: 'stretch',
-		marginBottom: 25,
-		paddingLeft: 20,
-	},
-	popupFeatureItem: {
-		fontSize: 16,
-		color: '#666',
-		marginBottom: 12,
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	popupQuestion: {
-		fontSize: 18,
-		color: '#333',
-		fontWeight: '600',
-		marginBottom: 20,
-	},
-	popupButtons: {
-		width: '100%',
-		gap: 10,
-	},
-	setupButton: {
-		backgroundColor: '#8146C1',
-		paddingVertical: 12,
-		paddingHorizontal: 30,
-		borderRadius: 25,
-		width: '100%',
-		alignItems: 'center',
-	},
-	setupButtonText: {
-		color: '#FFFFFF',
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	laterButton: {
-		backgroundColor: '#FFFFFF',
-		paddingVertical: 12,
-		paddingHorizontal: 30,
-		borderRadius: 25,
-		width: '100%',
-		alignItems: 'center',
-		borderWidth: 1,
-		borderColor: '#8146C1',
-	},
-	laterButtonText: {
-		color: '#8146C1',
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	petsSection: {
-		top: -50,
-		marginBottom: 20,
-	},
-	welcomeIcon: {
-		marginBottom: 10,
-	},
-	popupOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-		justifyContent: 'center',
-		alignItems: 'center',
-		zIndex: 1000,
+		zIndex: 2000,
 	},
 	popupContainer: {
 		backgroundColor: '#FFFFFF',
@@ -911,6 +854,145 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		borderWidth: 2,
 		borderColor: '#FFFFFF',
+	},
+	setupBanner: {
+		backgroundColor: '#FFFFFF',
+		marginHorizontal: 20,
+		marginVertical: 10,
+		borderRadius: 12,
+		padding: 12,
+		elevation: 3,
+		borderWidth: 2,
+		borderColor: '#8146C1',
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+	},
+	setupBannerHighlight: {
+		transform: [{ scale: 1.02 }],
+	},
+	setupBannerContent: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	setupIconContainer: {
+		position: 'relative',
+		width: 45,
+		height: 45,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	setupIconBadge: {
+		position: 'absolute',
+		top: -5,
+		right: -5,
+		backgroundColor: '#FFFFFF',
+		borderRadius: 12,
+		padding: 2,
+	},
+	setupTextContainer: {
+		flex: 1,
+		marginHorizontal: 12,
+	},
+	setupTitle: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 2,
+	},
+	setupSubtitle: {
+		fontSize: 12,
+		color: '#666666',
+		fontWeight: '500',
+	},
+	tutorialOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.7)',
+		zIndex: 2000,
+	},
+	tutorialCutoutContainer: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		paddingTop: 95,
+	},
+	tutorialCutout: {
+		marginHorizontal: 20,
+		height: 65,
+		borderRadius: 12,
+		backgroundColor: 'transparent',
+		borderWidth: 2,
+		borderColor: '#FF8ACF',
+		shadowColor: '#FF8ACF',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowOpacity: 0.5,
+		shadowRadius: 10,
+	},
+	tutorialTextContainer: {
+		marginHorizontal: 20,
+		marginTop: 20,
+		backgroundColor: '#FFFFFF',
+		padding: 20,
+		borderRadius: 15,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	tutorialTitle: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 10,
+		textAlign: 'center',
+	},
+	tutorialText: {
+		fontSize: 14,
+		color: '#666666',
+		textAlign: 'center',
+		marginBottom: 15,
+		lineHeight: 20,
+	},
+	tutorialButton: {
+		backgroundColor: '#8146C1',
+		paddingVertical: 10,
+		paddingHorizontal: 30,
+		borderRadius: 25,
+		marginTop: 5,
+	},
+	tutorialButtonText: {
+		color: '#FFFFFF',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	bottomNav: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		zIndex: 1000,
+	},
+	bottomNavDisabled: {
+		opacity: 0.7,
 	},
 });
 

@@ -158,6 +158,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 			const petData = {
 				user_id: parseInt(user_id),
+				created_by: parseInt(user_id),
 				name: petName.trim(),
 				type: petType.toLowerCase(),
 				breed: petBreed.trim(),
@@ -171,9 +172,14 @@ const AddPetProfile = ({ navigation, route }) => {
 				size: petSize?.toLowerCase() || null
 			};
 
+			// Add debugging log
+			console.log('Pet Data being sent:', petData);
+
 			// Append each field individually to FormData
 			Object.keys(petData).forEach(key => {
 				formData.append(key, petData[key]);
+				// Add debugging log
+				console.log(`Appending ${key}:`, petData[key]);
 			});
 
 			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/index.php`;
@@ -256,7 +262,7 @@ const AddPetProfile = ({ navigation, route }) => {
 				});
 			}
 		} catch (error) {
-			console.error('Error creating pet profile:', error);
+			console.error('Error in handleContinue:', error);
 			Toast.show({
 				type: 'error',
 				text1: 'Error',
