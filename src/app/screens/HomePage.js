@@ -66,6 +66,7 @@ const HomePage = ({ navigation, route }) => {
 		}
 		
 		try {
+			// Fix the URL to use the correct endpoint
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
 			console.log("Attempting to fetch from:", url);
 			
@@ -77,20 +78,18 @@ const HomePage = ({ navigation, route }) => {
 				}
 			});
 			
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			
+			// Add debug logging
+			console.log("Response status:", response.status);
 			const data = await response.json();
-			console.log("Successfully parsed response data:", data);
+			console.log("Raw response data:", data);
 			
 			if (data.success) {
 				const loggablePets = data.pets.map(pet => ({
 					...pet,
-					photo: pet.photo ? pet.photo : null // Use the photo URL directly
+					photo: pet.photo ? pet.photo : null
 				}));
-				console.log("Pets data received:", loggablePets);
-				setUserPets(loggablePets); // Update state with the correct pet data
+				console.log("Active pets found:", loggablePets);
+				setUserPets(loggablePets);
 			} else {
 				throw new Error(data.message || 'Failed to load pets data');
 			}

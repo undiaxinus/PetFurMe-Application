@@ -6252,3 +6252,75 @@
 [05-Feb-2025 01:48:30 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
 [05-Feb-2025 01:48:30 Europe/Berlin] Stack trace: #0 {main}
 [05-Feb-2025 01:48:30 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 01:51:50 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 01:51:50 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 01:51:50 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 01:51:50 Europe/Berlin] User ID: 108
+[05-Feb-2025 01:51:50 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 01:51:50 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 01:51:50 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 01:51:50 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 01:53:33 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 01:53:33 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 01:53:33 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 01:53:33 Europe/Berlin] User ID: 108
+[05-Feb-2025 01:53:33 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 01:53:33 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 01:53:33 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 01:53:33 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 01:56:24 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 01:56:24 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 01:56:24 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 01:56:24 Europe/Berlin] User ID: 108
+[05-Feb-2025 01:56:24 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 01:56:24 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 01:56:24 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 01:56:24 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 01:58:05 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 01:58:05 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 01:58:05 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 01:58:05 Europe/Berlin] User ID: 108
+[05-Feb-2025 01:58:05 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 01:58:05 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 01:58:05 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 01:58:05 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 02:14:04 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 02:14:04 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 02:14:04 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 02:14:04 Europe/Berlin] User ID: 108
+[05-Feb-2025 02:14:04 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 02:14:04 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 02:14:04 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 02:14:04 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 02:14:12 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 02:14:12 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 02:14:12 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 02:14:12 Europe/Berlin] User ID: 108
+[05-Feb-2025 02:14:12 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 02:14:12 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 02:14:12 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 02:14:12 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 02:18:15 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 02:18:15 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 02:18:15 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 02:18:15 Europe/Berlin] User ID: 108
+[05-Feb-2025 02:18:15 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 02:18:15 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 02:18:15 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 02:18:15 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 02:21:51 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 02:21:51 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 02:21:51 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 02:21:51 Europe/Berlin] User ID: 108
+[05-Feb-2025 02:21:51 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 02:21:51 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 02:21:51 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 02:21:51 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}
+[05-Feb-2025 02:23:40 Europe/Berlin] === New Request to check_profile_status.php ===
+[05-Feb-2025 02:23:40 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[05-Feb-2025 02:23:40 Europe/Berlin] Request method: OPTIONS
+[05-Feb-2025 02:23:40 Europe/Berlin] User ID: 108
+[05-Feb-2025 02:23:40 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[05-Feb-2025 02:23:40 Europe/Berlin] ERROR in check_profile_status.php: Method not allowed
+[05-Feb-2025 02:23:40 Europe/Berlin] Stack trace: #0 {main}
+[05-Feb-2025 02:23:40 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Method not allowed","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":38}}

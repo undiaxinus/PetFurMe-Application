@@ -27,9 +27,9 @@ try {
     error_log("Fetching pets for user_id: " . $user_id);
 
     // Fetch pets with BLOB data
-    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo, allergies, notes 
+    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo, allergies, notes, deleted_at 
              FROM pets 
-             WHERE user_id = ?";
+             WHERE user_id = ? AND deleted_at IS NULL";
              
     $stmt = $db->prepare($query);
     
@@ -43,8 +43,10 @@ try {
         $result = $stmt->get_result();
         $pets = array();
         
+        error_log("Found " . $result->num_rows . " active pets");
+        
         while ($row = $result->fetch_assoc()) {
-            error_log("Processing pet: " . $row['name']);
+            error_log("Processing pet: " . json_encode($row));
             
             // Handle photo
             $photoUrl = null;
