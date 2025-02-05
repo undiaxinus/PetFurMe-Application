@@ -29,6 +29,8 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		for (const route of state.routes) {
 			if (route.params?.user_id) {
 				try {
+					console.log("Fetching data for user_id:", route.params.user_id);
+					
 					const response = await fetch(
 						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}&t=${Date.now()}`
 					);
@@ -38,36 +40,19 @@ const CustomDrawerContent = ({ navigation, state }) => {
 					}
 					
 					const data = await response.json();
-					console.log("User data response:", data);
+					console.log("Raw API Response:", data);
 					
 					if (data.success) {
-						let photoUri = null;
-						
-						if (data.profile.photo) {
-							try {
-								const cleanBase64 = data.profile.photo.replace(/[\r\n\s]/g, '');
-								
-								if (cleanBase64.startsWith('data:image')) {
-									photoUri = cleanBase64;
-								} else if (cleanBase64.match(/^[A-Za-z0-9+/=]+$/)) {
-									photoUri = `data:image/jpeg;base64,${cleanBase64}`;
-								} else {
-									photoUri = cleanBase64.startsWith('http') 
-										? cleanBase64 
-										: `${API_BASE_URL}/PetFurMe-Application/${cleanBase64}`;
-								}
-							} catch (error) {
-								console.error("Error processing photo:", error);
-								photoUri = null;
-							}
-						}
-
-						return {
+						const userData = {
 							user_id: route.params.user_id,
-							name: data.profile.name || "Guest",
-							role: data.profile.role || "User",
-							photo: photoUri
+							name: data.profile.name,
+							username: data.profile.username,
+							role: data.profile.role,
+							photo: data.profile.photo
 						};
+						
+						console.log("Processed user data:", userData);
+						return userData;
 					}
 				} catch (error) {
 					console.error("Error in getUserData:", error);
@@ -100,19 +85,15 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	useEffect(() => {
 		const loadUserData = async () => {
 			const data = await getUserData();
+			console.log("Fetched user data:", data);
 			if (data) {
 				setUserData(data);
 				loadActivityLogs();
 			}
 		};
 		
-		// Initial load
 		loadUserData();
-		
-		// Set up auto refresh interval
 		const refreshInterval = setInterval(loadUserData, 10000);
-		
-		// Cleanup interval on unmount
 		return () => clearInterval(refreshInterval);
 	}, [state?.routes]);
 
@@ -161,21 +142,36 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	};
 
 	const renderProfileSection = () => {
+		// Get the actual user data
+		const displayName = userData?.name || userData?.username;
+		const userRole = userData?.role || "pet_owner";
+		
+		console.log("Rendering profile with:", {
+			displayName,
+			userRole,
+			photo: userData?.photo
+		});
+		
 		return (
 			<View style={styles.profileSection}>
 				<View style={styles.profileImageContainer}>
 					<Image
-						source={userData?.photo ? { uri: userData.photo } : require("../../assets/images/defphoto.png")}
+						source={
+							userData?.photo 
+								? { uri: `${API_BASE_URL}/PetFurMe-Application/uploads/${userData.photo}` }
+								: require("../../assets/images/defphoto.png")
+						}
 						style={styles.profileImage}
 						defaultSource={require("../../assets/images/defphoto.png")}
+						onError={(error) => console.error("Image loading error:", error)}
 					/>
 				</View>
 				<View style={styles.profileTextContainer}>
 					<Text style={styles.profileName}>
-						{userData?.name || "Guest"}
+						{displayName}
 					</Text>
 					<Text style={styles.profileRole}>
-						{userData?.role || "User"}
+						{userRole === 'pet_owner' ? 'Pet Owner' : userRole}
 					</Text>
 				</View>
 			</View>

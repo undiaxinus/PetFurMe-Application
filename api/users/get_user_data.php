@@ -20,15 +20,19 @@ try {
     // Get user_id from query parameter
     $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
+    // Debug log for user_id
+    error_log("Attempting to fetch data for user_id: " . $user_id);
+
     if (!$user_id) {
         throw new Exception("User ID is required");
     }
 
-    // Debug log
-    error_log("Fetching user data for user_id: " . $user_id);
-
     // Updated query to include photo and role
     $query = "SELECT username, name, email, phone, age, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
+    
+    // Debug log for query
+    error_log("Executing query: " . $query);
+
     $stmt = $db->prepare($query);
 
     if (!$stmt) {
@@ -46,30 +50,23 @@ try {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
+        // Debug log for raw data
+        error_log("Raw data from database: " . json_encode($row));
+        
         // Handle photo path
         $photoUrl = null;
         if ($row['photo'] !== null && $row['photo'] !== '') {
+            error_log("Photo value from database: " . $row['photo']);
+            
             // Check if it's already a full URL
             if (!filter_var($row['photo'], FILTER_VALIDATE_URL)) {
-                // Handle different path formats
-                if (strpos($row['photo'], 'uploads/') === 0) {
-                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application/' . $row['photo'];
-                } else if (strpos($row['photo'], '/uploads/') === 0) {
-                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application' . $row['photo'];
-                } else {
-                    $photoUrl = $API_BASE_URL . '/PetFurMe-Application/uploads/' . basename($row['photo']);
-                }
+                error_log("Photo is not a URL, constructing path...");
                 
-                // Verify file exists
-                $absolute_path = UPLOADS_ABSOLUTE_PATH . '/' . basename($row['photo']);
-                if (file_exists($absolute_path)) {
-                    $response['profile']['photo'] = $photoUrl;
-                } else {
-                    error_log("Photo file not found at: " . $absolute_path);
-                    $response['profile']['photo'] = null;
-                }
+                $photoUrl = $row['photo'];  // Use the raw photo value
+                error_log("Constructed photoUrl: " . $photoUrl);
             } else {
-                $response['profile']['photo'] = $row['photo'];
+                $photoUrl = $row['photo'];
+                error_log("Using original photo URL: " . $photoUrl);
             }
         }
         
@@ -82,15 +79,18 @@ try {
                 'phone' => $row['phone'],
                 'age' => $row['age'],
                 'address' => $row['store_address'],
-                'photo' => $photoUrl,
-                'role' => $row['role'],
-                'email_verified_at' => $row['email_verified_at'],
-                'has_photo' => $photoUrl !== null
+                'photo' => $photoUrl,  // Use the photoUrl we constructed
+                'role' => $row['role'] ?: 'pet_owner',
+                'email_verified_at' => $row['email_verified_at']
             ]
         ];
         
+        // Debug log for final response
+        error_log("Final response data: " . json_encode($response));
+        
         echo json_encode($response);
     } else {
+        error_log("No user found for ID: " . $user_id);
         throw new Exception("User not found");
     }
 

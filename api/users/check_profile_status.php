@@ -157,7 +157,8 @@ try {
             'name' => $row['name'] ?? null,
             'email' => $row['email'] ?? null,
             'phone' => $row['phone'] ?? null,
-            'hasPhoto' => !empty($row['photo'])
+            'hasPhoto' => !empty($row['photo']),
+            'photo' => $row['photo'] ?? null
         ]
     ];
     

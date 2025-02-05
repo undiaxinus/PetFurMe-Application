@@ -25,6 +25,7 @@ const HomePage = ({ navigation, route }) => {
 	const [petProducts, setPetProducts] = useState([]);
 	const [isProductsLoading, setIsProductsLoading] = useState(false);
 	const [userName, setUserName] = useState('');
+	const [userPhoto, setUserPhoto] = useState(null);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -113,68 +114,37 @@ const HomePage = ({ navigation, route }) => {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
 			console.log("Checking profile status at:", url);
 			
-			const controller = new AbortController();
-			const timeoutId = setTimeout(() => controller.abort(), 10000);
-			
 			const response = await fetch(url, {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
-				},
-				signal: controller.signal
+				}
 			});
 			
-			clearTimeout(timeoutId);
-			
-			console.log("Response status:", response.status);
-			console.log("Response headers:", Object.fromEntries(response.headers));
-			
-			const text = await response.text();
-			console.log("Raw response:", text);
-			
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
-			}
-			
-			if (!text.trim()) {
-				throw new Error("Empty response from server");
-			}
-			
-			const data = JSON.parse(text);
-			console.log("Parsed data:", data);
+			const data = await response.json();
+			console.log("Profile data:", data);
 			
 			if (data.success) {
 				setIsProfileComplete(data.isProfileComplete);
 				setShowWelcomePopup(!data.isProfileComplete);
-				setUserName(data.profile?.name || 'there');
-			} else {
-				console.error("Profile check failed:", data.message);
-				setIsProfileComplete(false);
-				setShowWelcomePopup(true);
+				
+				// Update user name and photo
+				if (data.profile) {
+					setUserName(data.profile.name || 'Guest');
+					setUserPhoto(data.profile.photo 
+						? `${API_BASE_URL}/PetFurMe-Application/${data.profile.photo}`
+						: null
+					);
+				}
 			}
 		} catch (error) {
 			console.error("Profile check error:", error);
-			console.error("Error details:", {
-				message: error.message,
-				stack: error.stack,
-				name: error.name
-			});
-			
-			let errorMessage = "Failed to check profile status.";
-			if (error.name === 'AbortError') {
-				errorMessage = "Request timed out. Please check your connection.";
-			} else if (error.message.includes('Network request failed')) {
-				errorMessage = "Network error. Please check your connection.";
-			}
-			
-			Alert.alert(
-				"Connection Error",
-				errorMessage
-			);
-			
 			setIsProfileComplete(false);
 			setShowWelcomePopup(true);
+			// Set defaults if there's an error
+			setUserName('Guest');
+			setUserPhoto(null);
 		}
 	};
 
@@ -348,10 +318,19 @@ const HomePage = ({ navigation, route }) => {
 
 				<View style={styles.headerContent}>
 					<Text style={styles.welcomeText}>
-						Hey! Your pet's happiness starts here!
+						Hey {userName}! Your pet's happiness starts here!
 					</Text>
-					
 				</View>
+				
+				<TouchableOpacity 
+					style={styles.profilePhotoContainer}
+					onPress={() => navigation.navigate('ProfileVerification', { user_id: user_id })}
+				>
+					<Image
+						source={userPhoto ? { uri: userPhoto } : require("../../assets/images/doprof.png")}
+						style={styles.profilePhoto}
+					/>
+				</TouchableOpacity>
 			</View>
 
 			{/* Add paddingTop to scrollContent to account for fixed header */}
@@ -936,6 +915,17 @@ const styles = StyleSheet.create({
 	},
 	welcomeIcon: {
 		marginBottom: 10,
+	},
+	profilePhotoContainer: {
+		marginLeft: 10,
+		marginTop: -15,
+	},
+	profilePhoto: {
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		borderWidth: 2,
+		borderColor: '#FFFFFF',
 	},
 });
 
