@@ -15,6 +15,8 @@ import CustomDropdown from '../components/CustomDropdown';
 import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
+import Toast, { BaseToast } from 'react-native-toast-message';
+
 const PET_TYPES = [
 	"Dog",
 	"Cat",
@@ -122,7 +124,7 @@ const AddPetProfile = ({ navigation, route }) => {
 
 	const handleContinue = async () => {
 		if (!user_id) {
-			alert("Error: User ID is missing");
+			Alert.alert("Error", "User ID is missing");
 			return;
 		}
 
@@ -135,7 +137,7 @@ const AddPetProfile = ({ navigation, route }) => {
 			!petGender ||
 			petWeight.trim() === ""
 		) {
-			alert("Please fill out all required fields.");
+			Alert.alert("Error", "Please fill out all required fields.");
 			return;
 		}
 
@@ -146,7 +148,12 @@ const AddPetProfile = ({ navigation, route }) => {
 			
 			// Handle photo
 			if (photo?.base64) {
-				formData.append('photo', photo.base64);
+				const photoFile = {
+					uri: photo.uri,
+					type: 'image/jpeg',
+					name: 'photo.jpg'
+				};
+				formData.append('photo', photoFile);
 			}
 
 			const petData = {
@@ -164,32 +171,37 @@ const AddPetProfile = ({ navigation, route }) => {
 				size: petSize?.toLowerCase() || null
 			};
 
-			formData.append('data', JSON.stringify(petData));
+			// Append each field individually to FormData
+			Object.keys(petData).forEach(key => {
+				formData.append(key, petData[key]);
+			});
 
-			console.log('Sending form data:', formData);
+			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/index.php`;
+			console.log('Request URL:', url);
+			console.log('Sending pet data:', petData);
 
-			const response = await fetch(`http://${SERVER_IP}/PetFurMe-Application/api/pets/index.php`, {
+			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
-					'Content-Type': 'multipart/form-data',
 				},
 				body: formData
 			});
 
 			const responseText = await response.text();
+			console.log('Response status:', response.status);
 			console.log('Raw server response:', responseText);
 
 			let data;
 			try {
 				data = JSON.parse(responseText);
 			} catch (e) {
-				console.error('Error parsing response:', e);
-				throw new Error('Invalid server response');
+				console.error('Server returned non-JSON response:', responseText);
+				throw new Error('Server returned an invalid response');
 			}
 
 			if (data.success) {
-				// Log the activity for adding new pet
+				// Log the activity
 				await logActivity(
 					ACTIVITY_TYPES.PET_ADDED,
 					user_id,
@@ -208,22 +220,49 @@ const AddPetProfile = ({ navigation, route }) => {
 					}
 				);
 
-				Alert.alert(
-					"Success",
-					"Pet profile created successfully!",
-					[
+				// Show success toast
+				Toast.show({
+					type: 'success',
+					text1: 'Success!',
+					text2: `${petName} has been added to your pets`,
+					position: 'bottom',
+					visibilityTime: 3000,
+				});
+
+				// Reset navigation stack and navigate to DrawerNavigator/HomePage
+				navigation.reset({
+					index: 0,
+					routes: [
 						{
-							text: "OK",
-							onPress: () => navigation.goBack()
+							name: 'DrawerNavigator',
+							params: { user_id: user_id },
+							state: {
+								routes: [
+									{
+										name: 'HomePage',
+										params: { user_id: user_id }
+									}
+								]
+							}
 						}
-					]
-				);
+					],
+				});
 			} else {
-				throw new Error(data.message || 'Failed to create pet profile');
+				Toast.show({
+					type: 'error',
+					text1: 'Error',
+					text2: data.message || 'Failed to create pet profile',
+					position: 'bottom',
+				});
 			}
 		} catch (error) {
 			console.error('Error creating pet profile:', error);
-			Alert.alert('Error', 'Failed to create pet profile: ' + error.message);
+			Toast.show({
+				type: 'error',
+				text1: 'Error',
+				text2: 'Failed to create pet profile. Please try again.',
+				position: 'bottom',
+			});
 		} finally {
 			setLoading(false);
 		}
