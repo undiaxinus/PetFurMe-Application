@@ -69,7 +69,7 @@ try {
                 'email' => $row['email'],
                 'phone' => $row['phone'],
                 'age' => $row['age'],
-                'address' => $row['address'] ?? $row['store_address'],
+                'address' => $row['address'],
                 'photo' => $row['photo'],
                 'role' => $row['role'] ?? 'pet_owner',
                 'email_verified_at' => $row['email_verified_at']

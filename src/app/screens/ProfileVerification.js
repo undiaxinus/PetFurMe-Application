@@ -17,14 +17,14 @@ import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import CustomHeader from '../components/CustomHeader';
 const API_BASE_URL = `http://${SERVER_IP}/PetFurMe-Application`;
 
 const ProfileVerification = ({ navigation, route }) => {
     const { user_id } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
-    const [age, setAge] = useState('');
-    const [store_address, setStoreAddress] = useState('');
+    const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('••••••••••');
@@ -34,6 +34,13 @@ const ProfileVerification = ({ navigation, route }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!navigation) {
+            console.error('Navigation prop is undefined');
+            return;
+        }
+    }, [navigation]);
 
     useEffect(() => {
         if (!user_id) {
@@ -82,8 +89,7 @@ const ProfileVerification = ({ navigation, route }) => {
                 setName(userData.name || '');
                 setEmail(userData.email || '');
                 setPhoneNumber(userData.phone || '');
-                setAge(userData.age ? userData.age.toString() : '');
-                setStoreAddress(userData.address || '');
+                setAddress(userData.address || '');
 
                 // Handle photo
                 if (userData.photo) {
@@ -154,7 +160,8 @@ const ProfileVerification = ({ navigation, route }) => {
         try {
             const formData = new FormData();
             
-            if (profilePhoto?.uri && !profilePhoto.uri.startsWith('data:image')) {
+            // Handle profile photo
+            if (profilePhoto?.uri && !profilePhoto.uri.startsWith('http')) {
                 const localUri = profilePhoto.uri;
                 const filename = localUri.split('/').pop();
                 
@@ -168,72 +175,41 @@ const ProfileVerification = ({ navigation, route }) => {
             const userData = {
                 user_id: user_id,
                 name: name.trim(),
-                age: age ? parseInt(age) : null,
-                store_address: store_address.trim(),
+                address: address.trim(),
                 phone: phoneNumber.trim(),
-                email: email.trim()
+                email: email.trim(),
+                age: null
             };
 
-            formData.append('data', JSON.stringify(userData));
-            console.log('Sending form data:', JSON.stringify(userData));
+            // Debug log
+            console.log('Sending user data:', userData);
 
-            const response = await fetch(
+            formData.append('data', JSON.stringify(userData));
+
+            const response = await axios.post(
                 `${API_BASE_URL}/api/users/update_user_data.php`,
+                formData,
                 {
-                    method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
                 }
             );
 
-            const result = await response.json();
-            console.log('Profile update response:', result);
+            console.log('Profile update response:', response.data);
 
-            if (result.success) {
-                const activityResult = await logActivity(
+            if (response.data.success) {
+                await logActivity(
                     ACTIVITY_TYPES.PROFILE_UPDATED,
                     user_id,
                     {
                         name: name.trim(),
                         email: email,
                         phone: phoneNumber,
-                        age: age,
-                        address: store_address,
-                        hasPhoto: !!profilePhoto,
-                        updatedFields: Object.entries({
-                            name: name.trim(),
-                            age: age,
-                            address: store_address,
-                            phone: phoneNumber,
-                            email: email,
-                            photo: profilePhoto ? 'photo' : null
-                        })
-                        .filter(([_, value]) => value)
-                        .map(([key]) => key)
+                        address: address,
+                        hasPhoto: !!profilePhoto
                     }
                 );
-                console.log('Activity logging result:', activityResult);
-
-                const updatedDataResponse = await fetch(
-                    `${API_BASE_URL}/api/users/get_user_data.php`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'Cache-Control': 'no-cache'
-                        },
-                        body: JSON.stringify({ user_id: user_id })
-                    }
-                );
-
-                const updatedData = await updatedDataResponse.json();
-                
-                if (updatedData.success) {
-                    await AsyncStorage.setItem('userData', JSON.stringify({
-                        user_id,
-                        ...updatedData.profile
-                    }));
-                }
 
                 Alert.alert('Success', 'Profile updated successfully', [
                     {
@@ -242,16 +218,16 @@ const ProfileVerification = ({ navigation, route }) => {
                             if (route.params?.onComplete) {
                                 route.params.onComplete();
                             }
-                            navigation.goBack();
+                            handleNavigation();
                         }
                     }
                 ]);
             } else {
-                throw new Error(result.message || 'Failed to update profile');
+                throw new Error(response.data.message || 'Failed to update profile');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', 'Failed to update profile');
+            Alert.alert('Error', error.message || 'Failed to update profile');
         } finally {
             setIsLoading(false);
         }
@@ -315,6 +291,34 @@ const ProfileVerification = ({ navigation, route }) => {
         }
     };
 
+    const handleNavigation = () => {
+        try {
+            if (navigation) {
+                navigation.navigate('DrawerNavigator', {
+                    screen: 'HomePage',
+                    params: { user_id: user_id }
+                });
+            } else {
+                console.error('Navigation is not available');
+            }
+        } catch (error) {
+            console.error('Navigation error:', error);
+            // Fallback navigation attempt
+            if (navigation?.reset) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ 
+                        name: 'DrawerNavigator',
+                        params: {
+                            screen: 'HomePage',
+                            params: { user_id: user_id }
+                        }
+                    }],
+                });
+            }
+        }
+    };
+
     return (
         <View style={styles.mainContainer}>
             {isLoading && (
@@ -323,19 +327,17 @@ const ProfileVerification = ({ navigation, route }) => {
                 </View>
             )}
             
-            <View style={styles.header}>
-                <TouchableOpacity 
-                    style={styles.backButton}
-                    onPress={() => navigation.goBack()}
-                >
-                    <Ionicons name="arrow-back" size={24} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Profile Settings</Text>
-            </View>
+            <CustomHeader
+                title="Profile Settings"
+                onBack={handleNavigation}
+                navigation={navigation}
+            />
 
             <ScrollView 
                 style={styles.container}
-                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+                showsVerticalScrollIndicator={true}
+                bounces={true}
             >
                 <View style={styles.profileSection}>
                     <View style={styles.profileImageContainer}>
@@ -385,33 +387,17 @@ const ProfileVerification = ({ navigation, route }) => {
                         </View>
                     </View>
 
-                    <View style={styles.rowInputs}>
-                        <View style={[styles.inputGroup, { flex: 1, marginRight: 8 }]}>
-                            <Text style={styles.label}>Age</Text>
-                            <View style={styles.inputWrapper}>
-                                <Ionicons name="calendar-outline" size={20} color="#666" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    value={age}
-                                    onChangeText={setAge}
-                                    keyboardType="numeric"
-                                    placeholder="Age"
-                                />
-                            </View>
-                        </View>
-
-                        <View style={[styles.inputGroup, { flex: 2 }]}>
-                            <Text style={styles.label}>Phone</Text>
-                            <View style={styles.inputWrapper}>
-                                <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    value={phoneNumber}
-                                    onChangeText={setPhoneNumber}
-                                    keyboardType="phone-pad"
-                                    placeholder="Phone number"
-                                />
-                            </View>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Phone</Text>
+                        <View style={styles.inputWrapper}>
+                            <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <TextInput
+                                style={styles.input}
+                                value={phoneNumber}
+                                onChangeText={setPhoneNumber}
+                                keyboardType="phone-pad"
+                                placeholder="Phone number"
+                            />
                         </View>
                     </View>
 
@@ -421,8 +407,8 @@ const ProfileVerification = ({ navigation, route }) => {
                             <Ionicons name="location-outline" size={20} color="#666" style={styles.inputIcon} />
                             <TextInput
                                 style={styles.input}
-                                value={store_address}
-                                onChangeText={setStoreAddress}
+                                value={address}
+                                onChangeText={setAddress}
                                 placeholder="Enter your address"
                             />
                         </View>
@@ -534,25 +520,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     container: {
-        flex: 1,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-        paddingTop: 60,
-        backgroundColor: '#FFFFFF',
-        borderBottomWidth: 1,
-        borderBottomColor: '#F0F0F0',
-    },
-    backButton: {
-        padding: 8,
-    },
-    headerTitle: {
-        fontSize: 24,
-        fontWeight: '700',
-        marginLeft: 16,
-        color: '#333333',
+        flexGrow: 1,
     },
     profileSection: {
         alignItems: 'center',
@@ -594,6 +562,7 @@ const styles = StyleSheet.create({
     formContainer: {
         padding: 24,
         paddingTop: 0,
+        paddingBottom: 40,
     },
     sectionTitle: {
         fontSize: 18,
@@ -603,10 +572,6 @@ const styles = StyleSheet.create({
     },
     inputGroup: {
         marginBottom: 16,
-    },
-    rowInputs: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
     label: {
         fontSize: 14,
@@ -644,6 +609,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         marginTop: 24,
+        marginBottom: 24,
         elevation: 2,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

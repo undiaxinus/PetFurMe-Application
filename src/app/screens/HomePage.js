@@ -130,8 +130,16 @@ const HomePage = ({ navigation, route }) => {
 			console.log("Profile data:", data);
 			
 			if (data.success) {
-				setIsProfileComplete(data.isProfileComplete);
-				setShowWelcomePopup(!data.isProfileComplete);
+				// Check if all required fields have values
+				const isComplete = data.profile && 
+					data.profile.name && 
+					data.profile.phone && 
+					data.profile.address && 
+					data.profile.email && 
+					data.profile.password;
+				
+				setIsProfileComplete(isComplete);
+				setShowWelcomePopup(!isComplete);
 				
 				// Update user name and photo
 				if (data.profile) {

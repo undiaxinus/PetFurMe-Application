@@ -62,15 +62,14 @@ try {
         }
     }
 
-    // Debug log the received data
-    error_log("Received POST data: " . print_r($_POST, true));
-    error_log("Received FILES data: " . print_r($_FILES, true));
+    // Debug log the received data before processing
+    error_log("Received data before processing: " . print_r($data, true));
 
     // Build query with proper path format
     $query = "UPDATE users SET 
               name = ?, 
               age = ?, 
-              store_address = ?, 
+              address = ?,
               phone = ?, 
               email = ?";
 
@@ -81,18 +80,24 @@ try {
 
     $query .= " WHERE id = ?";
 
+    // Debug log the query
+    error_log("Query to execute: " . $query);
+
     $stmt = $db->prepare($query);
     if (!$stmt) {
         throw new Exception("Prepare failed: " . $db->error);
     }
+
+    // Make sure age is properly handled (default to NULL if not provided)
+    $age = isset($data['age']) ? $data['age'] : null;
 
     // Bind parameters based on whether photo exists
     if ($photo_path !== null) {
         $stmt->bind_param(
             "sissssi",
             $data['name'],
-            $data['age'],
-            $data['store_address'],
+            $age,
+            $data['address'],
             $data['phone'],
             $data['email'],
             $photo_path,
@@ -102,13 +107,23 @@ try {
         $stmt->bind_param(
             "sisssi",
             $data['name'],
-            $data['age'],
-            $data['store_address'],
+            $age,
+            $data['address'],
             $data['phone'],
             $data['email'],
             $data['user_id']
         );
     }
+
+    // Debug log the bound parameters
+    error_log("Binding parameters: " . json_encode([
+        'name' => $data['name'],
+        'age' => $age,
+        'address' => $data['address'],
+        'phone' => $data['phone'],
+        'email' => $data['email'],
+        'user_id' => $data['user_id']
+    ]));
 
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
