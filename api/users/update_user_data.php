@@ -65,75 +65,94 @@ try {
     // Debug log the received data before processing
     error_log("Received data before processing: " . print_r($data, true));
 
-    // Build query with proper path format
-    $query = "UPDATE users SET 
-              name = ?, 
-              age = ?, 
-              address = ?,
-              phone = ?, 
-              email = ?";
+    // Modify the query to only update fields that have values
+    $updates = array();
+    $types = '';
+    $params = array();
 
-    // Add photo to query only if it exists
-    if ($photo_path !== null) {
-        $query .= ", photo = ?";
+    // Check each field and only include it if it's provided
+    if (isset($data['name'])) {
+        $updates[] = "name = ?";
+        $types .= 's';
+        $params[] = $data['name'];
     }
 
-    $query .= " WHERE id = ?";
+    if (isset($data['address'])) {
+        $updates[] = "address = ?";
+        $types .= 's';
+        $params[] = $data['address'];
+    }
 
-    // Debug log the query
+    if (isset($data['phone'])) {
+        $updates[] = "phone = ?";
+        $types .= 's';
+        $params[] = $data['phone'];
+    }
+
+    if (isset($data['email'])) {
+        $updates[] = "email = ?";
+        $types .= 's';
+        $params[] = $data['email'];
+    }
+
+    // Add the complete_credentials check
+    $updates[] = "complete_credentials = CASE 
+        WHEN name IS NOT NULL AND name != '' AND
+             email IS NOT NULL AND email != '' AND
+             phone IS NOT NULL AND phone != '' AND
+             address IS NOT NULL AND address != ''
+        THEN 1
+        ELSE 0
+    END";
+
+    // Add user_id to parameters
+    $types .= 'i';
+    $params[] = $data['user_id'];
+
+    // Construct the final query
+    $query = "UPDATE users SET " . implode(", ", $updates) . " WHERE id = ?";
+
+    // Debug log the query and parameters
     error_log("Query to execute: " . $query);
+    error_log("Parameters: " . json_encode($params));
 
     $stmt = $db->prepare($query);
     if (!$stmt) {
         throw new Exception("Prepare failed: " . $db->error);
     }
 
-    // Make sure age is properly handled (default to NULL if not provided)
-    $age = isset($data['age']) ? $data['age'] : null;
-
-    // Bind parameters based on whether photo exists
-    if ($photo_path !== null) {
-        $stmt->bind_param(
-            "sissssi",
-            $data['name'],
-            $age,
-            $data['address'],
-            $data['phone'],
-            $data['email'],
-            $photo_path,
-            $data['user_id']
-        );
-    } else {
-        $stmt->bind_param(
-            "sisssi",
-            $data['name'],
-            $age,
-            $data['address'],
-            $data['phone'],
-            $data['email'],
-            $data['user_id']
-        );
+    // Bind parameters dynamically
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
     }
-
-    // Debug log the bound parameters
-    error_log("Binding parameters: " . json_encode([
-        'name' => $data['name'],
-        'age' => $age,
-        'address' => $data['address'],
-        'phone' => $data['phone'],
-        'email' => $data['email'],
-        'user_id' => $data['user_id']
-    ]));
 
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
     }
 
-    $response = [
-        'success' => true,
-        'message' => 'Profile updated successfully',
-        'photo_path' => $photo_path
-    ];
+    // Check if any rows were affected
+    if ($stmt->affected_rows > 0) {
+        // Fetch updated user data to confirm changes
+        $select_query = "SELECT name, email, phone, address, complete_credentials 
+                        FROM users WHERE id = ?";
+        $select_stmt = $db->prepare($select_query);
+        $select_stmt->bind_param("i", $data['user_id']);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        $updated_data = $result->fetch_assoc();
+
+        $response = [
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'photo_path' => $photo_path,
+            'updated_data' => $updated_data
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'No changes were made to the profile'
+        ];
+    }
 
     echo json_encode($response);
 

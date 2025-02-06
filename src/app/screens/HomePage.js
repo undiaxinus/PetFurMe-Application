@@ -9,12 +9,15 @@ import {
 	ScrollView,
 	Alert,
 	ActivityIndicator,
+	ToastAndroid,
+	Platform,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
+import CompleteProfileBar from '../components/CompleteProfileBar';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
@@ -30,6 +33,7 @@ const HomePage = ({ navigation, route }) => {
 	const [userName, setUserName] = useState('');
 	const [userPhoto, setUserPhoto] = useState(null);
 	const [showProfileTutorial, setShowProfileTutorial] = useState(false);
+	const [credentialsComplete, setCredentialsComplete] = useState(false);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -62,6 +66,36 @@ const HomePage = ({ navigation, route }) => {
 	useEffect(() => {
 		checkProfileStatus();
 	}, [user_id]);
+
+	useEffect(() => {
+		console.log("Current isProfileComplete state:", isProfileComplete);
+	}, [isProfileComplete]);
+
+	useEffect(() => {
+		if (route.params?.showMessage) {
+			const message = route.params.message;
+			const messageType = route.params.messageType;
+
+			// Clear the message params
+			navigation.setParams({
+				showMessage: undefined,
+				message: undefined,
+				messageType: undefined
+			});
+
+			// Show message based on platform
+			if (Platform.OS === 'android') {
+				ToastAndroid.show(message, ToastAndroid.SHORT);
+			} else {
+				// For iOS, you might want to use a custom alert or modal
+				Alert.alert(
+					messageType === 'success' ? 'Success' : 'Information',
+					message,
+					[{ text: 'OK' }]
+				);
+			}
+		}
+	}, [route.params?.showMessage]);
 
 	const fetchUserPets = async () => {
 		// Don't set loading state for auto refresh to avoid UI flicker
@@ -118,30 +152,25 @@ const HomePage = ({ navigation, route }) => {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
 			console.log("Checking profile status at:", url);
 			
-			const response = await fetch(url, {
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				}
-			});
-			
+			const response = await fetch(url);
 			const data = await response.json();
-			console.log("Profile data:", data);
+			console.log("Profile status response:", data);
 			
 			if (data.success) {
-				// Check if all required fields have values
-				const isComplete = data.profile && 
-					data.profile.name && 
-					data.profile.phone && 
-					data.profile.address && 
-					data.profile.email && 
-					data.profile.password;
+				// Check both complete_credentials and required fields
+				const hasRequiredFields = data.profile.name && 
+										data.profile.email && 
+										data.profile.phone && 
+										data.profile.photo;
+									
+				const credentialsStatus = data.profile.complete_credentials === 1;
 				
-				setIsProfileComplete(isComplete);
-				setShowWelcomePopup(!isComplete);
+				console.log("Has required fields:", hasRequiredFields);
+				console.log("Credentials status:", credentialsStatus);
 				
-				// Update user name and photo
+				setCredentialsComplete(credentialsStatus);
+				setIsProfileComplete(hasRequiredFields && credentialsStatus);
+				
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
 					setUserPhoto(data.profile.photo 
@@ -153,10 +182,7 @@ const HomePage = ({ navigation, route }) => {
 		} catch (error) {
 			console.error("Profile check error:", error);
 			setIsProfileComplete(false);
-			setShowWelcomePopup(true);
-			// Set defaults if there's an error
-			setUserName('Guest');
-			setUserPhoto(null);
+			setCredentialsComplete(false);
 		}
 	};
 
@@ -269,7 +295,7 @@ const HomePage = ({ navigation, route }) => {
 	return (
 		<View style={styles.container}>
 			<CustomHeader
-				title={`Hey ${userName}!`}
+				title={`Welcome, ${userName}`}
 				subtitle="Your pet's happiness starts here!"
 				navigation={navigation}
 				showDrawerButton={true}
@@ -343,27 +369,16 @@ const HomePage = ({ navigation, route }) => {
 					<ActivityIndicator size="large" color="#8146C1" />
 				</View>
 			)}
-			{/* Fixed Header */}
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{!isProfileComplete && (
-					<TouchableOpacity 
-						style={[styles.setupBanner, styles.setupBannerHighlight]}
-						onPress={() => navigation.navigate('ProfileVerification', { user_id: user_id })}
-					>
-						<View style={styles.setupBannerContent}>
-							<View style={styles.setupIconContainer}>
-								<Ionicons name="person-circle-outline" size={40} color="#8146C1" />
-								<View style={styles.setupIconBadge}>
-									<Ionicons name="alert-circle" size={20} color="#FF8ACF" />
-								</View>
-							</View>
-							<View style={styles.setupTextContainer}>
-								<Text style={styles.setupTitle}>Complete Profile</Text>
-								<Text style={styles.setupSubtitle}>Required to access all features</Text>
-							</View>
-							<Ionicons name="chevron-forward-circle" size={24} color="#8146C1" />
-						</View>
-					</TouchableOpacity>
+				{(!isProfileComplete || !credentialsComplete) && (
+					<CompleteProfileBar 
+						onPress={() => navigation.navigate('ProfileVerification', { 
+							user_id: user_id,
+							onComplete: () => {
+								checkProfileStatus(); // Recheck status after completion
+							}
+						})}
+					/>
 				)}
 				
 				<View style={styles.searchSection}>
@@ -862,61 +877,6 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		borderWidth: 2,
 		borderColor: '#FFFFFF',
-	},
-	setupBanner: {
-		backgroundColor: '#FFFFFF',
-		marginHorizontal: 20,
-		marginVertical: 10,
-		borderRadius: 12,
-		padding: 12,
-		elevation: 3,
-		borderWidth: 2,
-		borderColor: '#8146C1',
-		shadowColor: '#8146C1',
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-	},
-	setupBannerHighlight: {
-		transform: [{ scale: 1.02 }],
-	},
-	setupBannerContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
-	setupIconContainer: {
-		position: 'relative',
-		width: 45,
-		height: 45,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	setupIconBadge: {
-		position: 'absolute',
-		top: -5,
-		right: -5,
-		backgroundColor: '#FFFFFF',
-		borderRadius: 12,
-		padding: 2,
-	},
-	setupTextContainer: {
-		flex: 1,
-		marginHorizontal: 12,
-	},
-	setupTitle: {
-		fontSize: 16,
-		fontWeight: 'bold',
-		color: '#8146C1',
-		marginBottom: 2,
-	},
-	setupSubtitle: {
-		fontSize: 12,
-		color: '#666666',
-		fontWeight: '500',
 	},
 	tutorialOverlay: {
 		position: 'absolute',

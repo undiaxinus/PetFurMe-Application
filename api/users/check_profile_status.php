@@ -120,7 +120,7 @@ try {
     }
 
     // Get profile details
-    $query = "SELECT name, email, phone, photo, role FROM users WHERE id = ?";
+    $query = "SELECT name, email, phone, photo, role, complete_credentials FROM users WHERE id = ?";
     $stmt = $db->prepare($query);
     
     if (!$stmt) {
@@ -139,7 +139,8 @@ try {
         'name' => $row['name'] ?? null,
         'email' => $row['email'] ?? null,
         'phone' => $row['phone'] ?? null,
-        'hasPhoto' => !empty($row['photo'])
+        'hasPhoto' => !empty($row['photo']),
+        'complete_credentials' => $row['complete_credentials']
     ]));
     
     $isComplete = !empty($row['name']) && 
@@ -148,6 +149,11 @@ try {
                  !empty($row['photo']);
     
     error_log("Profile complete status: " . ($isComplete ? 'true' : 'false'));
+    
+    // Add more detailed logging
+    error_log("Checking profile status for user: " . $user_id);
+    error_log("Raw row data: " . json_encode($row));
+    error_log("Complete credentials value: " . $row['complete_credentials']);
     
     $response = [
         'success' => true,
@@ -158,7 +164,8 @@ try {
             'email' => $row['email'] ?? null,
             'phone' => $row['phone'] ?? null,
             'hasPhoto' => !empty($row['photo']),
-            'photo' => $row['photo'] ?? null
+            'photo' => $row['photo'] ?? null,
+            'complete_credentials' => (int)$row['complete_credentials']
         ]
     ];
     

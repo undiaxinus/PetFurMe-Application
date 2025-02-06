@@ -158,8 +158,25 @@ const ProfileVerification = ({ navigation, route }) => {
     const handleUpdateInfo = async () => {
         setIsLoading(true);
         try {
+            console.log('Starting profile update with data:', {
+                name,
+                address,
+                phoneNumber,
+                email,
+                profilePhoto
+            });
+
             const formData = new FormData();
             
+            // Only include fields that have values
+            const userData = {};
+            
+            if (name !== undefined) userData.name = name.trim();
+            if (address !== undefined) userData.address = address.trim();
+            if (phoneNumber !== undefined) userData.phone = phoneNumber.trim();
+            if (email !== undefined) userData.email = email.trim();
+            userData.user_id = user_id;
+
             // Handle profile photo
             if (profilePhoto?.uri && !profilePhoto.uri.startsWith('http')) {
                 const localUri = profilePhoto.uri;
@@ -172,22 +189,14 @@ const ProfileVerification = ({ navigation, route }) => {
                 });
             }
 
-            const userData = {
-                user_id: user_id,
-                name: name.trim(),
-                address: address.trim(),
-                phone: phoneNumber.trim(),
-                email: email.trim(),
-                age: null
-            };
-
-            // Debug log
             console.log('Sending user data:', userData);
-
             formData.append('data', JSON.stringify(userData));
 
+            const updateUrl = `${API_BASE_URL}/api/users/update_user_data.php`;
+            console.log('Sending update request to:', updateUrl);
+
             const response = await axios.post(
-                `${API_BASE_URL}/api/users/update_user_data.php`,
+                updateUrl,
                 formData,
                 {
                     headers: {
@@ -199,29 +208,38 @@ const ProfileVerification = ({ navigation, route }) => {
             console.log('Profile update response:', response.data);
 
             if (response.data.success) {
-                await logActivity(
-                    ACTIVITY_TYPES.PROFILE_UPDATED,
-                    user_id,
-                    {
-                        name: name.trim(),
-                        email: email,
-                        phone: phoneNumber,
-                        address: address,
-                        hasPhoto: !!profilePhoto
-                    }
-                );
-
-                Alert.alert('Success', 'Profile updated successfully', [
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            if (route.params?.onComplete) {
-                                route.params.onComplete();
-                            }
-                            handleNavigation();
+                // Update local state with the returned data
+                if (response.data.updated_data) {
+                    const isComplete = response.data.updated_data.complete_credentials === 1;
+                    
+                    // Navigate to HomePage with different messages based on completion
+                    navigation.navigate('DrawerNavigator', {
+                        screen: 'HomePage',
+                        params: { 
+                            user_id: user_id,
+                            refresh: true,
+                            showMessage: true,
+                            messageType: isComplete ? 'success' : 'info',
+                            message: isComplete 
+                                ? 'Hooray! Your profile is now complete! 🎉'
+                                : 'Profile updated successfully'
                         }
+                    });
+
+                    // Call onComplete callback if provided
+                    if (route.params?.onComplete) {
+                        route.params.onComplete();
                     }
-                ]);
+                } else {
+                    // Just navigate to HomePage if no updated data
+                    navigation.navigate('DrawerNavigator', {
+                        screen: 'HomePage',
+                        params: { 
+                            user_id: user_id,
+                            refresh: true
+                        }
+                    });
+                }
             } else {
                 throw new Error(response.data.message || 'Failed to update profile');
             }
