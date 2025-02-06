@@ -16,6 +16,24 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { API_BASE_URL } from '../config/constants';
 
+const SuccessPopup = ({ onClose }) => (
+	<View style={styles.successOverlay}>
+		<View style={styles.successPopup}>
+			<Text style={{ fontSize: 50, marginBottom: 20 }}>🎉</Text>
+			<Text style={styles.successTitle}>Welcome to VetCare!</Text>
+			<Text style={styles.successMessage}>
+				Your account has been successfully created. You can now log in and start managing your pet's care.
+			</Text>
+			<TouchableOpacity 
+				style={styles.successButton} 
+				onPress={onClose}
+			>
+				<Text style={styles.successButtonText}>Continue to Login</Text>
+			</TouchableOpacity>
+		</View>
+	</View>
+);
+
 const RegistrationScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
@@ -26,6 +44,7 @@ const RegistrationScreen = ({ navigation }) => {
 	const [error, setError] = useState("");
 	const [step, setStep] = useState(1); // 1: Registration form, 2: OTP verification
 	const [otp, setOtp] = useState("");
+	const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
 	const API_URL = API_BASE_URL;
 
@@ -152,26 +171,37 @@ const RegistrationScreen = ({ navigation }) => {
 			});
 
 			if (verifyResponse.data.success) {
-				// If OTP is verified, proceed with registration
-				const registerResponse = await axios.post(`${API_URL}/register`, {
+				const registerData = {
 					email: email.trim(),
 					username: username.trim(),
 					password,
 					role: "pet_owner",
 					name: username.trim()
-				});
+				};
+
+				const registerResponse = await axios.post(`${API_URL}/register`, registerData);
 
 				if (registerResponse.data.success) {
-					Alert.alert(
-						"Success",
-						"Registration successful! Please login.",
-						[
-							{
-								text: "OK",
-								onPress: () => navigation.replace("LoginScreen")
-							}
-						]
-					);
+					// Clear form data
+					setEmail("");
+					setUsername("");
+					setPassword("");
+					setConfirmPassword("");
+					setOtp("");
+					
+					// Show success popup
+					setShowSuccessPopup(true);
+					
+					// Auto-navigate after 5 seconds if user doesn't click the button
+					setTimeout(() => {
+						if (showSuccessPopup) { // Only navigate if popup is still showing
+							setShowSuccessPopup(false);
+							navigation.reset({
+								index: 0,
+								routes: [{ name: 'LoginScreen' }]
+							});
+						}
+					}, 5000);
 				} else {
 					setError(registerResponse.data.error || "Registration failed");
 				}
@@ -179,7 +209,8 @@ const RegistrationScreen = ({ navigation }) => {
 				setError(verifyResponse.data.error || "Invalid OTP");
 			}
 		} catch (error) {
-			setError(error.response?.data?.error || "Verification failed");
+			console.error('Registration error:', error.response?.data || error);
+			setError(error.response?.data?.error || "Registration failed");
 		} finally {
 			setLoading(false);
 		}
@@ -270,6 +301,18 @@ const RegistrationScreen = ({ navigation }) => {
 				<View style={styles.loadingOverlay}>
 					<ActivityIndicator size="large" color="#8146C1" />
 				</View>
+			)}
+			
+			{showSuccessPopup && (
+				<SuccessPopup 
+					onClose={() => {
+						setShowSuccessPopup(false);
+						navigation.reset({
+							index: 0,
+							routes: [{ name: 'LoginScreen' }]
+						});
+					}} 
+				/>
 			)}
 
 			<Animated.View 
@@ -462,6 +505,63 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	successOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.7)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		zIndex: 1000,
+	},
+	successPopup: {
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 20,
+		width: '80%',
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	successIcon: {
+		width: 80,
+		height: 80,
+		marginBottom: 20,
+	},
+	successTitle: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 10,
+		textAlign: 'center',
+	},
+	successMessage: {
+		fontSize: 16,
+		color: '#666',
+		marginBottom: 20,
+		textAlign: 'center',
+		lineHeight: 22,
+	},
+	successButton: {
+		backgroundColor: '#8146C1',
+		paddingHorizontal: 30,
+		paddingVertical: 12,
+		borderRadius: 25,
+		marginTop: 10,
+	},
+	successButtonText: {
+		color: 'white',
+		fontSize: 16,
+		fontWeight: '600',
 	},
 });
 
