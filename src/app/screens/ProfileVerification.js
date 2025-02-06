@@ -189,6 +189,7 @@ const ProfileVerification = ({ navigation, route }) => {
                 const localUri = profilePhoto.uri;
                 let filename;
                 
+                // Handle base64 image
                 if (localUri.startsWith('data:image')) {
                     const ext = 'png';
                     filename = `user_${user_id}_${Date.now()}.${ext}`;
