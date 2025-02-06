@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, ActivityIndicator, RefreshControl, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, ActivityIndicator, RefreshControl, Alert, Animated } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { BASE_URL, SERVER_IP } from '../config/constants';
@@ -8,6 +8,7 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
+import { Swipeable } from 'react-native-gesture-handler';
 
 // Configure notifications for local only
 Notifications.setNotificationHandler({
@@ -21,14 +22,13 @@ Notifications.setNotificationHandler({
 const NotificationScreen = ({ navigation, route }) => {
   const [user_id, setUserId] = useState(route.params?.user_id);
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const refreshIntervalRef = useRef(null);
   const notificationListener = useRef();
   const responseListener = useRef();
   const lastFetchRef = useRef(Date.now());
-  const REFRESH_COOLDOWN = 5000; // 5 seconds cooldown between refreshes
+  const REFRESH_COOLDOWN = 5000;
 
   useEffect(() => {
     const getUserIdAndFetch = async () => {
@@ -108,22 +108,16 @@ const NotificationScreen = ({ navigation, route }) => {
   };
 
   const fetchNotifications = useCallback(async (currentUserId, isManualRefresh = false) => {
-    // Prevent rapid refreshes unless it's a manual refresh
     if (!isManualRefresh && Date.now() - lastFetchRef.current < REFRESH_COOLDOWN) {
       return;
     }
 
     try {
-      if (!isManualRefresh) {
-        setLoading(true);
-      }
       console.log('Fetching notifications for user:', currentUserId);
       
       const response = await axios.get(
         `http://${SERVER_IP}/PetFurMe-Application/api/notifications/get_notifications.php?user_id=${currentUserId}`
       );
-      
-      console.log('Notifications response:', response.data);
       
       if (response.data.success) {
         const formattedNotifications = response.data.notifications.map(notification => ({
@@ -135,7 +129,6 @@ const NotificationScreen = ({ navigation, route }) => {
           type: notification.notifiable_type
         }));
 
-        // Only show notifications for new items if it's not a manual refresh
         if (!isManualRefresh) {
           const newNotifications = formattedNotifications.filter(
             notification => !notification.read && 
@@ -160,7 +153,6 @@ const NotificationScreen = ({ navigation, route }) => {
       console.error('Error fetching notifications:', err);
       setError('Failed to load notifications');
     } finally {
-      setLoading(false);
       setIsRefreshing(false);
     }
   }, [notifications]);
@@ -221,24 +213,44 @@ const NotificationScreen = ({ navigation, route }) => {
   }, [user_id, fetchNotifications, isRefreshing]);
 
   const renderNotification = useCallback(({ item }) => {
-    const notificationStyle = [
-      styles.notificationItem,
-      item.read ? styles.read : styles.unread
-    ];
+    const renderRightActions = (progress, dragX) => {
+      const scale = dragX.interpolate({
+        inputRange: [-100, 0],
+        outputRange: [1, 0],
+        extrapolate: 'clamp',
+      });
+
+      return (
+        <TouchableOpacity 
+          style={styles.deleteAction}
+          onPress={() => markAsRead(item.id)}
+        >
+          <Animated.Text 
+            style={[styles.actionText, { transform: [{ scale }] }]}
+          >
+            Mark as Read
+          </Animated.Text>
+        </TouchableOpacity>
+      );
+    };
 
     return (
-      <TouchableOpacity
-        style={notificationStyle}
-        onPress={() => markAsRead(item.id)}
-      >
-        <View style={styles.textContainer}>
-          <Text style={styles.notificationTitle}>{item.title}</Text>
-          <Text style={styles.notificationDescription}>{item.description}</Text>
-          <Text style={styles.notificationTime}>
-            {new Date(item.created_at).toLocaleDateString()}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <Swipeable renderRightActions={renderRightActions}>
+        <Animated.View style={[
+          styles.notificationItem,
+          item.read ? styles.read : styles.unread
+        ]}>
+          <View style={styles.textContainer}>
+            <Text style={styles.notificationTitle}>{item.title}</Text>
+            <Text style={styles.notificationDescription} numberOfLines={2}>
+              {item.description}
+            </Text>
+            <Text style={styles.notificationTime}>
+              {new Date(item.created_at).toLocaleDateString()}
+            </Text>
+          </View>
+        </Animated.View>
+      </Swipeable>
     );
   }, []);
 
@@ -252,33 +264,28 @@ const NotificationScreen = ({ navigation, route }) => {
         showDrawerButton={true}
       />
 
-      {loading && !isRefreshing ? (
-        <ActivityIndicator size="large" color="#8146C1" style={styles.centerContent} />
-      ) : error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : notifications.length === 0 ? (
-        <Text style={styles.emptyText}>No notifications available.</Text>
-      ) : (
-        <FlatList
-          data={notifications}
-          renderItem={renderNotification}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContainer}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-              colors={['#8146C1']}
-              tintColor="#8146C1"
-            />
-          }
-          ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>No notifications available.</Text>
-          )}
-        />
-      )}
+      <FlatList
+        data={notifications}
+        renderItem={renderNotification}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            colors={['#8146C1']}
+            tintColor="#8146C1"
+          />
+        }
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              {error || 'No notifications available.'}
+            </Text>
+          </View>
+        )}
+      />
 
-      {/* Bottom Navigation */}
       <BottomNavigation activeScreen="NotificationScreen" />
     </View>
   );
@@ -287,68 +294,70 @@ const NotificationScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
     paddingBottom: 90,
   },
   notificationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 10,
+    padding: 16,
+    marginBottom: 8,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-    top: 35,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
   textContainer: {
-    marginLeft: 10,
     flex: 1,
   },
   notificationTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    marginBottom: 4,
   },
   notificationDescription: {
     fontSize: 14,
     color: '#666',
+    lineHeight: 20,
   },
   read: {
-    opacity: 0.6,
+    backgroundColor: '#ffffff',
   },
   unread: {
-    backgroundColor: '#e8dff7',
+    backgroundColor: '#f8f4ff',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
   },
   emptyText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#aaa',
-    marginTop: 20,
-  },
-  centerContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginTop: 20,
-    padding: 20,
+    color: '#666',
+    marginTop: 40,
   },
   notificationTime: {
     fontSize: 12,
     color: '#999',
-    marginTop: 4,
+    marginTop: 6,
   },
   listContainer: {
     flexGrow: 1,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 90,
-    zIndex: 1,
+    paddingTop: 8,
+  },
+  deleteAction: {
+    backgroundColor: '#8146C1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 100,
+    height: '100%',
+  },
+  actionText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '500',
   },
 });
 

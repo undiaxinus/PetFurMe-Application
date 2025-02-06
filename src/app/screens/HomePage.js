@@ -278,17 +278,34 @@ const HomePage = ({ navigation, route }) => {
 			const data = await response.json();
 			console.log('Received products data:', data);
 
+			// Define category colors
+			const categoryColors = {
+				1: '#FFE8F7', // Food category - light pink
+				2: '#E8F4FF', // Medicine category - light blue
+				3: '#F0FFE8', // Accessories category - light green
+				4: '#FFF3E8', // Grooming category - light orange
+				default: '#F5F5F5' // Default color
+			};
+
 			if (data.success) {
 				const transformedProducts = data.products.map(product => {
 					console.log('Processing product:', product);
 					return {
 						id: product.id.toString(),
 						name: product.name,
-						weight: product.notes || 'N/A',
+						code: product.code,
+						quantity: parseInt(product.quantity) || 0,
+						buyingPrice: parseFloat(product.buying_price) || 0,
+						sellingPrice: parseFloat(product.selling_price) || 0,
+						quantityAlert: parseInt(product.quantity_alert) || 0,
+						tax: parseFloat(product.tax) || 0,
+						notes: product.notes || '',
 						image: product.product_image 
 							? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
 							: require("../../assets/images/meowmix.png"),
-						type: product.category_name || 'Pet Product'
+						categoryId: product.category_id,
+						type: product.category_name || 'Pet Product',
+						backgroundColor: categoryColors[product.category_id] || categoryColors.default
 					};
 				});
 				console.log('Transformed products:', transformedProducts);
@@ -495,13 +512,18 @@ const HomePage = ({ navigation, route }) => {
 				<View style={styles.petProductsBox}>
 					<View style={styles.sectionHeader}>
 						<View style={styles.leftHeader}>
-							<Image
-								source={require("../../assets/images/petpro.png")}
-								style={styles.vetcare}
+							<Ionicons 
+								name="paw" 
+								size={24} 
+								color="#8146C1" 
+								style={styles.productIcon}
 							/>
 							<Text style={styles.petproducts}>Pet Products</Text>
 						</View>
-						<TouchableOpacity onPress={() => navigation.navigate("ViewMorePro")}>
+						<TouchableOpacity 
+							style={styles.viewMoreButton}
+							onPress={() => navigation.navigate("ViewMorePro")}
+						>
 							<Text style={styles.viewmore}>View More</Text>
 						</TouchableOpacity>
 					</View>
@@ -509,18 +531,48 @@ const HomePage = ({ navigation, route }) => {
 					{isProductsLoading ? (
 						<ActivityIndicator size="small" color="#8146C1" />
 					) : (
-						petProducts.map((item) => (
-							<View key={item.id} style={styles.petProductCard}>
-								<Image source={item.image} style={styles.productImage} />
-								<View style={styles.productDetails}>
-									<Text style={styles.productName}>{item.name}</Text>
-									<Text style={styles.productWeight}>{item.weight}</Text>
-									<View style={styles.badge}>
-										<Text style={styles.badgeText}>{item.type}</Text>
+						<View style={styles.productsGrid}>
+							{petProducts.map((item) => (
+								<TouchableOpacity 
+									key={item.id} 
+									style={[styles.petProductCard, { backgroundColor: item.backgroundColor }]}
+									onPress={() => navigation.navigate("ProductDetails", { productId: item.id })}
+								>
+									<View style={styles.productImageContainer}>
+										<View style={styles.productImageWrapper}>
+											<Image 
+												source={item.image} 
+												style={styles.productImage}
+												resizeMode="contain"
+											/>
+										</View>
+										<View style={styles.badge}>
+											<Text style={styles.badgeText}>{item.type}</Text>
+										</View>
 									</View>
-								</View>
-							</View>
-						))
+									<View style={styles.productDetails}>
+										<Text style={styles.productName} numberOfLines={1}>
+											{item.name}
+										</Text>
+										<View style={styles.productFooter}>
+											<Text style={styles.productPrice}>
+												₱{item.sellingPrice.toLocaleString()}
+											</Text>
+											{item.quantity <= item.quantityAlert && (
+												<Text style={styles.lowStock}>
+													{item.quantity === 0 ? 'Out of Stock' : `${item.quantity} left`}
+												</Text>
+											)}
+										</View>
+										{item.notes && (
+											<Text style={styles.productNotes} numberOfLines={1}>
+												{item.notes}
+											</Text>
+										)}
+									</View>
+								</TouchableOpacity>
+							))}
+						</View>
 					)}
 				</View>
 
@@ -653,31 +705,36 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	petProductsBox: {
-		backgroundColor: "#F7F7F7",
-		borderRadius: 10,
-		padding: 15,
-		marginHorizontal: 20,
+		backgroundColor: "#F8F2FF",
+		borderRadius: 15,
+		padding: 20,
+		marginHorizontal: 16,
 		marginBottom: 30,
 		marginTop: 15,
 		elevation: 3,
 		top: -50,
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
 	},
 	sectionHeader: {
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
-		marginBottom: 15,
-		paddingHorizontal: 5,
+		marginBottom: 24,
+		paddingHorizontal: 4,
 	},
 	leftHeader: {
 		flexDirection: "row",
 		alignItems: "center",
+		gap: 8,
 	},
-	vetcare: {
-		width: 24,
-		height: 24,
-		marginRight: 8,
-		resizeMode: "contain",
+	productIcon: {
+		marginRight: 4,
 	},
 	vets: {
 		fontSize: 18,
@@ -697,49 +754,119 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: 'bold',
 		color: '#333',
+		letterSpacing: 0.3,
+	},
+	viewMoreButton: {
+		backgroundColor: '#8146C1',
+		paddingHorizontal: 14,
+		paddingVertical: 8,
+		borderRadius: 20,
+		elevation: 2,
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
 	},
 	viewmore: {
-		color: "#5809BB",
-		fontWeight: "bold",
-		fontSize: 14,
+		color: "#FFFFFF",
+		fontWeight: "600",
+		fontSize: 12,
+	},
+	productsGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between',
+		gap: 12,
+		paddingHorizontal: 2,
 	},
 	petProductCard: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#FFFFFF",
-		borderRadius: 10,
-		padding: 10,
-		marginBottom: 10,
-		elevation: 2,
+		borderRadius: 12,
+		width: '47%',
+		overflow: 'hidden',
+		elevation: 3,
+		marginBottom: 12,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.15,
+		shadowRadius: 3,
+		backgroundColor: '#FFFFFF',
+	},
+	productImageContainer: {
+		position: 'relative',
+		width: '100%',
+		height: 120,
+		backgroundColor: '#FFFFFF',
+		borderTopLeftRadius: 12,
+		borderTopRightRadius: 12,
+		overflow: 'hidden',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	productImageWrapper: {
+		width: '90%',
+		height: '90%',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: '#FFFFFF',
 	},
 	productImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 10,
-		marginRight: 10,
-	},
-	productDetails: {
-		flex: 1,
-	},
-	productName: {
-		fontSize: 14,
-		fontWeight: "bold",
-	},
-	productWeight: {
-		fontSize: 12,
-		color: "#888888",
-		marginBottom: 5,
+		width: '100%',
+		height: '100%',
+		resizeMode: 'contain',
+		padding: 8,
 	},
 	badge: {
-		backgroundColor: "#FFD700",
-		paddingVertical: 2,
-		paddingHorizontal: 5,
-		borderRadius: 5,
-		alignSelf: "flex-start",
+		position: 'absolute',
+		top: 4,
+		left: 4,
+		backgroundColor: "#8146C1",
+		paddingVertical: 3,
+		paddingHorizontal: 6,
+		borderRadius: 8,
+		opacity: 0.9,
 	},
 	badgeText: {
-		fontSize: 10,
+		fontSize: 9,
 		color: "#FFFFFF",
+		fontWeight: '600',
+	},
+	productDetails: {
+		padding: 8,
+		backgroundColor: '#FFFFFF',
+		borderBottomLeftRadius: 12,
+		borderBottomRightRadius: 12,
+	},
+	productName: {
+		fontSize: 13,
+		fontWeight: "600",
+		color: '#333',
+		marginBottom: 4,
+	},
+	productFooter: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	productPrice: {
+		fontSize: 14,
+		fontWeight: "700",
+		color: '#8146C1',
+	},
+	productNotes: {
+		fontSize: 11,
+		color: '#666',
+		marginTop: 2,
+	},
+	lowStock: {
+		fontSize: 9,
+		color: '#FF4444',
+		fontWeight: '500',
 	},
 	sectionContainer: {
 		marginHorizontal: 20,

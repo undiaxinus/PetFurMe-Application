@@ -9,6 +9,7 @@ import {
 	ActivityIndicator,
 	Alert,
 	ScrollView,
+	SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
@@ -16,6 +17,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import Toast, { BaseToast } from 'react-native-toast-message';
+import CustomHeader from '../components/CustomHeader';
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 
 const PET_TYPES = [
 	"Dog",
@@ -275,267 +278,336 @@ const AddPetProfile = ({ navigation, route }) => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={styles.mainContainer}>
+			{/* Fixed Header Layer */}
+			<View style={styles.headerLayer}>
+				<CustomHeader 
+					title="Add Pet Profile"
+					showBack
+					navigation={navigation}
+				/>
+			</View>
+
+			{/* Content Layer */}
+			<View style={styles.contentContainer}>
+				<ScrollView 
+					style={styles.scrollView}
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={styles.scrollViewContent}
+				>
+					<View style={styles.formContainer}>
+						{/* Pet Image Section */}
+						<View style={styles.imageContainer}>
+							<View style={styles.imageCircle}>
+								<Image
+									source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
+									style={styles.petImage}
+									defaultSource={require("../../assets/images/doprof.png")}
+								/>
+								<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
+									<MaterialIcons name="add-a-photo" size={20} color="#FFFFFF" />
+								</TouchableOpacity>
+							</View>
+							<Text style={styles.uploadText}>Upload Pet Photo</Text>
+						</View>
+						
+						{/* Form Sections */}
+						<View style={styles.formSections}>
+							{/* Required Fields Section */}
+							<View style={styles.section}>
+								<View style={styles.sectionHeader}>
+									<MaterialIcons name="pets" size={20} color="#8146C1" />
+									<Text style={styles.sectionTitle}>Required Information</Text>
+								</View>
+								
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Pet's Name</Text>
+									<View style={styles.inputWithIcon}>
+										<FontAwesome5 name="paw" size={16} color="#8146C1" style={styles.inputIcon} />
+										<TextInput
+											style={styles.inputWithIconField}
+											placeholder="Enter pet's name"
+											value={petName}
+											onChangeText={setPetName}
+											placeholderTextColor="#8146C1"
+										/>
+									</View>
+								</View>
+
+								{/* Create a row for age and weight */}
+								<View style={styles.rowContainer}>
+									<View style={styles.halfInput}>
+										<Text style={styles.label}>Age</Text>
+										<TextInput
+											style={styles.input}
+											placeholder="Age"
+											value={petAge}
+											onChangeText={setPetAge}
+											placeholderTextColor="#8146C1"
+											keyboardType="numeric"
+										/>
+									</View>
+									<View style={styles.halfInput}>
+										<Text style={styles.label}>Weight (kg)</Text>
+										<TextInput
+											style={styles.input}
+											placeholder="Weight"
+											value={petWeight}
+											onChangeText={setPetWeight}
+											placeholderTextColor="#8146C1"
+											keyboardType="decimal-pad"
+										/>
+									</View>
+								</View>
+
+								{/* Create a row for type and size */}
+								<View style={styles.rowContainer}>
+									<View style={styles.halfInput}>
+										<Text style={styles.label}>Type</Text>
+										<CustomDropdown
+											label="Select Pet Type"
+											options={PET_TYPES}
+											value={petType}
+											onSelect={setPetType}
+											placeholder="Select type"
+										/>
+									</View>
+									<View style={styles.halfInput}>
+										<Text style={styles.label}>Size</Text>
+										<CustomDropdown
+											label="Select Pet Size"
+											options={PET_SIZES}
+											value={petSize}
+											onSelect={setPetSize}
+											placeholder="Select size"
+										/>
+									</View>
+								</View>
+
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Breed</Text>
+									<TextInput
+										style={styles.input}
+										placeholder="Enter breed"
+										value={petBreed}
+										onChangeText={setPetBreed}
+										placeholderTextColor="#8146C1"
+									/>
+								</View>
+
+								{/* Add Gender dropdown */}
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Gender</Text>
+									<CustomDropdown
+										label="Select Pet Gender"
+										options={PET_GENDERS}
+										value={petGender}
+										onSelect={setPetGender}
+										placeholder="Select gender"
+									/>
+								</View>
+							</View>
+
+							{/* Optional Fields Section */}
+							<View style={[styles.section, styles.optionalSection]}>
+								<View style={styles.sectionHeader}>
+									<MaterialIcons name="note-add" size={20} color="#8146C1" />
+									<Text style={styles.sectionTitle}>Additional Information</Text>
+								</View>
+								
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Allergies (Optional)</Text>
+									<TextInput
+										style={[styles.input, styles.textArea]}
+										placeholder="List any allergies"
+										value={petAllergies}
+										onChangeText={setPetAllergies}
+										placeholderTextColor="#8146C1"
+										multiline
+										numberOfLines={2}
+									/>
+								</View>
+
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Notes (Optional)</Text>
+									<TextInput
+										style={[styles.input, styles.textArea]}
+										placeholder="Any additional notes"
+										value={petNotes}
+										onChangeText={setPetNotes}
+										placeholderTextColor="#8146C1"
+										multiline
+										numberOfLines={3}
+									/>
+								</View>
+							</View>
+						</View>
+					</View>
+
+					{/* Save Button */}
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity
+							style={[
+								styles.continueButton,
+								(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()) && 
+								styles.continueButtonDisabled,
+							]}
+							onPress={handleContinue}
+							disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()}>
+							<Text style={styles.continueButtonText}>Save Pet Profile</Text>
+						</TouchableOpacity>
+					</View>
+				</ScrollView>
+			</View>
+
 			{/* Loading Overlay */}
 			{loading && (
 				<View style={styles.loadingOverlay}>
 					<ActivityIndicator size="large" color="#8146C1" />
 				</View>
 			)}
-
-			{/* Header */}
-			<View style={styles.header}>
-				<TouchableOpacity
-					onPress={() => navigation.goBack()}
-					style={styles.backButton}>
-					<Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-				</TouchableOpacity>
-				<Text style={styles.headerTitle}>Add Pet Profile</Text>
-			</View>
-
-			<ScrollView 
-				style={styles.scrollView}
-				showsVerticalScrollIndicator={false}
-				contentContainerStyle={styles.scrollViewContent}
-			>
-				
-
-				<View style={styles.formContainer}>
-				{/* Pet Image */}
-				<View style={styles.imageContainer}>
-					<View style={styles.imageCircle}>
-						<Image
-							source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
-							style={styles.petImage}
-							defaultSource={require("../../assets/images/doprof.png")}
-						/>
-						<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
-							<Ionicons name="camera" size={20} color="#FFFFFF" />
-						</TouchableOpacity>
-					</View>
-				</View>
-					
-					{/* Required Fields Section */}
-					<Text style={styles.sectionTitle}>Required Information</Text>
-					
-					<View style={styles.inputGroup}>
-						<Text style={styles.label}>Pet's Name</Text>
-						<TextInput
-							style={styles.input}
-							placeholder="Enter pet's name"
-							value={petName}
-							onChangeText={setPetName}
-							placeholderTextColor="#8146C1"
-						/>
-					</View>
-
-					{/* Create a row for age and weight */}
-					<View style={styles.rowContainer}>
-						<View style={styles.halfInput}>
-							<Text style={styles.label}>Age</Text>
-							<TextInput
-								style={styles.input}
-								placeholder="Age"
-								value={petAge}
-								onChangeText={setPetAge}
-								placeholderTextColor="#8146C1"
-								keyboardType="numeric"
-							/>
-						</View>
-						<View style={styles.halfInput}>
-							<Text style={styles.label}>Weight (kg)</Text>
-							<TextInput
-								style={styles.input}
-								placeholder="Weight"
-								value={petWeight}
-								onChangeText={setPetWeight}
-								placeholderTextColor="#8146C1"
-								keyboardType="decimal-pad"
-							/>
-						</View>
-					</View>
-
-					{/* Create a row for type and size */}
-					<View style={styles.rowContainer}>
-						<View style={styles.halfInput}>
-							<Text style={styles.label}>Type</Text>
-							<CustomDropdown
-								label="Select Pet Type"
-								options={PET_TYPES}
-								value={petType}
-								onSelect={setPetType}
-								placeholder="Select type"
-							/>
-						</View>
-						<View style={styles.halfInput}>
-							<Text style={styles.label}>Size</Text>
-							<CustomDropdown
-								label="Select Pet Size"
-								options={PET_SIZES}
-								value={petSize}
-								onSelect={setPetSize}
-								placeholder="Select size"
-							/>
-						</View>
-					</View>
-
-					<View style={styles.inputGroup}>
-						<Text style={styles.label}>Breed</Text>
-						<TextInput
-							style={styles.input}
-							placeholder="Enter breed"
-							value={petBreed}
-							onChangeText={setPetBreed}
-							placeholderTextColor="#8146C1"
-						/>
-					</View>
-
-					{/* Add Gender dropdown */}
-					<View style={styles.inputGroup}>
-						<Text style={styles.label}>Gender</Text>
-						<CustomDropdown
-							label="Select Pet Gender"
-							options={PET_GENDERS}
-							value={petGender}
-							onSelect={setPetGender}
-							placeholder="Select gender"
-						/>
-					</View>
-
-					{/* Optional Fields Section */}
-					<Text style={styles.sectionTitle}>Additional Information</Text>
-
-					<View style={styles.inputGroup}>
-						<Text style={styles.label}>Allergies (Optional)</Text>
-						<TextInput
-							style={[styles.input, styles.textArea]}
-							placeholder="List any allergies"
-							value={petAllergies}
-							onChangeText={setPetAllergies}
-							placeholderTextColor="#8146C1"
-							multiline
-							numberOfLines={2}
-						/>
-					</View>
-
-					<View style={styles.inputGroup}>
-						<Text style={styles.label}>Notes (Optional)</Text>
-						<TextInput
-							style={[styles.input, styles.textArea]}
-							placeholder="Any additional notes"
-							value={petNotes}
-							onChangeText={setPetNotes}
-							placeholderTextColor="#8146C1"
-							multiline
-							numberOfLines={3}
-						/>
-					</View>
-				</View>
-
-				<TouchableOpacity
-					style={[
-						styles.continueButton,
-						(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()) && {
-							backgroundColor: "#D52FFF",
-						},
-					]}
-					onPress={handleContinue}
-					disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()}>
-					<Text style={styles.continueButtonText}>Save Pet Profile</Text>
-				</TouchableOpacity>
-			</ScrollView>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
+	mainContainer: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: '#FFFFFF',
 	},
-	header: {
-		backgroundColor: "#8146C1",
-		paddingTop: 50,
-		paddingBottom: 15,
-		paddingHorizontal: 20,
-		flexDirection: "row",
-		alignItems: "center",
+	headerLayer: {
+		width: '100%',
+		position: 'fixed', // This is crucial for web
+		top: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: '#FFFFFF',
+		zIndex: 1000,
+		elevation: 4,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.23,
+		shadowRadius: 2.62,
 	},
-	backButton: {
-		marginRight: 15,
-	},
-	headerTitle: {
-		color: "#FFFFFF",
-		fontSize: 20,
-		fontWeight: "bold",
+	contentContainer: {
+		flex: 1,
+		marginTop: 60, // Height of your header
 	},
 	scrollView: {
 		flex: 1,
 	},
 	scrollViewContent: {
-		paddingBottom: 30,
+		paddingTop: 20,
+	},
+	formContainer: {
+		padding: 16,
 	},
 	imageContainer: {
 		alignItems: "center",
-		marginVertical: 20,
+		marginVertical: 24,
 	},
 	imageCircle: {
-		width: 100,
-		height: 100,
-		borderRadius: 60,
+		width: 130,
+		height: 130,
+		borderRadius: 65,
 		borderWidth: 2,
-		borderColor: "#D1ACDA",
+		borderColor: '#8146C1',
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#FFFFFF",
+		elevation: 3,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 3,
 	},
 	petImage: {
-		width: 90,
-		height: 90,
-		borderRadius: 55,
+		width: 120,
+		height: 120,
+		borderRadius: 60,
+	},
+	uploadText: {
+		marginTop: 8,
+		color: '#8146C1',
+		fontSize: 14,
+		fontWeight: '500',
 	},
 	cameraButton: {
 		position: "absolute",
-		bottom: 0,
-		right: 0,
-		backgroundColor: "#FF3DE0",
+		bottom: 5,
+		right: 5,
+		backgroundColor: "#8146C1",
 		borderRadius: 20,
 		padding: 8,
+		elevation: 2,
 	},
-	formContainer: {
-		paddingHorizontal: 20,
+	formSections: {
+		gap: 16,
+	},
+	section: {
+		backgroundColor: "#FFFFFF",
+		borderRadius: 12,
+		padding: 16,
+		marginBottom: 16,
+		elevation: 2,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+	},
+	optionalSection: {
+		backgroundColor: '#FAFAFA',
+	},
+	sectionHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 16,
+		paddingBottom: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
 	},
 	sectionTitle: {
-		fontSize: 18,
-		fontWeight: "bold",
+		fontSize: 16,
+		fontWeight: "600",
 		color: "#8146C1",
-		marginTop: 20,
-		marginBottom: 15,
+		marginLeft: 8,
 	},
 	inputGroup: {
-		marginBottom: 15,
+		marginBottom: 16,
 	},
-	rowContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		marginBottom: 15,
+	inputWithIcon: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: "#E0E0E0",
+		borderRadius: 8,
+		backgroundColor: "#FFFFFF",
 	},
-	halfInput: {
-		width: "48%",
+	inputIcon: {
+		padding: 12,
+	},
+	inputWithIconField: {
+		flex: 1,
+		padding: 12,
+		color: "#2D3748",
+		fontSize: 14,
 	},
 	label: {
 		fontSize: 14,
-		color: "#595959",
-		marginBottom: 5,
-		fontWeight: "600",
+		color: "#4A5568",
+		marginBottom: 6,
+		fontWeight: "500",
 	},
 	input: {
 		borderWidth: 1,
-		borderColor: "#bfbfbf",
-		borderRadius: 10,
+		borderColor: "#E0E0E0",
+		borderRadius: 8,
 		padding: 12,
 		backgroundColor: "#FFFFFF",
-		color: "#000000",
+		color: "#2D3748",
 		fontSize: 14,
 	},
 	textArea: {
@@ -543,25 +615,40 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'top',
 		paddingTop: 12,
 	},
+	buttonContainer: {
+		padding: 16,
+		backgroundColor: 'transparent',
+	},
 	continueButton: {
 		backgroundColor: "#8146C1",
-		paddingVertical: 15,
-		borderRadius: 25,
+		paddingVertical: 16,
+		borderRadius: 12,
 		alignItems: "center",
-		marginHorizontal: 20,
-		marginTop: 20,
+		elevation: 2,
+	},
+	continueButtonDisabled: {
+		backgroundColor: "#E2D9F3",
 	},
 	continueButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
-		fontWeight: "bold",
+		fontWeight: "600",
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
+		backgroundColor: "rgba(255, 255, 255, 0.8)",
 		justifyContent: "center",
 		alignItems: "center",
-		zIndex: 100,
+		zIndex: 1000,
+	},
+	rowContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: 16,
+		gap: 12,
+	},
+	halfInput: {
+		flex: 1,
 	},
 });
 

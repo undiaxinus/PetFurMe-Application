@@ -261,6 +261,11 @@ const ChatScreen = ({ navigation, route }) => {
                 item.sender === 'user' ? styles.userBubble : styles.otherBubble,
               ]}
             >
+              {item.sender === 'other' && (
+                <View style={styles.botAvatarContainer}>
+                  <MaterialIcons name="pets" size={16} color="#A259B5" />
+                </View>
+              )}
               <Text
                 style={[
                   styles.messageText,
@@ -279,25 +284,28 @@ const ChatScreen = ({ navigation, route }) => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         style={styles.inputContainer}
       >
-        <TextInput
-          style={styles.textInput}
-          value={input}
-          onChangeText={setInput}
-          placeholder="Type your message..."
-          placeholderTextColor="#999"
-          multiline
-        />
-        <TouchableOpacity
-          style={[styles.sendButton, !input.trim() && styles.sendButtonDisabled]}
-          onPress={sendMessage}
-          disabled={!input.trim()}
-        >
-          <MaterialIcons
-            name="send"
-            size={24}
-            color={input.trim() ? '#FFFFFF' : '#CCCCCC'}
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.textInput}
+            value={input}
+            onChangeText={setInput}
+            placeholder="Type your message..."
+            placeholderTextColor="#999"
+            multiline
+            maxHeight={100}
           />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.sendButton, !input.trim() && styles.sendButtonDisabled]}
+            onPress={sendMessage}
+            disabled={!input.trim()}
+          >
+            <MaterialIcons
+              name="send"
+              size={20}
+              color={input.trim() ? '#FFFFFF' : '#CCCCCC'}
+            />
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
 
       <BottomNavigation activeScreen="Chat" navigation={navigation} user_id={user_id} />
@@ -308,68 +316,116 @@ const ChatScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8F9FA',
   },
   chatWrapper: {
     flex: 1,
-    marginBottom: 90,
+    marginBottom: 80,
+    paddingTop: 8,
   },
   chatContainer: {
-    padding: 15,
-    paddingTop: 10,
+    padding: 16,
+    paddingBottom: 24,
   },
   messageBubble: {
-    padding: 12,
-    borderRadius: 15,
-    marginBottom: 10,
-    maxWidth: '75%',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginBottom: 12,
+    maxWidth: '80%',
+    marginHorizontal: 6,
+  },
+  botAvatarContainer: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#F0E6F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 6,
+    marginBottom: 2,
+    position: 'absolute',
+    left: -32,
+    bottom: 0,
   },
   userBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: '#cc66ff',
+    backgroundColor: '#A259B5',
+    borderRadius: 16,
+    borderBottomRightRadius: 4,
+    padding: 10,
+    paddingHorizontal: 14,
+    marginLeft: 'auto',
+    marginRight: 6,
   },
   otherBubble: {
     alignSelf: 'flex-start',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
+    borderRadius: 16,
+    borderBottomLeftRadius: 4,
+    padding: 10,
+    paddingHorizontal: 14,
+    marginLeft: 38,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
   },
   messageText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    lineHeight: 22,
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '400',
   },
   otherMessageText: {
-    color: '#000000',
+    color: '#2C3E50',
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#FFF',
-    borderTopWidth: 1,
-    borderTopColor: '#DDD',
+    backgroundColor: 'transparent',
     position: 'absolute',
     bottom: 90,
     left: 0,
     right: 0,
-    zIndex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   textInput: {
     flex: 1,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    backgroundColor: '#FFF',
-    fontSize: 16,
+    fontSize: 14,
+    color: '#2C3E50',
+    maxHeight: 80,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingRight: 10,
+    minHeight: 36,
   },
   sendButton: {
-    marginLeft: 10,
     backgroundColor: '#A259B5',
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 16,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 6,
   },
   sendButtonDisabled: {
     backgroundColor: '#E0E0E0',

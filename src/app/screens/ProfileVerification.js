@@ -240,12 +240,32 @@ const ProfileVerification = ({ navigation, route }) => {
             console.log('Profile update response:', response.data);
 
             if (response.data.success) {
+                // Show success popup with different messages based on profile completion
                 Alert.alert(
                     'Success',
                     response.data.updated_data?.complete_credentials === 1
                         ? '🎉 Hooray! Your profile is now complete! All features are now unlocked!'
                         : '✅ Profile updated successfully! Complete all fields to unlock all features.',
-                    [{ text: 'OK' }]
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                // Navigate to HomePage after user clicks OK
+                                if (navigation && !route.params?.testing) {
+                                    navigation.reset({
+                                        index: 0,
+                                        routes: [{ 
+                                            name: 'DrawerNavigator',
+                                            params: {
+                                                screen: 'HomePage',
+                                                params: { user_id: user_id }
+                                            }
+                                        }],
+                                    });
+                                }
+                            }
+                        }
+                    ]
                 );
                 
                 // Refresh user data to confirm update

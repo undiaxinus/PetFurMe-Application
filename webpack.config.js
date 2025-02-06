@@ -1,11 +1,16 @@
 const path = require('path');
+const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 
-module.exports = {
-  // ... other webpack config
-  resolve: {
-    alias: {
-      'src/assets': path.resolve(__dirname, 'src/assets'),
+module.exports = async function (env, argv) {
+  const config = await createExpoWebpackConfigAsync({
+    ...env,
+    babel: {
+      dangerouslyAddModulePathsToTranspile: [
+        'react-native-gesture-handler',
+        'react-native-reanimated',
+      ],
     },
-  },
-  // ... other webpack config
+  }, argv);
+
+  return config;
 }; 

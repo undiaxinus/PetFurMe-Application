@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   Image,
@@ -28,78 +28,74 @@ const PET_PATHS = {
 };
 
 const HomeScreen = ({ navigation }) => {
-  const [gradientAnimation] = useState(new Animated.Value(0));
-  const [fadeAnimation] = useState(new Animated.Value(0));
-  const pan = useState(new Animated.ValueXY())[0];
-  const backgroundY = useState(new Animated.Value(0))[0];
+  // Use refs for animations to prevent cleanup issues
+  const gradientAnimation = useRef(new Animated.Value(0)).current;
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const pan = useRef(new Animated.ValueXY()).current;
+  const backgroundY = useRef(new Animated.Value(0)).current;
 
   const [fontsLoaded] = useFonts({
     Fredoka_400Regular,
   });
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      if (gesture.dy < 0) { // Only allow upward swipe
-        pan.setValue({ x: 0, y: gesture.dy });
-      }
-    },
-    onPanResponderRelease: (_, gesture) => {
-      if (gesture.dy < -50) { // Threshold for navigation
-        Animated.timing(pan, {
-          toValue: { x: 0, y: -height },
-          duration: 300,
-          useNativeDriver: true,
-        }).start(() => navigation.navigate("LoginScreen"));
-      } else {
-        Animated.spring(pan, {
-          toValue: { x: 0, y: 0 },
-          useNativeDriver: true,
-        }).start();
-      }
-    },
-  });
-
+  // Cleanup function for animations
   useEffect(() => {
-    // Background animation
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(backgroundY, {
-          toValue: -20,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(backgroundY, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
+    const animations = [];
 
-    // Gradient and fade animations
-    Animated.parallel([
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(gradientAnimation, {
-            toValue: 1,
-            duration: 4000,
-            useNativeDriver: false,
-          }),
-          Animated.timing(gradientAnimation, {
-            toValue: 0,
-            duration: 4000,
-            useNativeDriver: false,
-          }),
-        ])
-      ),
-      Animated.timing(fadeAnimation, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    // Start your animations
+    const fadeIn = Animated.timing(fadeAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    });
+    animations.push(fadeIn);
+
+    const gradient = Animated.timing(gradientAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: false,
+    });
+    animations.push(gradient);
+
+    // Start all animations
+    Animated.parallel(animations).start();
+
+    // Cleanup
+    return () => {
+      animations.forEach(anim => anim.stop());
+      fadeAnimation.setValue(0);
+      gradientAnimation.setValue(0);
+      pan.setValue({ x: 0, y: 0 });
+      backgroundY.setValue(0);
+    };
   }, []);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (_, gesture) => {
+        if (gesture.dy < 0) {
+          pan.setValue({ x: 0, y: gesture.dy });
+        }
+      },
+      onPanResponderRelease: (_, gesture) => {
+        if (gesture.dy < -50) {
+          Animated.timing(pan, {
+            toValue: { x: 0, y: -height },
+            duration: 300,
+            useNativeDriver: true,
+          }).start(() => {
+            navigation.navigate("LoginScreen");
+          });
+        } else {
+          Animated.spring(pan, {
+            toValue: { x: 0, y: 0 },
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   if (!fontsLoaded) return null;
 
