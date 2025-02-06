@@ -21,7 +21,13 @@ import CustomHeader from '../components/CustomHeader';
 const API_BASE_URL = `http://${SERVER_IP}/PetFurMe-Application`;
 
 const ProfileVerification = ({ navigation, route }) => {
-    const { user_id } = route.params;
+    const user_id = route.params?.user_id || 
+                   route.params?.initial?.user_id || 
+                   new URLSearchParams(window.location.search).get('user_id');
+    
+    const isTestMode = route.params?.testing || 
+                      new URLSearchParams(window.location.search).get('testing') === 'true';
+
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -46,7 +52,6 @@ const ProfileVerification = ({ navigation, route }) => {
         if (!user_id) {
             console.error('No user_id provided');
             Alert.alert('Error', 'User ID is missing');
-            navigation.goBack();
             return;
         }
         
@@ -208,40 +213,15 @@ const ProfileVerification = ({ navigation, route }) => {
             console.log('Profile update response:', response.data);
 
             if (response.data.success) {
-                if (response.data.updated_data) {
-                    const isComplete = response.data.updated_data.complete_credentials === 1;
-                    
-                    // Call onComplete before navigation if it exists
-                    if (route.params?.onComplete) {
-                        await route.params.onComplete();
-                    }
-
-                    // Navigate with refresh flag and message
-                    navigation.navigate('DrawerNavigator', {
-                        screen: 'HomePage',
-                        params: { 
-                            user_id: user_id,
-                            refresh: true,
-                            showMessage: true,
-                            messageType: isComplete ? 'success' : 'info',
-                            message: isComplete 
-                                ? '🎉 Hooray! Your profile is now complete! All features are now unlocked!'
-                                : '✅ Profile updated successfully! Complete all fields to unlock all features.'
-                        }
-                    });
-                } else {
-                    // Navigate with just refresh flag and basic success message
-                    navigation.navigate('DrawerNavigator', {
-                        screen: 'HomePage',
-                        params: { 
-                            user_id: user_id,
-                            refresh: true,
-                            showMessage: true,
-                            messageType: 'info',
-                            message: 'Profile changes saved successfully'
-                        }
-                    });
-                }
+                Alert.alert(
+                    'Success',
+                    response.data.updated_data?.complete_credentials === 1
+                        ? '🎉 Hooray! Your profile is now complete! All features are now unlocked!'
+                        : '✅ Profile updated successfully! Complete all fields to unlock all features.',
+                    [{ text: 'OK' }]
+                );
+                
+                await fetchUserData();
             } else {
                 throw new Error(response.data.message || 'Failed to update profile');
             }
@@ -312,30 +292,11 @@ const ProfileVerification = ({ navigation, route }) => {
     };
 
     const handleNavigation = () => {
-        try {
-            if (navigation) {
-                navigation.navigate('DrawerNavigator', {
-                    screen: 'HomePage',
-                    params: { user_id: user_id }
-                });
-            } else {
-                console.error('Navigation is not available');
-            }
-        } catch (error) {
-            console.error('Navigation error:', error);
-            // Fallback navigation attempt
-            if (navigation?.reset) {
-                navigation.reset({
-                    index: 0,
-                    routes: [{ 
-                        name: 'DrawerNavigator',
-                        params: {
-                            screen: 'HomePage',
-                            params: { user_id: user_id }
-                        }
-                    }],
-                });
-            }
+        if (navigation && !route.params?.testing) {
+            navigation.navigate('DrawerNavigator', {
+                screen: 'HomePage',
+                params: { user_id: user_id }
+            });
         }
     };
 
