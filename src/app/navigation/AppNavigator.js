@@ -1,12 +1,13 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import CustomDrawerContent from '../screens/CustomDrawerContent';
 import ActivityHistoryScreen from '../screens/ActivityHistoryScreen';
 import HomePage from '../screens/HomePage';
 import LoginScreen from '../screens/LoginScreen';
 import RegistrationScreen from '../screens/RegistrationScreen';
 import { NavigationContainer } from '@react-navigation/native';
+import { screenTransitionConfig, forSlide } from '../config/transitions';
 // Import other screens...
 
 const Drawer = createDrawerNavigator();
@@ -19,6 +20,11 @@ function AppNavigator() {
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
+          cardStyleInterpolator: forSlide,
+          transitionSpec: {
+            open: screenTransitionConfig,
+            close: screenTransitionConfig,
+          },
         }}
       >
         <Stack.Screen name="Home" component={HomePage} />

@@ -5,6 +5,17 @@ const mysql = require('mysql2/promise');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 
+// Move CORS middleware to the top
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 // Create email transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -110,65 +121,64 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
-// Update the send-otp endpoint
+// Update the send-otp endpoint with better error handling
 router.post('/send-otp', async (req, res) => {
-  try {
-    console.log('Received request to send OTP:', req.body);
-    const { email } = req.body;
-    
-    if (!email) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Email is required' 
-      });
-    }
-
-    // Generate 6-digit OTP and convert to string
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const connection = await mysql.createConnection(config);
-
     try {
-      // Store OTP in database with expiration
-      await connection.execute(
-        'INSERT INTO password_resets (email, otp, created_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE otp = ?, created_at = NOW()',
-        [email.trim(), otp, otp]
-      );
+        console.log('Received request to send OTP:', req.body);
+        const { email } = req.body;
+        
+        if (!email) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Email is required' 
+            });
+        }
 
-      // Send email with OTP
-      const mailOptions = {
-        from: 'petmanagementt@gmail.com',
-        to: email.trim(),
-        subject: 'Password Reset OTP',
-        html: `
-          <h1>Password Reset Request</h1>
-          <p>Your OTP for password reset is: <strong>${otp}</strong></p>
-          <p>This OTP will expire in 10 minutes.</p>
-          <p>If you didn't request this, please ignore this email.</p>
-        `
-      };
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const connection = await mysql.createConnection(config);
 
-      console.log('Successfully stored OTP in database:', { email: email.trim(), otp });
-      await transporter.sendMail(mailOptions);
-      console.log('Successfully sent email to:', email.trim());
+        try {
+            // Store OTP in database
+            await connection.execute(
+                'INSERT INTO password_resets (email, otp, created_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE otp = ?, created_at = NOW()',
+                [email.trim(), otp, otp]
+            );
 
-      res.json({ 
-        success: true,
-        message: 'OTP sent successfully'
-      });
-    } finally {
-      await connection.end();
+            // Send email with OTP
+            const mailOptions = {
+                from: 'petmanagementt@gmail.com',
+                to: email.trim(),
+                subject: 'Email Verification OTP',
+                html: `
+                    <h1>Email Verification</h1>
+                    <p>Your verification code is: <strong>${otp}</strong></p>
+                    <p>This code will expire in 10 minutes.</p>
+                    <p>If you didn't request this, please ignore this email.</p>
+                `
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log('Successfully sent OTP email to:', email.trim());
+
+            res.json({ 
+                success: true,
+                message: 'OTP sent successfully'
+            });
+        } finally {
+            await connection.end();
+        }
+    } catch (error) {
+        console.error('Detailed error:', {
+            message: error.message,
+            stack: error.stack,
+            code: error.code
+        });
+        res.status(500).json({ 
+            success: false, 
+            error: error.message || 'Failed to send OTP'
+        });
     }
-  } catch (error) {
-    console.error('Detailed error:', {
-      message: error.message,
-      stack: error.stack,
-      code: error.code
-    });
-    res.status(500).json({ 
-      success: false, 
-      error: error.message || 'Failed to send OTP'
-    });
-  }
 });
 
 // Reset password endpoint

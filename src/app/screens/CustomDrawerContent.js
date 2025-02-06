@@ -8,6 +8,7 @@ import {
 	Modal,
 	ActivityIndicator,
 	Alert,
+	Animated,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -306,13 +307,22 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				animationType="fade"
 				onRequestClose={cancelLogout}>
 				<View style={styles.modalContainer}>
-					<View style={styles.modalContent}>
+					<Animated.View style={[styles.modalContent]}>
 						{isLoggingOut ? (
-							<ActivityIndicator size="large" color="#8146C1" />
+							<View style={styles.loadingContainer}>
+								<ActivityIndicator size="large" color="#6C63FF" />
+								<Text style={styles.loadingText}>Logging out...</Text>
+							</View>
 						) : (
 							<>
+								<View style={styles.modalIconContainer}>
+									<View style={styles.iconCircle}>
+										<MaterialIcons name="logout" size={28} color="#6C63FF" />
+									</View>
+								</View>
+								<Text style={styles.modalTitle}>Log Out</Text>
 								<Text style={styles.modalText}>
-									Are you sure you want to log out?
+									Are you sure you want to leave?
 								</Text>
 								<View style={styles.modalButtons}>
 									<TouchableOpacity
@@ -323,12 +333,12 @@ const CustomDrawerContent = ({ navigation, state }) => {
 									<TouchableOpacity
 										style={styles.confirmButton}
 										onPress={confirmLogout}>
-										<Text style={styles.confirmButtonText}>Logout</Text>
+										<Text style={styles.confirmButtonText}>Log Out</Text>
 									</TouchableOpacity>
 								</View>
 							</>
 						)}
-					</View>
+					</Animated.View>
 				</View>
 			</Modal>
 		</View>
@@ -400,15 +410,94 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
+		backgroundColor: "rgba(17, 24, 39, 0.6)",
+		backdropFilter: "blur(5px)",
 	},
 	modalContent: {
 		backgroundColor: "#FFFFFF",
-		padding: 20,
-		borderRadius: 10,
+		padding: 24,
+		borderRadius: 24,
 		alignItems: "center",
-		justifyContent: "center",
-		width: "80%",
+		width: "85%",
+		maxWidth: 340,
+		elevation: 8,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 4,
+		},
+		shadowOpacity: 0.15,
+		shadowRadius: 12,
+	},
+	modalIconContainer: {
+		marginBottom: 20,
+		marginTop: 8,
+	},
+	iconCircle: {
+		width: 64,
+		height: 64,
+		borderRadius: 32,
+		backgroundColor: '#F0F0FF',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modalTitle: {
+		fontSize: 24,
+		fontWeight: "700",
+		color: "#111827",
+		marginBottom: 8,
+		textAlign: "center",
+	},
+	modalText: {
+		fontSize: 16,
+		color: "#6B7280",
+		marginBottom: 24,
+		textAlign: "center",
+		lineHeight: 24,
+	},
+	modalButtons: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "100%",
+		gap: 12,
+	},
+	cancelButton: {
+		flex: 1,
+		backgroundColor: "#F3F4F6",
+		paddingVertical: 14,
+		paddingHorizontal: 24,
+		borderRadius: 12,
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: '#E5E7EB',
+	},
+	confirmButton: {
+		flex: 1,
+		backgroundColor: "#6C63FF",
+		paddingVertical: 14,
+		paddingHorizontal: 24,
+		borderRadius: 12,
+		alignItems: 'center',
+	},
+	cancelButtonText: {
+		color: "#374151",
+		fontSize: 16,
+		fontWeight: "600",
+	},
+	confirmButtonText: {
+		color: "#FFFFFF",
+		fontSize: 16,
+		fontWeight: "600",
+	},
+	loadingContainer: {
+		alignItems: 'center',
+		padding: 32,
+	},
+	loadingText: {
+		marginTop: 16,
+		fontSize: 16,
+		color: "#6B7280",
+		fontWeight: "500",
 	},
 	yourpets: {
 		flexDirection: "row",
@@ -422,43 +511,6 @@ const styles = StyleSheet.create({
 		left: -10,
 		justifyContent: "space-between",
 		fontWeight: "bold",
-	},
-	modalText: {
-		fontSize: 18,
-		fontWeight: "bold",
-		color: "#000000",
-		marginBottom: 20,
-		textAlign: "center",
-	},
-	modalButtons: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		width: "100%",
-	},
-	cancelButton: {
-		backgroundColor: "#CCCCCC",
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius: 5,
-		marginRight: 10,
-	},
-	cancelButtonText: {
-		color: "#000000",
-		fontSize: 16,
-	},
-	confirmButton: {
-		backgroundColor: "#FF0000",
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius: 5,
-	},
-	confirmButtonText: {
-		color: "#FFFFFF",
-		fontSize: 16,
-	},
-	addNewPetButton: {
-		marginTop: 10,
-		marginLeft: 10,
 	},
 	activityLogsSection: {
 		marginVertical: 10,

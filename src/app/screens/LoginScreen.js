@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
 	View,
 	Text,
@@ -9,6 +9,7 @@ import {
 	ActivityIndicator,
 	Alert,
 	Platform,
+	Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
@@ -26,6 +27,25 @@ const LoginScreen = ({ navigation }) => {
 		ios: `http://localhost:${SERVER_PORT}`,
 		android: `http://${SERVER_IP}:${SERVER_PORT}`
 	});
+
+	// Add these animations
+	const fadeAnim = useRef(new Animated.Value(0)).current;
+	const slideAnim = useRef(new Animated.Value(50)).current;
+
+	useEffect(() => {
+		Animated.parallel([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 500,
+				useNativeDriver: true,
+			}),
+			Animated.timing(slideAnim, {
+				toValue: 0,
+				duration: 500,
+				useNativeDriver: true,
+			}),
+		]).start();
+	}, []);
 
 	const handleLogin = async () => {
 		try {
@@ -88,14 +108,22 @@ const LoginScreen = ({ navigation }) => {
 				</View>
 			)}
 
-			<View style={styles.logoContainer}>
-				<Image
-					source={require("../../assets/images/vetcare.png")}
-					style={styles.logo}
-				/>
-			</View>
+			<Animated.View 
+				style={[
+					styles.content,
+					{
+						opacity: fadeAnim,
+						transform: [{ translateY: slideAnim }],
+					}
+				]}
+			>
+				<View style={styles.logoContainer}>
+					<Image
+						source={require("../../assets/images/vetcare.png")}
+						style={styles.logo}
+					/>
+				</View>
 
-			<View style={styles.formContainer}>
 				<View style={styles.inputWrapper}>
 					<Ionicons
 						name="mail-outline"
@@ -109,7 +137,7 @@ const LoginScreen = ({ navigation }) => {
 						value={email}
 						onChangeText={setEmail}
 						keyboardType="email-address"
-						placeholderTextColor="#8146C1"
+						placeholderTextColor="#666666"
 						autoCapitalize="none"
 					/>
 				</View>
@@ -127,9 +155,12 @@ const LoginScreen = ({ navigation }) => {
 						value={password}
 						onChangeText={setPassword}
 						secureTextEntry={!showPassword}
-						placeholderTextColor="#8146C1"
+						placeholderTextColor="#666666"
 					/>
-					<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+					<TouchableOpacity 
+						onPress={() => setShowPassword(!showPassword)}
+						style={styles.eyeIcon}
+					>
 						<Ionicons
 							name={showPassword ? "eye-outline" : "eye-off-outline"}
 							size={20}
@@ -157,12 +188,12 @@ const LoginScreen = ({ navigation }) => {
 				</TouchableOpacity>
 
 				<View style={styles.registerContainer}>
-					<Text style={styles.registerText}>Don't have an account?</Text>
+					<Text style={styles.registerText}>Don't have an account? </Text>
 					<TouchableOpacity onPress={() => navigation.navigate('Register')}>
 						<Text style={styles.registerLink}>Register</Text>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</Animated.View>
 		</View>
 	);
 };
@@ -170,89 +201,85 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#F0E6FF",  // Light violet background
 		justifyContent: "center",
 		alignItems: "center",
 		paddingHorizontal: 20,
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(0, 0, 0, 0.6)",
+		backgroundColor: "rgba(129, 70, 193, 0.4)",
 		justifyContent: "center",
 		alignItems: "center",
 		zIndex: 100,
 	},
+	content: {
+		width: "100%",
+		maxWidth: 400,
+		padding: 25,
+		backgroundColor: "rgba(255, 255, 255, 0.95)",
+		borderRadius: 16,
+		shadowColor: "#8146C1",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.1,
+		shadowRadius: 12,
+		elevation: 5,
+	},
 	logoContainer: {
 		alignItems: "center",
-		marginBottom: 40,
+		marginBottom: 30,
 	},
 	logo: {
-		width: 180,
-		height: 180,
+		width: 150,
+		height: 150,
 		resizeMode: "contain",
-	},
-	formContainer: {
-		width: "100%",
-		padding: 20,
-		backgroundColor: "#D1ACDA",
-		borderRadius: 20,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.2,
-		shadowRadius: 5,
-		elevation: 8,
-		marginBottom: 20,
-		height: 'auto',
-		paddingBottom: 30,
 	},
 	inputWrapper: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 15,
+		marginBottom: 16,
 		borderWidth: 1,
-		borderColor: "#8146C1",
+		borderColor: "#E0E0E0",
 		borderRadius: 12,
-		backgroundColor: "#F5F5F5",
+		backgroundColor: "#FFFFFF",
 		paddingHorizontal: 15,
-		paddingVertical: 8,
-		marginTop: 10,
+		paddingVertical: 12,
 	},
 	icon: {
 		marginRight: 12,
 	},
+	eyeIcon: {
+		padding: 4,
+	},
 	input: {
 		flex: 1,
 		fontSize: 16,
-		color: "#8146C1",
-		paddingVertical: 8,
+		color: "#333333",
+		paddingVertical: 0,
 	},
 	loginButton: {
 		backgroundColor: "#8146C1",
 		borderRadius: 12,
-		paddingVertical: 12,
+		paddingVertical: 16,
 		alignItems: "center",
-		marginTop: 20,
+		marginTop: 24,
 		marginBottom: 20,
-		width: "50%",
+		width: "100%",
 		alignSelf: "center",
+		shadowColor: "#8146C1",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.2,
+		shadowRadius: 8,
+		elevation: 4,
 	},
 	loginButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
-		fontWeight: "bold",
-	},
-	footerText: {
-		textAlign: "center",
-		color: "#000000",
-		marginTop: 20,
-		fontSize: 15,
-	},
-	signUpText: {
-		color: "#8146C1",
-		fontWeight: "bold",
+		fontWeight: "600",
+		letterSpacing: 1,
 	},
 	errorText: {
-		color: "#FF0000",
+		color: "#FF4444",
 		textAlign: "center",
 		marginTop: 10,
 		fontSize: 14,
@@ -264,15 +291,15 @@ const styles = StyleSheet.create({
 		color: '#8146C1',
 		textAlign: 'right',
 		fontSize: 14,
-		marginTop: 5,
-		marginBottom: 15,
+		marginTop: 8,
+		marginBottom: 8,
 		fontWeight: '500',
 	},
 	registerContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 20,
+		marginTop: 16,
 	},
 	registerText: {
 		color: '#666666',
@@ -281,8 +308,7 @@ const styles = StyleSheet.create({
 	registerLink: {
 		color: '#8146C1',
 		fontSize: 14,
-		fontWeight: 'bold',
-		marginLeft: 5,
+		fontWeight: '600',
 	},
 });
 
