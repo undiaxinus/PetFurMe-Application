@@ -107,6 +107,8 @@ const ProfileVerification = ({ navigation, route }) => {
                             'Cache-Control': 'no-cache'
                         }
                     });
+                } else {
+                    setProfilePhoto(null);
                 }
 
                 // Store in AsyncStorage
@@ -183,15 +185,40 @@ const ProfileVerification = ({ navigation, route }) => {
             userData.user_id = user_id;
 
             // Handle profile photo
-            if (profilePhoto?.uri && !profilePhoto.uri.startsWith('http')) {
+            if (profilePhoto?.uri) {
                 const localUri = profilePhoto.uri;
-                const filename = localUri.split('/').pop();
+                let filename;
                 
-                formData.append('photo', {
-                    uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-                    type: 'image/jpeg',
-                    name: filename || 'profile_photo.jpg'
-                });
+                // Handle base64 image
+                if (localUri.startsWith('data:image')) {
+                    const ext = 'png';
+                    filename = `user_${user_id}_${Date.now()}.${ext}`;
+                    
+                    // Convert base64 to blob
+                    const base64Data = localUri.split(',')[1];
+                    const byteCharacters = atob(base64Data);
+                    const byteArrays = [];
+                    
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteArrays.push(byteCharacters.charCodeAt(i));
+                    }
+                    
+                    const blob = new Blob([new Uint8Array(byteArrays)], { type: 'image/png' });
+                    
+                    // Append to formData
+                    formData.append('photo', blob, filename);
+                    userData.photo = `user_photos/${filename}`;
+                } else {
+                    // Handle file URI
+                    filename = localUri.split('/').pop();
+                    formData.append('photo', {
+                        uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                        type: 'image/jpeg',
+                        name: filename
+                    });
+                    userData.photo = `user_photos/${filename}`;
+                }
+                console.log('Photo path to be saved:', userData.photo);
             }
 
             console.log('Sending user data:', userData);
@@ -221,6 +248,7 @@ const ProfileVerification = ({ navigation, route }) => {
                     [{ text: 'OK' }]
                 );
                 
+                // Refresh user data to confirm update
                 await fetchUserData();
             } else {
                 throw new Error(response.data.message || 'Failed to update profile');

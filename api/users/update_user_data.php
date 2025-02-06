@@ -3,13 +3,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
 
-include_once '../config/Database.php';
-require_once '../utils/image_handler.php';
+include '../config/database.php';
 
 try {
     $database = new Database();
@@ -29,130 +27,108 @@ try {
     }
 
     // Decode JSON data
-    $data = json_decode($_POST['data'], true);
+    $jsonData = json_decode($_POST['data'], true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         throw new Exception("Invalid JSON data: " . json_last_error_msg());
     }
 
     // Validate user_id
-    if (!isset($data['user_id'])) {
+    if (!isset($jsonData['user_id'])) {
         throw new Exception("User ID is required");
     }
 
-    // Handle photo upload
+    // Handle file upload
     $photo_path = null;
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        error_log("Processing photo upload");
-        
-        $photo_path = ImageHandler::saveImage($_FILES['photo'], 'user_photos', 'user');
-        if (!$photo_path) {
-            throw new Exception("Failed to save uploaded file");
+        $upload_dir = '../../uploads/user_photos/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
         }
-    } else if (isset($_FILES['photo'])) {
-        switch ($_FILES['photo']['error']) {
-            case UPLOAD_ERR_INI_SIZE:
-            case UPLOAD_ERR_FORM_SIZE:
-                throw new Exception("The image file is too large. Please upload an image smaller than 2MB.");
-            case UPLOAD_ERR_PARTIAL:
-                throw new Exception("The image was only partially uploaded. Please try again.");
-            case UPLOAD_ERR_NO_FILE:
-                throw new Exception("No image file was uploaded.");
-            default:
-                throw new Exception("There was an error uploading your image. Please try again with a smaller image.");
+
+        $filename = basename($_FILES['photo']['name']);
+        $target_path = $upload_dir . $filename;
+
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_path)) {
+            $photo_path = 'user_photos/' . $filename;
+            error_log("Photo uploaded successfully: " . $photo_path);
+        } else {
+            error_log("Failed to upload photo");
+            throw new Exception("Failed to upload photo");
         }
     }
 
     // Debug log the received data before processing
-    error_log("Received data before processing: " . print_r($data, true));
+    error_log("Received data before processing: " . print_r($jsonData, true));
 
-    // Modify the query to only update fields that have values
-    $updates = array();
-    $types = '';
-    $params = array();
+    // Start building the query
+    $updates = [];
+    $params = [];
+    $types = "";
 
-    // Check each field and only include it if it's provided
-    if (isset($data['name'])) {
+    // Add fields to update if they exist
+    if (isset($jsonData['name'])) {
         $updates[] = "name = ?";
-        $types .= 's';
-        $params[] = $data['name'];
+        $params[] = $jsonData['name'];
+        $types .= "s";
     }
-
-    if (isset($data['address'])) {
-        $updates[] = "address = ?";
-        $types .= 's';
-        $params[] = $data['address'];
-    }
-
-    if (isset($data['phone'])) {
-        $updates[] = "phone = ?";
-        $types .= 's';
-        $params[] = $data['phone'];
-    }
-
-    if (isset($data['email'])) {
+    if (isset($jsonData['email'])) {
         $updates[] = "email = ?";
-        $types .= 's';
-        $params[] = $data['email'];
+        $params[] = $jsonData['email'];
+        $types .= "s";
+    }
+    if (isset($jsonData['phone'])) {
+        $updates[] = "phone = ?";
+        $params[] = $jsonData['phone'];
+        $types .= "s";
+    }
+    if (isset($jsonData['address'])) {
+        $updates[] = "address = ?";
+        $params[] = $jsonData['address'];
+        $types .= "s";
     }
 
-    // Add the complete_credentials check
-    $updates[] = "complete_credentials = CASE 
-        WHEN name IS NOT NULL AND name != '' AND
-             email IS NOT NULL AND email != '' AND
-             phone IS NOT NULL AND phone != '' AND
-             address IS NOT NULL AND address != ''
-        THEN 1
-        ELSE 0
-    END";
+    // Add photo path to update
+    if ($photo_path || isset($jsonData['photo'])) {
+        $updates[] = "photo = ?";
+        $params[] = $photo_path ?? $jsonData['photo'];
+        $types .= "s";
+        error_log("Adding photo to update: " . ($photo_path ?? $jsonData['photo']));
+    }
 
     // Add user_id to parameters
-    $types .= 'i';
-    $params[] = $data['user_id'];
+    $params[] = $jsonData['user_id'];
+    $types .= "i";
 
     // Construct the final query
     $query = "UPDATE users SET " . implode(", ", $updates) . " WHERE id = ?";
+    error_log("Update query: " . $query);
+    error_log("Parameters: " . print_r($params, true));
 
-    // Debug log the query and parameters
-    error_log("Query to execute: " . $query);
-    error_log("Parameters: " . json_encode($params));
-
+    // Prepare and execute the query
     $stmt = $db->prepare($query);
     if (!$stmt) {
         throw new Exception("Prepare failed: " . $db->error);
     }
 
-    // Bind parameters dynamically
-    if (!empty($params)) {
-        $stmt->bind_param($types, ...$params);
-    }
-
+    $stmt->bind_param($types, ...$params);
+    
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
     }
 
-    // Check if any rows were affected
-    if ($stmt->affected_rows > 0) {
-        // Fetch updated user data to confirm changes
-        $select_query = "SELECT name, email, phone, address, complete_credentials 
-                        FROM users WHERE id = ?";
-        $select_stmt = $db->prepare($select_query);
-        $select_stmt->bind_param("i", $data['user_id']);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        $updated_data = $result->fetch_assoc();
+    // Get updated user data
+    $select_stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
+    $select_stmt->bind_param("i", $jsonData['user_id']);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    $updated_data = $result->fetch_assoc();
 
-        $response = [
-            'success' => true,
-            'message' => 'Profile updated successfully',
-            'photo_path' => $photo_path,
-            'updated_data' => $updated_data
-        ];
-    } else {
-        $response = [
-            'success' => false,
-            'message' => 'No changes were made to the profile'
-        ];
-    }
+    $response = [
+        'success' => true,
+        'message' => 'Profile updated successfully',
+        'photo_path' => $photo_path ?? $jsonData['photo'],
+        'updated_data' => $updated_data
+    ];
 
     echo json_encode($response);
 
@@ -166,6 +142,9 @@ try {
 } finally {
     if (isset($stmt)) {
         $stmt->close();
+    }
+    if (isset($select_stmt)) {
+        $select_stmt->close();
     }
     if (isset($db)) {
         $db->close();

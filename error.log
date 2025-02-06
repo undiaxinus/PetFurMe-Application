@@ -9881,3 +9881,379 @@
 [06-Feb-2025 09:29:46 Europe/Berlin] Raw row data: 
 [06-Feb-2025 09:29:46 Europe/Berlin] Complete credentials value: 1
 [06-Feb-2025 09:29:46 Europe/Berlin] Sending success response: 
+[06-Feb-2025 10:06:36 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:06:36 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[06-Feb-2025 10:06:36 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:06:36 Europe/Berlin] User ID: 108
+[06-Feb-2025 10:06:36 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:06:36 Europe/Berlin] Processing request for user_id: 108
+[06-Feb-2025 10:06:36 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:06:36 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:06:36 Europe/Berlin] ERROR in check_profile_status.php: Unknown column 'complete_credentials' in 'field list'
+[06-Feb-2025 10:06:36 Europe/Berlin] Stack trace: #0 D:\XAMPP\htdocs\PetFurMe-Application\api\users\check_profile_status.php(124): mysqli->prepare('SELECT name, em...')
+#1 {main}
+[06-Feb-2025 10:06:36 Europe/Berlin] Sending error response: {"success":false,"message":"Server error: Unknown column 'complete_credentials' in 'field list'","debug_info":{"file":"D:\\XAMPP\\htdocs\\PetFurMe-Application\\api\\users\\check_profile_status.php","line":124}}
+[06-Feb-2025 10:14:41 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:14:41 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:14:41 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:14:41 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:14:41 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:14:41 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:14:41 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:14:41 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:14:41 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:14:41 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:14:41 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:14:41 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:14:41 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:14:41 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:14:50 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:14:50 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[06-Feb-2025 10:14:50 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:14:50 Europe/Berlin] User ID: 108
+[06-Feb-2025 10:14:50 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:14:50 Europe/Berlin] Processing request for user_id: 108
+[06-Feb-2025 10:14:50 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:14:50 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:14:50 Europe/Berlin] Profile data retrieved: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"complete_credentials":1}
+[06-Feb-2025 10:14:50 Europe/Berlin] Profile complete status: true
+[06-Feb-2025 10:14:50 Europe/Berlin] Checking profile status for user: 108
+[06-Feb-2025 10:14:50 Europe/Berlin] Raw row data: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","role":"pet_owner","complete_credentials":1}
+[06-Feb-2025 10:14:50 Europe/Berlin] Complete credentials value: 1
+[06-Feb-2025 10:14:50 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"108","profile":{"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","complete_credentials":1}}
+[06-Feb-2025 10:20:18 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:20:18 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:20:18 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:20:18 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:20:18 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:20:18 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:20:18 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:20:18 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:20:18 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:20:18 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:20:18 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:20:18 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:20:18 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:20:18 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:30:33 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:30:33 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:30:33 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:30:33 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:30:33 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:30:33 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:30:33 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:30:33 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:30:33 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:30:33 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:30:33 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:30:33 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:30:33 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:30:33 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:36:14 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:36:14 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:36:14 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:36:14 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:36:14 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:36:14 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:36:14 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:36:14 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:36:14 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:36:14 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:36:14 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:36:14 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:36:14 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:36:14 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:38:11 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:38:11 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[06-Feb-2025 10:38:11 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:38:11 Europe/Berlin] User ID: 108
+[06-Feb-2025 10:38:11 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:38:11 Europe/Berlin] Processing request for user_id: 108
+[06-Feb-2025 10:38:11 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:38:11 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:38:11 Europe/Berlin] Profile data retrieved: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"complete_credentials":1}
+[06-Feb-2025 10:38:11 Europe/Berlin] Profile complete status: true
+[06-Feb-2025 10:38:11 Europe/Berlin] Checking profile status for user: 108
+[06-Feb-2025 10:38:11 Europe/Berlin] Raw row data: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","role":"pet_owner","complete_credentials":1}
+[06-Feb-2025 10:38:11 Europe/Berlin] Complete credentials value: 1
+[06-Feb-2025 10:38:11 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"108","profile":{"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","complete_credentials":1}}
+[06-Feb-2025 10:44:16 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:44:16 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[06-Feb-2025 10:44:16 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:44:16 Europe/Berlin] User ID: 108
+[06-Feb-2025 10:44:16 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:44:16 Europe/Berlin] Processing request for user_id: 108
+[06-Feb-2025 10:44:16 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:44:16 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:44:16 Europe/Berlin] Profile data retrieved: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"complete_credentials":1}
+[06-Feb-2025 10:44:16 Europe/Berlin] Profile complete status: true
+[06-Feb-2025 10:44:16 Europe/Berlin] Checking profile status for user: 108
+[06-Feb-2025 10:44:16 Europe/Berlin] Raw row data: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","role":"pet_owner","complete_credentials":1}
+[06-Feb-2025 10:44:16 Europe/Berlin] Complete credentials value: 1
+[06-Feb-2025 10:44:16 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"108","profile":{"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","complete_credentials":1}}
+[06-Feb-2025 10:44:23 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:44:23 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:44:23 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:44:23 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:44:23 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:44:23 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:44:23 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:44:23 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:44:23 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:44:23 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:44:23 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:44:23 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:44:23 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:44:23 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:46:51 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:46:51 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:46:51 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:46:51 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:46:51 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:46:51 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:46:51 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:46:51 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:46:51 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:46:51 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:46:51 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:46:51 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:46:51 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:46:51 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 10:50:45 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 10:50:45 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 10:50:45 Europe/Berlin] Request method: GET
+[06-Feb-2025 10:50:45 Europe/Berlin] User ID: 137
+[06-Feb-2025 10:50:45 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 10:50:45 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 10:50:45 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 10:50:45 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 10:50:45 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 10:50:45 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 10:50:45 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 10:50:45 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 10:50:45 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 10:50:45 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:04:19 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:04:19 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:04:19 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:04:19 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:04:19 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:04:19 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:04:19 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:04:19 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:04:19 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:04:19 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:04:19 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:04:19 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:04:19 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:04:19 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:06:45 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:06:45 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:06:45 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:06:45 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:06:45 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:06:45 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:06:45 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:06:45 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:06:45 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:06:45 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:06:45 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:06:45 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:06:45 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:06:45 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:12:08 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:12:08 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:12:08 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:12:08 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:12:08 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:12:08 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:12:08 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:12:08 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:12:08 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:12:08 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:12:08 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:12:08 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:12:08 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:12:08 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:16:07 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:16:07 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:16:07 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:16:07 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:16:07 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:16:07 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:16:07 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:16:07 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:16:07 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:16:07 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:16:07 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:16:07 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:16:07 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:16:07 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:20:40 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:20:40 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:20:40 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:20:40 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:20:40 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:20:40 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:20:40 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:20:40 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:20:40 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:20:40 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:20:40 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:20:40 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:20:40 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:20:40 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:22:29 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:22:29 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:22:29 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:22:29 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:22:29 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:22:29 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:22:29 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:22:29 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:22:29 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:22:29 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:22:29 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:22:29 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:22:29 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:22:29 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:25:55 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:25:55 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:25:55 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:25:55 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:25:55 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:25:55 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:25:55 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:25:55 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:25:55 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:25:55 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:25:55 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:25:55 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:25:55 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:25:55 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:27:12 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:27:12 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:27:12 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:27:12 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:27:12 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:27:12 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:27:12 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:27:12 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:27:12 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:27:12 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:27:12 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:27:12 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:27:12 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:27:12 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:34:35 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:34:35 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:34:35 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:34:35 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:34:35 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:34:35 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:34:35 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:34:35 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:34:35 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:34:35 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:34:35 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:34:35 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:34:35 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:34:35 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:41:13 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:41:13 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:41:13 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:41:13 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:41:13 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:41:13 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:41:13 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:41:13 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:41:13 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:41:13 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:41:13 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:41:13 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:41:13 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:41:13 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:43:49 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:43:49 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:43:49 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:43:49 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:43:49 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:43:49 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:43:49 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:43:49 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:43:49 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:43:49 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:43:49 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:43:49 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:43:49 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:43:49 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 11:44:58 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:44:58 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=108
+[06-Feb-2025 11:44:58 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:44:58 Europe/Berlin] User ID: 108
+[06-Feb-2025 11:44:58 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:44:58 Europe/Berlin] Processing request for user_id: 108
+[06-Feb-2025 11:44:58 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:44:58 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:44:58 Europe/Berlin] Profile data retrieved: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"complete_credentials":1}
+[06-Feb-2025 11:44:58 Europe/Berlin] Profile complete status: true
+[06-Feb-2025 11:44:58 Europe/Berlin] Checking profile status for user: 108
+[06-Feb-2025 11:44:58 Europe/Berlin] Raw row data: {"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","role":"pet_owner","complete_credentials":1}
+[06-Feb-2025 11:44:58 Europe/Berlin] Complete credentials value: 1
+[06-Feb-2025 11:44:58 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"108","profile":{"name":"Reu Azel","email":"yureasel1@gmail.com","phone":"123456789","hasPhoto":true,"photo":"user_photos\/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg","complete_credentials":1}}
+[06-Feb-2025 11:51:31 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 11:51:31 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 11:51:31 Europe/Berlin] Request method: GET
+[06-Feb-2025 11:51:31 Europe/Berlin] User ID: 137
+[06-Feb-2025 11:51:31 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 11:51:31 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 11:51:31 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 11:51:31 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 11:51:31 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 11:51:31 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 11:51:31 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 11:51:31 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 11:51:31 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 11:51:31 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 12:20:14 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 12:20:14 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 12:20:14 Europe/Berlin] Request method: GET
+[06-Feb-2025 12:20:14 Europe/Berlin] User ID: 137
+[06-Feb-2025 12:20:14 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 12:20:14 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 12:20:14 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 12:20:14 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 12:20:14 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 12:20:14 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 12:20:14 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 12:20:14 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 12:20:14 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 12:20:14 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 12:23:09 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 12:23:09 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 12:23:09 Europe/Berlin] Request method: GET
+[06-Feb-2025 12:23:09 Europe/Berlin] User ID: 137
+[06-Feb-2025 12:23:09 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 12:23:10 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 12:23:10 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 12:23:10 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 12:23:10 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"complete_credentials":0}
+[06-Feb-2025 12:23:10 Europe/Berlin] Profile complete status: false
+[06-Feb-2025 12:23:10 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 12:23:10 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":null,"role":"pet_owner","complete_credentials":0}
+[06-Feb-2025 12:23:10 Europe/Berlin] Complete credentials value: 0
+[06-Feb-2025 12:23:10 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":false,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":false,"photo":null,"complete_credentials":0}}
+[06-Feb-2025 12:23:53 Europe/Berlin] === New Request to check_profile_status.php ===
+[06-Feb-2025 12:23:53 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=137
+[06-Feb-2025 12:23:53 Europe/Berlin] Request method: GET
+[06-Feb-2025 12:23:53 Europe/Berlin] User ID: 137
+[06-Feb-2025 12:23:53 Europe/Berlin] Database config loaded successfully from: D:\XAMPP\htdocs\PetFurMe-Application\api\users/../config/database.php
+[06-Feb-2025 12:23:53 Europe/Berlin] Processing request for user_id: 137
+[06-Feb-2025 12:23:53 Europe/Berlin] Database connection established successfully
+[06-Feb-2025 12:23:53 Europe/Berlin] User count check completed: 1
+[06-Feb-2025 12:23:53 Europe/Berlin] Profile data retrieved: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":true,"complete_credentials":1}
+[06-Feb-2025 12:23:53 Europe/Berlin] Profile complete status: true
+[06-Feb-2025 12:23:53 Europe/Berlin] Checking profile status for user: 137
+[06-Feb-2025 12:23:53 Europe/Berlin] Raw row data: {"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","photo":"user_photos\/user_137_1738841003997.png","role":"pet_owner","complete_credentials":1}
+[06-Feb-2025 12:23:53 Europe/Berlin] Complete credentials value: 1
+[06-Feb-2025 12:23:53 Europe/Berlin] Sending success response: {"success":true,"isProfileComplete":true,"user_id":"137","profile":{"name":"kaiju","email":"onalynj1@gmail.com","phone":"123456","hasPhoto":true,"photo":"user_photos\/user_137_1738841003997.png","complete_credentials":1}}
