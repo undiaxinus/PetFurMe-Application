@@ -18,6 +18,7 @@ import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import CompleteProfileBar from '../components/CompleteProfileBar';
+import CustomToast from '../components/CustomToast';
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
@@ -34,6 +35,7 @@ const HomePage = ({ navigation, route }) => {
 	const [userPhoto, setUserPhoto] = useState(null);
 	const [showProfileTutorial, setShowProfileTutorial] = useState(false);
 	const [credentialsComplete, setCredentialsComplete] = useState(false);
+	const [toastConfig, setToastConfig] = useState(null);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -72,28 +74,40 @@ const HomePage = ({ navigation, route }) => {
 	}, [isProfileComplete]);
 
 	useEffect(() => {
+		if (route.params?.refresh) {
+			refreshAllData();
+			// Clear the refresh param
+			navigation.setParams({ refresh: undefined });
+		}
+	}, [route.params?.refresh]);
+
+	useEffect(() => {
 		if (route.params?.showMessage) {
 			const message = route.params.message;
 			const messageType = route.params.messageType;
 
-			// Clear the message params
+			if (Platform.OS === 'android') {
+				// Use custom toast instead of ToastAndroid
+				setToastConfig({
+					message,
+					type: messageType
+				});
+			} else {
+				Alert.alert(
+					messageType === 'success' ? '🎉 Success!' : 'Information',
+					message,
+					[{ text: 'OK' }],
+					{ cancelable: false }
+				);
+			}
+
 			navigation.setParams({
 				showMessage: undefined,
 				message: undefined,
 				messageType: undefined
 			});
-
-			// Show message based on platform
-			if (Platform.OS === 'android') {
-				ToastAndroid.show(message, ToastAndroid.SHORT);
-			} else {
-				// For iOS, you might want to use a custom alert or modal
-				Alert.alert(
-					messageType === 'success' ? 'Success' : 'Information',
-					message,
-					[{ text: 'OK' }]
-				);
-			}
+			
+			refreshAllData();
 		}
 	}, [route.params?.showMessage]);
 
@@ -157,7 +171,6 @@ const HomePage = ({ navigation, route }) => {
 			console.log("Profile status response:", data);
 			
 			if (data.success) {
-				// Check both complete_credentials and required fields
 				const hasRequiredFields = data.profile.name && 
 										data.profile.email && 
 										data.profile.phone && 
@@ -292,8 +305,23 @@ const HomePage = ({ navigation, route }) => {
 		fetchPetProducts();
 	}, []);
 
+	// Add a function to refresh all data
+	const refreshAllData = async () => {
+		await Promise.all([
+			checkProfileStatus(),
+			fetchUserPets()
+		]);
+	};
+
 	return (
 		<View style={styles.container}>
+			{toastConfig && (
+				<CustomToast
+					message={toastConfig.message}
+					type={toastConfig.type}
+					onHide={() => setToastConfig(null)}
+				/>
+			)}
 			<CustomHeader
 				title={`Welcome, ${userName}`}
 				subtitle="Your pet's happiness starts here!"
@@ -375,7 +403,7 @@ const HomePage = ({ navigation, route }) => {
 						onPress={() => navigation.navigate('ProfileVerification', { 
 							user_id: user_id,
 							onComplete: () => {
-								checkProfileStatus(); // Recheck status after completion
+								refreshAllData(); // Use the new refresh function
 							}
 						})}
 					/>

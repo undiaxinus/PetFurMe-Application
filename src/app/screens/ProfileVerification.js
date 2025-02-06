@@ -208,11 +208,15 @@ const ProfileVerification = ({ navigation, route }) => {
             console.log('Profile update response:', response.data);
 
             if (response.data.success) {
-                // Update local state with the returned data
                 if (response.data.updated_data) {
                     const isComplete = response.data.updated_data.complete_credentials === 1;
                     
-                    // Navigate to HomePage with different messages based on completion
+                    // Call onComplete before navigation if it exists
+                    if (route.params?.onComplete) {
+                        await route.params.onComplete();
+                    }
+
+                    // Navigate with refresh flag and message
                     navigation.navigate('DrawerNavigator', {
                         screen: 'HomePage',
                         params: { 
@@ -221,22 +225,20 @@ const ProfileVerification = ({ navigation, route }) => {
                             showMessage: true,
                             messageType: isComplete ? 'success' : 'info',
                             message: isComplete 
-                                ? 'Hooray! Your profile is now complete! 🎉'
-                                : 'Profile updated successfully'
+                                ? '🎉 Hooray! Your profile is now complete! All features are now unlocked!'
+                                : '✅ Profile updated successfully! Complete all fields to unlock all features.'
                         }
                     });
-
-                    // Call onComplete callback if provided
-                    if (route.params?.onComplete) {
-                        route.params.onComplete();
-                    }
                 } else {
-                    // Just navigate to HomePage if no updated data
+                    // Navigate with just refresh flag and basic success message
                     navigation.navigate('DrawerNavigator', {
                         screen: 'HomePage',
                         params: { 
                             user_id: user_id,
-                            refresh: true
+                            refresh: true,
+                            showMessage: true,
+                            messageType: 'info',
+                            message: 'Profile changes saved successfully'
                         }
                     });
                 }
