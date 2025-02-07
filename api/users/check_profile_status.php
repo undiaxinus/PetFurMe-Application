@@ -120,7 +120,9 @@ try {
     }
 
     // Get profile details
-    $query = "SELECT name, email, phone, photo, role, complete_credentials FROM users WHERE id = ?";
+    $query = "SELECT name, email, phone, photo, complete_credentials, verified_by 
+              FROM users 
+              WHERE id = ?";
     $stmt = $db->prepare($query);
     
     if (!$stmt) {
@@ -165,7 +167,8 @@ try {
             'phone' => $row['phone'] ?? null,
             'hasPhoto' => !empty($row['photo']),
             'photo' => $row['photo'] ?? null,
-            'complete_credentials' => (int)$row['complete_credentials']
+            'complete_credentials' => (int)$row['complete_credentials'],
+            'verified_by' => $row['verified_by'] ?? null
         ]
     ];
     

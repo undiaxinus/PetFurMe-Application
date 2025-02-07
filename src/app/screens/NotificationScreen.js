@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, ActivityIndicator, RefreshControl, Alert, Animated } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, ActivityIndicator, RefreshControl, Alert, Animated, Linking } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { BASE_URL, SERVER_IP } from '../config/constants';
@@ -10,14 +10,33 @@ import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import { Swipeable } from 'react-native-gesture-handler';
 
-// Configure notifications for local only
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+// Add this at the top level
+const configureNotifications = Platform.OS === 'web' 
+  ? {
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false, // Badges aren't supported on web
+      }),
+    }
+  : {
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    };
+
+// Set default notification handler
+Notifications.setNotificationHandler(configureNotifications);
+
+// Add these notification type constants at the top of the file
+const NOTIFICATION_TYPES = {
+  APPOINTMENT_REMINDER: 'appointment_reminder',
+  NEW_PRODUCT: 'new_product',
+  LOW_STOCK: 'low_stock',
+  CHECKUP_RESULT: 'checkup_result'
+};
 
 const NotificationScreen = ({ navigation, route }) => {
   const [user_id, setUserId] = useState(route.params?.user_id);
@@ -28,80 +47,163 @@ const NotificationScreen = ({ navigation, route }) => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const lastFetchRef = useRef(Date.now());
-  const REFRESH_COOLDOWN = 5000;
+  const REFRESH_COOLDOWN = 1000;
+  const [permissionStatus, setPermissionStatus] = useState('unknown');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getUserIdAndFetch = async () => {
+    const initializeScreen = async () => {
       try {
-        if (!user_id) {
-          const storedUserId = await AsyncStorage.getItem('user_id');
-          if (storedUserId) {
-            setUserId(storedUserId);
-            fetchNotifications(storedUserId);
+        // Request permissions
+        await requestNotificationPermissions();
+        
+        // Get user ID
+        let currentUserId = user_id;
+        if (!currentUserId) {
+          currentUserId = await AsyncStorage.getItem('user_id');
+          if (currentUserId) {
+            setUserId(currentUserId);
           } else {
             console.error('No user_id found');
             navigation.navigate('LoginScreen');
+            return;
           }
-        } else {
-          fetchNotifications(user_id);
         }
+        
+        // Fetch notifications immediately
+        await fetchNotifications(currentUserId);
+        
+        // Set up auto refresh every 30 seconds instead of 60
+        refreshIntervalRef.current = setInterval(() => {
+          if (currentUserId && !isRefreshing) {
+            console.log('Auto-refreshing notifications...');
+            fetchNotifications(currentUserId);
+          }
+        }, 30000);
       } catch (err) {
-        console.error('Error getting user_id:', err);
-        setError('Failed to get user session');
+        console.error('Error during initialization:', err);
+        setError('Failed to initialize notifications');
       }
     };
 
-    // Initial fetch
-    getUserIdAndFetch();
-
-    // Set up auto refresh every 1 minute (60000ms)
-    refreshIntervalRef.current = setInterval(() => {
-      if (user_id && !isRefreshing) {
-        console.log('Auto-refreshing notifications...');
-        fetchNotifications(user_id);
-      }
-    }, 60000);
-
-    // Request notification permissions
-    requestNotificationPermissions();
+    initializeScreen();
 
     return () => {
       if (refreshIntervalRef.current) {
         clearInterval(refreshIntervalRef.current);
       }
     };
-  }, [user_id, isRefreshing]);
+  }, []);
 
   const requestNotificationPermissions = async () => {
     try {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      
-      if (finalStatus !== 'granted') {
-        console.log('Failed to get notification permissions');
-        return;
+      if (Platform.OS === 'web') {
+        // Web notification permissions
+        if (!('Notification' in window)) {
+          console.log('This browser does not support notifications');
+          setPermissionStatus('unsupported');
+          return false;
+        }
+
+        let permission = Notification.permission;
+        
+        if (permission === 'denied') {
+          console.log('Notification permission previously denied');
+          setPermissionStatus('denied');
+          Alert.alert(
+            'Notifications Blocked',
+            'Please enable notifications in your browser settings to receive updates.',
+            [
+              {
+                text: 'Learn How',
+                onPress: () => {
+                  // You could navigate to a help screen here
+                  navigation.navigate('NotificationHelp');
+                }
+              },
+              { text: 'OK' }
+            ]
+          );
+          return false;
+        }
+
+        if (permission === 'default') {
+          permission = await Notification.requestPermission();
+        }
+
+        if (permission === 'granted') {
+          setPermissionStatus('granted');
+          return true;
+        }
+
+      } else {
+        // Mobile notification permissions
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        
+        if (finalStatus !== 'granted') {
+          console.log('Failed to get push token for push notification!');
+          setPermissionStatus('denied');
+          Alert.alert(
+            'Notification Permission Required',
+            'Please enable notifications in your device settings to receive updates.',
+            [
+              {
+                text: 'Open Settings',
+                onPress: () => {
+                  if (Platform.OS === 'ios') {
+                    Linking.openURL('app-settings:');
+                  } else {
+                    Linking.openSettings();
+                  }
+                }
+              },
+              { text: 'Cancel' }
+            ]
+          );
+          return false;
+        }
+        
+        setPermissionStatus('granted');
+        return true;
       }
     } catch (error) {
       console.error('Error requesting notification permissions:', error);
+      setPermissionStatus('error');
+      return false;
     }
   };
 
   const showLocalNotification = async (title, message) => {
     try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: title,
+      if (permissionStatus !== 'granted') {
+        const granted = await requestNotificationPermissions();
+        if (!granted) return;
+      }
+
+      if (Platform.OS === 'web') {
+        // Web notification
+        new Notification(title, {
           body: message,
-          sound: true,
-          priority: 'high',
-        },
-        trigger: null, // null means show immediately
-      });
+          icon: '/path/to/your/icon.png' // Add your notification icon
+        });
+      } else {
+        // Mobile notification
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: title,
+            body: message,
+            sound: true,
+            priority: 'high',
+          },
+          trigger: null, // null means show immediately
+        });
+      }
     } catch (error) {
       console.error('Error showing notification:', error);
     }
@@ -112,50 +214,64 @@ const NotificationScreen = ({ navigation, route }) => {
       return;
     }
 
+    setIsLoading(true);
     try {
-      console.log('Fetching notifications for user:', currentUserId);
-      
       const response = await axios.get(
-        `http://${SERVER_IP}/PetFurMe-Application/api/notifications/get_notifications.php?user_id=${currentUserId}`
+        `http://${SERVER_IP}/PetFurMe-Application/api/notifications/get_notifications.php?user_id=${currentUserId}`,
+        { timeout: 5000 }
       );
-      
+
+      if (!response.data) {
+        throw new Error('No data received from server');
+      }
+
       if (response.data.success) {
         const formattedNotifications = response.data.notifications.map(notification => ({
           id: notification.id,
-          title: notification.type,
-          description: notification.data,
+          type: notification.type,
+          notifiable_type: notification.notifiable_type,
+          notifiable_id: notification.notifiable_id,
+          data: notification.data,
           read: notification.read_at !== null,
-          created_at: notification.created_at,
-          type: notification.notifiable_type
+          created_at: notification.created_at
         }));
 
+        // Show new notifications
         if (!isManualRefresh) {
           const newNotifications = formattedNotifications.filter(
             notification => !notification.read && 
             !notifications.find(n => n.id === notification.id)
           );
 
-          newNotifications.forEach(notification => {
-            showLocalNotification(
-              notification.title,
-              notification.description
+          for (const notification of newNotifications) {
+            const data = JSON.parse(notification.data);
+            await showLocalNotification(
+              notification.type.split('_').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+              ).join(' '),
+              data.message
             );
-          });
+          }
         }
 
         setNotifications(formattedNotifications);
         setError(null);
-        lastFetchRef.current = Date.now();
       } else {
         throw new Error(response.data.message || 'Failed to load notifications');
       }
     } catch (err) {
+      if (err.code === 'ECONNABORTED') {
+        setError('Request timed out. Please check your connection.');
+      } else {
+        setError(err.message || 'Failed to load notifications');
+      }
       console.error('Error fetching notifications:', err);
-      setError('Failed to load notifications');
     } finally {
+      setIsLoading(false);
       setIsRefreshing(false);
+      lastFetchRef.current = Date.now();
     }
-  }, [notifications]);
+  }, [notifications, permissionStatus]);
 
   const markAsRead = async (id) => {
     try {
@@ -234,22 +350,83 @@ const NotificationScreen = ({ navigation, route }) => {
       );
     };
 
+    const getNotificationIcon = () => {
+      switch (item.type) {
+        case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
+          return <MaterialIcons name="event" size={24} color="#8146C1" />;
+        case NOTIFICATION_TYPES.NEW_PRODUCT:
+          return <MaterialIcons name="new-releases" size={24} color="#8146C1" />;
+        case NOTIFICATION_TYPES.LOW_STOCK:
+          return <MaterialIcons name="warning" size={24} color="#FFA500" />;
+        case NOTIFICATION_TYPES.CHECKUP_RESULT:
+          return <MaterialIcons name="medical-services" size={24} color="#8146C1" />;
+        default:
+          return <MaterialIcons name="notifications" size={24} color="#8146C1" />;
+      }
+    };
+
+    const handleNotificationPress = () => {
+      switch (item.type) {
+        case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
+          navigation.navigate('AppointmentDetails', { 
+            appointment_id: item.notifiable_id 
+          });
+          break;
+        case NOTIFICATION_TYPES.NEW_PRODUCT:
+          navigation.navigate('ProductDetails', { 
+            product_id: JSON.parse(item.data).product_id 
+          });
+          break;
+        case NOTIFICATION_TYPES.CHECKUP_RESULT:
+          navigation.navigate('CheckupDetails', { 
+            checkup_id: JSON.parse(item.data).checkup_id 
+          });
+          break;
+        default:
+          // Handle other notification types
+          break;
+      }
+      markAsRead(item.id);
+    };
+
+    const getNotificationColor = () => {
+      switch (item.type) {
+        case NOTIFICATION_TYPES.LOW_STOCK:
+          return styles.warningNotification;
+        case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
+          return styles.appointmentNotification;
+        case NOTIFICATION_TYPES.NEW_PRODUCT:
+          return styles.newProductNotification;
+        default:
+          return item.read ? styles.read : styles.unread;
+      }
+    };
+
     return (
       <Swipeable renderRightActions={renderRightActions}>
-        <Animated.View style={[
-          styles.notificationItem,
-          item.read ? styles.read : styles.unread
-        ]}>
-          <View style={styles.textContainer}>
-            <Text style={styles.notificationTitle}>{item.title}</Text>
-            <Text style={styles.notificationDescription} numberOfLines={2}>
-              {item.description}
-            </Text>
-            <Text style={styles.notificationTime}>
-              {new Date(item.created_at).toLocaleDateString()}
-            </Text>
-          </View>
-        </Animated.View>
+        <TouchableOpacity onPress={handleNotificationPress}>
+          <Animated.View style={[
+            styles.notificationItem,
+            getNotificationColor()
+          ]}>
+            <View style={styles.iconContainer}>
+              {getNotificationIcon()}
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.notificationTitle}>
+                {item.type.split('_').map(word => 
+                  word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ')}
+              </Text>
+              <Text style={styles.notificationDescription} numberOfLines={2}>
+                {JSON.parse(item.data).message}
+              </Text>
+              <Text style={styles.notificationTime}>
+                {new Date(item.created_at).toLocaleDateString()}
+              </Text>
+            </View>
+          </Animated.View>
+        </TouchableOpacity>
       </Swipeable>
     );
   }, []);
@@ -279,9 +456,13 @@ const NotificationScreen = ({ navigation, route }) => {
         }
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              {error || 'No notifications available.'}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator size="large" color="#8146C1" />
+            ) : (
+              <Text style={styles.emptyText}>
+                {error || 'No notifications available.'}
+              </Text>
+            )}
           </View>
         )}
       />
@@ -301,10 +482,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    marginBottom: 8,
+    marginHorizontal: 8,
+    marginVertical: 4,
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   textContainer: {
     flex: 1,
@@ -358,6 +547,35 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     fontWeight: '500',
+  },
+  iconContainer: {
+    marginRight: 12,
+    justifyContent: 'center',
+  },
+  warningNotification: {
+    backgroundColor: '#FFF3E0',
+  },
+  appointmentNotification: {
+    backgroundColor: '#E8F5E9',
+  },
+  newProductNotification: {
+    backgroundColor: '#E3F2FD',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    right: -6,
+    top: -6,
+    backgroundColor: '#FF4444',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 

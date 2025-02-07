@@ -15,6 +15,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { API_BASE_URL } from '../config/constants';
+import PasswordStrengthIndicator from '../components/PasswordStrengthIndicator';
+import { checkPasswordStrength } from '../utils/passwordStrength';
 
 const SuccessPopup = ({ onClose }) => (
 	<View style={styles.successOverlay}>
@@ -94,9 +96,10 @@ const RegistrationScreen = ({ navigation }) => {
 				return;
 			}
 
-			// Add password strength validation
-			if (password.length < 6) {
-				setError("Password must be at least 6 characters long");
+			// Check password strength
+			const passwordCheck = checkPasswordStrength(password);
+			if (passwordCheck.strength === 'weak') {
+				setError("Please choose a stronger password");
 				return;
 			}
 
@@ -243,23 +246,26 @@ const RegistrationScreen = ({ navigation }) => {
 				/>
 			</View>
 
-			<View style={styles.inputWrapper}>
-				<Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
-				<TextInput
-					style={styles.input}
-					placeholder="Password"
-					value={password}
-					onChangeText={setPassword}
-					secureTextEntry={!showPassword}
-					placeholderTextColor="#666666"
-				/>
-				<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-					<Ionicons
-						name={showPassword ? "eye-outline" : "eye-off-outline"}
-						size={20}
-						color="#8146C1"
+			<View style={styles.inputContainer}>
+				<View style={styles.inputWrapper}>
+					<Ionicons name="lock-closed-outline" size={20} color="#8146C1" style={styles.icon} />
+					<TextInput
+						style={styles.input}
+						placeholder="Password"
+						value={password}
+						onChangeText={setPassword}
+						secureTextEntry={!showPassword}
+						placeholderTextColor="#666666"
 					/>
-				</TouchableOpacity>
+					<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+						<Ionicons
+							name={showPassword ? "eye-outline" : "eye-off-outline"}
+							size={20}
+							color="#8146C1"
+						/>
+					</TouchableOpacity>
+				</View>
+				<PasswordStrengthIndicator password={password} />
 			</View>
 
 			<View style={styles.inputWrapper}>
@@ -562,6 +568,10 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 16,
 		fontWeight: '600',
+	},
+	inputContainer: {
+		marginBottom: 16,
+		position: 'relative',
 	},
 });
 

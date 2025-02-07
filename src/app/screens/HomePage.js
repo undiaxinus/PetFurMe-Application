@@ -36,6 +36,7 @@ const HomePage = ({ navigation, route }) => {
 	const [showProfileTutorial, setShowProfileTutorial] = useState(false);
 	const [credentialsComplete, setCredentialsComplete] = useState(false);
 	const [toastConfig, setToastConfig] = useState(null);
+	const [isVerified, setIsVerified] = useState(false);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -111,6 +112,10 @@ const HomePage = ({ navigation, route }) => {
 		}
 	}, [route.params?.showMessage]);
 
+	useEffect(() => {
+		console.log("Verification status changed:", isVerified);
+	}, [isVerified]);
+
 	const fetchUserPets = async () => {
 		// Don't set loading state for auto refresh to avoid UI flicker
 		const isAutoRefresh = isLoading === false;
@@ -168,9 +173,21 @@ const HomePage = ({ navigation, route }) => {
 			
 			const response = await fetch(url);
 			const data = await response.json();
-			console.log("Profile status response:", data);
+			
+			// Add detailed logging
+			console.log("Full profile data:", data.profile);
+			console.log("Verified by value (raw):", data.profile.verified_by);
+			console.log("Verified by type:", typeof data.profile.verified_by);
 			
 			if (data.success) {
+				// Convert to number and check if greater than 0
+				const verifiedByValue = Number(data.profile.verified_by);
+				console.log("Verified by value (converted):", verifiedByValue);
+				const verifiedStatus = !isNaN(verifiedByValue) && verifiedByValue > 0;
+				console.log("Final verified status:", verifiedStatus);
+				
+				setIsVerified(verifiedStatus);
+				
 				const hasRequiredFields = data.profile.name && 
 										data.profile.email && 
 										data.profile.phone && 
@@ -196,13 +213,14 @@ const HomePage = ({ navigation, route }) => {
 			console.error("Profile check error:", error);
 			setIsProfileComplete(false);
 			setCredentialsComplete(false);
+			setIsVerified(false);
 		}
 	};
 
 	const handleSetUpNow = async () => {
 		await logActivity('Started profile setup', user_id);
 		setShowWelcomePopup(false);
-		navigation.navigate('ProfileVerification', { 
+		navigation.navigate('Profile', { 
 			user_id: user_id,
 			onComplete: async () => {
 				await logActivity(ACTIVITY_TYPES.PROFILE_UPDATED, user_id);
@@ -252,7 +270,7 @@ const HomePage = ({ navigation, route }) => {
 		{
 			id: "1",
 			title: "Ready to book an appointment?",
-			subtitle: "Connect with our trusted veterinarians for your pet's health needs",
+			subtitle: "Connect with our trusted care team for your pet's health.",
 		},
 	];
 
@@ -262,6 +280,16 @@ const HomePage = ({ navigation, route }) => {
 			navigation.navigate("LoginScreen");
 			return;
 		}
+		
+		if (!isVerified) {
+			Alert.alert(
+				"Account Not Verified",
+				"Your account needs to be verified before you can add pets. Please complete the verification process.",
+				[{ text: "OK" }]
+			);
+			return;
+		}
+		
 		await logActivity(ACTIVITY_TYPES.PET_ADDED, user_id);
 		navigation.navigate("AddPetName", { user_id: user_id });
 	};
@@ -330,6 +358,19 @@ const HomePage = ({ navigation, route }) => {
 		]);
 	};
 
+	const showVerificationAlert = () => {
+		Alert.alert(
+			"Account Pending Verification",
+			"Your account is currently pending verification by an administrator. This process helps ensure the safety and quality of our pet care community. You'll be notified once your account is verified.",
+			[
+				{ 
+					text: "OK",
+					style: "default"
+				}
+			]
+		);
+	};
+
 	return (
 		<View style={styles.container}>
 			{toastConfig && (
@@ -348,6 +389,15 @@ const HomePage = ({ navigation, route }) => {
 				userPhoto={userPhoto}
 				user_id={user_id}
 			/>
+
+			{!isVerified && (
+				<View style={styles.verificationBanner}>
+					<Ionicons name="hourglass-outline" size={18} color="#8146C1" />
+					<Text style={styles.verificationBannerText}>
+						Account pending verification. Some features are limited until an admin verifies your account.
+					</Text>
+				</View>
+			)}
 
 			{showWelcomePopup && (
 				<View style={styles.popupOverlay}>
@@ -417,10 +467,10 @@ const HomePage = ({ navigation, route }) => {
 			<ScrollView contentContainerStyle={styles.scrollContent}>
 				{(!isProfileComplete || !credentialsComplete) && (
 					<CompleteProfileBar 
-						onPress={() => navigation.navigate('ProfileVerification', { 
+						onPress={() => navigation.navigate('Profile', { 
 							user_id: user_id,
 							onComplete: () => {
-								refreshAllData(); // Use the new refresh function
+								refreshAllData();
 							}
 						})}
 					/>
@@ -443,13 +493,18 @@ const HomePage = ({ navigation, route }) => {
 							style={[
 								styles.categoryItem,
 								{ backgroundColor: category.backgroundColor },
+								!isVerified && styles.disabledItem
 							]}
-							onPress={() =>
+							onPress={() => {
+								if (!isVerified) {
+									showVerificationAlert();
+									return;
+								}
 								navigation.navigate(category.screen, { 
 									reason: category.label,
 									user_id: user_id
-								})
-							}
+								});
+							}}
 						>
 							<View style={styles.categoryContent}>
 								<Image 
@@ -458,6 +513,11 @@ const HomePage = ({ navigation, route }) => {
 								/>
 								<Text style={styles.categoryLabel}>{category.label}</Text>
 							</View>
+							{!isVerified && (
+								<View style={styles.disabledOverlay}>
+									<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+								</View>
+							)}
 						</TouchableOpacity>
 					))}
 				</View>
@@ -474,35 +534,70 @@ const HomePage = ({ navigation, route }) => {
 							contentContainerStyle={styles.petsScrollContainer}
 						>
 							{userPets.map((pet) => (
-								<TouchableOpacity onPress={() => navigation.navigate('PetProfile', { petId: pet.id, user_id: user_id })} key={pet.id} style={styles.petItem}>
-								<Image
-									source={
-										pet.photo 
-											? { 
-												uri: pet.photo,
-												headers: {
-													'Cache-Control': 'no-cache'
+								<TouchableOpacity 
+									onPress={() => {
+										if (!isVerified) {
+											showVerificationAlert();
+											return;
+										}
+										navigation.navigate('PetProfile', { petId: pet.id, user_id: user_id });
+									}} 
+									key={pet.id} 
+									style={[
+										styles.petItem,
+										!isVerified && styles.disabledItem
+									]}
+								>
+									<Image
+										source={
+											pet.photo 
+												? { 
+													uri: pet.photo,
+													headers: {
+														'Cache-Control': 'no-cache'
+													}
 												}
-											}
-											: require("../../assets/images/doprof.png")
-									}
-									style={styles.petImage}
-									defaultSource={require("../../assets/images/doprof.png")}
-									resizeMode="contain"
-									onError={(e) => {
-										console.log('Image loading error:', e.nativeEvent.error);
-										setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
-									}}
-								/>
-								<Text style={styles.petName}>{pet.name}</Text>
-							</TouchableOpacity>
+												: require("../../assets/images/doprof.png")
+										}
+										style={styles.petImage}
+										defaultSource={require("../../assets/images/doprof.png")}
+										resizeMode="contain"
+										onError={(e) => {
+											console.log('Image loading error:', e.nativeEvent.error);
+											setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
+										}}
+									/>
+									<Text style={styles.petName}>{pet.name}</Text>
+									{!isVerified && (
+										<View style={styles.petLockOverlay}>
+											<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+										</View>
+									)}
+								</TouchableOpacity>
 							))}
-							<TouchableOpacity onPress={handleAddNewPet} style={styles.petItem}>
+							<TouchableOpacity 
+								onPress={() => {
+									if (!isVerified) {
+										showVerificationAlert();
+										return;
+									}
+									handleAddNewPet();
+								}}
+								style={[
+									styles.petItem,
+									!isVerified && styles.disabledItem
+								]}
+							>
 								<Image
 									source={require("../../assets/images/addnew.png")}
 									style={styles.petImage}
 								/>
 								<Text style={styles.petName}>Add New</Text>
+								{!isVerified && (
+									<View style={styles.verificationBadge}>
+										<Ionicons name="lock-closed" size={12} color="#FFFFFF" />
+									</View>
+								)}
 							</TouchableOpacity>
 						</ScrollView>
 					</View>
@@ -589,9 +684,24 @@ const HomePage = ({ navigation, route }) => {
 								<Text style={styles.vetCardTitle}>{item.title}</Text>
 								<Text style={styles.vetCardSubtitle}>{item.subtitle}</Text>
 								<TouchableOpacity
-									style={styles.bookAppointmentButton}
-									onPress={() => navigation.navigate("Consultation", { user_id: user_id })}>
+									style={[
+										styles.bookAppointmentButton,
+										!isVerified && styles.disabledItem
+									]}
+									onPress={() => {
+										if (!isVerified) {
+											showVerificationAlert();
+											return;
+										}
+										navigation.navigate("Consultation", { user_id: user_id });
+									}}
+								>
 									<Text style={styles.bookAppointmentText}>Book Appointment →</Text>
+									{!isVerified && (
+										<View style={styles.disabledOverlay}>
+											<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+										</View>
+									)}
 								</TouchableOpacity>
 							</View>
 						</View>
@@ -1116,6 +1226,63 @@ const styles = StyleSheet.create({
 	},
 	bottomNavDisabled: {
 		opacity: 0.7,
+	},
+	disabledItem: {
+		opacity: 0.5,
+	},
+	verificationBadge: {
+		position: 'absolute',
+		top: 5,
+		right: 5,
+		backgroundColor: '#FF4444',
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 12,
+		zIndex: 1,
+	},
+	verificationText: {
+		color: '#FFFFFF',
+		fontSize: 10,
+		fontWeight: 'bold',
+	},
+	verificationBanner: {
+		backgroundColor: 'rgba(129, 70, 193, 0.15)',
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 10,
+		paddingHorizontal: 16,
+		gap: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: 'rgba(129, 70, 193, 0.2)',
+	},
+	verificationBannerText: {
+		color: '#8146C1',
+		fontSize: 12,
+		flex: 1,
+		fontWeight: '400',
+	},
+	disabledOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0,0,0,0.1)',
+		borderRadius: 10,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	petLockOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0,0,0,0.4)',
+		borderRadius: 32.5,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginBottom: 5,
 	},
 });
 

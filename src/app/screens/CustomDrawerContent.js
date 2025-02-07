@@ -120,28 +120,6 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		setIsLogoutModalVisible(false);
 	};
 
-	const handleAddNewPet = async () => {
-		if (!userData || !userData.user_id) {
-			console.error("No user ID available");
-			Alert.alert(
-				"Error",
-				"Please login again to add a new pet",
-				[
-					{
-						text: "OK",
-						onPress: () => navigation.navigate("LoginScreen")
-					}
-				]
-			);
-			return;
-		}
-
-		await logActivity('Started adding a new pet', userData.user_id);
-		navigation.navigate("AddPetName", {
-			user_id: userData.user_id
-		});
-	};
-
 	const renderProfileSection = () => {
 		// Get the actual user data
 		const displayName = userData?.name || userData?.username;
@@ -241,61 +219,25 @@ const CustomDrawerContent = ({ navigation, state }) => {
 			{renderProfileSection()}
 			
 			<View style={styles.navigationContainer}>
-				{/* Pets Section - Always show but handle auth in onPress */}
-				<TouchableOpacity 
-					onPress={handleAddNewPet}
-					style={styles.navigationItem}
-				>
-					<MaterialIcons name="pets" size={24} color="#808080" />
-					<Text style={styles.navText}>Add Pet</Text>
-				</TouchableOpacity>
-
-				{/* Settings Section - Always show but handle auth in onPress */}
-				<TouchableOpacity 
-					onPress={() => {
-						if (!userData?.user_id) {
-							Alert.alert(
-								"Login Required",
-								"Please login to access settings",
-								[
-									{
-										text: "OK",
-										onPress: () => navigation.navigate("LoginScreen")
-									}
-								]
-							);
-							return;
-						}
-						navigation.navigate('ProfileVerification', { 
-							user_id: userData.user_id 
-						});
-					}} 
-					style={styles.navigationItem}
-				>
-					<Ionicons name="settings-outline" size={24} color="#808080" />
-					<Text style={styles.navText}>Settings</Text>
-				</TouchableOpacity>
-
-				{/* Add this before the divider */}
-				<View style={styles.divider} />
-				
 				{renderActivityLogs()}
 				
 				<View style={styles.divider} />
+			</View>
 
-				{/* Login/Logout Section */}
+			{/* Login/Logout Section moved to bottom */}
+			<View style={styles.bottomContainer}>
 				{userData?.user_id ? (
-					<TouchableOpacity onPress={handleLogout} style={styles.navigationItem}>
-						<MaterialIcons name="logout" size={24} color="#808080" />
-						<Text style={styles.navText}>Logout</Text>
+					<TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+						<MaterialIcons name="logout" size={24} color="#FF4B4B" />
+						<Text style={styles.logoutText}>Logout</Text>
 					</TouchableOpacity>
 				) : (
 					<TouchableOpacity 
 						onPress={() => navigation.navigate('LoginScreen')} 
-						style={styles.navigationItem}
+						style={styles.logoutButton}
 					>
-						<MaterialIcons name="login" size={24} color="#808080" />
-						<Text style={styles.navText}>Login</Text>
+						<MaterialIcons name="login" size={24} color="#8146C1" />
+						<Text style={[styles.logoutText, { color: '#8146C1' }]}>Login</Text>
 					</TouchableOpacity>
 				)}
 			</View>
@@ -583,6 +525,30 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		color: '#8146C1',
 		marginTop: 4,
+	},
+	bottomContainer: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		padding: 20,
+		borderTopWidth: 1,
+		borderTopColor: '#F0F0F0',
+		backgroundColor: '#FFFFFF',
+	},
+	logoutButton: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingVertical: 15,
+		paddingHorizontal: 15,
+		borderRadius: 8,
+		backgroundColor: '#FFF0F0',
+	},
+	logoutText: {
+		marginLeft: 15,
+		fontSize: 16,
+		color: '#FF4B4B',
+		fontWeight: "600",
 	},
 });
 

@@ -6,6 +6,7 @@ import ActivityHistoryScreen from '../screens/ActivityHistoryScreen';
 import HomePage from '../screens/HomePage';
 import LoginScreen from '../screens/LoginScreen';
 import RegistrationScreen from '../screens/RegistrationScreen';
+import NotificationHelpScreen from '../screens/NotificationHelpScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { screenTransitionConfig, forSlide } from '../config/transitions';
 // Import other screens...
@@ -32,6 +33,11 @@ function AppNavigator() {
         <Stack.Screen name="Register" component={RegistrationScreen} />
         <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
         <Stack.Screen name="ActivityHistory" component={ActivityHistoryScreen} />
+        <Stack.Screen 
+          name="NotificationHelp" 
+          component={NotificationHelpScreen} 
+          options={{ headerShown: false }}
+        />
         {/* Other drawer screens */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -102,7 +102,7 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
           { screen: 'HomePage', icon: 'home', label: 'Home' },
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
-          { screen: 'Help', icon: 'help-circle', label: 'Help' }
+          { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
         ].map(({ screen, icon, label }) => (
           <TouchableOpacity 
             key={screen}

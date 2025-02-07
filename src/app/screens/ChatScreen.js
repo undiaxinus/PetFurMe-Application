@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image, Platform, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
+import axios from 'axios';
+import { SERVER_IP } from '../config/constants';  // Make sure this points to your server IP
 
 const baseStyles = StyleSheet.create({
   container: {
@@ -21,17 +23,21 @@ const baseStyles = StyleSheet.create({
   }
 });
 
+const logMessage = (message) => {
+  console.log(`[ChatScreen] ${message}`);
+};
+
 const ChatScreen = ({ navigation, route }) => {
   const user_id = route.params?.user_id;
+  // Start in automated mode by default
+  const [isAutomated, setIsAutomated] = useState(true);
   
   // Add this useEffect to log the user_id
   useEffect(() => {
     console.log("ChatScreen user_id:", user_id);
   }, [user_id]);
 
-  const [messages, setMessages] = useState([
-    { id: '1', text: 'Hello! How can I help you today? You can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments', sender: 'other' },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const flatListRef = useRef(null);
 
@@ -42,10 +48,137 @@ const ChatScreen = ({ navigation, route }) => {
     }
   }, [messages]);
 
+  // Modify the fetchMessages function to properly handle the messages
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(
+        `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`
+      );
+      
+      console.log('Fetch messages response:', response.data); // Debug log
+      
+      if (response.data.success && response.data.messages) {
+        const dbMessages = response.data.messages.map(msg => ({
+          id: msg.id.toString(),
+          text: msg.message,
+          sender: msg.sender_id === parseInt(user_id) ? 'user' : 'other',
+          type: 'database',
+          timestamp: msg.sent_at,
+          conversation_id: msg.conversation_id
+        }));
+
+        // Sort messages by timestamp
+        dbMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+        // Update messages state immediately
+        setMessages(dbMessages);
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  // Modify the useEffect for mode changes
+  useEffect(() => {
+    if (isAutomated) {
+      // Only show bot welcome message if there are no automated messages
+      const hasAutomatedMessages = messages.some(msg => msg.type === 'automated');
+      if (!hasAutomatedMessages) {
+        const welcomeMessage = {
+          id: Date.now().toString(),
+          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
+          sender: 'other',
+          type: 'automated'
+        };
+        setMessages(prevMessages => [welcomeMessage]);
+      }
+    } else {
+      // Clear automated messages when switching to live chat
+      setMessages(prevMessages => prevMessages.filter(msg => msg.type !== 'automated'));
+      
+      // Switch to live chat mode
+      if (user_id) {
+        fetchMessages();
+        if (!currentConversation?.id) {
+          startConversation();
+        }
+      }
+    }
+  }, [isAutomated, user_id]);
+
+  // Add a useEffect to periodically fetch new messages in live chat mode
+  useEffect(() => {
+    let messagePolling;
+    
+    if (!isAutomated && user_id) {
+      // Fetch messages immediately
+      fetchMessages();
+      
+      // Then set up polling every 5 seconds
+      messagePolling = setInterval(() => {
+        fetchMessages();
+      }, 5000);
+    }
+
+    // Cleanup function to clear interval when component unmounts or mode changes
+    return () => {
+      if (messagePolling) {
+        clearInterval(messagePolling);
+      }
+    };
+  }, [isAutomated, user_id]);
+
+  // Add this near the top of ChatScreen component
+  const [admins, setAdmins] = useState([]);
+
+  // Add this useEffect to fetch admins when component mounts
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const response = await axios.get(`http://${SERVER_IP}/PetFurMe-Application/api/users/get_admins.php`);
+        if (response.data.success) {
+          setAdmins(response.data.admins);
+        }
+      } catch (error) {
+        console.error('Error fetching admins:', error);
+      }
+    };
+
+    fetchAdmins();
+  }, []);
+
+  // Add state for conversation
+  const [currentConversation, setCurrentConversation] = useState(null);
+
+  // Add function to start conversation
+  const startConversation = async () => {
+    try {
+      const response = await axios.post(
+        `http://${SERVER_IP}/PetFurMe-Application/api/messages/start_conversation.php`,
+        { 
+          user_id: user_id,
+          admin_id: 1 // Always use admin ID 1
+        }
+      );
+      
+      if (response.data.success) {
+        setCurrentConversation({
+          id: response.data.conversation_id,
+          admin_id: 1 // Always use admin ID 1
+        });
+      }
+    } catch (error) {
+      console.error('Error starting conversation:', error);
+    }
+  };
+
   // Chatbot response logic
   const getBotResponse = (userMessage) => {
-    const message = userMessage.toLowerCase();
+    const message = userMessage.toLowerCase().trim();
     
+    // First, log the incoming message to debug
+    console.log("Received message:", message);
+
     // Define expanded response patterns
     const responses = {
       greeting: {
@@ -188,9 +321,17 @@ const ChatScreen = ({ navigation, route }) => {
       }
     };
 
-    // Check for matches and return appropriate response
+    // Check each category's patterns
     for (const category in responses) {
-      if (responses[category].patterns.some(pattern => message.includes(pattern))) {
+      const matchFound = responses[category].patterns.some(pattern => {
+        // Log pattern matching attempts
+        console.log(`Checking pattern '${pattern}' against message '${message}'`);
+        return message.includes(pattern.toLowerCase());
+      });
+
+      if (matchFound) {
+        console.log(`Match found in category: ${category}`);
+        
         // If the category has multiple responses, randomly select one
         if (Array.isArray(responses[category].responses)) {
           const randomIndex = Math.floor(Math.random() * responses[category].responses.length);
@@ -201,40 +342,219 @@ const ChatScreen = ({ navigation, route }) => {
       }
     }
 
-    // Default response if no pattern matches
+    // If no match is found, return default response
+    console.log("No pattern match found, returning default response");
     return "I'm not sure I understand. You can ask about:\n\n• Grooming services\n• Veterinary consultations\n• Vaccinations\n• Deworming\n• Appointments\n• Pricing\n• Emergency services\n• Location and payments";
   };
 
-  const sendMessage = () => {
+  // Add some test patterns at the start of your component
+  useEffect(() => {
+    // Test the bot response function
+    const testMessages = [
+      "hello",
+      "I need grooming services",
+      "what are your prices",
+      "where are you located"
+    ];
+
+    testMessages.forEach(msg => {
+      console.log(`Test message: "${msg}"`);
+      console.log(`Bot response: "${getBotResponse(msg)}"`);
+      console.log("---");
+    });
+  }, []);
+
+  // Modify the sendMessage function to update UI immediately
+  const sendMessage = async () => {
     if (input.trim()) {
-      // Add user message
-      const newMessage = { id: Date.now().toString(), text: input, sender: 'user' };
-      setMessages(prevMessages => [...prevMessages, newMessage]);
-      setInput('');
-      
-      // Generate and add bot response
-      setTimeout(() => {
-        const botResponse = {
-          id: Date.now().toString(),
-          text: getBotResponse(input),
-          sender: 'other'
-        };
-        setMessages(prevMessages => [...prevMessages, botResponse]);
-      }, 1000);
+      try {
+        if (!isAutomated) {
+          // Ensure we have a conversation started
+          if (!currentConversation?.id) {
+            await startConversation();
+          }
+
+          // Create message object
+          const newMessage = {
+            id: Date.now().toString(),
+            text: input.trim(),
+            sender: 'user',
+            type: 'database',
+            timestamp: new Date().toISOString(),
+            conversation_id: currentConversation?.id
+          };
+
+          // Update UI immediately
+          setMessages(prevMessages => [...prevMessages, newMessage]);
+
+          // Clear input early
+          const messageText = input.trim();
+          setInput('');
+
+          // Save message to database
+          const response = await axios.post(
+            `http://${SERVER_IP}/PetFurMe-Application/api/messages/save_message.php`,
+            {
+              sender_id: parseInt(user_id),
+              receiver_id: 1, // Admin ID
+              message: messageText,
+              conversation_id: currentConversation?.id,
+              is_automated: 0
+            }
+          );
+
+          if (!response.data.success) {
+            throw new Error('Failed to save message');
+          }
+
+          // Fetch latest messages to sync with server
+          await fetchMessages();
+        } else {
+          // Handle automated chat messages as before
+          const userMessage = {
+            id: Date.now().toString(),
+            text: input,
+            sender: 'user',
+            type: 'automated'
+          };
+
+          const botResponseText = getBotResponse(input);
+          const botResponse = {
+            id: (Date.now() + 1).toString(),
+            text: botResponseText,
+            sender: 'other',
+            type: 'automated'
+          };
+
+          setMessages(prevMessages => [...prevMessages, userMessage, botResponse]);
+          setInput('');
+        }
+      } catch (error) {
+        console.error('Error in sendMessage:', error);
+        Alert.alert('Error', 'Failed to send message. Please try again.');
+      }
     }
   };
+
+  // Modify the toggle button style to make it more prominent
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity 
+          onPress={() => setIsAutomated(!isAutomated)}
+          style={{ 
+            marginRight: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: isAutomated ? '#4CAF50' : '#2196F3',
+            padding: 10,
+            borderRadius: 20,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}
+        >
+          <MaterialIcons 
+            name={isAutomated ? "android" : "support-agent"} 
+            size={24} 
+            color="#FFFFFF" 
+          />
+          <Text style={{ 
+            color: '#FFFFFF', 
+            marginLeft: 8,
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}>
+            {isAutomated ? 'Bot Active' : 'Live Chat'}
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, isAutomated]);
+
+  // Add this to verify mode changes
+  useEffect(() => {
+    console.log('Chat mode changed to:', isAutomated ? 'Automated' : 'Live Chat');
+  }, [isAutomated]);
 
   const renderMessage = ({ item }) => (
     <View
       style={[
-        styles.messageBubble,
-        item.sender === 'user' ? styles.userBubble : styles.otherBubble,
+        styles.messageContainer,
+        item.sender === 'user' ? styles.userMessageContainer : styles.otherMessageContainer,
       ]}
     >
-      <Text style={[
-        styles.messageText,
-        item.sender === 'other' && styles.otherMessageText
-      ]}>{item.text}</Text>
+      {item.sender === 'other' && (
+        <View style={styles.chatHead}>
+          <MaterialIcons 
+            name={isAutomated ? "android" : "support-agent"}
+            size={24} 
+            color="#A259B5"
+          />
+        </View>
+      )}
+      
+      <View
+        style={[
+          styles.messageBubble,
+          item.type === 'system' ? styles.systemBubble :
+          item.sender === 'user' ? styles.userBubble : styles.otherBubble,
+        ]}
+      >
+        <Text style={[
+          styles.messageText,
+          item.type === 'system' ? styles.systemMessageText :
+          item.sender === 'other' && styles.otherMessageText
+        ]}>{item.text}</Text>
+        
+        {item.timestamp && (
+          <Text style={styles.timestampText}>
+            {new Date(item.timestamp).toLocaleTimeString([], { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            })}
+          </Text>
+        )}
+      </View>
+
+      {item.sender === 'user' && (
+        <View style={styles.userChatHead}>
+          <MaterialIcons 
+            name="person"
+            size={24} 
+            color="#A259B5"
+          />
+        </View>
+      )}
+    </View>
+  );
+
+  // Add a toggle button component
+  const ToggleButton = () => (
+    <TouchableOpacity 
+      onPress={() => setIsAutomated(!isAutomated)}
+      style={styles.toggleButton}
+    >
+      <MaterialIcons 
+        name={isAutomated ? "android" : "support-agent"} 
+        size={24} 
+        color="#FFFFFF" 
+      />
+      <Text style={styles.toggleButtonText}>
+        {isAutomated ? 'Switch to Live Chat' : 'Switch to Bot'}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  // Add this before the return statement in your ChatScreen component
+  const renderToggleButton = () => (
+    <View style={styles.toggleButtonContainer}>
+      <ToggleButton />
     </View>
   );
 
@@ -248,34 +568,15 @@ const ChatScreen = ({ navigation, route }) => {
         showDrawerButton={true}
       />
 
+      {renderToggleButton()}
+
       <View style={styles.chatWrapper}>
         <FlatList
           ref={flatListRef}
           data={messages}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.chatContainer}
-          renderItem={({ item }) => (
-            <View
-              style={[
-                styles.messageBubble,
-                item.sender === 'user' ? styles.userBubble : styles.otherBubble,
-              ]}
-            >
-              {item.sender === 'other' && (
-                <View style={styles.botAvatarContainer}>
-                  <MaterialIcons name="pets" size={16} color="#A259B5" />
-                </View>
-              )}
-              <Text
-                style={[
-                  styles.messageText,
-                  item.sender === 'other' && styles.otherMessageText,
-                ]}
-              >
-                {item.text}
-              </Text>
-            </View>
-          )}
+          renderItem={renderMessage}
         />
       </View>
 
@@ -309,6 +610,9 @@ const ChatScreen = ({ navigation, route }) => {
       </KeyboardAvoidingView>
 
       <BottomNavigation activeScreen="Chat" navigation={navigation} user_id={user_id} />
+
+      {/* Add this in your render method */}
+      {console.log("Current mode:", isAutomated ? "Automated" : "Live Chat")}
     </View>
   );
 };
@@ -327,25 +631,45 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  messageBubble: {
+  messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginBottom: 12,
-    maxWidth: '80%',
-    marginHorizontal: 6,
+    maxWidth: '90%',
   },
-  botAvatarContainer: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+  userMessageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginLeft: 'auto',
+  },
+  otherMessageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginRight: 'auto',
+  },
+  chatHead: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#F0E6F5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 6,
+    marginRight: 8,
+  },
+  userChatHead: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F0E6F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+  },
+  messageBubble: {
+    maxWidth: '70%',
+    padding: 10,
+    paddingHorizontal: 14,
     marginBottom: 2,
-    position: 'absolute',
-    left: -32,
-    bottom: 0,
   },
   userBubble: {
     alignSelf: 'flex-end',
@@ -355,7 +679,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 14,
     marginLeft: 'auto',
-    marginRight: 6,
+    marginRight: 0, // Remove right margin since we're using container padding
   },
   otherBubble: {
     alignSelf: 'flex-start',
@@ -364,7 +688,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
     padding: 10,
     paddingHorizontal: 14,
-    marginLeft: 38,
+    marginLeft: 0, // Remove left margin since we're using container padding
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -378,7 +702,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: '400',
+    marginBottom: 4, // Add space for timestamp
   },
   otherMessageText: {
     color: '#2C3E50',
@@ -429,6 +753,56 @@ const styles = StyleSheet.create({
   },
   sendButtonDisabled: {
     backgroundColor: '#E0E0E0',
+  },
+  systemBubble: {
+    alignSelf: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 16,
+    padding: 16,
+    marginVertical: 20,
+    marginHorizontal: 20,
+    borderWidth: 1,
+    borderColor: '#E9ECEF',
+  },
+  systemMessageText: {
+    color: '#2C3E50',
+    fontSize: 15,
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  toggleButtonContainer: {
+    padding: 10,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  toggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#A259B5',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  toggleButtonText: {
+    color: '#FFFFFF',
+    marginLeft: 8,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  timestampText: {
+    fontSize: 10,
+    color: '#999999',
+    marginTop: 4,
+    alignSelf: 'flex-end',
   },
 });
 

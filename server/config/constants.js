@@ -1,6 +1,6 @@
-const SERVER_IP = '192.168.1.5';
+const SERVER_IP = 'petforme.online';
 const SERVER_PORT = 3001;
-const BASE_URL = `http://${SERVER_IP}:${SERVER_PORT}`;
+const BASE_URL = `https://${SERVER_IP}`;
 
 module.exports = {
     SERVER_IP,

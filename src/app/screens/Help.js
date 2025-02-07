@@ -98,14 +98,14 @@ const HelpScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <CustomHeader
-        title="Help Center"
+        title="FAQ"
         subtitle="Frequently Asked Questions"
         navigation={navigation}
         showBackButton={true}
         showDrawerButton={true}
       />
 
-      {/* Help Sections */}
+      {/* FAQ Sections */}
       <FlatList
         data={helpSections}
         keyExtractor={(item, index) => index.toString()}
@@ -114,7 +114,7 @@ const HelpScreen = ({ navigation }) => {
       />
 
       {/* Bottom Navigation */}
-      <BottomNavigation activeScreen="Help" />
+      <BottomNavigation activeScreen="FAQ" />
     </View>
   );
 };

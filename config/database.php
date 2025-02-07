@@ -2,10 +2,10 @@
 class Database {
     // Database credentials
     private $host = "localhost";
-    private $db_name = "pet-management";
-    private $username = "root";
-    private $password = "";
-    public $conn;
+    private $db_name = "u336332733_pet_management";
+    private $username = "u336332733_PFM";
+    private $password = "PetFurMe1423";
+    private $conn;
 
     // Get database connection
     public function getConnection() {
@@ -18,9 +18,9 @@ class Database {
                 $this->password
             );
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->exec("set names utf8");
         } catch(PDOException $e) {
-            echo "Connection error: " . $e->getMessage();
+            error_log("Database connection error: " . $e->getMessage());
+            return false;
         }
 
         return $this->conn;
