@@ -5,8 +5,7 @@ header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
 include_once '../config/Database.php';
-
-$API_BASE_URL = 'http://192.168.1.9'; // Make sure this matches your React Native API_BASE_URL
+include_once '../config/config.php'; // Include the new config file
 
 try {
     $database = new Database();
@@ -26,7 +25,7 @@ try {
     // Debug log
     error_log("Fetching pets for user_id: " . $user_id);
 
-    // Fetch pets with BLOB data
+    // Use prepared statement
     $query = "SELECT id, name, type, breed, age, gender, weight, size, photo, allergies, notes, deleted_at 
              FROM pets 
              WHERE user_id = ? AND deleted_at IS NULL";
@@ -48,29 +47,10 @@ try {
         while ($row = $result->fetch_assoc()) {
             error_log("Processing pet: " . json_encode($row));
             
-            // Handle photo
+            // Handle photo URL using the config function
             $photoUrl = null;
             if (!empty($row['photo'])) {
-                try {
-                    // Get the file path from database
-                    $photo_path = $row['photo'];
-                    
-                    // Get the absolute server path to verify file exists
-                    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/PetFurMe-Application/' . $photo_path;
-                    error_log("Checking file at: " . $absolute_path);
-                    
-                    if (file_exists($absolute_path)) {
-                        // Fix: Remove 'api/pets/' from the URL construction
-                        $photoUrl = $API_BASE_URL . '/PetFurMe-Application/' . $photo_path;
-                        error_log("Photo URL created: " . $photoUrl);
-                    } else {
-                        error_log("Photo file not found at: " . $absolute_path);
-                        error_log("Database photo path: " . $photo_path);
-                    }
-                    
-                } catch (Exception $e) {
-                    error_log("Error processing photo for " . $row['name'] . ": " . $e->getMessage());
-                }
+                $photoUrl = getBaseUrl() . '/' . $row['photo'];
             }
             
             $pets[] = array(

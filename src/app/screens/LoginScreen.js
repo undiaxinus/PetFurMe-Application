@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { getApiConfig } from '../../utils/config';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -21,12 +21,6 @@ const LoginScreen = ({ navigation }) => {
 	const [showPassword, setShowPassword] = useState(false); // New state for password visibility
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
-
-	const API_URL = Platform.select({
-		web: `http://${SERVER_IP}:${SERVER_PORT}`,
-		ios: `http://localhost:${SERVER_PORT}`,
-		android: `http://${SERVER_IP}:${SERVER_PORT}`
-	});
 
 	// Add these animations
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -50,46 +44,69 @@ const LoginScreen = ({ navigation }) => {
 	const handleLogin = async () => {
 		try {
 			setLoading(true);
-			setError("");
+			setError('');
 
 			if (!email || !password) {
-				setError("Please enter both email and password");
+				setError('Please enter both email and password');
 				return;
 			}
 
-			const response = await axios({
+			const config = await getApiConfig();
+			const loginUrl = `${config.API_BASE_URL}${config.API_PATH}/auth/login.php`;
+			
+			console.log('Login attempt:', {
+				url: loginUrl,
+				email: email,
+				passwordLength: password.length
+			});
+
+			// Add request configuration logging
+			const requestConfig = {
 				method: 'post',
-				url: `${API_URL}/api/login`,
-				data: {
-					username: email,
-					password: password
-				},
+				url: loginUrl,
+				data: { email, password },
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
-				},
-				// Remove withCredentials if you're not using cookies
-				// withCredentials: true
+				}
+			};
+			
+			console.log('Request config:', requestConfig);
+
+			const response = await axios(requestConfig);
+
+			console.log('Login response:', {
+				status: response.status,
+				statusText: response.statusText,
+				headers: response.headers,
+				data: response.data
 			});
 
-			console.log("Login response:", response.data);
-
 			if (response.data.success) {
-				navigation.navigate("DrawerNavigator", { 
+				navigation.navigate('DrawerNavigator', { 
 					screen: 'HomePage',
-					params: { user_id: response.data.user.id }
+					params: { user_id: response.data.user_id }
 				});
 			} else {
-				setError(response.data.error || "Login failed");
+				setError(response.data.error || 'Login failed');
 			}
 		} catch (error) {
-			console.error("Login error:", error);
+			console.error('Login error:', {
+				message: error.message,
+				response: error.response?.data,
+				request: error.request,
+				config: error.config
+			});
+			
 			if (error.response) {
-				setError(error.response.data?.error || "Server error occurred");
+				// The server responded with a status code outside the 2xx range
+				setError(error.response.data?.error || 'Server error');
 			} else if (error.request) {
-				setError("Unable to connect to server. Please check your connection.");
+				// The request was made but no response was received
+				setError('No response from server. Please check your connection.');
 			} else {
-				setError("An unexpected error occurred");
+				// Something happened in setting up the request
+				setError('An error occurred. Please try again.');
 			}
 		} finally {
 			setLoading(false);
@@ -108,15 +125,10 @@ const LoginScreen = ({ navigation }) => {
 				</View>
 			)}
 
-			<Animated.View 
-				style={[
-					styles.content,
-					{
-						opacity: fadeAnim,
-						transform: [{ translateY: slideAnim }],
-					}
-				]}
-			>
+			<Animated.View style={[styles.content, {
+				opacity: fadeAnim,
+				transform: [{ translateY: slideAnim }],
+			}]}>
 				<View style={styles.logoContainer}>
 					<Image
 						source={require("../../assets/images/vetcare.png")}
@@ -124,68 +136,74 @@ const LoginScreen = ({ navigation }) => {
 					/>
 				</View>
 
-				<View style={styles.inputWrapper}>
-					<Ionicons
-						name="mail-outline"
-						size={20}
-						color="#8146C1"
-						style={styles.icon}
-					/>
-					<TextInput
-						style={styles.input}
-						placeholder="Email"
-						value={email}
-						onChangeText={setEmail}
-						keyboardType="email-address"
-						placeholderTextColor="#666666"
-						autoCapitalize="none"
-					/>
-				</View>
-
-				<View style={styles.inputWrapper}>
-					<Ionicons
-						name="lock-closed-outline"
-						size={20}
-						color="#8146C1"
-						style={styles.icon}
-					/>
-					<TextInput
-						style={styles.input}
-						placeholder="Password"
-						value={password}
-						onChangeText={setPassword}
-						secureTextEntry={!showPassword}
-						placeholderTextColor="#666666"
-					/>
-					<TouchableOpacity 
-						onPress={() => setShowPassword(!showPassword)}
-						style={styles.eyeIcon}
-					>
+				{/* Wrap inputs in a form */}
+				<form onSubmit={(e) => {
+					e.preventDefault();
+					handleLogin();
+				}}>
+					<View style={styles.inputWrapper}>
 						<Ionicons
-							name={showPassword ? "eye-outline" : "eye-off-outline"}
+							name="mail-outline"
 							size={20}
 							color="#8146C1"
+							style={styles.icon}
 						/>
+						<TextInput
+							style={styles.input}
+							placeholder="Email"
+							value={email}
+							onChangeText={setEmail}
+							keyboardType="email-address"
+							placeholderTextColor="#666666"
+							autoCapitalize="none"
+						/>
+					</View>
+
+					<View style={styles.inputWrapper}>
+						<Ionicons
+							name="lock-closed-outline"
+							size={20}
+							color="#8146C1"
+							style={styles.icon}
+						/>
+						<TextInput
+							style={styles.input}
+							placeholder="Password"
+							value={password}
+							onChangeText={setPassword}
+							secureTextEntry={!showPassword}
+							placeholderTextColor="#666666"
+						/>
+						<TouchableOpacity 
+							onPress={() => setShowPassword(!showPassword)}
+							style={styles.eyeIcon}
+						>
+							<Ionicons
+								name={showPassword ? "eye-outline" : "eye-off-outline"}
+								size={20}
+								color="#8146C1"
+							/>
+						</TouchableOpacity>
+					</View>
+
+					<TouchableOpacity onPress={handleForgotPassword}>
+						<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
 					</TouchableOpacity>
-				</View>
 
-				<TouchableOpacity onPress={handleForgotPassword}>
-					<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-				</TouchableOpacity>
+					{error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-				{error ? <Text style={styles.errorText}>{error}</Text> : null}
-
-				<TouchableOpacity
-					style={[styles.loginButton, loading && styles.disabledButton]}
-					onPress={handleLogin}
-					disabled={loading}
-				>
-					{loading ? (
-						<ActivityIndicator size="small" color="#FFFFFF" />
-					) : (
-						<Text style={styles.loginButtonText}>LOGIN</Text>
-					)}
-				</TouchableOpacity>
+					<TouchableOpacity
+						style={[styles.loginButton, loading && styles.disabledButton]}
+						onPress={handleLogin}
+						disabled={loading}
+					>
+						{loading ? (
+							<ActivityIndicator size="small" color="#FFFFFF" />
+						) : (
+							<Text style={styles.loginButtonText}>LOGIN</Text>
+						)}
+					</TouchableOpacity>
+				</form>
 
 				<View style={styles.registerContainer}>
 					<Text style={styles.registerText}>Don't have an account? </Text>

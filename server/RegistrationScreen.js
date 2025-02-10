@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { getApiUrl, getBaseUrl } from '../config/constants';
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -23,38 +23,37 @@ const SignupScreen = ({ navigation }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apiBaseUrl, setApiBaseUrl] = useState('');
 
-  const API_URL = Platform.select({
-    ios: 'http://localhost:3001',
-    android: `http://${SERVER_IP}:3001`
-  });
-
-  // Add debug logging
-  console.log('Using API URL:', API_URL);
+  useEffect(() => {
+    const initializeApi = async () => {
+      const baseUrl = await getBaseUrl();
+      setApiBaseUrl(baseUrl);
+    };
+    initializeApi();
+  }, []);
 
   // Update axios configuration
-  const axiosInstance = axios.create({
-    baseURL: API_URL,
-    timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
-  });
+  const getAxiosInstance = () => {
+    return axios.create({
+      baseURL: apiBaseUrl,
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+  };
 
-  // Add connection test
   const testConnection = async () => {
     try {
-      console.log('Testing connection to:', `${API_URL}/health`);
+      const axiosInstance = getAxiosInstance();
+      console.log('Testing connection to:', `${apiBaseUrl}/health`);
       const response = await axiosInstance.get('/health');
       console.log('Connection test response:', response.data);
       return true;
     } catch (error) {
-      console.error('Connection test failed:', {
-        message: error.message,
-        code: error.code,
-        config: error.config
-      });
+      console.error('Connection test failed:', error);
       return false;
     }
   };
@@ -96,7 +95,7 @@ const SignupScreen = ({ navigation }) => {
       }
 
       // Log the request details
-      console.log('Sending registration request to:', `${API_URL}/api/register`);
+      console.log('Sending registration request to:', `${apiBaseUrl}/api/register`);
       console.log('Request data:', {
         name,
         email,
@@ -108,6 +107,7 @@ const SignupScreen = ({ navigation }) => {
         role: 'pet_owner'
       });
 
+      const axiosInstance = getAxiosInstance();
       const response = await axiosInstance.post('/api/register', {
         name,
         email,
@@ -142,7 +142,8 @@ const SignupScreen = ({ navigation }) => {
   // Add this for debugging connection issues
   const checkServerConnection = async () => {
     try {
-      const response = await axios.get(`${API_URL}/health`);
+      const axiosInstance = getAxiosInstance();
+      const response = await axiosInstance.get('/health');
       console.log('Server health check:', response.data);
     } catch (error) {
       console.error('Server health check failed:', error.message);

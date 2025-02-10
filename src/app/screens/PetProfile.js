@@ -8,7 +8,8 @@ import {
 	FlatList,
 	ActivityIndicator,
 	Alert,
-	ScrollView
+	ScrollView,
+	RefreshControl
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,6 +22,7 @@ const PetProfile = ({ route, navigation }) => {
 	const [loading, setLoading] = useState(true);
 	const { petId, user_id: routeUserId } = route.params;
 	const [userId, setUserId] = useState(routeUserId);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
 		const getUserId = async () => {
@@ -74,10 +76,10 @@ const PetProfile = ({ route, navigation }) => {
 			if (data.success && data.pets) {
 				const petData = data.pets.find(pet => pet.id === parseInt(petId));
 				console.log('Found pet data:', petData);
+				console.log('Pet photo URL:', petData?.photo ? `http://${SERVER_IP}/PetFurMe-Application/${petData.photo}` : 'No photo');
 
 				if (petData) {
 					setPet(petData);
-					console.log('Set pet data:', petData);
 				} else {
 					console.error('Pet not found in user\'s pets');
 					throw new Error('Pet not found');
@@ -106,6 +108,11 @@ const PetProfile = ({ route, navigation }) => {
 		});
 	};
 
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		fetchPetDetails().finally(() => setRefreshing(false));
+	}, []);
+
 	if (loading) {
 		return (
 			<View style={styles.loadingContainer}>
@@ -123,7 +130,17 @@ const PetProfile = ({ route, navigation }) => {
 	}
 
 	return (
-		<ScrollView style={styles.container}>
+		<ScrollView 
+			style={styles.container}
+			refreshControl={
+				<RefreshControl
+					refreshing={refreshing}
+					onRefresh={onRefresh}
+					colors={['#8146C1']}
+					tintColor="#8146C1"
+				/>
+			}
+		>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => navigation.goBack()}>
 					<Ionicons name="arrow-back" size={24} color="#FFFFFF" />
@@ -137,7 +154,7 @@ const PetProfile = ({ route, navigation }) => {
 						source={
 							pet?.photo
 								? { 
-									uri: pet.photo,
+									uri: `http://${SERVER_IP}/PetFurMe-Application/${pet.photo}`,
 									headers: {
 										'Cache-Control': 'no-cache',
 										'Pragma': 'no-cache',
@@ -150,7 +167,7 @@ const PetProfile = ({ route, navigation }) => {
 						style={styles.profileImage}
 						onError={(error) => {
 							console.error('Image loading error:', error);
-							console.log('Failed photo URL:', pet?.photo);
+							console.log('Failed photo URL:', `http://${SERVER_IP}/PetFurMe-Application/${pet?.photo}`);
 						}}
 					/>
 				</View>

@@ -1,8 +1,10 @@
 const dbConfig = {
-  host: 'localhost',
-  user: 'u336332733_PFM',
-  password: 'PetFurMe1423',
-  database: 'u336332733_pet_management',
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "pet-management",
+  port: 3306,
+  connectTimeout: 60000,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

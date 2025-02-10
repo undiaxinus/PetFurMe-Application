@@ -10,8 +10,16 @@ const CustomHeader = ({
   showDrawerButton = false,
   showProfileButton = false,
   userPhoto,
-  user_id
+  user_id,
+  onMenuPress
 }) => {
+  console.log("CustomHeader rendering with props:", {
+    title,
+    showBackButton,
+    showDrawerButton,
+    navigation: !!navigation
+  });
+
   return (
     <View style={styles.header}>
       <View style={styles.leftContainer}>
@@ -27,7 +35,12 @@ const CustomHeader = ({
         {showDrawerButton && (
           <TouchableOpacity 
             style={styles.iconButton} 
-            onPress={() => navigation.openDrawer()}
+            onPress={onMenuPress || (() => {
+              console.log("Menu button pressed");
+              if (navigation?.openDrawer) {
+                navigation.openDrawer();
+              }
+            })}
           >
             <Image
               source={require("../../assets/images/burger.png")}
@@ -48,7 +61,18 @@ const CustomHeader = ({
         {showProfileButton && (
           <TouchableOpacity 
             style={styles.iconButton}
-            onPress={() => navigation.navigate('ProfileVerification', { user_id })}
+            onPress={() => {
+                if (user_id) {
+                    navigation.navigate('ProfileVerification', { 
+                        user_id: user_id,
+                        onComplete: () => {
+                            // Optional: Add any completion callback logic here
+                        }
+                    });
+                } else {
+                    console.warn('No user_id provided to CustomHeader');
+                }
+            }}
           >
             <Image
               source={userPhoto ? { uri: userPhoto } : require("../../assets/images/doprof.png")}

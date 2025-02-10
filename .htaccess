@@ -1,9 +1,22 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Enable headers module
+    # Set CORS headers for all responses
     <IfModule mod_headers.c>
-        Header set Access-Control-Allow-Origin "*"
+        # Clear any existing CORS headers to prevent duplicates
+        Header unset Access-Control-Allow-Origin
+        Header unset Access-Control-Allow-Methods
+        Header unset Access-Control-Allow-Headers
+        
+        # Set CORS headers
+        Header always set Access-Control-Allow-Origin "*"
+        Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+        Header always set Access-Control-Max-Age "1728000"
+        
+        # Handle preflight
+        RewriteCond %{REQUEST_METHOD} OPTIONS
+        RewriteRule ^(.*)$ $1 [R=200,L]
     </IfModule>
     
     # Allow direct access to PHP files in api directory
@@ -18,7 +31,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ index.html [L]
-
-    RewriteCond %{REQUEST_URI} ^/api/
-    RewriteRule ^api/(.*) http://localhost:3001/api/$1 [P,L]
 </IfModule> 

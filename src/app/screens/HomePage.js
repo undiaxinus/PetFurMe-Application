@@ -9,17 +9,18 @@ import {
 	ScrollView,
 	Alert,
 	ActivityIndicator,
-	ToastAndroid,
 	Platform,
+	RefreshControl,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { BASE_URL, SERVER_IP, SERVER_PORT, getBaseUrl, getApiUrl } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import CompleteProfileBar from '../components/CompleteProfileBar';
 import CustomToast from '../components/CustomToast';
-const API_BASE_URL = `http://${SERVER_IP}`;
+import { Toast } from '../components/Toast';
+import axios from 'axios';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -37,6 +38,8 @@ const HomePage = ({ navigation, route }) => {
 	const [credentialsComplete, setCredentialsComplete] = useState(false);
 	const [toastConfig, setToastConfig] = useState(null);
 	const [isVerified, setIsVerified] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
+	const [baseUrl, setBaseUrl] = useState('');
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -116,6 +119,14 @@ const HomePage = ({ navigation, route }) => {
 		console.log("Verification status changed:", isVerified);
 	}, [isVerified]);
 
+	useEffect(() => {
+		const initializeUrls = async () => {
+			const url = await getBaseUrl();
+			setBaseUrl(url);
+		};
+		initializeUrls();
+	}, []);
+
 	const fetchUserPets = async () => {
 		// Don't set loading state for auto refresh to avoid UI flicker
 		const isAutoRefresh = isLoading === false;
@@ -124,21 +135,16 @@ const HomePage = ({ navigation, route }) => {
 		}
 		
 		try {
-			// Fix the URL to use the correct endpoint
-			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
-			console.log("Attempting to fetch from:", url);
+			const apiUrl = await getApiUrl('/pets/get_user_pets');
+			console.log("Attempting to fetch from:", apiUrl);
 			
-			const response = await fetch(url, {
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				}
+			const response = await axios.get(apiUrl, {
+				params: { user_id }
 			});
 			
 			// Add debug logging
 			console.log("Response status:", response.status);
-			const data = await response.json();
+			const data = await response.data;
 			console.log("Raw response data:", data);
 			
 			if (data.success) {
@@ -168,7 +174,7 @@ const HomePage = ({ navigation, route }) => {
 		if (!user_id) return;
 		
 		try {
-			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
+			const url = `${baseUrl}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
 			console.log("Checking profile status at:", url);
 			
 			const response = await fetch(url);
@@ -204,7 +210,7 @@ const HomePage = ({ navigation, route }) => {
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
 					setUserPhoto(data.profile.photo 
-						? `${API_BASE_URL}/PetFurMe-Application/${data.profile.photo}`
+						? `${baseUrl}/PetFurMe-Application/${data.profile.photo}`
 						: null
 					);
 				}
@@ -297,7 +303,7 @@ const HomePage = ({ navigation, route }) => {
 	const fetchPetProducts = async () => {
 		try {
 			setIsProductsLoading(true);
-			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
+			const response = await fetch(`${baseUrl}/PetFurMe-Application/api/products/get_home_products.php`);
 			
 			if (!response.ok) {
 				throw new Error('Failed to fetch products');
@@ -329,7 +335,7 @@ const HomePage = ({ navigation, route }) => {
 						tax: parseFloat(product.tax) || 0,
 						notes: product.notes || '',
 						image: product.product_image 
-							? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
+							? { uri: `${baseUrl}/PetFurMe-Application/${product.product_image}` }
 							: require("../../assets/images/meowmix.png"),
 						categoryId: product.category_id,
 						type: product.category_name || 'Pet Product',
@@ -370,6 +376,18 @@ const HomePage = ({ navigation, route }) => {
 			]
 		);
 	};
+
+	// Add onRefresh handler
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		Promise.all([
+			checkProfileStatus(),
+			fetchUserPets(),
+			fetchPetProducts()
+		]).finally(() => {
+			setRefreshing(false);
+		});
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -464,10 +482,21 @@ const HomePage = ({ navigation, route }) => {
 					<ActivityIndicator size="large" color="#8146C1" />
 				</View>
 			)}
-			<ScrollView contentContainerStyle={styles.scrollContent}>
+			<ScrollView
+				contentContainerStyle={styles.scrollContent}
+				showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						colors={['#8146C1']}
+						tintColor="#8146C1"
+					/>
+				}
+			>
 				{(!isProfileComplete || !credentialsComplete) && (
 					<CompleteProfileBar 
-						onPress={() => navigation.navigate('Profile', { 
+						onPress={() => navigation.navigate('ProfileVerification', { 
 							user_id: user_id,
 							onComplete: () => {
 								refreshAllData();
@@ -617,7 +646,7 @@ const HomePage = ({ navigation, route }) => {
 						</View>
 						<TouchableOpacity 
 							style={styles.viewMoreButton}
-							onPress={() => navigation.navigate("ViewMorePro")}
+							onPress={() => navigation.navigate("ViewMoreProducts", { user_id: user_id })}
 						>
 							<Text style={styles.viewmore}>View More</Text>
 						</TouchableOpacity>
@@ -726,9 +755,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
+		height: '100%',
 	},
 	scrollContent: {
 		paddingBottom: 120,
+		flexGrow: 1,
 	},
 	searchSection: {
 		flexDirection: 'row',

@@ -106,7 +106,7 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
         ].map(({ screen, icon, label }) => (
           <TouchableOpacity 
             key={screen}
-            style={styles.navItem}
+            style={[styles.navItem, currentScreen === screen && styles.activeNavItem]}
             onPress={() => handleNavigation(screen)}
           >
             <Animated.View style={[styles.iconContainer, getTabStyle(screen)]}>
@@ -129,14 +129,9 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 80,
+    width: '100%',
+    height: Platform.OS === 'ios' ? 85 : 65,
     backgroundColor: 'transparent',
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-    zIndex: 1000,
   },
   background: {
     position: 'absolute',
@@ -163,8 +158,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     height: '100%',
-    paddingHorizontal: 15,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+    paddingTop: 10,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 10,
   },
   navItem: {
     flex: 1,
@@ -189,7 +184,10 @@ const styles = StyleSheet.create({
   activeText: {
     fontWeight: '600',
     opacity: 1,
-  }
+  },
+  activeNavItem: {
+    // Add styles for active state if needed
+  },
 });
 
 export default BottomNavigation; 

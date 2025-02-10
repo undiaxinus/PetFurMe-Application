@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require("uuid");
 const path = require('path');
 const authRoutes = require('./routes/auth');
-const { BASE_URL, SERVER_IP, SERVER_PORT } = require('./config/constants');
-	
+const { BASE_URL, SERVER_IP, SERVER_PORT, NETWORK_INTERFACES } = require('./config/constants');
+const os = require('os');
+
 // Server configuration
-const PORT = 3001;
-const HOST = "0.0.0.0";
+const PORT = process.env.PORT || 3001;
+const HOST = '0.0.0.0'; // This is crucial - binds to all network interfaces
 
 // Set the path to your XAMPP htdocs directory
 const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api');
@@ -32,7 +33,7 @@ const app = express();
 
 // CORS configuration - this must come BEFORE other middleware
 app.use(cors({
-	origin: ['http://localhost:8081', 'http://localhost:19006', `http://${SERVER_IP}:3001`],
+	origin: '*', // Allow all origins during development
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 	credentials: true
@@ -341,24 +342,59 @@ app.get('/api/test-cors', (req, res) => {
 	res.json({ message: 'CORS is working' });
 });
 
+// Add this test route
+app.get('/test', (req, res) => {
+	res.json({ message: 'Test route working' });
+});
+
+// Add this near the top of your routes
+app.get('/health', (req, res) => {
+	res.json({
+		status: 'ok',
+		timestamp: new Date().toISOString(),
+		ip: req.ip,
+		serverAddress: req.socket.localAddress
+	});
+});
+
+// Get all network interfaces
+const getNetworkAddresses = () => {
+	const interfaces = os.networkInterfaces();
+	const addresses = [];
+	
+	for (const iface of Object.values(interfaces)) {
+		for (const addr of iface) {
+			if (addr.family === 'IPv4' && !addr.internal) {
+				addresses.push(addr.address);
+			}
+		}
+	}
+	return addresses;
+};
+
 const startServer = async () => {
 	try {
-		// Test database connection first
 		const isConnected = await testConnection();
 		if (!isConnected) {
+			console.error("Database connection failed");
 			throw new Error("Database connection failed");
 		}
 
-		// Start the server
-		app.listen(PORT, HOST, () => {
+		const server = app.listen(PORT, HOST, () => {
+			const addresses = getNetworkAddresses();
 			console.log("=================================");
-			console.log(`Server running on:`);
+			console.log(`Server running on port ${PORT}`);
+			console.log("\nAvailable on:");
 			console.log(`- Local: http://localhost:${PORT}`);
-			console.log(`- Network: http://${SERVER_IP}:${PORT}`);
-			console.log(`- Android: http://10.0.2.2:${PORT}`);
-			console.log("Database Status: Connected");
+			addresses.forEach(addr => {
+				console.log(`- Network: http://${addr}:${PORT}`);
+			});
+			console.log("\nDatabase Status: Connected");
 			console.log("=================================");
 		});
+
+		// Increase timeout
+		server.timeout = 30000; // 30 seconds
 	} catch (error) {
 		console.error("Server startup failed:", error);
 		process.exit(1);

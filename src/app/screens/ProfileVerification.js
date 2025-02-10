@@ -9,7 +9,8 @@ import {
     Image,
     Alert,
     ActivityIndicator,
-    Platform
+    Platform,
+    RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,12 +22,11 @@ import CustomHeader from '../components/CustomHeader';
 const API_BASE_URL = `http://${SERVER_IP}/PetFurMe-Application`;
 
 const ProfileVerification = ({ navigation, route }) => {
-    const user_id = route.params?.user_id || 
-                   route.params?.initial?.user_id || 
-                   new URLSearchParams(window.location.search).get('user_id');
+    // Get user_id only from route params
+    const user_id = route.params?.user_id;
     
-    const isTestMode = route.params?.testing || 
-                      new URLSearchParams(window.location.search).get('testing') === 'true';
+    // Simplified test mode check
+    const isTestMode = route.params?.testing || false;
 
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
@@ -40,6 +40,7 @@ const ProfileVerification = ({ navigation, route }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [error, setError] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         if (!navigation) {
@@ -348,6 +349,11 @@ const ProfileVerification = ({ navigation, route }) => {
         }
     };
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchUserData().finally(() => setRefreshing(false));
+    }, []);
+
     return (
         <View style={styles.mainContainer}>
             {isLoading && (
@@ -367,6 +373,14 @@ const ProfileVerification = ({ navigation, route }) => {
                 contentContainerStyle={{ paddingBottom: 100 }}
                 showsVerticalScrollIndicator={true}
                 bounces={true}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={['#8146C1']}
+                        tintColor="#8146C1"
+                    />
+                }
             >
                 <View style={styles.profileSection}>
                     <View style={styles.profileImageContainer}>

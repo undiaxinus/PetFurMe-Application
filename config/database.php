@@ -2,10 +2,10 @@
 class Database {
     // Database credentials
     private $host = "localhost";
-    private $db_name = "u336332733_pet_management";
-    private $username = "u336332733_PFM";
-    private $password = "PetFurMe1423";
-    private $conn;
+    private $db_name = "pet-management";
+    private $username = "root";
+    private $password = "";
+    public $conn;
 
     // Get database connection
     public function getConnection() {
@@ -15,15 +15,21 @@ class Database {
             $this->conn = new PDO(
                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
                 $this->username,
-                $this->password
+                $this->password,
+                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
             );
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $this->conn;
         } catch(PDOException $e) {
             error_log("Database connection error: " . $e->getMessage());
-            return false;
+            throw new Exception("Database connection failed: " . $e->getMessage());
         }
-
-        return $this->conn;
     }
 }
+
+$db_config = array(
+    'hostname' => 'localhost',
+    'database' => 'pet-management',
+    'username' => 'root',
+    'password' => ''
+);
 ?> 

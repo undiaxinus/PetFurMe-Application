@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 
@@ -296,23 +296,17 @@ const AddAppointment = ({ route, navigation }) => {
           <View style={styles.pickerContainerWithIcon}>
             <Ionicons name="paw-outline" size={20} color="#666666" style={styles.pickerIcon} />
             <View style={styles.pickerWrapper}>
-              <Picker
-                selectedValue={selectedPet}
+              <RNPickerSelect
                 style={styles.picker}
                 onValueChange={(itemValue) => {
                   setSelectedPet(itemValue);
                   console.log("Selected pet:", pets.find(p => p.id === itemValue));
                 }}
-              >
-                <Picker.Item label="Select a pet" value={null} />
-                {pets.map(pet => (
-                  <Picker.Item 
-                    key={pet.id} 
-                    label={pet.name} 
-                    value={pet.id} 
-                  />
-                ))}
-              </Picker>
+                items={pets.map(pet => ({
+                  label: pet.name,
+                  value: pet.id,
+                }))}
+              />
             </View>
           </View>
 

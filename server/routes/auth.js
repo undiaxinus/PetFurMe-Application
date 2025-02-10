@@ -5,6 +5,27 @@ const mysql = require('mysql2/promise');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 
+// Debug the actual config being used
+console.log('Full database configuration:', {
+  ...config,
+  password: '***' // Hide password in logs
+});
+
+// Debug the require path
+console.log('Config file path:', require.resolve('../config/database'));
+
+// Add error handler for uncaught promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// At the top of the file, add debug logging for the config
+console.log('Database configuration loaded:', {
+  host: config.host,
+  user: config.user,
+  database: config.database
+});
+
 // Move CORS middleware to the top
 router.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -20,21 +41,41 @@ router.use((req, res, next) => {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'petmanagementt@gmail.com', // Replace with your Gmail
-    pass: 'ajlwvhzglwasoqku' // Replace with your app-specific password
+    user: 'petmanagementt@gmail.com',
+    pass: 'ajlwvhzglwasoqku'
   }
 });
 
-// Verify if email exists
+// Update the verify-email endpoint
 router.post('/verify-email', async (req, res) => {
   try {
     const { email } = req.body;
-    const connection = await mysql.createConnection(config);
+    console.log('Verifying email:', email);
+
+    const connection = await mysql.createConnection({
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database,
+      // Add these additional options
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
+    });
+
+    console.log('Database connection successful');
+
+    // Check if the users table exists
+    const [tables] = await connection.execute(
+      'SHOW TABLES LIKE "users"'
+    );
+    console.log('Tables check:', tables);
 
     const [rows] = await connection.execute(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );
+    console.log('Query result:', rows);
 
     await connection.end();
 
@@ -44,8 +85,21 @@ router.post('/verify-email', async (req, res) => {
 
     res.json({ exists: true });
   } catch (error) {
-    console.error('Error verifying email:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Detailed error in verify-email:', {
+      message: error.message,
+      code: error.code,
+      errno: error.errno,
+      sqlState: error.sqlState,
+      sqlMessage: error.sqlMessage,
+      stack: error.stack
+    });
+    
+    // Send a more detailed error response
+    res.status(500).json({ 
+      error: 'Database error',
+      details: error.message,
+      code: error.code
+    });
   }
 });
 
@@ -69,7 +123,15 @@ router.post('/verify-otp', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
+    const connection = await mysql.createConnection({
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
+    });
 
     try {
       // Log the actual values being checked
@@ -136,7 +198,15 @@ router.post('/send-otp', async (req, res) => {
 
         // Generate 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const connection = await mysql.createConnection(config);
+        const connection = await mysql.createConnection({
+          host: config.host,
+          user: config.user,
+          password: config.password,
+          database: config.database,
+          waitForConnections: true,
+          connectionLimit: 10,
+          queueLimit: 0
+        });
 
         try {
             // Store OTP in database
@@ -197,7 +267,15 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
+    const connection = await mysql.createConnection({
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
+    });
 
     try {
       // First verify if user exists
@@ -261,7 +339,15 @@ router.post('/register', async (req, res) => {
         const { email, username, password, role, name } = req.body;
         console.log('Received registration request for:', email);
 
-        const connection = await mysql.createConnection(config);
+        const connection = await mysql.createConnection({
+          host: config.host,
+          user: config.user,
+          password: config.password,
+          database: config.database,
+          waitForConnections: true,
+          connectionLimit: 10,
+          queueLimit: 0
+        });
         
         try {
             // Hash the password
@@ -302,6 +388,40 @@ router.use((req, res, next) => {
     body: req.body
   });
   next();
+});
+
+// Add this near your other routes
+router.get('/test-db', async (req, res) => {
+  try {
+    console.log('Testing database connection with config:', {
+      host: config.host,
+      user: config.user,
+      database: config.database
+    });
+
+    const connection = await mysql.createConnection({
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database
+    });
+
+    const [tables] = await connection.execute('SHOW TABLES');
+    await connection.end();
+
+    res.json({
+      success: true,
+      message: 'Database connection successful',
+      tables: tables
+    });
+  } catch (error) {
+    console.error('Database test failed:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code
+    });
+  }
 });
 
 module.exports = router; 

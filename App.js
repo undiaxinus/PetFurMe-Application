@@ -7,6 +7,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import ErrorBoundary from './src/app/components/ErrorBoundary';
+import { useFonts } from 'expo-font';
 
 // Import all screens
 import HomeScreen from "./src/app/screens/HomeScreen";
@@ -32,6 +33,7 @@ import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
 import ProfileVerification from "./src/app/screens/ProfileVerification";
 import UpdatePetProfile from "./src/app/screens/UpdatePetProfile";
 import ActivityHistoryScreen from "./src/app/screens/ActivityHistoryScreen";
+import ViewMoreProducts from "./src/app/screens/ViewMoreProducts";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -161,6 +163,14 @@ const App = () => {
 		default: {}
 	});
 
+	const [fontsLoaded] = useFonts({
+		'Fredoka': require('@expo-google-fonts/fredoka/Fredoka_400Regular.ttf'),
+	});
+
+	if (!fontsLoaded) {
+		return null; // or a loading screen
+	}
+
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
@@ -196,6 +206,9 @@ const App = () => {
 						<Stack.Screen name="Register" component={RegistrationScreen} />
 						<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 						<Stack.Screen name="LandingPage" component={LandingPage} />
+
+						{/* Add ViewMoreProducts screen here */}
+						<Stack.Screen name="ViewMoreProducts" component={ViewMoreProducts} />
 
 						{/* Add ProfileVerification screen here */}
 						<Stack.Screen name="ProfileVerification" component={ProfileVerification} />

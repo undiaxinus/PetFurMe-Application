@@ -10,17 +10,18 @@ import {
 	Alert,
 	ActivityIndicator,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { API_BASE_URL } from "../../utils/config"; // Make sure this path is correct
 
-const ProductPage = ({ navigation }) => {
+const ProductPage = ({ navigation, route }) => {
 	const [products, setProducts] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		console.log("Navigation props:", navigation);
+		console.log("Has openDrawer?:", navigation?.openDrawer);
 		fetchProducts();
-	}, []);
+	}, [navigation]);
 
 	const fetchProducts = async () => {
 		try {
@@ -103,85 +104,45 @@ const ProductPage = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			{/* Header */}
-			<View style={styles.header}>
-				<TouchableOpacity 
-					style={styles.menuButton}
-					onPress={() => navigation.openDrawer()}
-				>
-					<Ionicons name="menu" size={30} color="#FFFFFF" />
-				</TouchableOpacity>
-
-				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchBar}
-						placeholder="Search"
-						placeholderTextColor="#888888"
-						value={searchQuery}
-						onChangeText={setSearchQuery}
-					/>
-					<TouchableOpacity style={styles.searchButton}>
-						<Image
-							source={require("../../assets/images/search.png")}
-							style={styles.search}
+			{/* Main Content */}
+			<View style={styles.mainContent}>
+				<View style={styles.searchWrapper}>
+					<View style={styles.searchContainer}>
+						<TextInput
+							style={styles.searchBar}
+							placeholder="Search"
+							placeholderTextColor="#888888"
+							value={searchQuery}
+							onChangeText={setSearchQuery}
 						/>
-					</TouchableOpacity>
+						<TouchableOpacity style={styles.searchButton}>
+							<Image
+								source={require("../../assets/images/search.png")}
+								style={styles.search}
+							/>
+						</TouchableOpacity>
+					</View>
 				</View>
+
+				{isLoading ? (
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size="large" color="#8146C1" />
+					</View>
+				) : products.length === 0 ? (
+					<View style={styles.noProductsContainer}>
+						<Text style={styles.noProductsText}>No products found</Text>
+					</View>
+				) : (
+					<FlatList
+						data={filteredProducts}
+						keyExtractor={(item) => item.id}
+						renderItem={renderProduct}
+						contentContainerStyle={styles.productList}
+						numColumns={2}
+						showsVerticalScrollIndicator={false}
+					/>
+				)}
 			</View>
-
-			{/* Show loading indicator */}
-			{isLoading ? (
-				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" color="#8146C1" />
-				</View>
-			) : products.length === 0 ? (
-				<View style={styles.noProductsContainer}>
-					<Text style={styles.noProductsText}>No products found</Text>
-				</View>
-			) : (
-				<FlatList
-					data={filteredProducts}
-					keyExtractor={(item) => item.id}
-					renderItem={renderProduct}
-					contentContainerStyle={styles.productList}
-					numColumns={2}
-				/>
-			)}
-
-			{/* Bottom Navigation */}
-			<View style={styles.bottomNav}>
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('HomePage')}
-        >
-            <Ionicons name="home-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('ChatScreen')}
-        >
-            <Ionicons name="chatbubble-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-
-		<TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('NotificationScreen')}
-        >
-			<Ionicons name="notifications-outline" size={24} color="#8146C1" />
-			<Text style={styles.navText}>Notifications</Text>
-		</TouchableOpacity>
-
-        <TouchableOpacity 
-            style={styles.navItem}
-            onPress={() => navigation.navigate('Help')}
-        >
-            <Ionicons name="help-circle-outline" size={24} color="#8146C1" />
-            <Text style={styles.navText}>Help</Text>
-        </TouchableOpacity>
-      </View>
 		</View>
 	);
 };
@@ -189,26 +150,21 @@ const ProductPage = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
-		paddingTop: 40,
+		backgroundColor: '#FFFFFF',
 	},
-	header: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 15,
-		backgroundColor: '#8146C1',
-		height: 100,
+	mainContent: {
+		flex: 1,
 		paddingTop: 20,
-		top: -40,
 	},
-	menuButton: {
-		padding: 5,
+	searchWrapper: {
+		backgroundColor: '#FFFFFF',
+		paddingHorizontal: 15,
+		paddingVertical: 10,
+		zIndex: 1,
 	},
 	searchContainer: {
-		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginLeft: 10,
 		backgroundColor: '#D9D9D9',
 		borderRadius: 8,
 		paddingRight: 10,
@@ -306,32 +262,6 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		fontWeight: "bold",
 	},
-	bottomNav: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		paddingVertical: 10,
-		backgroundColor: '#FFFFFF',
-		borderTopWidth: 1,
-		borderTopColor: 'rgba(0,0,0,0.1)',
-	  },
-	  navItem: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	  },
-	  navText: {
-		fontSize: 12,
-		color: '#8146C1',
-		marginTop: 4,
-	  },
-	navIcon: {
-		width: 30,
-		height: 30,
-		resizeMode: "contain",
-	},
 	loadingContainer: {
 		flex: 1,
 		justifyContent: 'center',
@@ -346,6 +276,9 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: '#666',
 	},
+	header: undefined,
+	menuButton: undefined,
+	bottomNavWrapper: undefined,
 });
 
 export default ProductPage;
