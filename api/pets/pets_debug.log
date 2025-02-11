@@ -1,0 +1,377 @@
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] get_pets.php script started
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Request method: GET
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:46:39 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:46:39 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:46:39 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:46:39 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Database connection established
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Query executed successfully
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Found pets count: 1
+[11-Feb-2025 02:46:39 Europe/Berlin] [2025-02-11 02:46:39] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] get_pets.php script started
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Request method: GET
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:46:49 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:46:49 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:46:49 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:46:49 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Database connection established
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Query executed successfully
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Found pets count: 1
+[11-Feb-2025 02:46:49 Europe/Berlin] [2025-02-11 02:46:49] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] get_pets.php script started
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Request method: GET
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:00 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:00 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:00 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:00 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Database connection established
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Query executed successfully
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Found pets count: 1
+[11-Feb-2025 02:47:00 Europe/Berlin] [2025-02-11 02:47:00] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] get_pets.php script started
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Request method: GET
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:10 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:10 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:10 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:10 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Database connection established
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Query executed successfully
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Found pets count: 1
+[11-Feb-2025 02:47:10 Europe/Berlin] [2025-02-11 02:47:10] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] get_pets.php script started
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Request method: GET
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:20 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:20 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:20 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:20 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Database connection established
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Query executed successfully
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Found pets count: 1
+[11-Feb-2025 02:47:20 Europe/Berlin] [2025-02-11 02:47:20] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] get_pets.php script started
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Request method: GET
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:30 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:30 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:30 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:30 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Database connection established
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Query executed successfully
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Found pets count: 1
+[11-Feb-2025 02:47:30 Europe/Berlin] [2025-02-11 02:47:30] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] get_pets.php script started
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Request method: GET
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:40 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:40 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:40 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:40 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Database connection established
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Query executed successfully
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Found pets count: 1
+[11-Feb-2025 02:47:40 Europe/Berlin] [2025-02-11 02:47:40] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] get_pets.php script started
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Request method: GET
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:47:50 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:47:50 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:47:50 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:47:50 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Database connection established
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Query executed successfully
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Found pets count: 1
+[11-Feb-2025 02:47:50 Europe/Berlin] [2025-02-11 02:47:50] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] get_pets.php script started
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Request method: GET
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:48:09 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:48:09 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:48:09 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:48:09 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Database connection established
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Query executed successfully
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Found pets count: 1
+[11-Feb-2025 02:48:09 Europe/Berlin] [2025-02-11 02:48:09] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] get_pets.php script started
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Request method: GET
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:48:13 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:48:13 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:48:13 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:48:13 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Database connection established
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Query executed successfully
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Found pets count: 1
+[11-Feb-2025 02:48:13 Europe/Berlin] [2025-02-11 02:48:13] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] get_pets.php script started
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Request method: GET
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:48:36 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:48:36 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:48:36 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:48:36 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Database connection established
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Query executed successfully
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Found pets count: 1
+[11-Feb-2025 02:48:36 Europe/Berlin] [2025-02-11 02:48:36] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] get_pets.php script started
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Request method: GET
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:48:46 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:48:46 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:48:46 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:48:46 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Database connection established
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Query executed successfully
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Found pets count: 1
+[11-Feb-2025 02:48:46 Europe/Berlin] [2025-02-11 02:48:46] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] get_pets.php script started
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Request method: GET
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:48:57 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:48:57 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:48:57 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:48:57 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Database connection established
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Query executed successfully
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Found pets count: 1
+[11-Feb-2025 02:48:57 Europe/Berlin] [2025-02-11 02:48:57] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] get_pets.php script started
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Request method: GET
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:49:07 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:49:07 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:49:07 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:49:07 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Database connection established
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Query executed successfully
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Found pets count: 1
+[11-Feb-2025 02:49:07 Europe/Berlin] [2025-02-11 02:49:07] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] get_pets.php script started
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Request method: GET
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:49:17 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:49:17 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:49:17 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:49:17 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Database connection established
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Query executed successfully
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Found pets count: 1
+[11-Feb-2025 02:49:17 Europe/Berlin] [2025-02-11 02:49:17] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] get_pets.php script started
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Request method: GET
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:49:27 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:49:27 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:49:27 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:49:27 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Database connection established
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Query executed successfully
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Found pets count: 1
+[11-Feb-2025 02:49:27 Europe/Berlin] [2025-02-11 02:49:27] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] get_pets.php script started
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Request method: GET
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:49:37 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:49:37 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:49:37 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:49:37 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Database connection established
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Query executed successfully
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Found pets count: 1
+[11-Feb-2025 02:49:37 Europe/Berlin] [2025-02-11 02:49:37] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] get_pets.php script started
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Request method: GET
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:49:47 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:49:47 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:49:47 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:49:47 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Database connection established
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Query executed successfully
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Found pets count: 1
+[11-Feb-2025 02:49:47 Europe/Berlin] [2025-02-11 02:49:47] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] get_pets.php script started
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Request method: GET
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:50:21 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:50:21 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:50:21 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:50:21 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Database connection established
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Query executed successfully
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Found pets count: 1
+[11-Feb-2025 02:50:21 Europe/Berlin] [2025-02-11 02:50:21] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] get_pets.php script started
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Request method: GET
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:50:54 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:50:54 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:50:54 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:50:54 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Database connection established
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Query executed successfully
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Found pets count: 1
+[11-Feb-2025 02:50:54 Europe/Berlin] [2025-02-11 02:50:54] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] get_pets.php script started
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Request method: GET
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:50:58 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:50:58 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:50:58 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:50:58 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Database connection established
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Query executed successfully
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Found pets count: 1
+[11-Feb-2025 02:50:58 Europe/Berlin] [2025-02-11 02:50:58] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] get_pets.php script started
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Request method: GET
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:08 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:08 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:08 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:08 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Database connection established
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Query executed successfully
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Found pets count: 1
+[11-Feb-2025 02:51:08 Europe/Berlin] [2025-02-11 02:51:08] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] get_pets.php script started
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Request method: GET
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:18 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:18 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:18 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:18 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Database connection established
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Query executed successfully
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Found pets count: 1
+[11-Feb-2025 02:51:18 Europe/Berlin] [2025-02-11 02:51:18] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] get_pets.php script started
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Request method: GET
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:28 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:28 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:28 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:28 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Database connection established
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Query executed successfully
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Found pets count: 1
+[11-Feb-2025 02:51:28 Europe/Berlin] [2025-02-11 02:51:28] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] get_pets.php script started
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Request method: GET
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:38 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:38 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:38 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:38 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Database connection established
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Query executed successfully
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Found pets count: 1
+[11-Feb-2025 02:51:38 Europe/Berlin] [2025-02-11 02:51:38] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] get_pets.php script started
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Request method: GET
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:48 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:48 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:48 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:48 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Database connection established
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Query executed successfully
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Found pets count: 1
+[11-Feb-2025 02:51:48 Europe/Berlin] [2025-02-11 02:51:48] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] get_pets.php script started
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Request method: GET
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:51:58 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:51:58 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:51:58 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:51:58 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Database connection established
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Query executed successfully
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Found pets count: 1
+[11-Feb-2025 02:51:58 Europe/Berlin] [2025-02-11 02:51:58] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] get_pets.php script started
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Request method: GET
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:52:08 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:52:08 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:52:08 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:52:08 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Database connection established
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Query executed successfully
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Found pets count: 1
+[11-Feb-2025 02:52:08 Europe/Berlin] [2025-02-11 02:52:08] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] get_pets.php script started
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Request method: GET
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] GET parameters: - Data: {"user_id":"138"}
+[11-Feb-2025 02:52:21 Europe/Berlin] Attempting database connection...
+[11-Feb-2025 02:52:21 Europe/Berlin] Host: localhost
+[11-Feb-2025 02:52:21 Europe/Berlin] Database: pet-management
+[11-Feb-2025 02:52:21 Europe/Berlin] Database connection successful
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Database connection established
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Requested pets for user_id: - Data: "138"
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Executing query: - Data: "SELECT * FROM pets WHERE user_id = ? AND deleted_at IS NULL"
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Query executed successfully
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Found pets count: 1
+[11-Feb-2025 02:52:21 Europe/Berlin] [2025-02-11 02:52:21] Pet record: - Data: {"id":25,"name":"Blacky","type":"rabbit"}

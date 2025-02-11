@@ -1969,3 +1969,126 @@ Stack trace:
 [10-Feb-2025 14:55:12 Europe/Berlin] Database connection successful
 [10-Feb-2025 14:55:12 Europe/Berlin] Found user with ID: 108
 [10-Feb-2025 14:55:12 Europe/Berlin] Password verified successfully for user ID: 108
+[10-Feb-2025 15:25:18 Europe/Berlin] === New Login Request ===
+[10-Feb-2025 15:25:18 Europe/Berlin] Request Method: POST
+[10-Feb-2025 15:25:18 Europe/Berlin] Request Headers: Array
+(
+    [Host] => localhost
+    [Connection] => keep-alive
+    [Content-Length] => 54
+    [sec-ch-ua-platform] => "Android"
+    [User-Agent] => Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36
+    [Accept] => application/json
+    [sec-ch-ua] => "Not(A:Brand";v="99", "Brave";v="133", "Chromium";v="133"
+    [Content-Type] => application/json
+    [sec-ch-ua-mobile] => ?1
+    [Sec-GPC] => 1
+    [Accept-Language] => en-US,en;q=0.7
+    [Origin] => http://localhost:8081
+    [Sec-Fetch-Site] => same-site
+    [Sec-Fetch-Mode] => cors
+    [Sec-Fetch-Dest] => empty
+    [Referer] => http://localhost:8081/
+    [Accept-Encoding] => gzip, deflate, br, zstd
+)
+
+[10-Feb-2025 15:25:18 Europe/Berlin] Raw Input: {"email":"yureasel1@gmail.com","password":"123456789"}
+[10-Feb-2025 15:25:18 Europe/Berlin] Response Headers: Array
+(
+    [0] => X-Powered-By: PHP/8.2.12
+    [1] => Content-Type: application/json
+)
+
+[10-Feb-2025 15:25:18 Europe/Berlin] Raw request data: {"email":"yureasel1@gmail.com","password":"123456789"}
+[10-Feb-2025 15:25:18 Europe/Berlin] Parsed request data: Array
+(
+    [email] => yureasel1@gmail.com
+    [password] => 123456789
+)
+
+[10-Feb-2025 15:25:18 Europe/Berlin] Attempting login for email: yureasel1@gmail.com
+[10-Feb-2025 15:25:18 Europe/Berlin] Database connection successful
+[10-Feb-2025 15:25:18 Europe/Berlin] Found user with ID: 108
+[10-Feb-2025 15:25:18 Europe/Berlin] Password verified successfully for user ID: 108
+[10-Feb-2025 15:28:39 Europe/Berlin] === New Login Request ===
+[10-Feb-2025 15:28:39 Europe/Berlin] Request Method: POST
+[10-Feb-2025 15:28:39 Europe/Berlin] Request Headers: Array
+(
+    [Host] => localhost
+    [Connection] => keep-alive
+    [Content-Length] => 54
+    [sec-ch-ua-platform] => "Android"
+    [User-Agent] => Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36
+    [Accept] => application/json
+    [sec-ch-ua] => "Not(A:Brand";v="99", "Brave";v="133", "Chromium";v="133"
+    [Content-Type] => application/json
+    [sec-ch-ua-mobile] => ?1
+    [Sec-GPC] => 1
+    [Accept-Language] => en-US,en;q=0.7
+    [Origin] => http://localhost:8081
+    [Sec-Fetch-Site] => same-site
+    [Sec-Fetch-Mode] => cors
+    [Sec-Fetch-Dest] => empty
+    [Referer] => http://localhost:8081/
+    [Accept-Encoding] => gzip, deflate, br, zstd
+)
+
+[10-Feb-2025 15:28:39 Europe/Berlin] Raw Input: {"email":"yureasel1@gmail.com","password":"123456789"}
+[10-Feb-2025 15:28:39 Europe/Berlin] Response Headers: Array
+(
+    [0] => X-Powered-By: PHP/8.2.12
+    [1] => Content-Type: application/json
+)
+
+[10-Feb-2025 15:28:39 Europe/Berlin] Raw request data: {"email":"yureasel1@gmail.com","password":"123456789"}
+[10-Feb-2025 15:28:39 Europe/Berlin] Parsed request data: Array
+(
+    [email] => yureasel1@gmail.com
+    [password] => 123456789
+)
+
+[10-Feb-2025 15:28:39 Europe/Berlin] Attempting login for email: yureasel1@gmail.com
+[10-Feb-2025 15:28:39 Europe/Berlin] Database connection successful
+[10-Feb-2025 15:28:39 Europe/Berlin] Found user with ID: 108
+[10-Feb-2025 15:28:39 Europe/Berlin] Password verified successfully for user ID: 108
+[11-Feb-2025 01:53:08 Europe/Berlin] === New Login Request ===
+[11-Feb-2025 01:53:08 Europe/Berlin] Request Method: POST
+[11-Feb-2025 01:53:08 Europe/Berlin] Request Headers: Array
+(
+    [Host] => localhost
+    [Connection] => keep-alive
+    [Content-Length] => 55
+    [sec-ch-ua-platform] => "Android"
+    [User-Agent] => Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36
+    [Accept] => application/json
+    [sec-ch-ua] => "Not(A:Brand";v="99", "Brave";v="133", "Chromium";v="133"
+    [Content-Type] => application/json
+    [sec-ch-ua-mobile] => ?1
+    [Sec-GPC] => 1
+    [Accept-Language] => en-US,en;q=0.7
+    [Origin] => http://localhost:8081
+    [Sec-Fetch-Site] => same-site
+    [Sec-Fetch-Mode] => cors
+    [Sec-Fetch-Dest] => empty
+    [Referer] => http://localhost:8081/
+    [Accept-Encoding] => gzip, deflate, br, zstd
+)
+
+[11-Feb-2025 01:53:08 Europe/Berlin] Raw Input: {"email":"everdale365@gmail.com","password":"12345678"}
+[11-Feb-2025 01:53:08 Europe/Berlin] Response Headers: Array
+(
+    [0] => X-Powered-By: PHP/8.2.12
+    [1] => Content-Type: application/json
+)
+
+[11-Feb-2025 01:53:08 Europe/Berlin] Raw request data: {"email":"everdale365@gmail.com","password":"12345678"}
+[11-Feb-2025 01:53:08 Europe/Berlin] Parsed request data: Array
+(
+    [email] => everdale365@gmail.com
+    [password] => 12345678
+)
+
+[11-Feb-2025 01:53:08 Europe/Berlin] Attempting login for email: everdale365@gmail.com
+[11-Feb-2025 01:53:08 Europe/Berlin] Database connection successful
+[11-Feb-2025 01:53:08 Europe/Berlin] Found user with ID: 138
+[11-Feb-2025 01:53:08 Europe/Berlin] Password verified successfully for user ID: 138

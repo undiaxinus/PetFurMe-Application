@@ -14,6 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { getApiConfig } from '../../utils/config';
+import { logger } from '../../utils/logger';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -54,59 +55,39 @@ const LoginScreen = ({ navigation }) => {
 			const config = await getApiConfig();
 			const loginUrl = `${config.API_BASE_URL}${config.API_PATH}/auth/login.php`;
 			
-			console.log('Login attempt:', {
+			logger.info('Login', 'Login attempt', {
 				url: loginUrl,
-				email: email,
+				email,
 				passwordLength: password.length
 			});
 
-			// Add request configuration logging
-			const requestConfig = {
+			const response = await axios({
 				method: 'post',
 				url: loginUrl,
 				data: { email, password },
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
-				}
-			};
-			
-			console.log('Request config:', requestConfig);
-
-			const response = await axios(requestConfig);
-
-			console.log('Login response:', {
-				status: response.status,
-				statusText: response.statusText,
-				headers: response.headers,
-				data: response.data
+				},
+				withCredentials: false
 			});
 
 			if (response.data.success) {
+				logger.info('Login', 'Login successful', { user_id: response.data.user_id });
 				navigation.navigate('DrawerNavigator', { 
 					screen: 'HomePage',
 					params: { user_id: response.data.user_id }
 				});
 			} else {
+				logger.warn('Login', 'Login failed', response.data);
 				setError(response.data.error || 'Login failed');
 			}
 		} catch (error) {
-			console.error('Login error:', {
-				message: error.message,
-				response: error.response?.data,
-				request: error.request,
-				config: error.config
-			});
-			
+			logger.error('Login', 'Login error', error);
 			if (error.response) {
-				// The server responded with a status code outside the 2xx range
 				setError(error.response.data?.error || 'Server error');
-			} else if (error.request) {
-				// The request was made but no response was received
-				setError('No response from server. Please check your connection.');
 			} else {
-				// Something happened in setting up the request
-				setError('An error occurred. Please try again.');
+				setError('Network error. Please check your connection.');
 			}
 		} finally {
 			setLoading(false);

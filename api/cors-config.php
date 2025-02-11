@@ -1,24 +1,18 @@
 <?php
-// Set strict CORS headers for all API endpoints
+/**
+ * Central CORS configuration for the API
+ */
 function setCorsHeaders() {
-    if (isset($_SERVER['HTTP_ORIGIN'])) {
-        $allowed_origins = array(
-            'http://localhost:8081',
-            'http://localhost:3000',
-            'http://localhost'
-        );
-        
-        if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
-            header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
-        }
-    }
-    
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
+    // Always set these headers regardless of origin
+    header("Access-Control-Allow-Origin: http://localhost:8081");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept");
-    header("Access-Control-Max-Age: 86400");
+    header("Access-Control-Max-Age: 86400"); // 24 hours cache
     
-    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        header("HTTP/1.1 200 OK");
+    // Handle preflight requests
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
         exit();
     }
 }

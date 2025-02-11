@@ -1,34 +1,41 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
+# Enable rewrite engine
+RewriteEngine On
+
+# Remove all CORS headers from here since they're handled in PHP
+
+# Allow direct access to PHP files in api directory
+RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/api/.*\.php$ [NC]
+RewriteRule ^ - [L]
+
+# Allow direct access to uploads directory
+RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/uploads/.*$ [NC]
+RewriteRule ^ - [L]
+
+# All other routes go to React app
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# Add this before the RewriteEngine line
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Make sure PHP files in utils directory are accessible
+<Directory "C:/xampp/htdocs/PetFurMe-Application/api/utils">
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Require all granted
     
-    # Set CORS headers for all responses
-    <IfModule mod_headers.c>
-        # Clear any existing CORS headers to prevent duplicates
-        Header unset Access-Control-Allow-Origin
-        Header unset Access-Control-Allow-Methods
-        Header unset Access-Control-Allow-Headers
-        
-        # Set CORS headers
-        Header always set Access-Control-Allow-Origin "*"
-        Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-        Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
-        Header always set Access-Control-Max-Age "1728000"
-        
-        # Handle preflight
-        RewriteCond %{REQUEST_METHOD} OPTIONS
-        RewriteRule ^(.*)$ $1 [R=200,L]
-    </IfModule>
-    
-    # Allow direct access to PHP files in api directory
-    RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/api/.*\.php$ [NC]
-    RewriteRule ^ - [L]
-    
-    # Allow direct access to uploads directory
-    RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/uploads/.*$ [NC]
-    RewriteRule ^ - [L]
-    
-    # All other routes go to React app
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.html [L]
-</IfModule> 
+    # Allow specific PHP files
+    <Files "log.php">
+        Require all granted
+    </Files>
+</Directory>
+
+# Protect log files
+<FilesMatch "\.(log|txt)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch> 

@@ -1,26 +1,30 @@
 <?php
-// Enable error logging
+// Include CORS headers first - must be before any output or error handling
+require_once '../cors-config.php';
+require_once '../utils/logger.php';
+
+// Initialize logger
+Logger::init('login');
+
+// Now enable error logging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/login_debug.log');
 
-// Log request details
-error_log("=== New Login Request ===");
-error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-error_log("Request Headers: " . print_r(getallheaders(), true));
-error_log("Raw Input: " . file_get_contents('php://input'));
-
-// Include the main CORS and error handling first
-require_once '../index.php';
+// Remove any other CORS-related includes or headers
 
 // Include database connection
 require_once '../config/Database.php';
 
-// Log CORS headers being sent
-error_log("Response Headers: " . print_r(headers_list(), true));
+// Log the start of login process
+Logger::info("=== New Login Request ===", [
+    'method' => $_SERVER['REQUEST_METHOD'],
+    'headers' => getallheaders(),
+    'origin' => $_SERVER['HTTP_ORIGIN'] ?? 'unknown'
+]);
 
-// Only set content type
+// Only set content type after CORS headers
 header('Content-Type: application/json; charset=UTF-8');
 
 // Handle preflight OPTIONS request
@@ -44,11 +48,15 @@ try {
     $rawData = file_get_contents('php://input');
     $data = json_decode($rawData, true);
     
-    error_log("Raw request data: " . $rawData);
-    error_log("Parsed request data: " . print_r($data, true));
+    Logger::debug("Received login data", [
+        'email' => $data['email'] ?? 'not provided',
+        'passwordProvided' => isset($data['password']),
+        'rawData' => $rawData
+    ]);
     
     // Validate input
     if (!$data || !isset($data['email']) || !isset($data['password'])) {
+        Logger::warn("Invalid login data provided", ['data' => $data]);
         http_response_code(400);
         echo json_encode([
             'success' => false,
@@ -60,12 +68,10 @@ try {
     $email = $data['email'];
     $password = $data['password'];
 
-    error_log("Attempting login for email: " . $email);
-    
     // Database connection
     $database = new Database();
     $db = $database->getConnection();
-    error_log("Database connection successful");
+    Logger::info("Database connection established");
 
     // Query user
     $query = "SELECT id, password FROM users WHERE email = :email";
@@ -73,10 +79,12 @@ try {
     $stmt->bindParam(':email', $email);
     $stmt->execute();
     
+    Logger::debug("Executing user query", ['email' => $email]);
+    
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$user) {
-        error_log("No user found for email: " . $email);
+        Logger::warn("Login failed - User not found", ['email' => $email]);
         echo json_encode([
             'success' => false,
             'error' => 'Invalid email or password'
@@ -84,18 +92,18 @@ try {
         exit();
     }
 
-    error_log("Found user with ID: " . $user['id']);
+    Logger::info("User found", ['user_id' => $user['id']]);
     
     // Verify password
     if (password_verify($password, $user['password'])) {
-        error_log("Password verified successfully for user ID: " . $user['id']);
+        Logger::info("Login successful", ['user_id' => $user['id']]);
         echo json_encode([
             'success' => true,
             'user_id' => $user['id'],
             'message' => 'Login successful'
         ]);
     } else {
-        error_log("Password verification failed for user ID: " . $user['id']);
+        Logger::warn("Login failed - Invalid password", ['user_id' => $user['id']]);
         echo json_encode([
             'success' => false,
             'error' => 'Invalid email or password'
@@ -103,8 +111,10 @@ try {
     }
 
 } catch (Exception $e) {
-    error_log("Login error: " . $e->getMessage());
-    error_log("Stack trace: " . $e->getTraceAsString());
+    Logger::error("Login error", [
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
     
     http_response_code(500);
     echo json_encode([

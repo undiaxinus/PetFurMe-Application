@@ -1,8 +1,24 @@
 <?php
+require_once __DIR__ . '/../utils/Logger.php';
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Accept, Authorization, X-Requested-With, Cache-Control, Pragma');
+
+// Set up specific logging for user operations
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/user_debug.log');
+
+function logUserDebug($message, $data = null) {
+    $log = "[" . date('Y-m-d H:i:s') . "] " . $message;
+    if ($data) {
+        $log .= " - Data: " . json_encode($data);
+    }
+    error_log($log);
+}
 
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -14,9 +30,15 @@ include_once '../config/Database.php';
 include_once '../config/constants.php';
 
 try {
+    Logger::info('UserAPI', 'get_user_data.php script started');
+    Logger::debug('UserAPI', 'Request method: ' . $_SERVER['REQUEST_METHOD']);
+    Logger::debug('UserAPI', 'GET parameters:', $_GET);
+    Logger::debug('UserAPI', 'Request URI:', $_SERVER['REQUEST_URI']);
+    
     // Get database connection
     $database = new Database();
     $db = $database->connect();
+    Logger::info('UserAPI', 'Database connection established');
 
     if (!$db) {
         throw new Exception("Database connection failed");
@@ -25,9 +47,7 @@ try {
     // Get user_id from GET or POST
     $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 
               (isset($_POST['user_id']) ? $_POST['user_id'] : null);
-
-    // Debug log for user_id
-    error_log("Received request for user_id: " . $user_id);
+    Logger::debug('UserAPI', 'Requested user_id:', $user_id);
 
     if (!$user_id) {
         throw new Exception("User ID is required");
@@ -37,7 +57,7 @@ try {
     $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
     
     // Debug log for query
-    error_log("Executing query: " . $query);
+    Logger::debug('UserAPI', 'Executing query:', $query);
 
     $stmt = $db->prepare($query);
 
@@ -57,7 +77,7 @@ try {
         $row = $result->fetch_assoc();
         
         // Debug log for raw data
-        error_log("Raw data from database: " . json_encode($row));
+        Logger::debug('UserAPI', 'Raw data from database:', $row);
         
         $response = [
             'success' => true,
@@ -77,21 +97,25 @@ try {
         ];
         
         // Debug log for final response
-        error_log("Final response data: " . json_encode($response));
+        Logger::debug('UserAPI', 'Final response data:', $response);
         
         echo json_encode($response);
     } else {
-        error_log("No user found for ID: " . $user_id);
+        Logger::info('UserAPI', 'No user found for ID: ' . $user_id);
         throw new Exception("User not found");
     }
 
 } catch (Exception $e) {
-    error_log("Error in get_user_data.php: " . $e->getMessage());
+    Logger::error('UserAPI', 'Error occurred:', [
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
     
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => 'Error: ' . $e->getMessage(),
+        'timestamp' => date('Y-m-d H:i:s')
     ]);
 } finally {
     if (isset($stmt)) {

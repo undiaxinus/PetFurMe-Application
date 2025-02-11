@@ -21,6 +21,7 @@ import CompleteProfileBar from '../components/CompleteProfileBar';
 import CustomToast from '../components/CustomToast';
 import { Toast } from '../components/Toast';
 import axios from 'axios';
+import { logger } from '../utils/logger';
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -128,45 +129,35 @@ const HomePage = ({ navigation, route }) => {
 	}, []);
 
 	const fetchUserPets = async () => {
-		// Don't set loading state for auto refresh to avoid UI flicker
-		const isAutoRefresh = isLoading === false;
-		if (!isAutoRefresh) {
-			setIsLoading(true);
-		}
-		
 		try {
-			const apiUrl = await getApiUrl('/pets/get_user_pets');
-			console.log("Attempting to fetch from:", apiUrl);
-			
-			const response = await axios.get(apiUrl, {
-				params: { user_id }
-			});
-			
-			// Add debug logging
-			console.log("Response status:", response.status);
-			const data = await response.data;
-			console.log("Raw response data:", data);
-			
-			if (data.success) {
-				const loggablePets = data.pets.map(pet => {
-					console.log(`Processing pet ${pet.name} with photo URL:`, pet.photo);
-					return {
-						...pet,
-						photo: pet.photo ? pet.photo : null
-					};
-				});
-				console.log("Active pets found:", loggablePets);
-				setUserPets(loggablePets);
+			logger.debug('HomePage', 'Starting to fetch user pets');
+			logger.debug('HomePage', 'User ID:', user_id);
+
+			if (!user_id) {
+				logger.warn('HomePage', 'No user_id available');
+				return;
+			}
+
+			const url = await getApiUrl(`/pets/get_pets.php?user_id=${user_id}`);
+			logger.debug('HomePage', 'Fetching from URL:', url);
+
+			const response = await fetch(url);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			logger.debug('HomePage', 'Received data:', data);
+
+			if (data.success && Array.isArray(data.pets)) {
+				setUserPets(data.pets);
 			} else {
-				throw new Error(data.message || 'Failed to load pets data');
+				logger.error('HomePage', 'Invalid pets data received:', data);
+				setUserPets([]); // Set empty array as fallback
 			}
 		} catch (error) {
-			console.error("Error fetching pets:", error);
-			Alert.alert("Error", "Unable to load pets. Please try again.");
-		} finally {
-			if (!isAutoRefresh) {
-				setIsLoading(false);
-			}
+			logger.error('HomePage', 'Error fetching pets:', error);
+			setUserPets([]); // Set empty array on error
 		}
 	};
 

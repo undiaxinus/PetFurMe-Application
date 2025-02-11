@@ -15,6 +15,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logActivity } from '../utils/activityLogger';
+import { logger } from '../utils/logger';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -24,43 +25,36 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const [userData, setUserData] = useState(null);
 	const [activityLogs, setActivityLogs] = useState([]);
 	
-	const getUserData = async () => {
-		if (!state?.routes) return null;
-		
-		for (const route of state.routes) {
-			if (route.params?.user_id) {
-				try {
-					console.log("Fetching data for user_id:", route.params.user_id);
-					
-					const response = await fetch(
-						`${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${route.params.user_id}&t=${Date.now()}`
-					);
-					
-					if (!response.ok) {
-						throw new Error('Failed to fetch user data');
-					}
-					
-					const data = await response.json();
-					console.log("Raw API Response:", data);
-					
-					if (data.success) {
-						const userData = {
-							user_id: route.params.user_id,
-							name: data.profile.name,
-							username: data.profile.username,
-							role: data.profile.role,
-							photo: data.profile.photo
-						};
-						
-						console.log("Processed user data:", userData);
-						return userData;
-					}
-				} catch (error) {
-					console.error("Error in getUserData:", error);
-				}
+	const fetchUserData = async (userId) => {
+		try {
+			logger.debug('CustomDrawer', 'Fetching user data for ID:', userId);
+			
+			if (!userId) {
+				throw new Error('User ID is required');
 			}
+
+			const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${userId}`;
+			logger.debug('CustomDrawer', 'Fetching from URL:', url);
+
+			const response = await fetch(url);
+			logger.debug('CustomDrawer', 'Response status:', response.status);
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			logger.debug('CustomDrawer', 'User data received:', data);
+
+			if (data.success && data.profile) {
+				return data.profile;
+			} else {
+				throw new Error(data.message || 'Failed to fetch user data');
+			}
+		} catch (error) {
+			logger.error('CustomDrawer', 'Error fetching user data:', error);
+			throw error;
 		}
-		return null;
 	};
 
 	const loadActivityLogs = async () => {
@@ -85,18 +79,25 @@ const CustomDrawerContent = ({ navigation, state }) => {
 
 	useEffect(() => {
 		const loadUserData = async () => {
-			const data = await getUserData();
-			console.log("Fetched user data:", data);
-			if (data) {
-				setUserData(data);
+			try {
+				if (!userData?.user_id) {
+					logger.warn('CustomDrawer', 'No user_id available');
+					return;
+				}
+
+				const userData = await fetchUserData(userData.user_id);
+				setUserData(userData);
 				loadActivityLogs();
+			} catch (error) {
+				logger.error('CustomDrawer', 'Failed to load user data:', error);
+				// Handle error appropriately
 			}
 		};
 		
 		loadUserData();
 		const refreshInterval = setInterval(loadUserData, 10000);
 		return () => clearInterval(refreshInterval);
-	}, [state?.routes]);
+	}, [userData?.user_id]);
 
 	const handleLogout = () => {
 		setIsLogoutModalVisible(true);

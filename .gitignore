@@ -33,3 +33,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Logs
+/logs/*
+!/logs/.htaccess
+!/logs/index.php
