@@ -14,7 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { getApiConfig } from '../../utils/config';
-import { logger } from '../../utils/logger';
+import { logger } from '../utils/logger';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");

@@ -38,4 +38,20 @@ RewriteRule ^ index.html [L]
 <FilesMatch "\.(log|txt)$">
     Order allow,deny
     Deny from all
-</FilesMatch> 
+</FilesMatch>
+
+# Enable Apache headers module
+<IfModule mod_headers.c>
+    # Enable CORS for development
+    SetEnvIf Origin "http://localhost:8081" AccessControlAllowOrigin=$0
+    Header set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, Accept, X-Requested-With"
+    Header set Access-Control-Allow-Credentials "true"
+
+    # Handle OPTIONS method
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+
+# Your existing rules... 

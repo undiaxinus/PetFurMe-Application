@@ -27,7 +27,8 @@ export const logger = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         },
         mode: 'cors',
         credentials: 'include',
@@ -45,9 +46,10 @@ export const logger = {
         throw new Error(`Server logging failed: ${response.status}`);
       }
     } catch (error) {
-      // Fallback to console logging
-      console.warn('Failed to send log to server:', error);
-      console[level.toLowerCase()](`[${component}] ${message}`, data);
+      // Just log to console in development
+      if (process.env.NODE_ENV === 'development') {
+        console[level.toLowerCase()](`[${component}] ${message}`, data);
+      }
     }
   },
   

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
@@ -7,6 +8,8 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const { BASE_URL, SERVER_IP, SERVER_PORT, NETWORK_INTERFACES } = require('./config/constants');
 const os = require('os');
+const config = require('./config/database');
+const errorHandler = require('./middleware/errorHandler');
 
 // Server configuration
 const PORT = process.env.PORT || 3001;
@@ -15,19 +18,14 @@ const HOST = '0.0.0.0'; // This is crucial - binds to all network interfaces
 // Set the path to your XAMPP htdocs directory
 const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api');
 
-// Database configuration
-const dbConfig = {
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "pet-management",
-	waitForConnections: true,
-	connectionLimit: 10,
-	queueLimit: 0
-};
-
-// Create database pool
-const db = mysql.createPool(dbConfig);
+// Create connection pool with more detailed error handling
+const pool = mysql.createPool({
+	...config,
+	enableKeepAlive: true,
+	keepAliveInitialDelay: 0
+}).on('error', (err) => {
+	console.error('Database pool error:', err);
+});
 
 const app = express();
 
@@ -85,7 +83,7 @@ app.get("/api/pets/get_user_pets", async (req, res) => {
 		console.log("Attempting to fetch pets for user_id:", user_id);
 
 		// Execute the query with proper error handling
-		const [pets] = await db.query(
+		const [pets] = await pool.query(
 			"SELECT id, name, photo FROM pets WHERE user_id = ?",
 			[user_id]
 		);
@@ -119,24 +117,43 @@ app.use((err, req, res, next) => {
 	});
 });
 
-// Test database connection
-const testConnection = async () => {
+// Test database connection with more detailed logging
+async function testConnection() {
 	try {
-		await db.query("SELECT 1");
-		console.log("Database connected successfully");
+		console.log('Attempting database connection with config:', {
+			host: config.host,
+			user: config.user,
+			database: config.database,
+			port: config.port
+		});
+
+		const connection = await pool.getConnection();
+		console.log('Successfully acquired connection');
+
+		await connection.query('SELECT 1');
+		console.log('Successfully executed test query');
+
+		connection.release();
+		console.log('Successfully released connection');
 		return true;
-	} catch (err) {
-		console.error("Database connection failed:", err);
+	} catch (error) {
+		console.error('Database connection error:', {
+			message: error.message,
+			code: error.code,
+			errno: error.errno,
+			sqlState: error.sqlState,
+			sqlMessage: error.sqlMessage
+		});
 		return false;
 	}
-};
+}
 
 // Health check endpoint
 app.get("/health", (req, res) => {
 	res.json({
 		status: "ok",
 		timestamp: new Date().toISOString(),
-		database: db.pool ? "connected" : "disconnected",
+		database: pool ? "connected" : "disconnected",
 	});
 });
 
@@ -153,7 +170,7 @@ app.post("/api/register", async (req, res) => {
 		});
 
 		// Check if email already exists
-		const [existingUser] = await db.query(
+		const [existingUser] = await pool.query(
 			"SELECT * FROM users WHERE email = ?",
 			[email]
 		);
@@ -171,7 +188,7 @@ app.post("/api/register", async (req, res) => {
 		const uuid = uuidv4();
 
 		// Insert user
-		const [result] = await db.query(
+		const [result] = await pool.query(
 			`INSERT INTO users (uuid, username, name, email, password, role, created_at, updated_at) 
 			VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
 			[
@@ -213,7 +230,7 @@ app.post("/api/login", async (req, res) => {
 		const { username, password } = req.body;
 		console.log('Login attempt for:', username);
 
-		const [users] = await db.query(
+		const [users] = await pool.query(
 			"SELECT * FROM users WHERE email = ? OR username = ?",
 			[username, username]
 		);
@@ -260,7 +277,7 @@ app.post("/api/test-password", async (req, res) => {
 
 		// Get user from database
 		const query = "SELECT * FROM users WHERE email = ?";
-		db.query(query, [email], async (err, results) => {
+		pool.query(query, [email], async (err, results) => {
 			if (err) {
 				return res.status(500).json({ error: "Database error" });
 			}
@@ -372,15 +389,29 @@ const getNetworkAddresses = () => {
 	return addresses;
 };
 
-const startServer = async () => {
+// Start server function
+async function startServer() {
 	try {
+		// Test database connection before starting server
 		const isConnected = await testConnection();
 		if (!isConnected) {
-			console.error("Database connection failed");
-			throw new Error("Database connection failed");
+			throw new Error('Database connection failed');
 		}
 
-		const server = app.listen(PORT, HOST, () => {
+		// Your existing middleware and route setup
+		app.use(express.json());
+		app.use(express.urlencoded({ extended: true }));
+
+		// Add request logging middleware
+		app.use((req, res, next) => {
+			console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+			next();
+		});
+
+		// Your routes here...
+
+		// Start the server
+		app.listen(PORT, HOST, () => {
 			const addresses = getNetworkAddresses();
 			console.log("=================================");
 			console.log(`Server running on port ${PORT}`);
@@ -392,13 +423,26 @@ const startServer = async () => {
 			console.log("\nDatabase Status: Connected");
 			console.log("=================================");
 		});
-
-		// Increase timeout
-		server.timeout = 30000; // 30 seconds
 	} catch (error) {
-		console.error("Server startup failed:", error);
+		console.error('Server startup failed:', error);
 		process.exit(1);
 	}
-};
+}
 
+// Handle process termination
+process.on('SIGINT', async () => {
+	try {
+		await pool.end();
+		console.log('Database pool closed');
+		process.exit(0);
+	} catch (error) {
+		console.error('Error closing database pool:', error);
+		process.exit(1);
+	}
+});
+
+// Start the server
 startServer();
+
+// Add this after your routes
+app.use(errorHandler);
