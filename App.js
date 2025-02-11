@@ -7,6 +7,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import ErrorBoundary from './src/app/components/ErrorBoundary';
+import * as Font from 'expo-font';
 
 // Import all screens
 import HomeScreen from "./src/app/screens/HomeScreen";
@@ -134,6 +135,14 @@ const toastConfig = {
 
 // Main Stack Navigator
 const App = () => {
+	const [fontsLoaded] = Font.useFonts({
+		// Your fonts here
+	});
+
+	if (!fontsLoaded) {
+		return null;
+	}
+
 	// Add web-specific navigation container config
 	const navigationConfig = Platform.select({
 		web: {

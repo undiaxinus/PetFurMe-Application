@@ -1,6 +1,9 @@
+
+
+=== Migrated from debug.log at 2025-02-11 02:44:47 ===
 [2025-02-07 06:10:57] === New Message Save Request ===
 [2025-02-07 06:10:57] Request Method: POST
-[2025-02-07 06:10:57] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"70","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:10:57] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"70","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:10:57] Raw request data: {"sender_id":108,"receiver_id":1,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:57] Decoded data: {"sender_id":108,"receiver_id":1,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:57] Connecting to database...
@@ -28,7 +31,7 @@
 
 [2025-02-07 06:10:58] === New Message Save Request ===
 [2025-02-07 06:10:58] Request Method: POST
-[2025-02-07 06:10:58] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"70","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:10:58] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"70","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:10:58] Raw request data: {"sender_id":108,"receiver_id":2,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:58] Decoded data: {"sender_id":108,"receiver_id":2,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:58] Connecting to database...
@@ -56,7 +59,7 @@
 
 [2025-02-07 06:10:58] === New Message Save Request ===
 [2025-02-07 06:10:58] Request Method: POST
-[2025-02-07 06:10:58] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"72","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:10:58] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"72","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:10:58] Raw request data: {"sender_id":108,"receiver_id":109,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:58] Decoded data: {"sender_id":108,"receiver_id":109,"message":"fdsd","conversation_id":3}
 [2025-02-07 06:10:58] Connecting to database...
@@ -84,7 +87,7 @@
 
 [2025-02-07 06:55:46] === New Message Save Request ===
 [2025-02-07 06:55:46] Request Method: POST
-[2025-02-07 06:55:46] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"107","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:55:46] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"107","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:55:46] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":7,"is_automated":0,"bot_context":null}
 [2025-02-07 06:55:46] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":7,"is_automated":0,"bot_context":null}
 [2025-02-07 06:55:46] Connecting to database...
@@ -112,7 +115,7 @@
 
 [2025-02-07 06:55:47] === New Message Save Request ===
 [2025-02-07 06:55:47] Request Method: POST
-[2025-02-07 06:55:47] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:55:47] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:55:47] Raw request data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":7,"is_automated":0}
 [2025-02-07 06:55:47] Decoded data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":7,"is_automated":0}
 [2025-02-07 06:55:47] Connecting to database...
@@ -140,7 +143,7 @@
 
 [2025-02-07 06:55:47] === New Message Save Request ===
 [2025-02-07 06:55:47] Request Method: POST
-[2025-02-07 06:55:47] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"90","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 06:55:47] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"90","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 06:55:47] Raw request data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":7,"is_automated":0}
 [2025-02-07 06:55:47] Decoded data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":7,"is_automated":0}
 [2025-02-07 06:55:47] Connecting to database...
@@ -168,7 +171,7 @@
 
 [2025-02-07 07:00:35] === New Message Save Request ===
 [2025-02-07 07:00:35] Request Method: POST
-[2025-02-07 07:00:35] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"110","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:35] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"110","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:35] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":null,"is_automated":0,"bot_context":null}
 [2025-02-07 07:00:35] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":null,"is_automated":0,"bot_context":null}
 [2025-02-07 07:00:35] Connecting to database...
@@ -196,7 +199,7 @@
 
 [2025-02-07 07:00:35] === New Message Save Request ===
 [2025-02-07 07:00:35] Request Method: POST
-[2025-02-07 07:00:35] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"91","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:35] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"91","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:35] Raw request data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:35] Decoded data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:35] Connecting to database...
@@ -224,7 +227,7 @@
 
 [2025-02-07 07:00:36] === New Message Save Request ===
 [2025-02-07 07:00:36] Request Method: POST
-[2025-02-07 07:00:36] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"93","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:36] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"93","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:36] Raw request data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:36] Decoded data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:36] Connecting to database...
@@ -252,7 +255,7 @@
 
 [2025-02-07 07:00:46] === New Message Save Request ===
 [2025-02-07 07:00:46] Request Method: POST
-[2025-02-07 07:00:46] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"127","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:46] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"127","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:46] Raw request data: {"sender_id":108,"receiver_id":1,"message":"detailed consultations","conversation_id":null,"is_automated":0,"bot_context":null}
 [2025-02-07 07:00:46] Decoded data: {"sender_id":108,"receiver_id":1,"message":"detailed consultations","conversation_id":null,"is_automated":0,"bot_context":null}
 [2025-02-07 07:00:46] Connecting to database...
@@ -280,7 +283,7 @@
 
 [2025-02-07 07:00:46] === New Message Save Request ===
 [2025-02-07 07:00:46] Request Method: POST
-[2025-02-07 07:00:46] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"108","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:46] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"108","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:46] Raw request data: {"sender_id":108,"receiver_id":2,"message":"detailed consultations","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:46] Decoded data: {"sender_id":108,"receiver_id":2,"message":"detailed consultations","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:46] Connecting to database...
@@ -308,7 +311,7 @@
 
 [2025-02-07 07:00:47] === New Message Save Request ===
 [2025-02-07 07:00:47] Request Method: POST
-[2025-02-07 07:00:47] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"110","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:00:47] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"110","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:00:47] Raw request data: {"sender_id":108,"receiver_id":109,"message":"detailed consultations","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:47] Decoded data: {"sender_id":108,"receiver_id":109,"message":"detailed consultations","conversation_id":null,"is_automated":0}
 [2025-02-07 07:00:47] Connecting to database...
@@ -336,7 +339,7 @@
 
 [2025-02-07 07:04:31] === New Message Save Request ===
 [2025-02-07 07:04:31] Request Method: POST
-[2025-02-07 07:04:31] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:04:31] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:04:31] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Connecting to database...
@@ -364,7 +367,7 @@
 
 [2025-02-07 07:04:31] === New Message Save Request ===
 [2025-02-07 07:04:31] Request Method: POST
-[2025-02-07 07:04:31] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:04:31] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"88","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:04:31] Raw request data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Decoded data: {"sender_id":108,"receiver_id":2,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Connecting to database...
@@ -392,7 +395,7 @@
 
 [2025-02-07 07:04:31] === New Message Save Request ===
 [2025-02-07 07:04:31] Request Method: POST
-[2025-02-07 07:04:31] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"90","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:04:31] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"90","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:04:31] Raw request data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Decoded data: {"sender_id":108,"receiver_id":109,"message":"hello","conversation_id":8,"is_automated":0}
 [2025-02-07 07:04:31] Connecting to database...
@@ -420,7 +423,7 @@
 
 [2025-02-07 07:09:37] === New Message Save Request ===
 [2025-02-07 07:09:37] Request Method: POST
-[2025-02-07 07:09:37] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"103","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:09:37] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"103","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:09:37] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Details Consultation","conversation_id":9,"is_automated":0}
 [2025-02-07 07:09:37] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Details Consultation","conversation_id":9,"is_automated":0}
 [2025-02-07 07:09:37] Connecting to database...
@@ -448,7 +451,7 @@
 
 [2025-02-07 07:12:58] === New Message Save Request ===
 [2025-02-07 07:12:58] Request Method: POST
-[2025-02-07 07:12:58] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"106","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:12:58] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"106","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:12:58] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Automated Chat Support","conversation_id":11,"is_automated":0}
 [2025-02-07 07:12:58] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Automated Chat Support","conversation_id":11,"is_automated":0}
 [2025-02-07 07:12:58] Connecting to database...
@@ -476,7 +479,7 @@
 
 [2025-02-07 07:15:39] === New Message Save Request ===
 [2025-02-07 07:15:39] Request Method: POST
-[2025-02-07 07:15:39] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:15:39] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:15:39] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":12,"is_automated":0}
 [2025-02-07 07:15:39] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":12,"is_automated":0}
 [2025-02-07 07:15:39] Connecting to database...
@@ -504,7 +507,7 @@
 
 [2025-02-07 07:18:49] === New Message Save Request ===
 [2025-02-07 07:18:49] Request Method: POST
-[2025-02-07 07:18:49] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:18:49] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:18:49] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":13,"is_automated":0}
 [2025-02-07 07:18:49] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":13,"is_automated":0}
 [2025-02-07 07:18:49] Connecting to database...
@@ -532,7 +535,7 @@
 
 [2025-02-07 07:21:31] === New Message Save Request ===
 [2025-02-07 07:21:31] Request Method: POST
-[2025-02-07 07:21:31] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"95","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:21:31] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"95","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:21:31] Raw request data: {"sender_id":108,"receiver_id":0,"message":"Hello","is_automated":1,"bot_context":"user_query"}
 [2025-02-07 07:21:31] Decoded data: {"sender_id":108,"receiver_id":0,"message":"Hello","is_automated":1,"bot_context":"user_query"}
 [2025-02-07 07:21:31] Connecting to database...
@@ -560,7 +563,7 @@
 
 [2025-02-07 07:21:32] === New Message Save Request ===
 [2025-02-07 07:21:32] Request Method: POST
-[2025-02-07 07:21:32] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"172","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:21:32] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"172","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:21:32] Raw request data: {"sender_id":0,"receiver_id":108,"message":"Hello! How can I assist you today? Feel free to ask about our pet care services!","is_automated":1,"bot_context":"bot_response"}
 [2025-02-07 07:21:32] Decoded data: {"sender_id":0,"receiver_id":108,"message":"Hello! How can I assist you today? Feel free to ask about our pet care services!","is_automated":1,"bot_context":"bot_response"}
 [2025-02-07 07:21:32] Connecting to database...
@@ -588,7 +591,7 @@
 
 [2025-02-07 07:26:56] === New Message Save Request ===
 [2025-02-07 07:26:56] Request Method: POST
-[2025-02-07 07:26:56] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:26:56] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:26:56] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":20,"is_automated":0}
 [2025-02-07 07:26:56] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":20,"is_automated":0}
 [2025-02-07 07:26:56] Connecting to database...
@@ -616,7 +619,7 @@
 
 [2025-02-07 07:35:04] === New Message Save Request ===
 [2025-02-07 07:35:04] Request Method: POST
-[2025-02-07 07:35:04] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"95","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:35:04] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"95","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:35:04] Raw request data: {"sender_id":108,"receiver_id":0,"message":"Hello","is_automated":1,"bot_context":"user_query"}
 [2025-02-07 07:35:04] Decoded data: {"sender_id":108,"receiver_id":0,"message":"Hello","is_automated":1,"bot_context":"user_query"}
 [2025-02-07 07:35:04] Connecting to database...
@@ -644,7 +647,7 @@
 
 [2025-02-07 07:35:04] === New Message Save Request ===
 [2025-02-07 07:35:04] Request Method: POST
-[2025-02-07 07:35:04] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"172","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:35:04] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"172","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:35:04] Raw request data: {"sender_id":0,"receiver_id":108,"message":"Hello! How can I assist you today? Feel free to ask about our pet care services!","is_automated":1,"bot_context":"bot_response"}
 [2025-02-07 07:35:04] Decoded data: {"sender_id":0,"receiver_id":108,"message":"Hello! How can I assist you today? Feel free to ask about our pet care services!","is_automated":1,"bot_context":"bot_response"}
 [2025-02-07 07:35:04] Connecting to database...
@@ -672,7 +675,7 @@
 
 [2025-02-07 07:38:24] === New Message Save Request ===
 [2025-02-07 07:38:24] Request Method: POST
-[2025-02-07 07:38:24] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:38:24] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:38:24] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":26,"is_automated":0}
 [2025-02-07 07:38:24] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":26,"is_automated":0}
 [2025-02-07 07:38:24] Connecting to database...
@@ -700,7 +703,7 @@
 
 [2025-02-07 07:46:51] === New Message Save Request ===
 [2025-02-07 07:46:51] Request Method: POST
-[2025-02-07 07:46:51] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 07:46:51] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 07:46:51] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":31,"is_automated":0}
 [2025-02-07 07:46:51] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":31,"is_automated":0}
 [2025-02-07 07:46:51] Connecting to database...
@@ -728,7 +731,7 @@
 
 [2025-02-07 08:10:03] === New Message Save Request ===
 [2025-02-07 08:10:03] Request Method: POST
-[2025-02-07 08:10:03] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 08:10:03] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 08:10:03] Raw request data: {"sender_id":138,"receiver_id":1,"message":"Hello","conversation_id":34,"is_automated":0}
 [2025-02-07 08:10:03] Decoded data: {"sender_id":138,"receiver_id":1,"message":"Hello","conversation_id":34,"is_automated":0}
 [2025-02-07 08:10:03] Connecting to database...
@@ -756,7 +759,7 @@
 
 [2025-02-07 08:11:04] === New Message Save Request ===
 [2025-02-07 08:11:04] Request Method: POST
-[2025-02-07 08:11:04] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 08:11:04] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 08:11:04] Raw request data: {"sender_id":138,"receiver_id":1,"message":"Hello","conversation_id":35,"is_automated":0}
 [2025-02-07 08:11:04] Decoded data: {"sender_id":138,"receiver_id":1,"message":"Hello","conversation_id":35,"is_automated":0}
 [2025-02-07 08:11:04] Connecting to database...
@@ -784,7 +787,7 @@
 
 [2025-02-07 13:43:35] === New Message Save Request ===
 [2025-02-07 13:43:35] Request Method: POST
-[2025-02-07 13:43:35] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 13:43:35] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 13:43:35] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":38,"is_automated":0}
 [2025-02-07 13:43:35] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":38,"is_automated":0}
 [2025-02-07 13:43:35] Connecting to database...
@@ -812,7 +815,7 @@
 
 [2025-02-07 13:49:03] === New Message Save Request ===
 [2025-02-07 13:49:03] Request Method: POST
-[2025-02-07 13:49:03] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-07 13:49:03] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-02-07 13:49:03] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":40,"is_automated":0}
 [2025-02-07 13:49:03] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":40,"is_automated":0}
 [2025-02-07 13:49:03] Connecting to database...
@@ -838,3 +841,78 @@
 [2025-02-07 13:49:03] Database connection closed
 [2025-02-07 13:49:03] === Request Complete ===
 
+[2025-02-08 05:05:50] === New Message Save Request ===
+[2025-02-08 05:05:50] Request Method: POST
+[2025-02-08 05:05:50] Request Headers: {"Host":" 192.168.1.10","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/16.6 Mobile\/15E148 Safari\/604.1","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-08 05:05:50] Raw request data: {"sender_id":142,"receiver_id":1,"message":"Hello","conversation_id":46,"is_automated":0}
+[2025-02-08 05:05:50] Decoded data: {"sender_id":142,"receiver_id":1,"message":"Hello","conversation_id":46,"is_automated":0}
+[2025-02-08 05:05:50] Connecting to database...
+[2025-02-08 05:05:50] Database connection established
+[2025-02-08 05:05:50] Preparing query: INSERT INTO messages (
+                conversation_id,
+                sender_id,
+                receiver_id,
+                message,
+                sent_at,
+                created_at,
+                updated_at
+              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+[2025-02-08 05:05:50] Binding parameters:
+[2025-02-08 05:05:50] sender_id: 142
+[2025-02-08 05:05:50] receiver_id: 1
+[2025-02-08 05:05:50] message: Hello
+[2025-02-08 05:05:50] conversation_id: 46
+[2025-02-08 05:05:50] Executing query...
+[2025-02-08 05:05:50] Message saved successfully with ID: 41
+[2025-02-08 05:05:50] Sending response: {"success":true,"message_id":41,"message":"Message saved successfully"}
+[2025-02-08 05:05:50] Statement closed
+[2025-02-08 05:05:50] Database connection closed
+[2025-02-08 05:05:50] === Request Complete ===
+
+
+
+=== Migrated from debug.log at 2025-02-11 02:44:47 ===
+File accessed at: 2025-01-15 20:38:41
+File accessed at: 2025-01-15 20:40:34
+File accessed at: 2025-01-15 20:43:43
+File accessed at: 2025-01-15 20:45:28
+File accessed at: 2025-01-15 20:45:47
+File accessed at: 2025-01-15 20:47:12
+File accessed at: 2025-01-15 20:48:01
+File accessed at: 2025-01-15 20:48:33
+File accessed at: 2025-01-15 20:49:59
+File accessed at: 2025-01-15 20:49:59
+File accessed at: 2025-01-15 20:50:16
+File accessed at: 2025-01-15 20:50:33
+File accessed at: 2025-01-15 20:52:17
+File accessed at: 2025-01-15 20:52:17
+File accessed at: 2025-01-15 20:52:17
+File accessed at: 2025-01-15 20:52:17
+File accessed at: 2025-01-15 20:52:46
+File accessed at: 2025-01-15 20:52:46
+File accessed at: 2025-01-15 20:52:46
+File accessed at: 2025-01-15 20:52:46
+File accessed at: 2025-01-15 20:53:16
+File accessed at: 2025-01-16 10:42:09
+File accessed at: 2025-01-16 10:53:05
+File accessed at: 2025-01-16 10:55:49
+File accessed at: 2025-01-16 11:00:09
+File accessed at: 2025-01-16 11:01:17
+File accessed at: 2025-01-16 11:03:27
+File accessed at: 2025-01-16 11:07:27
+File accessed at: 2025-01-16 11:10:17
+File accessed at: 2025-01-16 11:14:05
+File accessed at: 2025-01-16 12:11:50
+File accessed at: 2025-01-16 12:13:37
+File accessed at: 2025-01-16 12:15:31
+File accessed at: 2025-01-16 12:17:26
+File accessed at: 2025-01-16 12:17:39
+File accessed at: 2025-01-16 12:19:02
+File accessed at: 2025-01-16 12:22:04
+File accessed at: 2025-01-16 12:22:14
+File accessed at: 2025-01-16 12:22:55
+File accessed at: 2025-01-16 13:05:30
+File accessed at: 2025-01-16 13:29:26
+File accessed at: 2025-01-16 13:30:29
+File accessed at: 2025-01-16 13:32:40
+File accessed at: 2025-01-16 15:14:43
