@@ -8,17 +8,29 @@ class Message {
     }
 
     public function getMessages($user_id) {
+        // Add debug logging
+        error_log("Getting messages for user_id: " . $user_id);
+        
         $query = "SELECT * FROM " . $this->table . " 
                  WHERE (sender_id = :user_id OR receiver_id = :user_id)
                  ORDER BY sent_at ASC";
+
+        // Log the query
+        error_log("Query: " . $query);
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
         
         try {
             $stmt->execute();
+            
+            // Check if we have any results
+            $count = $stmt->rowCount();
+            error_log("Found {$count} messages");
+            
             return $stmt;
         } catch(PDOException $e) {
+            error_log("Error getting messages: " . $e->getMessage());
             return false;
         }
     }

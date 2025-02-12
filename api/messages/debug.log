@@ -838,3 +838,115 @@
 [2025-02-07 13:49:03] Database connection closed
 [2025-02-07 13:49:03] === Request Complete ===
 
+[2025-02-12 18:23:41] === New Message Save Request ===
+[2025-02-12 18:23:41] Request Method: POST
+[2025-02-12 18:23:41] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"89","User-Agent":"Mozilla\/5.0 (Linux; Android 8.0.0; SM-G955U Build\/R16NW) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/133.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-12 18:23:41] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":50,"is_automated":0}
+[2025-02-12 18:23:41] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":50,"is_automated":0}
+[2025-02-12 18:23:41] Connecting to database...
+[2025-02-12 18:23:41] Database connection established
+[2025-02-12 18:23:41] Preparing query: INSERT INTO messages (
+                conversation_id,
+                sender_id,
+                receiver_id,
+                message,
+                sent_at,
+                created_at,
+                updated_at
+              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+[2025-02-12 18:23:41] Binding parameters:
+[2025-02-12 18:23:41] sender_id: 108
+[2025-02-12 18:23:41] receiver_id: 1
+[2025-02-12 18:23:41] message: Hello
+[2025-02-12 18:23:41] conversation_id: 50
+[2025-02-12 18:23:41] Executing query...
+[2025-02-12 18:23:41] Error occurred: Cannot add or update a child row: a foreign key constraint fails (`pet-management`.`messages`, CONSTRAINT `fk_conversation_id` FOREIGN KEY (`conversation_id`) REFERENCES `conversations` (`id`) ON DELETE CASCADE)
+[2025-02-12 18:23:41] Sending error response: {"success":false,"message":"Cannot add or update a child row: a foreign key constraint fails (`pet-management`.`messages`, CONSTRAINT `fk_conversation_id` FOREIGN KEY (`conversation_id`) REFERENCES `conversations` (`id`) ON DELETE CASCADE)"}
+[2025-02-12 18:23:41] Statement closed
+[2025-02-12 18:23:41] Database connection closed
+[2025-02-12 18:23:41] === Request Complete ===
+
+[2025-02-12 18:30:53] === New Message Save Request ===
+[2025-02-12 18:30:53] Request Method: POST
+[2025-02-12 18:30:53] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"206","User-Agent":"Mozilla\/5.0 (Linux; Android 8.0.0; SM-G955U Build\/R16NW) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/133.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-12 18:30:53] Raw request data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":52,"is_automated":0,"sent_at":"2025-02-12T17:30:53.067Z","created_at":"2025-02-12T17:30:53.067Z","updated_at":"2025-02-12T17:30:53.067Z"}
+[2025-02-12 18:30:53] Decoded data: {"sender_id":108,"receiver_id":1,"message":"Hello","conversation_id":52,"is_automated":0,"sent_at":"2025-02-12T17:30:53.067Z","created_at":"2025-02-12T17:30:53.067Z","updated_at":"2025-02-12T17:30:53.067Z"}
+[2025-02-12 18:30:53] Connecting to database...
+[2025-02-12 18:30:53] Database connection established
+[2025-02-12 18:30:53] Preparing query: INSERT INTO messages (
+                conversation_id,
+                sender_id,
+                receiver_id,
+                message,
+                sent_at,
+                created_at,
+                updated_at
+              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+[2025-02-12 18:30:53] Binding parameters:
+[2025-02-12 18:30:53] sender_id: 108
+[2025-02-12 18:30:53] receiver_id: 1
+[2025-02-12 18:30:53] message: Hello
+[2025-02-12 18:30:53] conversation_id: 52
+[2025-02-12 18:30:53] Executing query...
+[2025-02-12 18:30:53] Message saved successfully with ID: 43
+[2025-02-12 18:30:53] Sending response: {"success":true,"message_id":43,"message":"Message saved successfully"}
+[2025-02-12 18:30:53] Statement closed
+[2025-02-12 18:30:53] Database connection closed
+[2025-02-12 18:30:53] === Request Complete ===
+
+[2025-02-12 18:45:05] === New Message Save Request ===
+[2025-02-12 18:45:05] Request Method: POST
+[2025-02-12 18:45:05] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"206","User-Agent":"Mozilla\/5.0 (Linux; Android 8.0.0; SM-G955U Build\/R16NW) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/133.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-12 18:45:05] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":57,"is_automated":0,"sent_at":"2025-02-12T17:45:05.189Z","created_at":"2025-02-12T17:45:05.189Z","updated_at":"2025-02-12T17:45:05.189Z"}
+[2025-02-12 18:45:05] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":57,"is_automated":0,"sent_at":"2025-02-12T17:45:05.189Z","created_at":"2025-02-12T17:45:05.189Z","updated_at":"2025-02-12T17:45:05.189Z"}
+[2025-02-12 18:45:05] Connecting to database...
+[2025-02-12 18:45:05] Database connection established
+[2025-02-12 18:45:05] Preparing query: INSERT INTO messages (
+                conversation_id,
+                sender_id,
+                receiver_id,
+                message,
+                sent_at,
+                created_at,
+                updated_at
+              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+[2025-02-12 18:45:05] Binding parameters:
+[2025-02-12 18:45:05] sender_id: 108
+[2025-02-12 18:45:05] receiver_id: 1
+[2025-02-12 18:45:05] message: hello
+[2025-02-12 18:45:05] conversation_id: 57
+[2025-02-12 18:45:05] Executing query...
+[2025-02-12 18:45:05] Message saved successfully with ID: 44
+[2025-02-12 18:45:05] Sending response: {"success":true,"message_id":44,"message":"Message saved successfully"}
+[2025-02-12 18:45:05] Statement closed
+[2025-02-12 18:45:05] Database connection closed
+[2025-02-12 18:45:05] === Request Complete ===
+
+[2025-02-12 19:15:24] === New Message Save Request ===
+[2025-02-12 19:15:24] Request Method: POST
+[2025-02-12 19:15:24] Request Headers: {"Host":"192.168.1.5","Connection":"keep-alive","Content-Length":"206","User-Agent":"Mozilla\/5.0 (Linux; Android 8.0.0; SM-G955U Build\/R16NW) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/133.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-02-12 19:15:24] Raw request data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":62,"is_automated":0,"sent_at":"2025-02-12T18:15:24.492Z","created_at":"2025-02-12T18:15:24.492Z","updated_at":"2025-02-12T18:15:24.492Z"}
+[2025-02-12 19:15:24] Decoded data: {"sender_id":108,"receiver_id":1,"message":"hello","conversation_id":62,"is_automated":0,"sent_at":"2025-02-12T18:15:24.492Z","created_at":"2025-02-12T18:15:24.492Z","updated_at":"2025-02-12T18:15:24.492Z"}
+[2025-02-12 19:15:24] Connecting to database...
+[2025-02-12 19:15:24] Database connection established
+[2025-02-12 19:15:24] Preparing query: INSERT INTO messages (
+                conversation_id,
+                sender_id,
+                receiver_id,
+                message,
+                sent_at,
+                created_at,
+                updated_at
+              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+[2025-02-12 19:15:24] Binding parameters:
+[2025-02-12 19:15:24] sender_id: 108
+[2025-02-12 19:15:24] receiver_id: 1
+[2025-02-12 19:15:24] message: hello
+[2025-02-12 19:15:24] conversation_id: 62
+[2025-02-12 19:15:24] Executing query...
+[2025-02-12 19:15:24] Message saved successfully with ID: 45
+[2025-02-12 19:15:24] Sending response: {"success":true,"message_id":45,"message":"Message saved successfully"}
+[2025-02-12 19:15:24] Statement closed
+[2025-02-12 19:15:24] Database connection closed
+[2025-02-12 19:15:24] === Request Complete ===
+

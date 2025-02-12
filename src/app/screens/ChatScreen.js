@@ -29,15 +29,142 @@ const logMessage = (message) => {
 
 const ChatScreen = ({ navigation, route }) => {
   const user_id = route.params?.user_id;
-  // Start in automated mode by default
-  const [isAutomated, setIsAutomated] = useState(true);
+
+  // Start in live chat mode by default since we want to show database messages
+  const [isAutomated, setIsAutomated] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   
-  // Add this useEffect to log the user_id
+  // Load messages immediately when component mounts
   useEffect(() => {
-    console.log("ChatScreen user_id:", user_id);
+    const loadMessages = async () => {
+      try {
+        const url = `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`;
+        const response = await axios.get(url);
+
+        if (!response.data) {
+          throw new Error('No data received from server');
+        }
+
+        if (!response.data.success) {
+          throw new Error(response.data.message || 'Server returned error');
+        }
+
+        if (!Array.isArray(response.data.messages)) {
+          throw new Error('Messages is not an array');
+        }
+
+        if (response.data.messages.length > 0) {
+          const dbMessages = response.data.messages.map(msg => ({
+            id: msg.id.toString(),
+            text: msg.message,
+            sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
+            type: 'database',
+            timestamp: msg.sent_at,
+            conversation_id: msg.conversation_id
+          }));
+
+          dbMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+          setMessages(dbMessages);
+        } else {
+          setMessages([]);
+        }
+      } catch (error) {
+        console.error('Error loading messages:', error.message);
+      }
+    };
+
+    if (user_id) {
+      loadMessages();
+    }
   }, [user_id]);
 
-  const [messages, setMessages] = useState([]);
+  // Modify the useEffect for mode changes
+  useEffect(() => {
+    if (isAutomated) {
+      // When switching to automated mode, keep database messages and add welcome message
+      const hasAutomatedMessages = messages.some(msg => msg.type === 'automated');
+      if (!hasAutomatedMessages) {
+        const welcomeMessage = {
+          id: Date.now().toString(),
+          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
+          sender: 'other',
+          type: 'automated'
+        };
+        setMessages(prevMessages => {
+          const databaseMessages = prevMessages.filter(msg => msg.type === 'database');
+          return [...databaseMessages, welcomeMessage];
+        });
+      }
+    } else {
+      // When switching to live chat, remove automated messages but keep database messages
+      setMessages(prevMessages => {
+        const databaseMessages = prevMessages.filter(msg => msg.type === 'database');
+        return databaseMessages;
+      });
+    }
+  }, [isAutomated]);
+
+  // Modify fetchMessages to properly handle message updates
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(
+        `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`
+      );
+      
+      if (response.data.success && response.data.messages) {
+        const dbMessages = response.data.messages.map(msg => ({
+          id: msg.id.toString(),
+          text: msg.message,
+          sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
+          type: 'database',
+          timestamp: msg.sent_at,
+          conversation_id: msg.conversation_id
+        }));
+
+        setMessages(prevMessages => {
+          // Get existing message IDs
+          const existingIds = new Set(prevMessages.filter(msg => msg.type === 'database').map(msg => msg.id));
+          
+          // Only add messages that don't already exist
+          const newMessages = dbMessages.filter(msg => !existingIds.has(msg.id));
+          
+          if (newMessages.length === 0) {
+            return prevMessages;
+          }
+
+          // Combine all messages and sort
+          const allMessages = [...prevMessages, ...newMessages].sort((a, b) => {
+            if (!a.timestamp || !b.timestamp) return 0;
+            return new Date(a.timestamp) - new Date(b.timestamp);
+          });
+
+          return allMessages;
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  // Add polling for new messages in live chat mode
+  useEffect(() => {
+    let messagePolling;
+    
+    if (!isAutomated && user_id) {
+      // Poll for new messages every 5 seconds
+      messagePolling = setInterval(() => {
+        fetchMessages();
+      }, 5000);
+    }
+
+    return () => {
+      if (messagePolling) {
+        clearInterval(messagePolling);
+      }
+    };
+  }, [isAutomated, user_id]);
+
   const [input, setInput] = useState('');
   const flatListRef = useRef(null);
 
@@ -47,86 +174,6 @@ const ChatScreen = ({ navigation, route }) => {
       flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
-
-  // Modify the fetchMessages function to properly handle the messages
-  const fetchMessages = async () => {
-    try {
-      const response = await axios.get(
-        `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`
-      );
-      
-      console.log('Fetch messages response:', response.data); // Debug log
-      
-      if (response.data.success && response.data.messages) {
-        const dbMessages = response.data.messages.map(msg => ({
-          id: msg.id.toString(),
-          text: msg.message,
-          sender: msg.sender_id === parseInt(user_id) ? 'user' : 'other',
-          type: 'database',
-          timestamp: msg.sent_at,
-          conversation_id: msg.conversation_id
-        }));
-
-        // Sort messages by timestamp
-        dbMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-        // Update messages state immediately
-        setMessages(dbMessages);
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
-
-  // Modify the useEffect for mode changes
-  useEffect(() => {
-    if (isAutomated) {
-      // Only show bot welcome message if there are no automated messages
-      const hasAutomatedMessages = messages.some(msg => msg.type === 'automated');
-      if (!hasAutomatedMessages) {
-        const welcomeMessage = {
-          id: Date.now().toString(),
-          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
-          sender: 'other',
-          type: 'automated'
-        };
-        setMessages(prevMessages => [welcomeMessage]);
-      }
-    } else {
-      // Clear automated messages when switching to live chat
-      setMessages(prevMessages => prevMessages.filter(msg => msg.type !== 'automated'));
-      
-      // Switch to live chat mode
-      if (user_id) {
-        fetchMessages();
-        if (!currentConversation?.id) {
-          startConversation();
-        }
-      }
-    }
-  }, [isAutomated, user_id]);
-
-  // Add a useEffect to periodically fetch new messages in live chat mode
-  useEffect(() => {
-    let messagePolling;
-    
-    if (!isAutomated && user_id) {
-      // Fetch messages immediately
-      fetchMessages();
-      
-      // Then set up polling every 5 seconds
-      messagePolling = setInterval(() => {
-        fetchMessages();
-      }, 5000);
-    }
-
-    // Cleanup function to clear interval when component unmounts or mode changes
-    return () => {
-      if (messagePolling) {
-        clearInterval(messagePolling);
-      }
-    };
-  }, [isAutomated, user_id]);
 
   // Add this near the top of ChatScreen component
   const [admins, setAdmins] = useState([]);
@@ -164,11 +211,16 @@ const ChatScreen = ({ navigation, route }) => {
       if (response.data.success) {
         setCurrentConversation({
           id: response.data.conversation_id,
-          admin_id: 1 // Always use admin ID 1
+          admin_id: 1
         });
+        return response.data.conversation_id;
+      } else {
+        throw new Error('Failed to start conversation');
       }
     } catch (error) {
       console.error('Error starting conversation:', error);
+      Alert.alert('Error', 'Failed to start conversation. Please try again.');
+      return null;
     }
   };
 
@@ -176,9 +228,6 @@ const ChatScreen = ({ navigation, route }) => {
   const getBotResponse = (userMessage) => {
     const message = userMessage.toLowerCase().trim();
     
-    // First, log the incoming message to debug
-    console.log("Received message:", message);
-
     // Define expanded response patterns
     const responses = {
       greeting: {
@@ -324,14 +373,10 @@ const ChatScreen = ({ navigation, route }) => {
     // Check each category's patterns
     for (const category in responses) {
       const matchFound = responses[category].patterns.some(pattern => {
-        // Log pattern matching attempts
-        console.log(`Checking pattern '${pattern}' against message '${message}'`);
         return message.includes(pattern.toLowerCase());
       });
 
       if (matchFound) {
-        console.log(`Match found in category: ${category}`);
-        
         // If the category has multiple responses, randomly select one
         if (Array.isArray(responses[category].responses)) {
           const randomIndex = Math.floor(Math.random() * responses[category].responses.length);
@@ -343,7 +388,6 @@ const ChatScreen = ({ navigation, route }) => {
     }
 
     // If no match is found, return default response
-    console.log("No pattern match found, returning default response");
     return "I'm not sure I understand. You can ask about:\n\n• Grooming services\n• Veterinary consultations\n• Vaccinations\n• Deworming\n• Appointments\n• Pricing\n• Emergency services\n• Location and payments";
   };
 
@@ -364,14 +408,18 @@ const ChatScreen = ({ navigation, route }) => {
     });
   }, []);
 
-  // Modify the sendMessage function to update UI immediately
+  // Modify the sendMessage function to better handle local state
   const sendMessage = async () => {
     if (input.trim()) {
       try {
         if (!isAutomated) {
-          // Ensure we have a conversation started
-          if (!currentConversation?.id) {
-            await startConversation();
+          // Make sure we have a conversation ID
+          let conversationId = currentConversation?.id;
+          if (!conversationId) {
+            conversationId = await startConversation();
+            if (!conversationId) {
+              throw new Error('Could not start conversation');
+            }
           }
 
           // Create message object
@@ -381,15 +429,15 @@ const ChatScreen = ({ navigation, route }) => {
             sender: 'user',
             type: 'database',
             timestamp: new Date().toISOString(),
-            conversation_id: currentConversation?.id
+            conversation_id: conversationId
           };
-
-          // Update UI immediately
-          setMessages(prevMessages => [...prevMessages, newMessage]);
 
           // Clear input early
           const messageText = input.trim();
           setInput('');
+
+          // Update UI immediately with the new message
+          setMessages(prevMessages => [...prevMessages, newMessage]);
 
           // Save message to database
           const response = await axios.post(
@@ -398,8 +446,11 @@ const ChatScreen = ({ navigation, route }) => {
               sender_id: parseInt(user_id),
               receiver_id: 1, // Admin ID
               message: messageText,
-              conversation_id: currentConversation?.id,
-              is_automated: 0
+              conversation_id: conversationId,
+              is_automated: 0,
+              sent_at: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             }
           );
 
@@ -407,8 +458,8 @@ const ChatScreen = ({ navigation, route }) => {
             throw new Error('Failed to save message');
           }
 
-          // Fetch latest messages to sync with server
-          await fetchMessages();
+          // Instead of fetching all messages, just append any server response if needed
+          // Only fetch messages periodically through the existing polling mechanism
         } else {
           // Handle automated chat messages as before
           const userMessage = {
@@ -502,15 +553,15 @@ const ChatScreen = ({ navigation, route }) => {
       <View
         style={[
           styles.messageBubble,
-          item.type === 'system' ? styles.systemBubble :
           item.sender === 'user' ? styles.userBubble : styles.otherBubble,
         ]}
       >
         <Text style={[
           styles.messageText,
-          item.type === 'system' ? styles.systemMessageText :
           item.sender === 'other' && styles.otherMessageText
-        ]}>{item.text}</Text>
+        ]}>
+          {item.text}
+        </Text>
         
         {item.timestamp && (
           <Text style={styles.timestampText}>

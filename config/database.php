@@ -1,29 +1,33 @@
 <?php
 class Database {
-    // Database credentials
+    // Database credentials - update these with your actual values
     private $host = "localhost";
-    private $db_name = "u336332733_pet_management";
-    private $username = "u336332733_PFM";
-    private $password = "PetFurMe1423";
-    private $conn;
+    private $db_name = "pet-management";
+    private $username = "root";
+    private $password = "";
+    public $conn;
 
     // Get database connection
     public function getConnection() {
         $this->conn = null;
 
         try {
+            // Add error logging
+            error_log("Attempting database connection to {$this->host}/{$this->db_name}");
+            
             $this->conn = new PDO(
                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
                 $this->username,
                 $this->password
             );
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            error_log("Database connection successful");
+            return $this->conn;
         } catch(PDOException $e) {
-            error_log("Database connection error: " . $e->getMessage());
-            return false;
+            error_log("Database connection failed: " . $e->getMessage());
+            return null;
         }
-
-        return $this->conn;
     }
 }
 ?> 

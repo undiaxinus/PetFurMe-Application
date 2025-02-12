@@ -10,10 +10,12 @@ import {
   TextInput,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { API_BASE_URL } from '../../utils/config';
 import BottomNavigation from '../components/BottomNavigation';
+import CustomHeader from '../components/CustomHeader';
 
 const ProductListScreen = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
@@ -111,81 +113,81 @@ const ProductListScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Pet Products</Text>
-      </View>
+      <CustomHeader 
+        title="Pet Products"
+        navigation={navigation}
+        showBackButton={true}
+      />
+      
+      <View style={styles.mainContent}>
+        <View style={styles.scrollContent}>
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={20} color="#666" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search products..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
 
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#666" />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search products..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
-
-      <View style={styles.content}>
-        <View style={{ height: 60 }}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={categories}
-            keyExtractor={item => item.id}
-            contentContainerStyle={styles.categoriesList}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  styles.categoryButton,
-                  selectedCategory === item.id && styles.selectedCategory,
-                ]}
-                onPress={() => setSelectedCategory(item.id)}
-                activeOpacity={0.7}
-              >
-                <Text 
+          <View style={styles.categoriesContainer}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={categories}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.categoriesList}
+              renderItem={({ item }) => (
+                <TouchableOpacity
                   style={[
-                    styles.categoryText,
-                    selectedCategory === item.id && styles.selectedCategoryText,
+                    styles.categoryButton,
+                    selectedCategory === item.id && styles.selectedCategory,
                   ]}
-                  numberOfLines={1}
+                  onPress={() => setSelectedCategory(item.id)}
+                  activeOpacity={0.7}
                 >
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+                  <Text 
+                    style={[
+                      styles.categoryText,
+                      selectedCategory === item.id && styles.selectedCategoryText,
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#8146C1" style={styles.loader} />
-        ) : (
-          <FlatList
-            data={filteredProducts}
-            renderItem={renderProduct}
-            keyExtractor={item => item.id}
-            numColumns={2}
-            contentContainerStyle={[
-              styles.productList,
-              { paddingBottom: 100 }
-            ]}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={() => {
-                  setRefreshing(true);
-                  fetchProducts();
-                }}
-                colors={['#8146C1']}
+          <View style={styles.content}>
+            {loading ? (
+              <ActivityIndicator size="large" color="#8146C1" style={styles.loader} />
+            ) : (
+              <FlatList
+                data={filteredProducts}
+                renderItem={renderProduct}
+                keyExtractor={item => item.id}
+                numColumns={2}
+                contentContainerStyle={styles.productList}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={() => {
+                      setRefreshing(true);
+                      fetchProducts();
+                    }}
+                    colors={['#8146C1']}
+                  />
+                }
+                ListEmptyComponent={
+                  <Text style={styles.emptyText}>No products found</Text>
+                }
               />
-            }
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No products found</Text>
-            }
-          />
-        )}
+            )}
+          </View>
+        </View>
       </View>
 
       <BottomNavigation activeScreen="HomePage" user_id={user_id} />
@@ -198,20 +200,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
   },
-  header: {
-    backgroundColor: '#8146C1',
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 4,
-    paddingTop: 48,
-    height: 90,
+  mainContent: {
+    flex: 1,
+    marginBottom: Platform.OS === 'ios' ? 90 : 80, // Add margin for bottom navigation
   },
-  headerTitle: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 16,
+  scrollContent: {
+    flex: 1,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -223,66 +217,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
   },
-  searchInput: {
-    flex: 1,
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#333',
+  categoriesContainer: {
+    backgroundColor: '#F5F5F5',
+    height: 60,
+    zIndex: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
   categoriesList: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    marginBottom: 8,
-    height: 60,
   },
-  categoryButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#FFF',
-    marginRight: 12,
-    elevation: 1,
-    minWidth: 100,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    transform: [{ scale: 1 }],
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-  },
-  selectedCategory: {
-    backgroundColor: '#8146C1',
-    borderColor: '#8146C1',
-    elevation: 3,
-    transform: [{ scale: 1.05 }],
-    shadowColor: '#8146C1',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-  },
-  categoryText: {
-    color: '#666',
-    fontWeight: '600',
-    fontSize: 14,
-    textAlign: 'center',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-  },
-  selectedCategoryText: {
-    color: '#FFF',
+  content: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
   },
   productList: {
     padding: 8,
-    paddingBottom: 90,
+    paddingBottom: Platform.OS === 'ios' ? 120 : 100, // Account for bottom navigation
   },
   productCard: {
     flex: 1,
@@ -371,9 +323,50 @@ const styles = StyleSheet.create({
     color: '#666',
     fontStyle: 'italic',
   },
-  content: {
-    flex: 1,
-    marginBottom: 80,
+  categoryButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: '#FFF',
+    marginRight: 12,
+    elevation: 1,
+    minWidth: 100,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    transform: [{ scale: 1 }],
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+  },
+  selectedCategory: {
+    backgroundColor: '#8146C1',
+    borderColor: '#8146C1',
+    elevation: 3,
+    transform: [{ scale: 1.05 }],
+    shadowColor: '#8146C1',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+  },
+  categoryText: {
+    color: '#666',
+    fontWeight: '600',
+    fontSize: 14,
+    textAlign: 'center',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+  },
+  selectedCategoryText: {
+    color: '#FFF',
   },
 });
 

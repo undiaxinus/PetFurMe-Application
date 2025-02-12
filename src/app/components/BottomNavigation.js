@@ -129,14 +129,17 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: 'sticky',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 80,
-    backgroundColor: 'transparent',
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+    backgroundColor: '#FFFFFF',
+    height: Platform.OS === 'ios' ? 90 : 80,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 16,
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
     zIndex: 1000,
+    elevation: 8,
   },
   background: {
     position: 'absolute',
