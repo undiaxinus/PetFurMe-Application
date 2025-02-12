@@ -617,7 +617,7 @@ const HomePage = ({ navigation, route }) => {
 						</View>
 						<TouchableOpacity 
 							style={styles.viewMoreButton}
-							onPress={() => navigation.navigate("ViewMorePro")}
+							onPress={() => navigation.navigate("ProductListScreen")}
 						>
 							<Text style={styles.viewmore}>View More</Text>
 						</TouchableOpacity>

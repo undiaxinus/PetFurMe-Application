@@ -33,6 +33,7 @@ import ForgotPasswordScreen from "./src/app/screens/ForgotPasswordScreen";
 import ProfileVerification from "./src/app/screens/ProfileVerification";
 import UpdatePetProfile from "./src/app/screens/UpdatePetProfile";
 import ActivityHistoryScreen from "./src/app/screens/ActivityHistoryScreen";
+import ProductListScreen from "./src/app/screens/ProductListScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -229,6 +230,9 @@ const App = () => {
 							component={DrawerNavigator}
 							options={{ headerShown: false }}
 						/>
+
+						{/* Add ProductListScreen */}
+						<Stack.Screen name="ProductListScreen" component={ProductListScreen} />
 					</Stack.Navigator>
 				</NavigationContainer>
 				<Toast config={toastConfig} />
