@@ -34,6 +34,7 @@ import ProfileVerification from "./src/app/screens/ProfileVerification";
 import UpdatePetProfile from "./src/app/screens/UpdatePetProfile";
 import ActivityHistoryScreen from "./src/app/screens/ActivityHistoryScreen";
 import ProductListScreen from "./src/app/screens/ProductListScreen";
+import Appointment from "./src/app/screens/Appointment";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -154,6 +155,7 @@ const App = () => {
 						HomeScreen: '',
 						LoginScreen: 'login',
 						Register: 'register',
+						Appointment: 'appointment',
 						DrawerNavigator: {
 							screens: {
 								HomePage: 'home',
@@ -174,13 +176,7 @@ const App = () => {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ErrorBoundary>
-				<NavigationContainer
-					{...navigationConfig}
-					fallback={<Text>Loading...</Text>}
-					onError={(error) => {
-						console.error('Navigation error:', error);
-					}}
-				>
+				<NavigationContainer {...navigationConfig} fallback={<Text>Loading...</Text>}>
 					<Stack.Navigator
 						initialRouteName="HomeScreen"
 						screenOptions={{
@@ -200,6 +196,9 @@ const App = () => {
 							}),
 						}}
 					>
+						{/* Add Appointment screen here */}
+						<Stack.Screen name="Appointment" component={Appointment} />
+
 						{/* Authentication and Landing Screens */}
 						<Stack.Screen name="HomeScreen" component={HomeScreen} />
 						<Stack.Screen name="LoginScreen" component={LoginScreen} />

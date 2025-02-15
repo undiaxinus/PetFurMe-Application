@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated, Platform } from 're
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const BottomNavigation = ({ activeScreen, user_id }) => {
+const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
   const navigation = useNavigation();
   const route = useRoute();
   
@@ -29,6 +29,7 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
     ChatScreen: new Animated.Value(currentScreen === 'ChatScreen' ? 1 : 0),
     NotificationScreen: new Animated.Value(currentScreen === 'NotificationScreen' ? 1 : 0),
     Help: new Animated.Value(currentScreen === 'Help' ? 1 : 0),
+    Appointment: new Animated.Value(currentScreen === 'Appointment' ? 1 : 0),
   }).current;
 
   // Reset animations when activeScreen changes
@@ -99,20 +100,28 @@ const BottomNavigation = ({ activeScreen, user_id }) => {
         <View style={styles.background} />
         {/* Navigation Items */}
         {[
-          { screen: 'HomePage', icon: 'home', label: 'Home' },
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
+          { screen: 'Appointment', icon: 'calendar', label: 'Appointments' },
+          { screen: 'HomePage', icon: 'home', label: 'Home' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
           { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
         ].map(({ screen, icon, label }) => (
           <TouchableOpacity 
             key={screen}
-            style={styles.navItem}
+            style={[
+              styles.navItem,
+              screen === 'HomePage' && styles.homeItem
+            ]}
             onPress={() => handleNavigation(screen)}
           >
-            <Animated.View style={[styles.iconContainer, getTabStyle(screen)]}>
+            <Animated.View style={[
+              styles.iconContainer, 
+              getTabStyle(screen),
+              screen === 'HomePage' && styles.homeIconContainer
+            ]}>
               <Ionicons 
                 name={currentScreen === screen ? icon : `${icon}-outline`}
-                size={24} 
+                size={screen === 'HomePage' ? 28 : 24} 
                 color="#8146C1" 
               />
               <Text style={[
@@ -174,7 +183,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 50,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+  },
+  homeItem: {
+    marginTop: -15,
+  },
+  homeIconContainer: {
+    backgroundColor: '#f0e6f7',
+    padding: 12,
+    borderRadius: 20,
   },
   iconContainer: {
     alignItems: 'center',

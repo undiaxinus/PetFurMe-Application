@@ -6,8 +6,8 @@ module.exports = async function (env, argv) {
     ...env,
     babel: {
       dangerouslyAddModulePathsToTranspile: [
+        '@react-native-masked-view/masked-view',
         'react-native-gesture-handler',
-        'react-native-reanimated',
       ],
     },
   }, argv);
@@ -20,6 +20,13 @@ module.exports = async function (env, argv) {
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
   };
+
+  // Add resolve.alias if it doesn't exist
+  config.resolve = config.resolve || {};
+  config.resolve.alias = config.resolve.alias || {};
+  
+  // Add this alias
+  config.resolve.alias['react-native-gesture-handler'] = 'react-native-gesture-handler/lib/commonjs/web';
 
   return config;
 }; 

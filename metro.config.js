@@ -1,14 +1,14 @@
-const { getDefaultConfig } = require('@expo/metro-config');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const defaultConfig = getDefaultConfig(__dirname);
+const config = getDefaultConfig(__dirname);
 
 // Add custom configurations if needed
-defaultConfig.resolver.assetExts.push('png');
+config.resolver.assetExts.push('png');
 
 module.exports = {
-  ...defaultConfig,
+  ...config,
   resolver: {
-    ...defaultConfig.resolver,
-    sourceExts: [...defaultConfig.resolver.sourceExts, 'mjs', 'cjs'],
+    ...config.resolver,
+    sourceExts: ['jsx', 'js', 'ts', 'tsx', 'json'],
   },
 }; 

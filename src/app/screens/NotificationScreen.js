@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    paddingBottom: 90,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
   },
   notificationItem: {
     flexDirection: 'row',

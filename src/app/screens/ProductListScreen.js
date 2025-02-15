@@ -43,11 +43,14 @@ const ProductListScreen = ({ navigation, route }) => {
       setLoading(true);
       let url = `${API_BASE_URL}/PetFurMe-Application/api/products/get_products.php`;
       
+      const params = new URLSearchParams();
       if (selectedCategory !== 'all') {
-        url += `?category_id=${selectedCategory}`;
+        params.append('category_id', selectedCategory);
       }
       
-      const response = await fetch(url);
+      const finalUrl = params.toString() ? `${url}?${params.toString()}` : url;
+      
+      const response = await fetch(finalUrl);
       
       if (!response.ok) {
         throw new Error('Network response was not ok');

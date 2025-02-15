@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingBottom: 90,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
   },
   listContainer: {
     paddingHorizontal: 20,

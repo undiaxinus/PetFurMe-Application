@@ -9,6 +9,7 @@ import RegistrationScreen from '../screens/RegistrationScreen';
 import NotificationHelpScreen from '../screens/NotificationHelpScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { screenTransitionConfig, forSlide } from '../config/transitions';
+import Appointment from '../screens/Appointment';
 // Import other screens...
 
 const Drawer = createDrawerNavigator();
@@ -16,31 +17,34 @@ const Stack = createStackNavigator();
 
 function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          cardStyleInterpolator: forSlide,
-          transitionSpec: {
-            open: screenTransitionConfig,
-            close: screenTransitionConfig,
-          },
-        }}
-      >
-        <Stack.Screen name="Home" component={HomePage} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegistrationScreen} />
-        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
-        <Stack.Screen name="ActivityHistory" component={ActivityHistoryScreen} />
-        <Stack.Screen 
-          name="NotificationHelp" 
-          component={NotificationHelpScreen} 
-          options={{ headerShown: false }}
-        />
-        {/* Other drawer screens */}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+        cardStyleInterpolator: forSlide,
+        transitionSpec: {
+          open: screenTransitionConfig,
+          close: screenTransitionConfig,
+        },
+      }}
+    >
+      <Stack.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegistrationScreen} />
+      <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+      <Stack.Screen name="ActivityHistory" component={ActivityHistoryScreen} />
+      <Stack.Screen 
+        name="NotificationHelp" 
+        component={NotificationHelpScreen} 
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="Appointment" 
+        component={Appointment}
+        options={{ headerShown: false }}
+      />
+      {/* Other drawer screens */}
+    </Stack.Navigator>
   );
 }
 
