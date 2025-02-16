@@ -99,6 +99,13 @@ const DrawerNavigator = () => {
 					drawerLabel: 'Activity History',
 				}}
 			/>
+			<Drawer.Screen 
+				name="Appointment" 
+				component={Appointment}
+				options={{
+					drawerLabel: 'Appointments',
+				}}
+			/>
 		</Drawer.Navigator>
 	);
 };
@@ -196,9 +203,6 @@ const App = () => {
 							}),
 						}}
 					>
-						{/* Add Appointment screen here */}
-						<Stack.Screen name="Appointment" component={Appointment} />
-
 						{/* Authentication and Landing Screens */}
 						<Stack.Screen name="HomeScreen" component={HomeScreen} />
 						<Stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -223,7 +227,7 @@ const App = () => {
 						<Stack.Screen name="Grooming" component={Grooming} />
 						<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
 
-						{/* Drawer Navigator */}
+						{/* DrawerNavigator (which now includes Appointment) */}
 						<Stack.Screen 
 							name="DrawerNavigator" 
 							component={DrawerNavigator}

@@ -28,13 +28,6 @@ const PET_TYPES = [
 	"Other"
 ];
 
-const PET_SIZES = [
-	"Small",
-	"Medium",
-	"Large",
-	"Extra Large"
-];
-
 const PET_GENDERS = [
 	"Male",
 	"Female"
@@ -45,7 +38,6 @@ const AddPetProfile = ({ navigation, route }) => {
 	const [petAge, setPetAge] = useState("");
 	const [petType, setPetType] = useState("");
 	const [petBreed, setPetBreed] = useState("");
-	const [petSize, setPetSize] = useState("");
 	const [petWeight, setPetWeight] = useState("");
 	const [petAllergies, setPetAllergies] = useState("");
 	const [petNotes, setPetNotes] = useState("");
@@ -159,6 +151,9 @@ const AddPetProfile = ({ navigation, route }) => {
 				formData.append('photo', photoFile);
 			}
 
+			// Capitalize first letter of type for category
+			const capitalizedType = petType.charAt(0).toUpperCase() + petType.slice(1).toLowerCase();
+
 			const petData = {
 				user_id: parseInt(user_id),
 				created_by: parseInt(user_id),
@@ -169,10 +164,10 @@ const AddPetProfile = ({ navigation, route }) => {
 				owner_name: null,
 				allergies: petAllergies?.trim() || null,
 				notes: petNotes?.trim() || null,
-				category: petType.toLowerCase(),
+				category: capitalizedType,
 				gender: petGender.toLowerCase(),
 				weight: parseFloat(petWeight),
-				size: petSize?.toLowerCase() || null
+				size: null
 			};
 
 			// Add debugging log
@@ -221,7 +216,6 @@ const AddPetProfile = ({ navigation, route }) => {
 						petAge: petAge,
 						petGender: petGender,
 						details: {
-							size: petSize || 'Not specified',
 							weight: petWeight,
 							allergies: petAllergies || 'None',
 							notes: petNotes || 'None'
@@ -334,7 +328,7 @@ const AddPetProfile = ({ navigation, route }) => {
 									</View>
 								</View>
 
-								{/* Create a row for age and weight */}
+								{/* Reorganize the form fields */}
 								<View style={styles.rowContainer}>
 									<View style={styles.halfInput}>
 										<Text style={styles.label}>Age</Text>
@@ -360,7 +354,6 @@ const AddPetProfile = ({ navigation, route }) => {
 									</View>
 								</View>
 
-								{/* Create a row for type and size */}
 								<View style={styles.rowContainer}>
 									<View style={styles.halfInput}>
 										<Text style={styles.label}>Type</Text>
@@ -373,13 +366,13 @@ const AddPetProfile = ({ navigation, route }) => {
 										/>
 									</View>
 									<View style={styles.halfInput}>
-										<Text style={styles.label}>Size</Text>
+										<Text style={styles.label}>Gender</Text>
 										<CustomDropdown
-											label="Select Pet Size"
-											options={PET_SIZES}
-											value={petSize}
-											onSelect={setPetSize}
-											placeholder="Select size"
+											label="Select Pet Gender"
+											options={PET_GENDERS}
+											value={petGender}
+											onSelect={setPetGender}
+											placeholder="Select gender"
 										/>
 									</View>
 								</View>
@@ -392,18 +385,6 @@ const AddPetProfile = ({ navigation, route }) => {
 										value={petBreed}
 										onChangeText={setPetBreed}
 										placeholderTextColor="#8146C1"
-									/>
-								</View>
-
-								{/* Add Gender dropdown */}
-								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Gender</Text>
-									<CustomDropdown
-										label="Select Pet Gender"
-										options={PET_GENDERS}
-										value={petGender}
-										onSelect={setPetGender}
-										placeholder="Select gender"
 									/>
 								</View>
 							</View>
@@ -449,11 +430,11 @@ const AddPetProfile = ({ navigation, route }) => {
 						<TouchableOpacity
 							style={[
 								styles.continueButton,
-								(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()) && 
+								(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petGender || !petWeight.trim()) && 
 								styles.continueButtonDisabled,
 							]}
 							onPress={handleContinue}
-							disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petSize || !petGender || !petWeight.trim()}>
+							disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petGender || !petWeight.trim()}>
 							<Text style={styles.continueButtonText}>Save Pet Profile</Text>
 						</TouchableOpacity>
 					</View>
@@ -500,14 +481,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	scrollViewContent: {
-		paddingTop: 20,
+		paddingTop: 16,
 	},
 	formContainer: {
 		padding: 16,
+		paddingBottom: 32, // Add more padding at bottom
 	},
 	imageContainer: {
 		alignItems: "center",
-		marginVertical: 24,
+		marginVertical: 16, // Reduce margin
 	},
 	imageCircle: {
 		width: 130,
@@ -551,7 +533,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 		borderRadius: 12,
 		padding: 16,
-		marginBottom: 16,
+		marginBottom: 12, // Reduce margin
 		elevation: 2,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 1 },
@@ -576,7 +558,7 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 	},
 	inputGroup: {
-		marginBottom: 16,
+		marginBottom: 12, // Reduce margin
 	},
 	inputWithIcon: {
 		flexDirection: 'row',
@@ -644,7 +626,7 @@ const styles = StyleSheet.create({
 	rowContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: 16,
+		marginBottom: 12, // Reduce margin
 		gap: 12,
 	},
 	halfInput: {

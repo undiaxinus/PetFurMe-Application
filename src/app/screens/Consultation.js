@@ -276,7 +276,7 @@ const AddAppointment = ({ route, navigation }) => {
               reason_for_visit: reasons_for_visit
             });
             setShowWebAlert(false);
-            navigation.navigate('Appointments');
+            navigation.navigate('Appointment');
           }
         },
         {

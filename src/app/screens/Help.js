@@ -114,7 +114,7 @@ const HelpScreen = ({ navigation }) => {
       />
 
       {/* Bottom Navigation */}
-      <BottomNavigation activeScreen="FAQ" />
+      <BottomNavigation activeScreen="Help" />
     </View>
   );
 };

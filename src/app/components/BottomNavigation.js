@@ -15,6 +15,8 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
     const screenMap = {
       'ChatSupport': 'ChatScreen',
       'Chat': 'ChatScreen',
+      'FAQ': 'Help',
+      'Appointments': 'Appointment',
       // Add other screen name mappings if needed
     };
     return screenMap[screenName] || screenName;
