@@ -10,8 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-include_once '../config/Database.php';
-include_once '../config/constants.php';
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/constants.php';
 
 try {
     // Get database connection

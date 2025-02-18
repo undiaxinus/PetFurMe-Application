@@ -21,12 +21,10 @@ const LoginScreen = ({ navigation }) => {
 	const [showPassword, setShowPassword] = useState(false); // New state for password visibility
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [visibleError, setVisibleError] = useState("");
 
-	const API_URL = Platform.select({
-		web: `http://${SERVER_IP}:${SERVER_PORT}`,
-		ios: `http://localhost:${SERVER_PORT}`,
-		android: `http://${SERVER_IP}:${SERVER_PORT}`
-	});
+	const API_URL = BASE_URL; // Use the BASE_URL from constants directly
 
 	// Add these animations
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -45,17 +43,86 @@ const LoginScreen = ({ navigation }) => {
 				useNativeDriver: true,
 			}),
 		]).start();
+
+		// Add connection test on component mount
+		const testConnection = async () => {
+			try {
+				console.log('Testing connection to:', `${API_URL}/health`);
+				const response = await axios.get(`${API_URL}/health`, { 
+					timeout: 5000,
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json',
+					},
+					// Add retry logic
+					validateStatus: function (status) {
+						return status >= 200 && status < 300;
+					},
+				});
+				console.log('Server health check response:', response.data);
+				setError(""); // Clear any existing errors
+				return true;
+			} catch (error) {
+				console.error('Connection test failed:', {
+					message: error.message,
+					code: error.code,
+					config: error.config
+				});
+				
+				// More specific error messages
+				if (error.code === 'ECONNABORTED') {
+					setError('Connection timed out. Please check if the server is running.');
+				} else if (error.code === 'ERR_NETWORK') {
+					setError('Network error. Please check:\n1. Is the server running?\n2. Is XAMPP running?\n3. Check port 3001 is free');
+				} else {
+					setError(`Cannot connect to server. Error: ${error.message}`);
+				}
+				return false;
+			}
+		};
+
+		testConnection();
+
+		// Clear loading state if screen is stuck
+		const timeoutId = setTimeout(() => {
+			if (isLoading) {
+				setIsLoading(false);
+				setVisibleError("Connection timed out. Please try again.");
+			}
+		}, 10000);
+
+		return () => clearTimeout(timeoutId);
 	}, []);
 
 	const handleLogin = async () => {
 		try {
-			setLoading(true);
+			setIsLoading(true);
 			setError("");
+
+			console.log('Login attempt:', {
+				API_URL,
+				SERVER_IP,
+				SERVER_PORT,
+				Platform: Platform.OS
+			});
 
 			if (!email || !password) {
 				setError("Please enter both email and password");
 				return;
 			}
+
+			// Add connection test
+			try {
+				console.log('Testing connection to:', `${API_URL}/health`);
+				const healthCheck = await axios.get(`${API_URL}/health`, { timeout: 5000 });
+				console.log('Server health check:', healthCheck.data);
+			} catch (healthError) {
+				console.error('Health check failed:', healthError);
+				setError(`Cannot connect to server (${SERVER_IP}:${SERVER_PORT}). Please check your connection and server address.`);
+				return;
+			}
+
+			console.log('Attempting login to:', `${API_URL}/api/login`);
 
 			const response = await axios({
 				method: 'post',
@@ -68,8 +135,7 @@ const LoginScreen = ({ navigation }) => {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
 				},
-				// Remove withCredentials if you're not using cookies
-				// withCredentials: true
+				timeout: 10000,
 			});
 
 			console.log("Login response:", response.data);
@@ -83,16 +149,27 @@ const LoginScreen = ({ navigation }) => {
 				setError(response.data.error || "Login failed");
 			}
 		} catch (error) {
-			console.error("Login error:", error);
-			if (error.response) {
-				setError(error.response.data?.error || "Server error occurred");
+			console.error('Login error:', {
+				message: error.message,
+				code: error.code,
+				response: error.response?.data,
+				config: error.config,
+				stack: error.stack
+			});
+			
+			if (error.code === 'ECONNABORTED') {
+				setError(`Connection timed out. Server (${SERVER_IP}:${SERVER_PORT}) is not responding.`);
+			} else if (error.code === 'ERR_NETWORK') {
+				setError(`Network error. Please check if:\n- Server is running (${SERVER_IP}:${SERVER_PORT})\n- IP is correct\n- You're on the same network`);
+			} else if (error.response) {
+				setError(error.response.data?.error || `Server error: ${error.response.status}`);
 			} else if (error.request) {
-				setError("Unable to connect to server. Please check your connection.");
+				setError(`Cannot reach server at ${API_URL}. Check your connection.`);
 			} else {
-				setError("An unexpected error occurred");
+				setError(`Error: ${error.message}`);
 			}
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
@@ -100,13 +177,37 @@ const LoginScreen = ({ navigation }) => {
 		navigation.navigate('ForgotPassword'); // Make sure this matches the screen name in App.js
 	};
 
+	console.log('Environment:', {
+		Platform: Platform.OS,
+		SERVER_IP,
+		SERVER_PORT,
+		API_URL,
+		BASE_URL
+	});
+
 	return (
 		<View style={styles.container}>
-			{loading && (
+			{isLoading && (
 				<View style={styles.loadingOverlay}>
 					<ActivityIndicator size="large" color="#8146C1" />
+					<Text style={styles.loadingText}>Connecting to server...</Text>
 				</View>
 			)}
+			
+			{visibleError ? (
+				<View style={styles.errorContainer}>
+					<Text style={styles.errorText}>{visibleError}</Text>
+					<TouchableOpacity 
+						style={styles.retryButton}
+						onPress={() => {
+							setVisibleError("");
+							testConnection();
+						}}
+					>
+						<Text style={styles.retryButtonText}>Retry Connection</Text>
+					</TouchableOpacity>
+				</View>
+			) : null}
 
 			<Animated.View 
 				style={[
@@ -207,11 +308,15 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 	loadingOverlay: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(129, 70, 193, 0.4)",
-		justifyContent: "center",
-		alignItems: "center",
-		zIndex: 100,
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(129, 70, 193, 0.9)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		zIndex: 1000
 	},
 	content: {
 		width: "100%",
@@ -310,6 +415,24 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: '600',
 	},
+	loadingText: {
+		color: '#FFFFFF',
+		marginTop: 10,
+		fontSize: 16
+	},
+	errorContainer: {
+		padding: 20,
+		alignItems: 'center'
+	},
+	retryButton: {
+		marginTop: 20,
+		padding: 10,
+		backgroundColor: '#8146C1',
+		borderRadius: 5
+	},
+	retryButtonText: {
+		color: '#FFFFFF'
+	}
 });
 
 export default LoginScreen;

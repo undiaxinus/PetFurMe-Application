@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include_once 'api/config/database.php';
+require_once __DIR__ . '/api/config/Database.php';
 
 // Define paths relative to project root
 define('STORAGE_BASE', __DIR__ . '/storage/');

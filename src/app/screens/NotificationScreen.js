@@ -49,51 +49,51 @@ const NotificationScreen = ({ navigation, route }) => {
   const lastFetchRef = useRef(Date.now());
   const REFRESH_COOLDOWN = 1000;
   const [permissionStatus, setPermissionStatus] = useState('unknown');
-  const [isLoading, setIsLoading] = useState(true);
 
+  // Load notifications immediately when user_id is available
   useEffect(() => {
-    const initializeScreen = async () => {
+    const loadInitialData = async () => {
       try {
-        // Request permissions
-        await requestNotificationPermissions();
-        
-        // Get user ID
         let currentUserId = user_id;
         if (!currentUserId) {
           currentUserId = await AsyncStorage.getItem('user_id');
           if (currentUserId) {
             setUserId(currentUserId);
+            await fetchNotifications(currentUserId);
           } else {
             console.error('No user_id found');
             navigation.navigate('LoginScreen');
             return;
           }
+        } else {
+          await fetchNotifications(currentUserId);
         }
-        
-        // Fetch notifications immediately
-        await fetchNotifications(currentUserId);
-        
-        // Set up auto refresh every 30 seconds instead of 60
-        refreshIntervalRef.current = setInterval(() => {
-          if (currentUserId && !isRefreshing) {
-            console.log('Auto-refreshing notifications...');
-            fetchNotifications(currentUserId);
-          }
-        }, 30000);
       } catch (err) {
-        console.error('Error during initialization:', err);
-        setError('Failed to initialize notifications');
+        console.error('Error loading initial data:', err);
+        setError('Failed to load notifications');
       }
     };
 
-    initializeScreen();
+    loadInitialData();
+  }, [user_id]); // Depend on user_id changes
+
+  // Set up auto-refresh separately
+  useEffect(() => {
+    if (user_id) {
+      refreshIntervalRef.current = setInterval(() => {
+        fetchNotifications(user_id);
+      }, 30000);
+
+      // Request permissions after initial load
+      requestNotificationPermissions();
+    }
 
     return () => {
       if (refreshIntervalRef.current) {
         clearInterval(refreshIntervalRef.current);
       }
     };
-  }, []);
+  }, [user_id]);
 
   const requestNotificationPermissions = async () => {
     try {
@@ -209,23 +209,14 @@ const NotificationScreen = ({ navigation, route }) => {
     }
   };
 
-  const fetchNotifications = useCallback(async (currentUserId, isManualRefresh = false) => {
-    if (!isManualRefresh && Date.now() - lastFetchRef.current < REFRESH_COOLDOWN) {
-      return;
-    }
-
-    setIsLoading(true);
+  const fetchNotifications = async (currentUserId) => {
     try {
       const response = await axios.get(
         `http://${SERVER_IP}/PetFurMe-Application/api/notifications/get_notifications.php?user_id=${currentUserId}`,
         { timeout: 5000 }
       );
 
-      if (!response.data) {
-        throw new Error('No data received from server');
-      }
-
-      if (response.data.success) {
+      if (response.data?.success) {
         const formattedNotifications = response.data.notifications.map(notification => ({
           id: notification.id,
           type: notification.type,
@@ -236,42 +227,33 @@ const NotificationScreen = ({ navigation, route }) => {
           created_at: notification.created_at
         }));
 
-        // Show new notifications
-        if (!isManualRefresh) {
-          const newNotifications = formattedNotifications.filter(
-            notification => !notification.read && 
-            !notifications.find(n => n.id === notification.id)
-          );
+        // Show only new notifications
+        const currentNotificationIds = notifications.map(n => n.id);
+        const newNotifications = formattedNotifications.filter(
+          notification => !notification.read && !currentNotificationIds.includes(notification.id)
+        );
 
-          for (const notification of newNotifications) {
-            const data = JSON.parse(notification.data);
-            await showLocalNotification(
-              notification.type.split('_').map(word => 
-                word.charAt(0).toUpperCase() + word.slice(1)
-              ).join(' '),
-              data.message
-            );
-          }
-        }
+        // Show notifications for new items
+        newNotifications.forEach(notification => {
+          const data = JSON.parse(notification.data);
+          showLocalNotification(
+            notification.type.split('_').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' '),
+            data.message
+          );
+        });
 
         setNotifications(formattedNotifications);
         setError(null);
-      } else {
-        throw new Error(response.data.message || 'Failed to load notifications');
       }
     } catch (err) {
-      if (err.code === 'ECONNABORTED') {
-        setError('Request timed out. Please check your connection.');
-      } else {
-        setError(err.message || 'Failed to load notifications');
-      }
       console.error('Error fetching notifications:', err);
+      setError('Failed to load notifications');
     } finally {
-      setIsLoading(false);
       setIsRefreshing(false);
-      lastFetchRef.current = Date.now();
     }
-  }, [notifications, permissionStatus]);
+  };
 
   const markAsRead = async (id) => {
     try {
@@ -318,38 +300,39 @@ const NotificationScreen = ({ navigation, route }) => {
     }
   };
 
+  const deleteNotification = async (id) => {
+    try {
+      const response = await axios.post(
+        `http://${SERVER_IP}/PetFurMe-Application/api/notifications/delete_notification.php`,
+        {
+          notification_id: id,
+          user_id: user_id
+        }
+      );
+
+      if (response.data.success) {
+        setNotifications(prev => prev.filter(notif => notif.id !== id));
+      } else {
+        throw new Error(response.data.message || 'Failed to delete notification');
+      }
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+      Alert.alert(
+        'Error',
+        'Failed to delete notification. Please try again.'
+      );
+    }
+  };
+
   const onRefresh = useCallback(async () => {
-    if (isRefreshing) return;
-    
     setIsRefreshing(true);
     if (user_id) {
-      await fetchNotifications(user_id, true);
+      await fetchNotifications(user_id);
     }
     setIsRefreshing(false);
-  }, [user_id, fetchNotifications, isRefreshing]);
+  }, [user_id]);
 
   const renderNotification = useCallback(({ item }) => {
-    const renderRightActions = (progress, dragX) => {
-      const scale = dragX.interpolate({
-        inputRange: [-100, 0],
-        outputRange: [1, 0],
-        extrapolate: 'clamp',
-      });
-
-      return (
-        <TouchableOpacity 
-          style={styles.deleteAction}
-          onPress={() => markAsRead(item.id)}
-        >
-          <Animated.Text 
-            style={[styles.actionText, { transform: [{ scale }] }]}
-          >
-            Mark as Read
-          </Animated.Text>
-        </TouchableOpacity>
-      );
-    };
-
     const getNotificationIcon = () => {
       switch (item.type) {
         case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
@@ -383,7 +366,6 @@ const NotificationScreen = ({ navigation, route }) => {
           });
           break;
         default:
-          // Handle other notification types
           break;
       }
       markAsRead(item.id);
@@ -402,6 +384,25 @@ const NotificationScreen = ({ navigation, route }) => {
       }
     };
 
+    const renderRightActions = (progress, dragX) => {
+      return (
+        <View style={styles.actionContainer}>
+          <TouchableOpacity 
+            style={styles.markReadAction}
+            onPress={() => markAsRead(item.id)}>
+            <MaterialIcons name="check" size={24} color="#fff" />
+            <Text style={styles.actionText}>Mark Read</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.deleteAction}
+            onPress={() => deleteNotification(item.id)}>
+            <MaterialIcons name="delete" size={24} color="#fff" />
+            <Text style={styles.actionText}>Delete</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    };
+
     return (
       <Swipeable renderRightActions={renderRightActions}>
         <TouchableOpacity onPress={handleNotificationPress}>
@@ -411,9 +412,13 @@ const NotificationScreen = ({ navigation, route }) => {
           ]}>
             <View style={styles.iconContainer}>
               {getNotificationIcon()}
+              {!item.read && <View style={styles.unreadDot} />}
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.notificationTitle}>
+              <Text style={[
+                styles.notificationTitle,
+                !item.read && styles.boldTitle
+              ]}>
                 {item.type.split('_').map(word => 
                   word.charAt(0).toUpperCase() + word.slice(1)
                 ).join(' ')}
@@ -422,7 +427,12 @@ const NotificationScreen = ({ navigation, route }) => {
                 {JSON.parse(item.data).message}
               </Text>
               <Text style={styles.notificationTime}>
-                {new Date(item.created_at).toLocaleDateString()}
+                {new Date(item.created_at).toLocaleDateString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  month: 'short',
+                  day: 'numeric'
+                })}
               </Text>
             </View>
           </Animated.View>
@@ -456,13 +466,9 @@ const NotificationScreen = ({ navigation, route }) => {
         }
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            {isLoading ? (
-              <ActivityIndicator size="large" color="#8146C1" />
-            ) : (
-              <Text style={styles.emptyText}>
-                {error || 'No notifications available.'}
-              </Text>
-            )}
+            <Text style={styles.emptyText}>
+              {error || 'Loading notifications...'}
+            </Text>
           </View>
         )}
       />
@@ -480,40 +486,91 @@ const styles = StyleSheet.create({
   },
   notificationItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    marginHorizontal: 8,
-    marginVertical: 4,
+    alignItems: 'flex-start',
+    padding: 14,
+    marginHorizontal: 10,
+    marginVertical: 5,
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 2,
+    borderLeftWidth: 4,
+    borderLeftColor: '#8146C1',
+  },
+  iconContainer: {
+    position: 'relative',
+    marginRight: 14,
+    padding: 8,
+    backgroundColor: '#f0e6ff',
+    borderRadius: 10,
+    alignSelf: 'flex-start',
   },
   textContainer: {
     flex: 1,
   },
   notificationTitle: {
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 14,
     color: '#1a1a1a',
     marginBottom: 4,
   },
-  notificationDescription: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
+  boldTitle: {
+    fontWeight: '700',
   },
-  read: {
-    backgroundColor: '#ffffff',
+  notificationDescription: {
+    fontSize: 13,
+    color: '#666',
+    lineHeight: 18,
+    marginBottom: 4,
+  },
+  notificationTime: {
+    fontSize: 12,
+    color: '#999',
   },
   unread: {
     backgroundColor: '#f8f4ff',
+  },
+  read: {
+    backgroundColor: '#ffffff',
+    opacity: 0.9,
+  },
+  unreadDot: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#8146C1',
+    borderWidth: 1.5,
+    borderColor: '#fff',
+  },
+  actionContainer: {
+    flexDirection: 'row',
+  },
+  markReadAction: {
+    backgroundColor: '#8146C1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: '100%',
+  },
+  deleteAction: {
+    backgroundColor: '#ff4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    height: '100%',
+  },
+  actionText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
   emptyContainer: {
     flex: 1,
@@ -527,39 +584,18 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 40,
   },
-  notificationTime: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 6,
-  },
   listContainer: {
     flexGrow: 1,
     paddingTop: 8,
   },
-  deleteAction: {
-    backgroundColor: '#8146C1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 100,
-    height: '100%',
-  },
-  actionText: {
-    color: '#fff',
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  iconContainer: {
-    marginRight: 12,
-    justifyContent: 'center',
-  },
   warningNotification: {
-    backgroundColor: '#FFF3E0',
+    borderLeftColor: '#FFA500',
   },
   appointmentNotification: {
-    backgroundColor: '#E8F5E9',
+    borderLeftColor: '#4CAF50',
   },
   newProductNotification: {
-    backgroundColor: '#E3F2FD',
+    borderLeftColor: '#2196F3',
   },
   notificationBadge: {
     position: 'absolute',

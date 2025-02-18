@@ -19,6 +19,9 @@ import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import CompleteProfileBar from '../components/CompleteProfileBar';
 import CustomToast from '../components/CustomToast';
+import PetDetailsModal from '../components/PetDetailsModal';
+import PetProductsSection from '../components/PetProductsSection';
+
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
@@ -29,14 +32,16 @@ const HomePage = ({ navigation, route }) => {
 	const [imageLoadErrors, setImageLoadErrors] = useState({});
 	const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 	const [isProfileComplete, setIsProfileComplete] = useState(false);
-	const [petProducts, setPetProducts] = useState([]);
-	const [isProductsLoading, setIsProductsLoading] = useState(false);
 	const [userName, setUserName] = useState('');
 	const [userPhoto, setUserPhoto] = useState(null);
 	const [showProfileTutorial, setShowProfileTutorial] = useState(false);
 	const [credentialsComplete, setCredentialsComplete] = useState(false);
 	const [toastConfig, setToastConfig] = useState(null);
 	const [isVerified, setIsVerified] = useState(false);
+	const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+	const [petRecords, setPetRecords] = useState([]);
+	const [selectedPet, setSelectedPet] = useState(null);
+	const [isPetModalVisible, setIsPetModalVisible] = useState(false);
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -45,15 +50,15 @@ const HomePage = ({ navigation, route }) => {
 
 	useEffect(() => {
 		if (user_id) {
-			// Initial fetch
 			fetchUserPets();
+			fetchUpcomingAppointments();
+			fetchPetRecords();
 			
-			// Set up auto refresh every 30 seconds
 			refreshIntervalRef.current = setInterval(() => {
 				fetchUserPets();
+				fetchUpcomingAppointments();
 			}, 10000);
 			
-			// Cleanup function
 			return () => {
 				if (refreshIntervalRef.current) {
 					clearInterval(refreshIntervalRef.current);
@@ -235,45 +240,6 @@ const HomePage = ({ navigation, route }) => {
 		setShowProfileTutorial(true);
 	};
 
-	const categories = [
-		{
-			id: "1",
-			label: "Consultation",
-			backgroundColor: "#FF8ACF",
-			screen: "Consultation",
-			image: require("../../assets/images/consultation.png"),
-		},
-		{
-			id: "2",
-			label: "Vaccination",
-			backgroundColor: "#8146C1",
-			screen: "Consultation",
-			image: require("../../assets/images/vaccination.png"),
-		},
-		{
-			id: "3",
-			label: "Deworming",
-			backgroundColor: "#FF8ACF",
-			screen: "Consultation",
-			image: require("../../assets/images/deworming.png"),
-		},
-		{
-			id: "4",
-			label: "Grooming",
-			backgroundColor: "#8146C1",
-			screen: "Consultation",
-			image: require("../../assets/images/grooming.png"),
-		},
-	];
-
-	const vets = [
-		{
-			id: "1",
-			title: "Ready to book an appointment?",
-			subtitle: "Connect with our trusted care team for your pet's health.",
-		},
-	];
-
 	const handleAddNewPet = async () => {
 		if (!user_id) {
 			Alert.alert("Error", "User ID is missing. Please try logging in again.");
@@ -293,62 +259,6 @@ const HomePage = ({ navigation, route }) => {
 		await logActivity(ACTIVITY_TYPES.PET_ADDED, user_id);
 		navigation.navigate("AddPetName", { user_id: user_id });
 	};
-
-	const fetchPetProducts = async () => {
-		try {
-			setIsProductsLoading(true);
-			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
-			
-			if (!response.ok) {
-				throw new Error('Failed to fetch products');
-			}
-
-			const data = await response.json();
-			console.log('Received products data:', data);
-
-			// Define category colors
-			const categoryColors = {
-				1: '#FFE8F7', // Food category - light pink
-				2: '#E8F4FF', // Medicine category - light blue
-				3: '#F0FFE8', // Accessories category - light green
-				4: '#FFF3E8', // Grooming category - light orange
-				default: '#F5F5F5' // Default color
-			};
-
-			if (data.success) {
-				const transformedProducts = data.products.map(product => {
-					console.log('Processing product:', product);
-					return {
-						id: product.id.toString(),
-						name: product.name,
-						code: product.code,
-						quantity: parseInt(product.quantity) || 0,
-						buyingPrice: parseFloat(product.buying_price) || 0,
-						sellingPrice: parseFloat(product.selling_price) || 0,
-						quantityAlert: parseInt(product.quantity_alert) || 0,
-						tax: parseFloat(product.tax) || 0,
-						notes: product.notes || '',
-						image: product.product_image 
-							? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
-							: require("../../assets/images/meowmix.png"),
-						categoryId: product.category_id,
-						type: product.category_name || 'Pet Product',
-						backgroundColor: categoryColors[product.category_id] || categoryColors.default
-					};
-				});
-				console.log('Transformed products:', transformedProducts);
-				setPetProducts(transformedProducts);
-			}
-		} catch (error) {
-			console.error('Error fetching products:', error);
-		} finally {
-			setIsProductsLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchPetProducts();
-	}, []);
 
 	// Add a function to refresh all data
 	const refreshAllData = async () => {
@@ -371,6 +281,85 @@ const HomePage = ({ navigation, route }) => {
 		);
 	};
 
+	const fetchUpcomingAppointments = async () => {
+		try {
+			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/appointments/get_upcoming.php?user_id=${user_id}`);
+			
+			if (!response.ok) {
+				console.error("Server error:", response.status, response.statusText);
+				const errorText = await response.text();
+				console.error("Error details:", errorText);
+				return;
+			}
+
+			const text = await response.text();
+			console.log("Raw response:", text); // Debug log
+			
+			if (!text) {
+				console.error("Empty response received");
+				return;
+			}
+
+			try {
+				const data = JSON.parse(text);
+				if (data.success) {
+					setUpcomingAppointments(data.appointments || []);
+				} else {
+					console.error("API error:", data.message, data.debug_info);
+				}
+			} catch (parseError) {
+				console.error("Parse error:", parseError);
+				console.error("Failed to parse:", text);
+			}
+		} catch (error) {
+			console.error("Network error:", error);
+		}
+	};
+
+	const fetchPetRecords = async () => {
+		try {
+			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pet_records.php?user_id=${user_id}`);
+			const data = await response.json();
+			if (data.success) {
+				setPetRecords(data.records || []);
+			} else {
+				console.error("Failed to fetch pet records:", data.message);
+			}
+		} catch (error) {
+			console.error("Error fetching pet records:", error);
+		}
+	};
+
+	const getTimeBasedGreeting = () => {
+		const hour = new Date().getHours();
+		if (hour < 12) {
+			return "Start your day with your furry friend";
+		} else if (hour < 17) {
+			return "Time for some pet care activities";
+		} else {
+			return "Evening cuddles with your pet await";
+		}
+	};
+
+	// Add this helper function near the other utility functions
+	const formatTime = (timeString) => {
+		const [hours, minutes] = timeString.split(':');
+		const hour = parseInt(hours);
+		const ampm = hour >= 12 ? 'PM' : 'AM';
+		const hour12 = hour % 12 || 12;
+		return `${hour12}:${minutes} ${ampm}`;
+	};
+
+	// Modify the pet item press handler
+	const handlePetPress = (pet) => {
+		if (!isVerified) {
+			showVerificationAlert();
+			return;
+		}
+		setSelectedPet(pet);
+		setIsPetModalVisible(true);
+	};
+
 	return (
 		<View style={styles.container}>
 			{toastConfig && (
@@ -381,8 +370,7 @@ const HomePage = ({ navigation, route }) => {
 				/>
 			)}
 			<CustomHeader
-				title={`Welcome, ${userName}`}
-				subtitle="Your pet's happiness starts here!"
+				title="VetCare Animal Clinic"
 				navigation={navigation}
 				showDrawerButton={true}
 				showProfileButton={true}
@@ -475,59 +463,104 @@ const HomePage = ({ navigation, route }) => {
 						})}
 					/>
 				)}
-				
-				<View style={styles.searchSection}>
-					<Image
-						source={require("../../assets/images/lookingfor.png")}
-						style={styles.searchIcon}
-					/>
-					<Text style={styles.searchText}>
-						What are you looking for?
-					</Text>
-				</View>
-				{/* Categories Section */}
-				<View style={styles.categoriesContainer}>
-					{categories.map((category) => (
-						<TouchableOpacity
-							key={category.id}
-							style={[
-								styles.categoryItem,
-								{ backgroundColor: category.backgroundColor },
-								!isVerified && styles.disabledItem
-							]}
-							onPress={() => {
-								if (!isVerified) {
-									showVerificationAlert();
-									return;
-								}
-								navigation.navigate(category.screen, { 
-									reason: category.label,
-									user_id: user_id
-								});
-							}}
-						>
-							<View style={styles.categoryContent}>
-								<Image 
-									source={category.image} 
-									style={styles.categoryImage} 
-								/>
-								<Text style={styles.categoryLabel}>{category.label}</Text>
-							</View>
-							{!isVerified && (
-								<View style={styles.disabledOverlay}>
-									<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
-								</View>
-							)}
-						</TouchableOpacity>
-					))}
+
+				{/* Welcome Card */}
+				<View style={styles.welcomeCard}>
+					<View style={styles.welcomeContent}>
+						<Text style={styles.welcomeText}>Hi {userName}!</Text>
+						<Text style={styles.welcomeSubtext}>
+							{getTimeBasedGreeting()}
+						</Text>
+					</View>
 				</View>
 
-				{/* Pets Section - Moved up */}
+				{/* Upcoming Appointments Widget */}
+				<View style={styles.widgetContainer}>
+					<View style={styles.widgetHeader}>
+						<Ionicons name="calendar" size={24} color="#8146C1" />
+						<Text style={styles.widgetTitle}>Upcoming Appointments</Text>
+					</View>
+					{upcomingAppointments.length > 0 ? (
+						<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+							{upcomingAppointments.map((appointment, index) => (
+								<TouchableOpacity 
+									key={index}
+									style={styles.appointmentCard}
+									onPress={() => navigation.navigate('AppointmentDetails', { appointmentId: appointment.appointment_id })}
+								>
+									<View style={styles.appointmentHeader}>
+										<Text style={styles.appointmentType}>
+											{Array.isArray(appointment.reason) ? appointment.reason.join(', ') : ''}
+										</Text>
+										<Text style={styles.appointmentDate}>
+											{appointment.appointment_date}
+										</Text>
+									</View>
+									<Text style={styles.appointmentPet}>{appointment.pet_name}</Text>
+									<Text style={styles.appointmentTime}>
+										{formatTime(appointment.appointment_time)}
+									</Text>
+								</TouchableOpacity>
+							))}
+						</ScrollView>
+					) : (
+						<View style={styles.emptyStateContainer}>
+							<Text style={styles.emptyStateText}>No upcoming appointments</Text>
+							<TouchableOpacity 
+								style={styles.scheduleButton}
+								onPress={() => navigation.navigate('Consultation', { user_id: user_id })}
+							>
+								<Text style={styles.scheduleButtonText}>Schedule Now</Text>
+							</TouchableOpacity>
+						</View>
+					)}
+				</View>
+
+				{/* Pet Records Section */}
+				<View style={styles.widgetContainer}>
+					<View style={styles.widgetHeader}>
+						<Ionicons name="document-text" size={24} color="#8146C1" />
+						<Text style={styles.widgetTitle}>Pet Records</Text>
+					</View>
+					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+						{petRecords.map((record, index) => (
+							<TouchableOpacity 
+								key={index}
+								style={styles.recordCard}
+								onPress={() => navigation.navigate('PetRecordDetails', { recordId: record.id })}
+							>
+								<View style={styles.recordIcon}>
+									<Ionicons name="document-text" size={24} color="#8146C1" />
+								</View>
+								<Text style={styles.recordPetName}>{record.pet_name}</Text>
+								<Text style={styles.recordType}>{record.type}</Text>
+								<Text style={styles.recordDate}>{record.date}</Text>
+							</TouchableOpacity>
+						))}
+						<TouchableOpacity 
+							style={styles.addRecordCard}
+							onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
+						>
+							<Ionicons name="add-circle" size={32} color="#8146C1" />
+							<Text style={styles.addRecordText}>Add New Record</Text>
+						</TouchableOpacity>
+					</ScrollView>
+				</View>
+
+				{/* Pets Section */}
 				{isLoading ? (
 					<ActivityIndicator size="large" color="#8146C1" />
 				) : (
 					<View style={styles.petsSection}>
-						<Text style={[styles.sectionTitle, { marginTop: -40 }]}>My Pets</Text>
+						<View style={styles.petsSectionHeader}>
+							<View style={styles.petsTitleContainer}>
+								<Ionicons name="paw" size={24} color="#8146C1" />
+								<Text style={styles.sectionTitle}>My Pets</Text>
+							</View>
+							<View style={styles.petsCountBadge}>
+								<Text style={styles.petsCountText}>{userPets.length}</Text>
+							</View>
+						</View>
 						<ScrollView 
 							horizontal 
 							showsHorizontalScrollIndicator={false}
@@ -535,39 +568,41 @@ const HomePage = ({ navigation, route }) => {
 						>
 							{userPets.map((pet) => (
 								<TouchableOpacity 
-									onPress={() => {
-										if (!isVerified) {
-											showVerificationAlert();
-											return;
-										}
-										navigation.navigate('PetProfile', { petId: pet.id, user_id: user_id });
-									}} 
+									onPress={() => handlePetPress(pet)}
 									key={pet.id} 
 									style={[
 										styles.petItem,
 										!isVerified && styles.disabledItem
 									]}
 								>
-									<Image
-										source={
-											pet.photo 
-												? { 
-													uri: pet.photo,
-													headers: {
-														'Cache-Control': 'no-cache'
+									<View style={styles.petImageContainer}>
+										<Image
+											source={
+												pet.photo 
+													? { 
+														uri: pet.photo,
+														headers: {
+															'Cache-Control': 'no-cache'
+														}
 													}
-												}
-												: require("../../assets/images/doprof.png")
-										}
-										style={styles.petImage}
-										defaultSource={require("../../assets/images/doprof.png")}
-										resizeMode="contain"
-										onError={(e) => {
-											console.log('Image loading error:', e.nativeEvent.error);
-											setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
-										}}
-									/>
-									<Text style={styles.petName}>{pet.name}</Text>
+													: require("../../assets/images/doprof.png")
+											}
+											style={styles.petImage}
+											defaultSource={require("../../assets/images/doprof.png")}
+											resizeMode="contain"
+											onError={(e) => {
+												console.log('Image loading error:', e.nativeEvent.error);
+												setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
+											}}
+										/>
+									</View>
+									<View style={styles.petInfoContainer}>
+										<Text style={styles.petName}>{pet.name}</Text>
+										<View style={styles.petDetailsChip}>
+											<Text style={styles.petDetailsText}>Pet Details</Text>
+											<Ionicons name="paw" size={12} color="#8146C1" />
+										</View>
+									</View>
 									{!isVerified && (
 										<View style={styles.petLockOverlay}>
 											<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
@@ -584,15 +619,17 @@ const HomePage = ({ navigation, route }) => {
 									handleAddNewPet();
 								}}
 								style={[
-									styles.petItem,
+									styles.addPetItem,
 									!isVerified && styles.disabledItem
 								]}
 							>
-								<Image
-									source={require("../../assets/images/addnew.png")}
-									style={styles.petImage}
-								/>
-								<Text style={styles.petName}>Add New</Text>
+								<View style={styles.addPetContent}>
+									<View style={styles.addPetIconContainer}>
+										<Ionicons name="add-circle" size={32} color="#8146C1" />
+									</View>
+									<Text style={styles.addPetText}>Add New Pet</Text>
+									<Text style={styles.addPetSubtext}>Register your pet companion</Text>
+								</View>
 								{!isVerified && (
 									<View style={styles.verificationBadge}>
 										<Ionicons name="lock-closed" size={12} color="#FFFFFF" />
@@ -604,109 +641,7 @@ const HomePage = ({ navigation, route }) => {
 				)}
 
 				{/* Pet Products Section */}
-				<View style={styles.petProductsBox}>
-					<View style={styles.sectionHeader}>
-						<View style={styles.leftHeader}>
-							<Ionicons 
-								name="paw" 
-								size={24} 
-								color="#8146C1" 
-								style={styles.productIcon}
-							/>
-							<Text style={styles.petproducts}>Pet Products</Text>
-						</View>
-						<TouchableOpacity 
-							style={styles.viewMoreButton}
-							onPress={() => navigation.navigate("ProductListScreen")}
-						>
-							<Text style={styles.viewmore}>View More</Text>
-						</TouchableOpacity>
-					</View>
-
-					{isProductsLoading ? (
-						<ActivityIndicator size="small" color="#8146C1" />
-					) : (
-						<View style={styles.productsGrid}>
-							{petProducts.map((item) => (
-								<TouchableOpacity 
-									key={item.id} 
-									style={[styles.petProductCard, { backgroundColor: item.backgroundColor }]}
-									onPress={() => navigation.navigate("ProductDetails", { productId: item.id })}
-								>
-									<View style={styles.productImageContainer}>
-										<View style={styles.productImageWrapper}>
-											<Image 
-												source={item.image} 
-												style={styles.productImage}
-												resizeMode="contain"
-											/>
-										</View>
-										<View style={styles.badge}>
-											<Text style={styles.badgeText}>{item.type}</Text>
-										</View>
-									</View>
-									<View style={styles.productDetails}>
-										<Text style={styles.productName} numberOfLines={1}>
-											{item.name}
-										</Text>
-										<View style={styles.productFooter}>
-											<Text style={styles.productPrice}>
-												₱{item.sellingPrice.toLocaleString()}
-											</Text>
-											{item.quantity <= item.quantityAlert && (
-												<Text style={styles.lowStock}>
-													{item.quantity === 0 ? 'Out of Stock' : `${item.quantity} left`}
-												</Text>
-											)}
-										</View>
-										{item.notes && (
-											<Text style={styles.productNotes} numberOfLines={1}>
-												{item.notes}
-											</Text>
-										)}
-									</View>
-								</TouchableOpacity>
-							))}
-						</View>
-					)}
-				</View>
-
-				{/* Vets Section */}
-				<View style={styles.sectionContainer}>
-				<Image
-					source={require("../../assets/images/vet.png")}
-					style={styles.vet}
-				/>
-					<Text style={styles.vets}>Vets</Text>
-					{vets.map((item) => (
-						<View key={item.id} style={styles.vetCard}>
-							<View style={styles.vetDetails}>
-								<Text style={styles.vetCardTitle}>{item.title}</Text>
-								<Text style={styles.vetCardSubtitle}>{item.subtitle}</Text>
-								<TouchableOpacity
-									style={[
-										styles.bookAppointmentButton,
-										!isVerified && styles.disabledItem
-									]}
-									onPress={() => {
-										if (!isVerified) {
-											showVerificationAlert();
-											return;
-										}
-										navigation.navigate("Consultation", { user_id: user_id });
-									}}
-								>
-									<Text style={styles.bookAppointmentText}>Book Appointment →</Text>
-									{!isVerified && (
-										<View style={styles.disabledOverlay}>
-											<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
-										</View>
-									)}
-								</TouchableOpacity>
-							</View>
-						</View>
-					))}
-				</View>
+				<PetProductsSection navigation={navigation} />
 			</ScrollView>
 
 			{/* Bottom Navigation - Always present but with pointer-events disabled */}
@@ -718,6 +653,13 @@ const HomePage = ({ navigation, route }) => {
 					(showWelcomePopup || showProfileTutorial) && styles.bottomNavDisabled
 				]}
 			/>
+
+			{/* Add the PetDetailsModal component */}
+			<PetDetailsModal
+				pet={selectedPet}
+				isVisible={isPetModalVisible}
+				onClose={() => setIsPetModalVisible(false)}
+			/>
 		</View>
 	);
 };
@@ -728,65 +670,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	scrollContent: {
-		paddingBottom: 120,
-	},
-	searchSection: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: '#FFFFFF',
-		borderRadius: 8,
-		padding: 8,
-		top: 10,
-	},
-	searchIcon: {
-		width: 20,
-		height: 20,
-		resizeMode: 'contain',
-		marginRight: 8,
-	},
-	searchText: {
-		fontSize: 14,
-		color: '#666666',
-	},
-	categoriesContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		marginVertical: 65,
-		paddingHorizontal: 10,
-		top: -50,
-	},
-	categoryItem: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 10,
-		width: 80,
-		height: 90,
-		padding: 5,
-	},
-	categoryContent: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		gap: 8,
-	},
-	categoryImage: {
-		width: 60,
-		height: 60,
-		marginBottom: 9,
-		top: 5,
-	},
-	categoryLabel: {
-		fontSize: 12,
-		color: "#FFFFFF",
-		textAlign: "center",
-		fontWeight: "bold",
-		top: -10,
+		paddingBottom: 40,
 	},
 	petsContainer: {
 		flexDirection: "row",
 		marginVertical: 20,
 		paddingHorizontal: 20,
-		top: -20,
 		width: 70,
 		height: 70,
 	},
@@ -822,7 +711,6 @@ const styles = StyleSheet.create({
 		marginBottom: 30,
 		marginTop: 15,
 		elevation: 3,
-		top: -50,
 		shadowColor: '#8146C1',
 		shadowOffset: {
 			width: 0,
@@ -846,19 +734,11 @@ const styles = StyleSheet.create({
 	productIcon: {
 		marginRight: 4,
 	},
-	vets: {
-		fontSize: 18,
-		fontWeight: 'bold',
-		marginLeft: 32,
-		bottom: 25,
-		color: '#333',
-	},
 	sectionTitle: {
 		fontSize: 18,
 		fontWeight: "bold",
-		color: "#8146C1",
-		left: 30,
-		marginTop: 30,
+		color: "#333333",
+		marginLeft: 0,
 	},
 	petproducts: {
 		fontSize: 18,
@@ -890,7 +770,7 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		gap: 12,
-		paddingHorizontal: 2,
+		paddingHorizontal: 4,
 	},
 	petProductCard: {
 		borderRadius: 12,
@@ -980,68 +860,62 @@ const styles = StyleSheet.create({
 	},
 	sectionContainer: {
 		marginHorizontal: 20,
-		marginBottom: -100,
-		top: -50,
-	},
-	vetCard: {
-		backgroundColor: "#FFFFFF",
-		borderRadius: 15,
-		padding: 20,
-		bottom: 10,
-		elevation: 2,
 		marginBottom: 20,
-		borderWidth: 2,
-		borderColor: '#8146C1',
-		shadowColor: '#8146C1',
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
 	},
-	vetDetails: {
-		width: '100%',
+	bottomNav: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		right: 0,
+		zIndex: 1000,
 	},
-	vetCardTitle: {
-		fontSize: 18,
-		fontWeight: "bold",
-		color: "#8146C1",
-		marginBottom: 8,
+	bottomNavDisabled: {
+		opacity: 0.7,
 	},
-	vetCardSubtitle: {
-		fontSize: 14,
-		color: "#666666",
-		marginBottom: 16,
-		lineHeight: 20,
+	disabledItem: {
+		opacity: 0.5,
 	},
-	bookAppointmentButton: {
-		backgroundColor: "#8146C1",
-		padding: 12,
-		borderRadius: 25,
-		alignItems: "center",
-		marginTop: 5,
+	verificationBadge: {
+		position: 'absolute',
+		top: 5,
+		right: 5,
+		backgroundColor: '#FF4444',
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 12,
+		zIndex: 1,
 	},
-	bookAppointmentText: {
-		fontSize: 16,
-		color: "#FFFFFF",
-		fontWeight: "bold",
+	verificationText: {
+		color: '#FFFFFF',
+		fontSize: 10,
+		fontWeight: 'bold',
 	},
-	loadingContainer: {
+	verificationBanner: {
+		backgroundColor: 'rgba(129, 70, 193, 0.15)',
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 10,
+		paddingHorizontal: 16,
+		gap: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: 'rgba(129, 70, 193, 0.2)',
+	},
+	verificationBannerText: {
+		color: '#8146C1',
+		fontSize: 12,
+		flex: 1,
+		fontWeight: '400',
+	},
+	disabledOverlay: {
 		position: 'absolute',
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0,
+		backgroundColor: 'rgba(0,0,0,0.1)',
+		borderRadius: 10,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'rgba(255, 255, 255, 0.7)',
-		zIndex: 1000
-	},
-	petsScrollContainer: {
-		paddingHorizontal: 20,
-		paddingVertical: 10,
-
 	},
 	popupOverlay: {
 		position: 'absolute',
@@ -1126,8 +1000,162 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	petsSection: {
-		top: -50,
+		marginTop: 20,
 		marginBottom: 20,
+		marginHorizontal: 16,
+		paddingHorizontal: 16,
+		backgroundColor: '#FFFFFF',
+		paddingVertical: 20,
+		borderRadius: 20,
+		elevation: 2,
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+	},
+	petsSectionHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginBottom: 20,
+		paddingHorizontal: 4,
+	},
+	petsTitleContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+	},
+	petsCountBadge: {
+		backgroundColor: '#F8F2FF',
+		borderRadius: 12,
+		paddingHorizontal: 12,
+		paddingVertical: 4,
+	},
+	petsCountText: {
+		color: '#8146C1',
+		fontSize: 14,
+		fontWeight: 'bold',
+	},
+	petsScrollContainer: {
+		paddingLeft: 4,
+		paddingRight: 20,
+		gap: 12,
+	},
+	petItem: {
+		width: 140,
+		height: 190,
+		borderRadius: 16,
+		backgroundColor: '#FFFFFF',
+		elevation: 3,
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		overflow: 'hidden',
+		borderWidth: 1,
+		borderColor: '#F0F0F0',
+	},
+	petImageContainer: {
+		width: '100%',
+		height: 120,
+		position: 'relative',
+		backgroundColor: '#F8F2FF',
+	},
+	petImage: {
+		width: '100%',
+		height: '100%',
+		borderTopLeftRadius: 16,
+		borderTopRightRadius: 16,
+		resizeMode: 'contain',
+	},
+	petInfoContainer: {
+		padding: 12,
+		backgroundColor: '#FFFFFF',
+		alignItems: 'center',
+	},
+	petName: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#333333',
+		marginBottom: 8,
+		textAlign: 'center',
+	},
+	petDetailsChip: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#F8F2FF',
+		paddingVertical: 4,
+		paddingHorizontal: 10,
+		borderRadius: 20,
+		alignSelf: 'center',
+		gap: 4,
+	},
+	petDetailsText: {
+		fontSize: 11,
+		color: '#8146C1',
+		fontWeight: '600',
+	},
+	addPetItem: {
+		width: 140,
+		height: 190,
+		borderRadius: 16,
+		backgroundColor: '#FFFFFF',
+		borderWidth: 1,
+		borderStyle: 'dashed',
+		borderColor: '#8146C1',
+		justifyContent: 'center',
+		alignItems: 'center',
+		elevation: 2,
+		shadowColor: '#8146C1',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+	},
+	addPetContent: {
+		alignItems: 'center',
+		padding: 12,
+	},
+	addPetIconContainer: {
+		width: 48,
+		height: 48,
+		borderRadius: 24,
+		backgroundColor: '#F8F2FF',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginBottom: 12,
+	},
+	addPetText: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#8146C1',
+		marginBottom: 4,
+		textAlign: 'center',
+	},
+	addPetSubtext: {
+		fontSize: 11,
+		color: '#666666',
+		textAlign: 'center',
+		paddingHorizontal: 8,
+	},
+	petLockOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 16,
 	},
 	welcomeIcon: {
 		marginBottom: 10,
@@ -1217,72 +1245,245 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold',
 	},
-	bottomNav: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-		zIndex: 1000,
+	welcomeCard: {
+		backgroundColor: '#8146C1',
+		borderRadius: 20,
+		margin: 16,
+		padding: 20,
+		marginTop: 20,
 	},
-	bottomNavDisabled: {
-		opacity: 0.7,
+	welcomeContent: {
+		gap: 8,
 	},
-	disabledItem: {
-		opacity: 0.5,
-	},
-	verificationBadge: {
-		position: 'absolute',
-		top: 5,
-		right: 5,
-		backgroundColor: '#FF4444',
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 12,
-		zIndex: 1,
-	},
-	verificationText: {
-		color: '#FFFFFF',
-		fontSize: 10,
+	welcomeText: {
+		fontSize: 24,
 		fontWeight: 'bold',
+		color: '#FFFFFF',
 	},
-	verificationBanner: {
-		backgroundColor: 'rgba(129, 70, 193, 0.15)',
+	welcomeSubtext: {
+		fontSize: 16,
+		color: '#FFFFFF',
+		opacity: 0.9,
+		letterSpacing: 0.3,
+	},
+	userName: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		color: '#FFFFFF',
+	},
+	welcomeSubtext: {
+		fontSize: 14,
+		color: '#FFFFFF',
+		opacity: 0.8,
+		marginTop: 4,
+	},
+	widgetContainer: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 15,
+		margin: 16,
+		padding: 16,
+		marginTop: 8,
+		elevation: 2,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+	},
+	widgetHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 10,
-		paddingHorizontal: 16,
+		marginBottom: 16,
 		gap: 8,
-		borderBottomWidth: 1,
-		borderBottomColor: 'rgba(129, 70, 193, 0.2)',
 	},
-	verificationBannerText: {
+	widgetTitle: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		color: '#333',
+	},
+	appointmentCard: {
+		backgroundColor: '#F8F2FF',
+		borderRadius: 12,
+		padding: 16,
+		marginRight: 12,
+		width: 200,
+	},
+	appointmentHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 8,
+	},
+	appointmentType: {
+		fontSize: 14,
+		fontWeight: '600',
 		color: '#8146C1',
+	},
+	appointmentDate: {
 		fontSize: 12,
-		flex: 1,
-		fontWeight: '400',
+		color: '#666',
 	},
-	disabledOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(0,0,0,0.1)',
-		borderRadius: 10,
-		justifyContent: 'center',
+	appointmentPet: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: '#333',
+		marginBottom: 4,
+	},
+	appointmentTime: {
+		fontSize: 14,
+		color: '#666',
+	},
+	emptyStateContainer: {
+		alignItems: 'center',
+		padding: 20,
+	},
+	emptyStateText: {
+		fontSize: 14,
+		color: '#666',
+		marginBottom: 12,
+	},
+	scheduleButton: {
+		backgroundColor: '#8146C1',
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+		borderRadius: 20,
+	},
+	scheduleButtonText: {
+		color: '#FFFFFF',
+		fontWeight: '600',
+	},
+	recordCard: {
+		backgroundColor: '#F8F2FF',
+		borderRadius: 12,
+		padding: 16,
+		marginRight: 12,
+		width: 150,
 		alignItems: 'center',
 	},
-	petLockOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(0,0,0,0.4)',
-		borderRadius: 32.5,
-		justifyContent: 'center',
+	recordIcon: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 25,
+		padding: 12,
+		marginBottom: 8,
+	},
+	recordPetName: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#333',
+		marginBottom: 4,
+	},
+	recordType: {
+		fontSize: 12,
+		color: '#8146C1',
+		marginBottom: 4,
+	},
+	recordDate: {
+		fontSize: 11,
+		color: '#666',
+	},
+	addRecordCard: {
+		backgroundColor: '#F8F2FF',
+		borderRadius: 12,
+		padding: 16,
+		marginRight: 12,
+		width: 150,
 		alignItems: 'center',
-		marginBottom: 5,
+		justifyContent: 'center',
+		borderStyle: 'dashed',
+		borderWidth: 2,
+		borderColor: '#8146C1',
+	},
+	addRecordText: {
+		fontSize: 14,
+		color: '#8146C1',
+		marginTop: 8,
+		fontWeight: '600',
+	},
+	modal: {
+		margin: 0,
+		justifyContent: 'flex-end',
+	},
+	modalContent: {
+		backgroundColor: 'white',
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+		paddingTop: 20,
+		maxHeight: '80%',
+	},
+	modalHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingHorizontal: 20,
+		paddingBottom: 15,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
+	},
+	modalTitle: {
+		fontSize: 20,
+		fontWeight: 'bold',
+		color: '#333',
+	},
+	closeButton: {
+		padding: 5,
+	},
+	modalScroll: {
+		padding: 20,
+	},
+	modalPetImage: {
+		width: 150,
+		height: 150,
+		borderRadius: 75,
+		alignSelf: 'center',
+		marginBottom: 20,
+	},
+	detailsGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between',
+		marginBottom: 24,
+	},
+	detailCard: {
+		width: '48%',
+		backgroundColor: '#F8F8F8',
+		padding: 16,
+		borderRadius: 12,
+		marginBottom: 16,
+	},
+	cardHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 8,
+	},
+	cardLabel: {
+		fontSize: 14,
+		color: '#666',
+		marginLeft: 6,
+	},
+	cardValue: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: '#333',
+	},
+	breedContainer: {
+		backgroundColor: '#F8F8F8',
+		padding: 16,
+		borderRadius: 12,
+		marginBottom: 24,
+	},
+	breedHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 8,
+	},
+	breedLabel: {
+		fontSize: 14,
+		color: '#666',
+		marginLeft: 6,
+	},
+	breedValue: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: '#333',
 	},
 });
 

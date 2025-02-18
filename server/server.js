@@ -6,10 +6,11 @@ const { v4: uuidv4 } = require("uuid");
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const { BASE_URL, SERVER_IP, SERVER_PORT } = require('./config/constants');
+const http = require('http');
 	
 // Server configuration
 const PORT = 3001;
-const HOST = "0.0.0.0";
+const HOST = "0.0.0.0";  // This allows connections from all network interfaces
 
 // Set the path to your XAMPP htdocs directory
 const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api');
@@ -22,7 +23,9 @@ const dbConfig = {
 	database: "pet-management",
 	waitForConnections: true,
 	connectionLimit: 10,
-	queueLimit: 0
+	queueLimit: 0,
+	debug: false,
+	trace: false
 };
 
 // Create database pool
@@ -32,7 +35,7 @@ const app = express();
 
 // CORS configuration - this must come BEFORE other middleware
 app.use(cors({
-	origin: ['http://localhost:8081', 'http://localhost:19006', `http://${SERVER_IP}:3001`],
+	origin: '*', // Allow all origins during development
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 	credentials: true
@@ -44,21 +47,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
-	console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-	console.log("Request Body:", req.body);
-	next();
-});
-
-// Add request logging middleware
-app.use((req, res, next) => {
-	console.log("=================================");
-	console.log("Incoming Request:");
-	console.log(`Time: ${new Date().toISOString()}`);
-	console.log(`Method: ${req.method}`);
-	console.log(`URL: ${req.url}`);
-	console.log("Headers:", req.headers);
-	console.log("Body:", req.body);
-	console.log("=================================");
+	console.log(`[${new Date().toISOString()}] Request:`, {
+		method: req.method,
+		url: req.url,
+		headers: req.headers,
+		ip: req.ip
+	});
 	next();
 });
 
@@ -131,12 +125,69 @@ const testConnection = async () => {
 };
 
 // Health check endpoint
-app.get("/health", (req, res) => {
-	res.json({
-		status: "ok",
-		timestamp: new Date().toISOString(),
-		database: db.pool ? "connected" : "disconnected",
-	});
+app.get('/health', async (req, res) => {
+	try {
+		// Test database connection
+		const dbConnected = await testConnection();
+		
+		res.json({
+			status: 'ok',
+			timestamp: new Date().toISOString(),
+			server: {
+				ip: SERVER_IP,
+				port: PORT,
+				uptime: process.uptime()
+			},
+			database: {
+				connected: dbConnected,
+				host: dbConfig.host
+			},
+			client: {
+				ip: req.ip,
+				headers: req.headers
+			}
+		});
+	} catch (error) {
+		res.status(500).json({
+			status: 'error',
+			message: error.message,
+			timestamp: new Date().toISOString()
+		});
+	}
+});
+
+// Also add this before the health endpoint
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	next();
+});
+
+// Add this after your health endpoint
+app.get('/debug', async (req, res) => {
+	try {
+		// Test database connection
+		const [result] = await db.query('SELECT 1');
+		
+		res.json({
+			status: 'ok',
+			database: 'connected',
+			timestamp: new Date().toISOString(),
+			server: {
+				ip: SERVER_IP,
+				port: PORT
+			},
+			headers: req.headers,
+			clientIP: req.ip
+		});
+	} catch (error) {
+		res.status(500).json({
+			status: 'error',
+			message: error.message,
+			timestamp: new Date().toISOString()
+		});
+	}
 });
 
 // Registration endpoint with password hashing
@@ -301,46 +352,58 @@ app.use((req, res, next) => {
 
 app.use('/api', authRoutes);
 
-// Add this near the top of your server.js, after your middleware setup
-app.use((req, res, next) => {
-	console.log(`${req.method} ${req.path}`);
-	next();
-});
-
-// Add error handling middleware at the bottom of your server.js
-app.use((err, req, res, next) => {
-	console.error('Server error:', err);
-	res.status(500).json({
-		success: false,
-		error: 'Internal server error'
-	});
-});
-
-// Add this test endpoint
-app.get('/api/cors-test', (req, res) => {
-	res.json({
-		message: 'CORS is working',
-		origin: req.headers.origin,
-		headers: req.headers
-	});
-});
-
-// Add this near the top of your routes
+// Add this right after your app declaration
 app.use((req, res, next) => {
 	console.log('Incoming request:', {
 		method: req.method,
-		path: req.path,
+		url: req.url,
 		headers: req.headers,
-		body: req.body
+		body: req.body,
+		ip: req.ip,
+		timestamp: new Date().toISOString()
 	});
 	next();
 });
 
-// Add a test endpoint
-app.get('/api/test-cors', (req, res) => {
-	res.json({ message: 'CORS is working' });
+// Add this near the top of your middleware stack
+app.use((req, res, next) => {
+	const startTime = Date.now();
+	
+	// Log request
+	console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+	console.log('Headers:', req.headers);
+	console.log('Body:', req.body);
+	
+	// Log response
+	res.on('finish', () => {
+		const duration = Date.now() - startTime;
+		console.log(`[${new Date().toISOString()}] Response sent:`, {
+			method: req.method,
+			url: req.url,
+			status: res.statusCode,
+			duration: `${duration}ms`
+		});
+	});
+	
+	next();
 });
 
+// Create HTTP server separately
+const server = http.createServer(app);
+
+// Add proper error handling and cleanup
+server.on('error', (error) => {
+	console.error('Server error:', error);
+	if (error.code === 'EADDRINUSE') {
+		console.log('Address in use, retrying...');
+		setTimeout(() => {
+			server.close();
+			server.listen(PORT, HOST);
+		}, 1000);
+	}
+});
+
+// Update the startServer function
 const startServer = async () => {
 	try {
 		// Test database connection first
@@ -350,7 +413,7 @@ const startServer = async () => {
 		}
 
 		// Start the server
-		app.listen(PORT, HOST, () => {
+		server.listen(PORT, HOST, () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
@@ -358,6 +421,15 @@ const startServer = async () => {
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");
+		});
+
+		// Handle graceful shutdown
+		process.on('SIGTERM', () => {
+			console.log('SIGTERM received. Closing server...');
+			server.close(() => {
+				console.log('Server closed');
+				process.exit(0);
+			});
 		});
 	} catch (error) {
 		console.error("Server startup failed:", error);

@@ -11,7 +11,7 @@ ini_set('display_errors', 1);
 error_log("Extract images script started");
 
 // Include database configuration
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 // Define paths relative to project root
 $project_root = realpath(__DIR__ . '/../../');

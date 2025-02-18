@@ -287,3 +287,27 @@ Stack trace:
 #0 D:\XAMPP\htdocs\PetFurMe-Application\api\appointments\save.php(125): mysqli_stmt->bind_param('iississssssssss...', 108, '12', 'Doggy', 'pet', 5, NULL, '["Consultation"...', '', '2025-02-15', '10:40', 'pending', NULL, NULL, 'user', 108)
 #1 {main}
   thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\appointments\save.php on line 125
+[2025-02-17 07:40:26] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:01] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:05] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:15] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:25] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:35] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:45] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9
+[2025-02-17 07:41:55] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
+            AND a.appointment_date >= CURDATE()
+            AND a...' at line 9

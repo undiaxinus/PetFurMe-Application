@@ -4,9 +4,9 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
-include_once '../config/Database.php';
+require_once __DIR__ . '/../config/Database.php';
 
-$API_BASE_URL = 'http://192.168.1.10'; // Make sure this matches your React Native API_BASE_URL
+$API_BASE_URL = 'http://192.168.1.7'; // Make sure this matches your React Native API_BASE_URL
 
 try {
     $database = new Database();

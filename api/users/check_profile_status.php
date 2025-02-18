@@ -25,7 +25,7 @@ try {
     ob_clean();
 
     // Check if Database.php exists
-    $dbPath = __DIR__ . '/../config/database.php';
+    $dbPath = __DIR__ . '/../config/Database.php';
     if (!file_exists($dbPath)) {
         throw new Exception("Database configuration file not found at: " . $dbPath);
     }

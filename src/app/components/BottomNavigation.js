@@ -79,13 +79,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
         {
           scale: animations[screen].interpolate({
             inputRange: [0, 1],
-            outputRange: [1, 1.1],
-          }),
-        },
-        {
-          translateY: animations[screen].interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, -8], // Pop up animation
+            outputRange: [1, 1.05],
           }),
         }
       ],
@@ -104,7 +98,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
         {[
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
           { screen: 'Appointment', icon: 'calendar', label: 'Appointments' },
-          { screen: 'HomePage', icon: 'home', label: 'Home' },
+          { screen: 'HomePage', icon: 'paw', label: 'Home' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
           { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
         ].map(({ screen, icon, label }) => (
@@ -123,8 +117,8 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
             ]}>
               <Ionicons 
                 name={currentScreen === screen ? icon : `${icon}-outline`}
-                size={screen === 'HomePage' ? 28 : 24} 
-                color="#8146C1" 
+                size={screen === 'HomePage' ? 32 : 24}
+                color="#8146C1"
               />
               <Text style={[
                 styles.navText, 
@@ -144,13 +138,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#FFFFFF',
-    height: Platform.OS === 'ios' ? 90 : 80,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 16,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    backgroundColor: 'transparent',
+    height: Platform.OS === 'ios' ? 110 : 96,
     zIndex: 1000,
     elevation: 8,
+    borderTopWidth: 0,
   },
   background: {
     position: 'absolute',
@@ -169,8 +161,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 10,
-    borderTopWidth: 1,
-    borderColor: 'rgba(129, 70, 193, 0.1)',
+    borderTopWidth: 0,
+    marginTop: -1,
   },
   bottomNav: {
     flexDirection: 'row',
@@ -178,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     paddingHorizontal: 15,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+    paddingBottom: 0,
   },
   navItem: {
     flex: 1,
@@ -188,12 +180,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   homeItem: {
-    marginTop: -15,
+    marginTop: -25,
   },
   homeIconContainer: {
     backgroundColor: '#f0e6f7',
-    padding: 12,
-    borderRadius: 20,
+    padding: 16,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: '#8146C1',
+    elevation: 4,
+    shadowColor: '#8146C1',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   iconContainer: {
     alignItems: 'center',
@@ -205,13 +207,14 @@ const styles = StyleSheet.create({
   navText: {
     fontSize: 11,
     color: '#8146C1',
-    marginTop: 2,
+    marginTop: 4,
     opacity: 0.8,
   },
   activeText: {
     fontWeight: '600',
     opacity: 1,
-  }
+    color: '#8146C1',
+  },
 });
 
 export default BottomNavigation; 

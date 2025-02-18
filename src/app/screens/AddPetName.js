@@ -44,6 +44,9 @@ const AddPetProfile = ({ navigation, route }) => {
 	const [petGender, setPetGender] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [photo, setPhoto] = useState(null);
+	const [ageUnit, setAgeUnit] = useState('years');
+	const isEditing = route.params?.isEditing || false;
+	const existingPet = route.params?.pet;
 
 	// Get user_id from route params
 	const user_id = route.params?.user_id;
@@ -75,6 +78,23 @@ const AddPetProfile = ({ navigation, route }) => {
 			}
 		})();
 	}, []);
+
+	useEffect(() => {
+		if (isEditing && existingPet) {
+			setPetName(existingPet.name || '');
+			setPetAge(existingPet.age?.toString() || '');
+			setPetType(existingPet.type || '');
+			setPetBreed(existingPet.breed || '');
+			setPetWeight(existingPet.weight?.toString() || '');
+			setPetAllergies(existingPet.allergies || '');
+			setPetNotes(existingPet.notes || '');
+			setPetGender(existingPet.gender || '');
+			setAgeUnit(existingPet.age_unit || 'years');
+			if (existingPet.photo) {
+				setPhoto({ uri: existingPet.photo });
+			}
+		}
+	}, [isEditing, existingPet]);
 
 	const pickImage = async () => {
 		try {
@@ -123,16 +143,14 @@ const AddPetProfile = ({ navigation, route }) => {
 			return;
 		}
 
-		// Validation for required fields
+		// Updated validation for required fields
 		if (
 			petName.trim() === "" ||
 			petAge.trim() === "" ||
 			!petType ||
-			petBreed.trim() === "" ||
-			!petGender ||
-			petWeight.trim() === ""
+			!petGender
 		) {
-			Alert.alert("Error", "Please fill out all required fields.");
+			Alert.alert("Error", "Please fill in the required fields: Name, Age, Type, and Gender");
 			return;
 		}
 
@@ -159,33 +177,34 @@ const AddPetProfile = ({ navigation, route }) => {
 				created_by: parseInt(user_id),
 				name: petName.trim(),
 				type: petType.toLowerCase(),
-				breed: petBreed.trim(),
+				breed: petBreed.trim() || null,
 				age: parseInt(petAge),
+				age_unit: ageUnit,
 				owner_name: null,
 				allergies: petAllergies?.trim() || null,
 				notes: petNotes?.trim() || null,
 				category: capitalizedType,
 				gender: petGender.toLowerCase(),
-				weight: parseFloat(petWeight),
+				weight: petWeight.trim() ? parseFloat(petWeight) : null,
 				size: null
 			};
+
+			if (isEditing) {
+				petData.id = existingPet.id;
+			}
 
 			// Add debugging log
 			console.log('Pet Data being sent:', petData);
 
-			// Append each field individually to FormData
+			// Append each field to FormData
 			Object.keys(petData).forEach(key => {
 				formData.append(key, petData[key]);
-				// Add debugging log
-				console.log(`Appending ${key}:`, petData[key]);
 			});
 
-			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/index.php`;
-			console.log('Request URL:', url);
-			console.log('Sending pet data:', petData);
-
+			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/${isEditing ? 'update' : 'index'}.php`;
+			
 			const response = await fetch(url, {
-				method: 'POST',
+				method: isEditing ? 'POST' : 'POST',
 				headers: {
 					'Accept': 'application/json',
 				},
@@ -193,21 +212,12 @@ const AddPetProfile = ({ navigation, route }) => {
 			});
 
 			const responseText = await response.text();
-			console.log('Response status:', response.status);
-			console.log('Raw server response:', responseText);
-
-			let data;
-			try {
-				data = JSON.parse(responseText);
-			} catch (e) {
-				console.error('Server returned non-JSON response:', responseText);
-				throw new Error('Server returned an invalid response');
-			}
+			const data = JSON.parse(responseText);
 
 			if (data.success) {
 				// Log the activity
 				await logActivity(
-					ACTIVITY_TYPES.PET_ADDED,
+					isEditing ? ACTIVITY_TYPES.PET_UPDATED : ACTIVITY_TYPES.PET_ADDED,
 					user_id,
 					{
 						petName: petName.trim(),
@@ -227,23 +237,31 @@ const AddPetProfile = ({ navigation, route }) => {
 				Toast.show({
 					type: 'success',
 					text1: 'Success!',
-					text2: `${petName} has been added to your pets`,
+					text2: isEditing 
+						? `${petName}'s profile has been updated`
+						: `${petName} has been added to your pets`,
 					position: 'bottom',
 					visibilityTime: 3000,
 				});
 
-				// Reset navigation stack and navigate to DrawerNavigator/HomePage
+				// Navigate back to HomePage with refresh flag
 				navigation.reset({
 					index: 0,
 					routes: [
 						{
 							name: 'DrawerNavigator',
-							params: { user_id: user_id },
+							params: { 
+								user_id: user_id,
+								refresh: true
+							},
 							state: {
 								routes: [
 									{
 										name: 'HomePage',
-										params: { user_id: user_id }
+										params: { 
+											user_id: user_id,
+											refresh: true
+										}
 									}
 								]
 							}
@@ -254,7 +272,7 @@ const AddPetProfile = ({ navigation, route }) => {
 				Toast.show({
 					type: 'error',
 					text1: 'Error',
-					text2: data.message || 'Failed to create pet profile',
+					text2: data.message || `Failed to ${isEditing ? 'update' : 'create'} pet profile`,
 					position: 'bottom',
 				});
 			}
@@ -263,7 +281,7 @@ const AddPetProfile = ({ navigation, route }) => {
 			Toast.show({
 				type: 'error',
 				text1: 'Error',
-				text2: 'Failed to create pet profile. Please try again.',
+				text2: `Failed to ${isEditing ? 'update' : 'create'} pet profile. Please try again.`,
 				position: 'bottom',
 			});
 		} finally {
@@ -273,16 +291,23 @@ const AddPetProfile = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.mainContainer}>
-			{/* Fixed Header Layer */}
-			<View style={styles.headerLayer}>
+			{/* Sticky Header */}
+			<View style={[
+				styles.headerLayer,
+				{
+					position: 'sticky',
+					top: 0,
+					zIndex: 1000,
+				}
+			]}>
 				<CustomHeader 
-					title="Add Pet Profile"
+					title={isEditing ? "Update Pet Profile" : "Add Pet Profile"}
 					showBack
 					navigation={navigation}
 				/>
 			</View>
 
-			{/* Content Layer */}
+			{/* Content */}
 			<View style={styles.contentContainer}>
 				<ScrollView 
 					style={styles.scrollView}
@@ -290,89 +315,120 @@ const AddPetProfile = ({ navigation, route }) => {
 					contentContainerStyle={styles.scrollViewContent}
 				>
 					<View style={styles.formContainer}>
-						{/* Pet Image Section */}
+						{/* Profile Photo Section */}
 						<View style={styles.imageContainer}>
-							<View style={styles.imageCircle}>
-								<Image
-									source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
-									style={styles.petImage}
-									defaultSource={require("../../assets/images/doprof.png")}
-								/>
-								<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
-									<MaterialIcons name="add-a-photo" size={20} color="#FFFFFF" />
-								</TouchableOpacity>
+							<View style={styles.imageWrapper}>
+								<View style={styles.imageCircle}>
+									<Image
+										source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
+										style={styles.petImage}
+										defaultSource={require("../../assets/images/doprof.png")}
+									/>
+									<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
+										<MaterialIcons name="photo-camera" size={11} color="#FFFFFF" />
+									</TouchableOpacity>
+								</View>
+								<Text style={styles.uploadText}>Add Pet Photo</Text>
 							</View>
-							<Text style={styles.uploadText}>Upload Pet Photo</Text>
 						</View>
 						
-						{/* Form Sections */}
 						<View style={styles.formSections}>
-							{/* Required Fields Section */}
+							{/* Basic Info Section */}
 							<View style={styles.section}>
 								<View style={styles.sectionHeader}>
-									<MaterialIcons name="pets" size={20} color="#8146C1" />
-									<Text style={styles.sectionTitle}>Required Information</Text>
+									<MaterialIcons name="pets" size={14} color="#8146C1" />
+									<Text style={styles.sectionTitle}>Basic Information</Text>
 								</View>
 								
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Pet's Name</Text>
+									<Text style={styles.label}>Name</Text>
 									<View style={styles.inputWithIcon}>
-										<FontAwesome5 name="paw" size={16} color="#8146C1" style={styles.inputIcon} />
+										<FontAwesome5 name="paw" size={14} color="#8146C1" style={styles.inputIcon} />
 										<TextInput
 											style={styles.inputWithIconField}
-											placeholder="Enter pet's name"
+											placeholder="Enter your pet's name"
 											value={petName}
 											onChangeText={setPetName}
-											placeholderTextColor="#8146C1"
+											placeholderTextColor="#A3A3A3"
 										/>
 									</View>
 								</View>
 
-								{/* Reorganize the form fields */}
-								<View style={styles.rowContainer}>
-									<View style={styles.halfInput}>
-										<Text style={styles.label}>Age</Text>
-										<TextInput
-											style={styles.input}
-											placeholder="Age"
-											value={petAge}
-											onChangeText={setPetAge}
-											placeholderTextColor="#8146C1"
-											keyboardType="numeric"
-										/>
+								<View style={styles.inputGroup}>
+									<Text style={styles.label}>Age <Text style={styles.required}>*</Text></Text>
+									<View style={styles.ageInputContainer}>
+										<View style={styles.ageInputWrapper}>
+											<TextInput
+												style={styles.ageInput}
+												placeholder="Age"
+												value={petAge}
+												onChangeText={setPetAge}
+												placeholderTextColor="#A3A3A3"
+												keyboardType="numeric"
+											/>
+										</View>
+										<View style={styles.ageUnitSelector}>
+											<TouchableOpacity 
+												style={[
+													styles.unitButton,
+													ageUnit === 'years' && styles.unitButtonActive
+												]}
+												onPress={() => setAgeUnit('years')}
+											>
+												<Text style={[
+													styles.unitButtonText,
+													ageUnit === 'years' && styles.unitButtonTextActive
+												]}>Yrs</Text>
+											</TouchableOpacity>
+											<TouchableOpacity 
+												style={[
+													styles.unitButton,
+													ageUnit === 'months' && styles.unitButtonActive
+												]}
+												onPress={() => setAgeUnit('months')}
+											>
+												<Text style={[
+													styles.unitButtonText,
+													ageUnit === 'months' && styles.unitButtonTextActive
+												]}>Mos</Text>
+											</TouchableOpacity>
+										</View>
 									</View>
+								</View>
+
+								<View style={styles.rowContainer}>
 									<View style={styles.halfInput}>
 										<Text style={styles.label}>Weight (kg)</Text>
 										<TextInput
 											style={styles.input}
-											placeholder="Weight"
+											placeholder="Optional"
 											value={petWeight}
 											onChangeText={setPetWeight}
-											placeholderTextColor="#8146C1"
+											placeholderTextColor="#A3A3A3"
 											keyboardType="decimal-pad"
+										/>
+									</View>
+									<View style={styles.halfInput}>
+										<Text style={styles.label}>Pet Type</Text>
+										<CustomDropdown
+											label="Select type"
+											options={PET_TYPES}
+											value={petType}
+											onSelect={setPetType}
+											placeholder="Choose type"
 										/>
 									</View>
 								</View>
 
 								<View style={styles.rowContainer}>
 									<View style={styles.halfInput}>
-										<Text style={styles.label}>Type</Text>
-										<CustomDropdown
-											label="Select Pet Type"
-											options={PET_TYPES}
-											value={petType}
-											onSelect={setPetType}
-											placeholder="Select type"
-										/>
-									</View>
-									<View style={styles.halfInput}>
 										<Text style={styles.label}>Gender</Text>
 										<CustomDropdown
-											label="Select Pet Gender"
+											label="Select gender"
 											options={PET_GENDERS}
 											value={petGender}
 											onSelect={setPetGender}
-											placeholder="Select gender"
+											placeholder="Choose gender"
 										/>
 									</View>
 								</View>
@@ -381,42 +437,42 @@ const AddPetProfile = ({ navigation, route }) => {
 									<Text style={styles.label}>Breed</Text>
 									<TextInput
 										style={styles.input}
-										placeholder="Enter breed"
+										placeholder="Optional"
 										value={petBreed}
 										onChangeText={setPetBreed}
-										placeholderTextColor="#8146C1"
+										placeholderTextColor="#A3A3A3"
 									/>
 								</View>
 							</View>
 
-							{/* Optional Fields Section */}
+							{/* Health Info Section */}
 							<View style={[styles.section, styles.optionalSection]}>
 								<View style={styles.sectionHeader}>
-									<MaterialIcons name="note-add" size={20} color="#8146C1" />
-									<Text style={styles.sectionTitle}>Additional Information</Text>
+									<MaterialIcons name="healing" size={14} color="#8146C1" />
+									<Text style={styles.sectionTitle}>Health Information</Text>
 								</View>
 								
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Allergies (Optional)</Text>
+									<Text style={styles.label}>Allergies</Text>
 									<TextInput
 										style={[styles.input, styles.textArea]}
-										placeholder="List any allergies"
+										placeholder="List any known allergies (if any)"
 										value={petAllergies}
 										onChangeText={setPetAllergies}
-										placeholderTextColor="#8146C1"
+										placeholderTextColor="#A3A3A3"
 										multiline
 										numberOfLines={2}
 									/>
 								</View>
 
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Notes (Optional)</Text>
+									<Text style={styles.label}>Special Notes</Text>
 									<TextInput
 										style={[styles.input, styles.textArea]}
-										placeholder="Any additional notes"
+										placeholder="Add any special care instructions"
 										value={petNotes}
 										onChangeText={setPetNotes}
-										placeholderTextColor="#8146C1"
+										placeholderTextColor="#A3A3A3"
 										multiline
 										numberOfLines={3}
 									/>
@@ -435,7 +491,9 @@ const AddPetProfile = ({ navigation, route }) => {
 							]}
 							onPress={handleContinue}
 							disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petGender || !petWeight.trim()}>
-							<Text style={styles.continueButtonText}>Save Pet Profile</Text>
+							<Text style={styles.continueButtonText}>
+								{isEditing ? 'Update Pet Profile' : 'Save Pet Profile'}
+							</Text>
 						</TouchableOpacity>
 					</View>
 				</ScrollView>
@@ -458,139 +516,186 @@ const styles = StyleSheet.create({
 	},
 	headerLayer: {
 		width: '100%',
-		position: 'fixed', // This is crucial for web
+		position: 'absolute',
 		top: 0,
 		left: 0,
 		right: 0,
 		backgroundColor: '#FFFFFF',
 		zIndex: 1000,
-		elevation: 4,
 		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.23,
-		shadowRadius: 2.62,
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.08,
+		shadowRadius: 1.5,
+		elevation: 2,
+		height: 60,
 	},
 	contentContainer: {
 		flex: 1,
-		marginTop: 60, // Height of your header
+		backgroundColor: '#FFFFFF',
 	},
 	scrollView: {
 		flex: 1,
 	},
 	scrollViewContent: {
-		paddingTop: 16,
+		paddingTop: 8,
+		paddingBottom: 20,
 	},
 	formContainer: {
 		padding: 16,
-		paddingBottom: 32, // Add more padding at bottom
 	},
 	imageContainer: {
 		alignItems: "center",
-		marginVertical: 16, // Reduce margin
+		marginBottom: 20,
+		marginTop: 12,
+		paddingHorizontal: 16,
+	},
+	imageWrapper: {
+		padding: 10,
+		backgroundColor: '#F8F5FF',
+		borderRadius: 16,
+		width: '100%',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: '#E9E3F5',
+		shadowColor: "#8146C1",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.05,
+		shadowRadius: 4,
+		elevation: 2,
 	},
 	imageCircle: {
-		width: 130,
-		height: 130,
-		borderRadius: 65,
-		borderWidth: 2,
+		width: 72,
+		height: 72,
+		borderRadius: 36,
+		borderWidth: 2.5,
 		borderColor: '#8146C1',
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#FFFFFF",
-		elevation: 3,
-		shadowColor: "#000",
+		shadowColor: "#8146C1",
 		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		elevation: 3,
+		padding: 8,
 	},
 	petImage: {
-		width: 120,
-		height: 120,
-		borderRadius: 60,
+		width: 48,
+		height: 48,
+		borderRadius: 24,
+		resizeMode: 'contain',
 	},
 	uploadText: {
 		marginTop: 8,
 		color: '#8146C1',
-		fontSize: 14,
-		fontWeight: '500',
+		fontSize: 11,
+		fontWeight: '600',
+		letterSpacing: 0.3,
+		opacity: 0.9,
 	},
 	cameraButton: {
 		position: "absolute",
-		bottom: 5,
-		right: 5,
+		bottom: -3,
+		right: -3,
 		backgroundColor: "#8146C1",
-		borderRadius: 20,
-		padding: 8,
-		elevation: 2,
+		borderRadius: 12,
+		padding: 4,
+		elevation: 3,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		borderWidth: 2,
+		borderColor: '#FFFFFF',
 	},
 	formSections: {
 		gap: 16,
 	},
 	section: {
 		backgroundColor: "#FFFFFF",
-		borderRadius: 12,
+		borderRadius: 16,
 		padding: 16,
-		marginBottom: 12, // Reduce margin
-		elevation: 2,
+		marginBottom: 12,
+		borderWidth: 1,
+		borderColor: '#F0F0F0',
 		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.2,
-		shadowRadius: 2,
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.06,
+		shadowRadius: 6,
+		elevation: 2,
 	},
 	optionalSection: {
-		backgroundColor: '#FAFAFA',
+		backgroundColor: '#FDFCFF',
+		borderColor: '#E9E3F5',
+		borderStyle: 'dashed',
 	},
 	sectionHeader: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginBottom: 16,
-		paddingBottom: 8,
+		paddingBottom: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: '#F0F0F0',
 	},
 	sectionTitle: {
-		fontSize: 16,
+		fontSize: 13,
 		fontWeight: "600",
-		color: "#8146C1",
-		marginLeft: 8,
+		color: '#8146C1',
+		marginLeft: 6,
+		letterSpacing: 0.3,
+		textTransform: 'uppercase',
 	},
 	inputGroup: {
-		marginBottom: 12, // Reduce margin
+		marginBottom: 14,
 	},
 	inputWithIcon: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		height: 42,
 		borderWidth: 1,
 		borderColor: "#E0E0E0",
-		borderRadius: 8,
+		borderRadius: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
 		backgroundColor: "#FFFFFF",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.04,
+		shadowRadius: 2,
+		elevation: 1,
 	},
 	inputIcon: {
 		padding: 12,
+		opacity: 0.8,
 	},
 	inputWithIconField: {
 		flex: 1,
-		padding: 12,
+		height: '100%',
 		color: "#2D3748",
-		fontSize: 14,
+		fontSize: 13,
+		paddingRight: 12,
 	},
 	label: {
-		fontSize: 14,
-		color: "#4A5568",
-		marginBottom: 6,
+		fontSize: 12,
+		color: '#666666',
+		marginBottom: 5,
 		fontWeight: "500",
+		letterSpacing: 0.2,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	input: {
+		height: 42,
 		borderWidth: 1,
 		borderColor: "#E0E0E0",
-		borderRadius: 8,
-		padding: 12,
+		borderRadius: 10,
+		padding: 10,
 		backgroundColor: "#FFFFFF",
 		color: "#2D3748",
-		fontSize: 14,
+		fontSize: 13,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.04,
+		shadowRadius: 2,
+		elevation: 1,
 	},
 	textArea: {
 		height: 80,
@@ -599,22 +704,31 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		padding: 16,
-		backgroundColor: 'transparent',
+		paddingTop: 8,
 	},
 	continueButton: {
 		backgroundColor: "#8146C1",
-		paddingVertical: 16,
-		borderRadius: 12,
+		height: 48,
+		borderRadius: 24,
 		alignItems: "center",
-		elevation: 2,
+		justifyContent: 'center',
+		marginTop: 8,
+		shadowColor: "#8146C1",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.25,
+		shadowRadius: 8,
+		elevation: 4,
 	},
 	continueButtonDisabled: {
 		backgroundColor: "#E2D9F3",
+		shadowOpacity: 0,
+		elevation: 0,
 	},
 	continueButtonText: {
 		color: "#FFFFFF",
 		fontSize: 16,
 		fontWeight: "600",
+		letterSpacing: 0.5,
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
@@ -626,11 +740,67 @@ const styles = StyleSheet.create({
 	rowContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: 12, // Reduce margin
+		marginBottom: 16,
 		gap: 12,
 	},
 	halfInput: {
 		flex: 1,
+	},
+	required: {
+		color: '#8146C1',
+		fontSize: 14,
+	},
+	ageInputContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+	},
+	ageInputWrapper: {
+		flex: 1,
+		maxWidth: '50%',
+	},
+	ageInput: {
+		height: 42,
+		borderWidth: 1,
+		borderColor: "#E0E0E0",
+		borderRadius: 10,
+		padding: 10,
+		backgroundColor: "#FFFFFF",
+		color: "#2D3748",
+		fontSize: 13,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.04,
+		shadowRadius: 2,
+		elevation: 1,
+	},
+	ageUnitSelector: {
+		flexDirection: 'row',
+		backgroundColor: '#F8F5FF',
+		borderRadius: 8,
+		padding: 2,
+		borderWidth: 1,
+		borderColor: '#E9E3F5',
+	},
+	unitButton: {
+		paddingVertical: 8,
+		paddingHorizontal: 12,
+		borderRadius: 6,
+		minWidth: 45,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	unitButtonActive: {
+		backgroundColor: '#8146C1',
+	},
+	unitButtonText: {
+		fontSize: 12,
+		color: '#666666',
+		fontWeight: '500',
+	},
+	unitButtonTextActive: {
+		color: '#FFFFFF',
+		fontWeight: '600',
 	},
 });
 

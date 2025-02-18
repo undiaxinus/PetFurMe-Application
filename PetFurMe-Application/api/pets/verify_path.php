@@ -8,7 +8,7 @@ $petsPath = __DIR__; // pets directory
 
 $paths = [
     'update_pet.php' => file_exists($petsPath . '/update_pet.php'),
-    'database.php' => file_exists($apiPath . '/config/database.php'),
+    'Database.php' => file_exists($apiPath . '/config/Database.php'),
     'test.php' => file_exists($apiPath . '/test.php')
 ];
 

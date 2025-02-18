@@ -4,7 +4,7 @@ header("Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 header("Access-Control-Allow-Methods: POST");
 header("Content-Type: application/json");
 
-include_once '../../config/database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 // Create database connection
 $database = new Database();

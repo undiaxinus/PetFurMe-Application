@@ -5,16 +5,17 @@ import {
 	TouchableOpacity,
 	Image,
 	StyleSheet,
-	FlatList,
 	ActivityIndicator,
 	Alert,
-	ScrollView
+	ScrollView,
+	Dimensions
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import defaultPetImage from '../../assets/images/doprof.png';
+import CustomHeader from '../components/CustomHeader';
 
 const PetProfile = ({ route, navigation }) => {
 	const [pet, setPet] = useState(null);
@@ -123,63 +124,107 @@ const PetProfile = ({ route, navigation }) => {
 	}
 
 	return (
-		<ScrollView style={styles.container}>
-			<View style={styles.header}>
-				<TouchableOpacity onPress={() => navigation.goBack()}>
-					<Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-				</TouchableOpacity>
-				<Text style={styles.title}>Pet Profile</Text>
-			</View>
+		<View style={styles.container}>
+			<CustomHeader
+				title={pet?.name || 'Pet Profile'}
+				subtitle={pet?.type || ''}
+				navigation={navigation}
+				showBackButton={true}
+			/>
 
-			<View style={styles.profileContainer}>
-				<View style={styles.imageContainer}>
-					<Image
-						source={
-							pet?.photo
-								? { 
-									uri: pet.photo,
-									headers: {
-										'Cache-Control': 'no-cache',
-										'Pragma': 'no-cache',
-										'Expires': '0',
-									},
-									cache: 'reload'
+			<ScrollView style={styles.scrollView}>
+				<View style={styles.profileContainer}>
+					<View style={styles.imageWrapper}>
+						<View style={styles.imageContainer}>
+							<Image
+								source={
+									pet?.photo
+										? { 
+											uri: pet.photo,
+											headers: {
+												'Cache-Control': 'no-cache',
+												'Pragma': 'no-cache',
+												'Expires': '0',
+											},
+											cache: 'reload'
+										}
+										: defaultPetImage
 								}
-								: defaultPetImage
-						}
-						style={styles.profileImage}
-						onError={(error) => {
-							console.error('Image loading error:', error);
-							console.log('Failed photo URL:', pet?.photo);
-						}}
-					/>
+								style={styles.profileImage}
+								onError={(error) => {
+									console.error('Image loading error:', error);
+									console.log('Failed photo URL:', pet?.photo);
+								}}
+							/>
+						</View>
+					</View>
 				</View>
-				<Text style={styles.petName}>{pet.name}</Text>
-			</View>
 
-			<View style={styles.detailsContainer}>
-				<DetailItem label="Category" value={pet.type} />
-				<DetailItem label="Age" value={`${pet.age} yrs old`} />
-				<DetailItem label="Gender" value={pet.gender} />
-				<DetailItem label="Breed" value={pet.breed} />
-				<DetailItem label="Size" value={pet.size} />
-				<DetailItem label="Weight" value={`${pet.weight} kg`} />
-			</View>
+				<View style={styles.detailsContainer}>
+					<View style={styles.detailsGrid}>
+						<DetailCard 
+							label="Age" 
+							value={`${pet.age} yrs`}
+							icon="calendar-outline"
+						/>
+						<DetailCard 
+							label="Gender" 
+							value={pet.gender}
+							icon="gender-male-female"
+						/>
+						<DetailCard 
+							label="Size" 
+							value={pet.size}
+							icon="ruler"
+						/>
+						<DetailCard 
+							label="Weight" 
+							value={`${pet.weight} kg`}
+							icon="weight"
+						/>
+					</View>
+					
+					<View style={styles.breedContainer}>
+						<View style={styles.breedHeader}>
+							<MaterialCommunityIcons 
+								name="dog" 
+								size={20} 
+								color="#666"
+							/>
+							<Text style={styles.breedLabel}>Breed</Text>
+						</View>
+						<Text style={styles.breedValue}>{pet.breed}</Text>
+					</View>
+				</View>
 
-			<TouchableOpacity 
-				style={styles.updateButton}
-				onPress={handleEditPress}
-			>
-				<Text style={styles.updateButtonText}>Update Pet's Profile</Text>
-			</TouchableOpacity>
-		</ScrollView>
+				<TouchableOpacity 
+					style={styles.updateButton}
+					onPress={handleEditPress}
+				>
+					<MaterialCommunityIcons 
+						name="pencil" 
+						size={20} 
+						color="#FFF" 
+						style={styles.buttonIcon}
+					/>
+					<Text style={styles.updateButtonText}>Edit Profile</Text>
+				</TouchableOpacity>
+			</ScrollView>
+		</View>
 	);
 };
 
-const DetailItem = ({ label, value }) => (
-	<View style={styles.detailItem}>
-		<Text style={styles.label}>{label}</Text>
-		<Text style={styles.value}>{value}</Text>
+const DetailCard = ({ label, value, icon }) => (
+	<View style={styles.detailCard}>
+		<View style={styles.cardHeader}>
+			<MaterialCommunityIcons 
+				name={icon} 
+				size={20} 
+				color="#666"
+			/>
+			<Text style={styles.cardLabel}>{label}</Text>
+		</View>
+		<Text style={styles.cardValue}>{value}</Text>
 	</View>
 );
 
@@ -193,78 +238,104 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	header: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 20,
-		paddingTop: 40,
-		backgroundColor: '#8146C1',
-	},
-	backButton: {
-		color: '#FFFFFF',
-		fontSize: 16,
-		marginRight: 20,
-	},
-	title: {
-		color: '#FFFFFF',
-		fontSize: 20,
-		fontWeight: 'bold',
-		left: 40,
+	scrollView: {
+		flex: 1,
 	},
 	profileContainer: {
 		alignItems: 'center',
-		padding: 20,
+		paddingVertical: 20,
+	},
+	imageWrapper: {
+		width: '100%',
+		height: 220,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	imageContainer: {
-		width: 150,
-		height: 150,
-		borderRadius: 75,
+		width: 180,
+		height: 180,
+		borderRadius: 90,
 		overflow: 'hidden',
-		marginBottom: 20,
-		backgroundColor: '#F0F0F0',
-		alignSelf: 'center',
+		backgroundColor: '#F5F5F5',
+		elevation: 3,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
 	},
 	profileImage: {
 		width: '100%',
 		height: '100%',
 		resizeMode: 'cover',
 	},
-	petName: {
-		fontSize: 24,
-		fontWeight: 'bold',
-		color: '#8146C1',
-		marginTop: 10,
-	},
 	detailsContainer: {
 		padding: 20,
 	},
-	detailItem: {
+	detailsGrid: {
 		flexDirection: 'row',
+		flexWrap: 'wrap',
 		justifyContent: 'space-between',
-		paddingVertical: 10,
-		borderBottomWidth: 1,
-		borderBottomColor: '#EEEEEE',
+		marginBottom: 24,
 	},
-	label: {
-		fontSize: 16,
-		color: '#666666',
+	detailCard: {
+		width: '48%',
+		backgroundColor: '#F8F8F8',
+		padding: 16,
+		borderRadius: 12,
+		marginBottom: 16,
 	},
-	value: {
+	cardHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 8,
+	},
+	cardLabel: {
+		fontSize: 14,
+		color: '#666',
+		marginLeft: 6,
+	},
+	cardValue: {
 		fontSize: 16,
-		color: '#333333',
-		fontWeight: '500',
+		fontWeight: '600',
+		color: '#333',
+	},
+	breedContainer: {
+		backgroundColor: '#F8F8F8',
+		padding: 16,
+		borderRadius: 12,
+		marginBottom: 24,
+	},
+	breedHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 8,
+	},
+	breedLabel: {
+		fontSize: 14,
+		color: '#666',
+		marginLeft: 6,
+	},
+	breedValue: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: '#333',
 	},
 	updateButton: {
 		backgroundColor: '#8146C1',
 		margin: 20,
-		padding: 15,
-		borderRadius: 25,
+		padding: 16,
+		borderRadius: 12,
 		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'center',
+	},
+	buttonIcon: {
+		marginRight: 8,
 	},
 	updateButtonText: {
 		color: '#FFFFFF',
 		fontSize: 16,
-		fontWeight: 'bold',
+		fontWeight: '600',
 	},
 });
 

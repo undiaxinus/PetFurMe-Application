@@ -724,13 +724,21 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: '#A259B5',
+    backgroundColor: '#8E44AD',
     borderRadius: 16,
     borderBottomRightRadius: 4,
-    padding: 10,
-    paddingHorizontal: 14,
+    padding: 12,
+    paddingHorizontal: 16,
     marginLeft: 'auto',
-    marginRight: 0, // Remove right margin since we're using container padding
+    marginRight: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
   },
   otherBubble: {
     alignSelf: 'flex-start',
@@ -739,7 +747,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
     padding: 10,
     paddingHorizontal: 14,
-    marginLeft: 0, // Remove left margin since we're using container padding
+    marginLeft: 0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -750,10 +758,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   messageText: {
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 4,
     color: '#FFFFFF',
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 4, // Add space for timestamp
+    fontWeight: '400',
+    letterSpacing: 0.3,
   },
   otherMessageText: {
     color: '#2C3E50',
@@ -850,8 +860,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   timestampText: {
-    fontSize: 10,
-    color: '#999999',
+    fontSize: 11,
+    color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 4,
     alignSelf: 'flex-end',
   },

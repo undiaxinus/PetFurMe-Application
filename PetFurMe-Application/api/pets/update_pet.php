@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     // Test database connection first
-    require_once '../../config/database.php';
+    require_once '../../config/Database.php';
     $database = new Database();
     $conn = $database->getConnection();
     

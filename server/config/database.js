@@ -8,7 +8,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  debug: true  // Enable debug mode
+  debug: false,
+  trace: false
 });
 
 // Test the database connection with a simple query

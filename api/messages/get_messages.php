@@ -5,15 +5,15 @@ header('Content-Type: application/json');
 // Add error logging
 error_log("Starting get_messages.php");
 
-include_once '../../config/Database.php';
-include_once '../../models/Message.php';
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../../models/Message.php';
 
 try {
     // Instantiate DB & connect
     $database = new Database();
     error_log("Created Database instance");
     
-    $db = $database->getConnection();
+    $db = $database->connect();
     error_log("Attempted to get database connection");
 
     if (!$db) {
@@ -40,7 +40,7 @@ try {
     if ($result) {
         $messages_arr = array();
         
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetch_assoc()) {
             error_log("Processing message: " . json_encode($row));
             
             $message_item = array(
@@ -76,5 +76,13 @@ try {
             'line' => $e->getLine()
         )
     ));
+} finally {
+    // Clean up
+    if (isset($result)) {
+        $result->free();
+    }
+    if (isset($db)) {
+        $db->close();
+    }
 }
 ?> 

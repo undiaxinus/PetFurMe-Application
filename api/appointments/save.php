@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-include_once '../config/Database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 try {
     error_log("=== New Appointment Request ===");
