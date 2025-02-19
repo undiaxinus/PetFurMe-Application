@@ -12,7 +12,7 @@ import { SERVER_IP } from '../config/constants';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
-const PetProductsSection = ({ navigation }) => {
+const PetProductsSection = ({ navigation, user_id }) => {
     const [petProducts, setPetProducts] = useState([]);
     const [isProductsLoading, setIsProductsLoading] = useState(false);
 
@@ -103,7 +103,7 @@ const PetProductsSection = ({ navigation }) => {
                 </View>
                 <TouchableOpacity 
                     style={styles.viewMoreButton}
-                    onPress={() => navigation.navigate("ProductListScreen")}
+                    onPress={() => navigation.navigate("ProductListScreen", { user_id })}
                 >
                     <Text style={styles.viewmore}>View More</Text>
                 </TouchableOpacity>

@@ -235,7 +235,14 @@ const App = () => {
 						/>
 
 						{/* Add ProductListScreen */}
-						<Stack.Screen name="ProductListScreen" component={ProductListScreen} />
+						<Stack.Screen 
+							name="ProductListScreen" 
+							component={ProductListScreen}
+							options={{ 
+								headerShown: false,
+								initialParams: { user_id: undefined }
+							}}
+						/>
 					</Stack.Navigator>
 				</NavigationContainer>
 				<Toast config={toastConfig} />

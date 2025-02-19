@@ -508,7 +508,7 @@ const HomePage = ({ navigation, route }) => {
 							<Text style={styles.emptyStateText}>No upcoming appointments</Text>
 							<TouchableOpacity 
 								style={styles.scheduleButton}
-								onPress={() => navigation.navigate('Consultation', { user_id: user_id })}
+								onPress={() => navigation.navigate('Appointment', { user_id: user_id })}
 							>
 								<Text style={styles.scheduleButtonText}>Schedule Now</Text>
 							</TouchableOpacity>
@@ -641,7 +641,10 @@ const HomePage = ({ navigation, route }) => {
 				)}
 
 				{/* Pet Products Section */}
-				<PetProductsSection navigation={navigation} />
+				<PetProductsSection 
+					navigation={navigation} 
+					user_id={user_id}
+				/>
 			</ScrollView>
 
 			{/* Bottom Navigation - Always present but with pointer-events disabled */}

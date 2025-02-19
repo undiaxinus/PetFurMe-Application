@@ -89,8 +89,26 @@ const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
   );
 };
 
-const AddAppointment = ({ route, navigation }) => {
-  const { reason, user_id } = route.params || {};
+const getPetTypeIcon = (petType) => {
+  const type = petType?.toLowerCase() || '';
+  switch (type) {
+    case 'cat':
+      return 'cat';
+    case 'rabbit':
+      return 'rabbit';
+    case 'bird':
+      return 'bird';
+    case 'dog':
+    default:
+      return 'dog';
+  }
+};
+
+const Consultation = ({ navigation, route }) => {
+  const user_id = route.params?.user_id;
+  const selected_pet = route.params?.selected_pet;
+  const [pets, setPets] = useState([]);
+  const [selectedPet, setSelectedPet] = useState(selected_pet || null);
   const [reasons_for_visit, setReasons] = useState([]);
   const [custom_reason, setCustomReason] = useState('');
   const [appointment_date, setDate] = useState(new Date());
@@ -98,8 +116,6 @@ const AddAppointment = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [pets, setPets] = useState([]);
-  const [selectedPet, setSelectedPet] = useState('');
   const [availableSlots, setAvailableSlots] = useState(null);
   const [selectedVaccineTypes, setSelectedVaccineTypes] = useState([]);
   const [otherVaccinationType, setOtherVaccinationType] = useState('');
@@ -129,34 +145,74 @@ const AddAppointment = ({ route, navigation }) => {
   ];
 
   useEffect(() => {
-    if (reason) {
-      setReasons(reason.split(',').map(r => r.trim())); // Set the reasons if passed as a parameter
-    }
-  }, [reason]);
-
-  useEffect(() => {
-    if (user_id) {
+    if (!user_id) {
+      console.log("No user_id found in Consultation, redirecting to login");
+      Alert.alert(
+        'Session Expired',
+        'Please login again to continue.',
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.replace('LoginScreen')
+          }
+        ]
+      );
+    } else {
       fetchUserPets();
     }
   }, [user_id]);
 
   const fetchUserPets = async () => {
     try {
-      console.log("Fetching pets for user_id:", user_id); // Debug log
-      const response = await fetch(`http://${SERVER_IP}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`);
-      const result = await response.json();
+      if (!user_id) {
+        throw new Error('No user ID available');
+      }
+
+      // Add debug logs
+      console.log('Fetching pets for user_id:', user_id);
+      const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
+      console.log('Fetch URL:', url);
+
+      const response = await fetch(url);
       
-      console.log("API Response:", result); // Debug log
+      // Add response debugging
+      console.log('Response status:', response.status);
       
-      if (result.success) {
-        setPets(result.pets);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error Response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Pets data received:', data);
+      
+      if (data.success) {
+        setPets(data.pets);
+        // Only set selectedPet if there's a pet passed through route params
+        if (selected_pet) {
+          setSelectedPet(selected_pet.id.toString());
+        }
       } else {
-        console.error('Failed to fetch pets:', result.message);
-        Alert.alert('Error', 'Failed to fetch pets. Please try again.');
+        throw new Error(data.message || 'Failed to fetch pets');
       }
     } catch (error) {
-      console.error('Error fetching pets:', error);
-      Alert.alert('Error', 'Unable to connect to the server.');
+      console.error("Error fetching pets:", error);
+      console.error("Error details:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      Alert.alert(
+        "Error",
+        "Failed to load pets. Please try again.",
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.goBack()
+          }
+        ]
+      );
     }
   };
 
@@ -212,7 +268,7 @@ const AddAppointment = ({ route, navigation }) => {
       }
 
       // Get the selected pet's details
-      const selectedPetDetails = pets.find(p => p.id.toString() === selectedPet.toString());
+      const selectedPetDetails = pets.find(p => p.id.toString() === selectedPet);
       if (!selectedPetDetails) {
         Alert.alert('Error', 'Selected pet not found');
         return;
@@ -222,8 +278,8 @@ const AddAppointment = ({ route, navigation }) => {
 
       // Ensure all data is properly formatted before sending
       const formattedAppointmentData = {
-        user_id: user_id.toString(), // Convert to string as API expects
-        pet_id: selectedPet.toString(), // Convert to string as API expects
+        user_id: user_id.toString(),
+        pet_id: selectedPet,
         pet_name: selectedPetDetails.name,
         pet_type: selectedPetDetails.type || 'pet',
         pet_age: selectedPetDetails.age ? selectedPetDetails.age.toString() : '0',
@@ -232,10 +288,9 @@ const AddAppointment = ({ route, navigation }) => {
         appointment_time: moment(appointmentTime, 'HH:mm').format('HH:mm')
       };
 
-      // Debug log
-      console.log('Sending appointment data:', formattedAppointmentData);
+      const endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`;
 
-      const response = await fetch(`http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -252,7 +307,7 @@ const AddAppointment = ({ route, navigation }) => {
 
       setLoading(false);
 
-      // Format success message with highlighted notification
+      // Update success message for rescheduling
       const successMessage = [
         `${getFormattedDate()}`,
         `${getFormattedTime()}`,
@@ -260,9 +315,9 @@ const AddAppointment = ({ route, navigation }) => {
         `Pet: ${selectedPetDetails.name}`,
         `Service: ${reasons_for_visit.join(', ')}`,
         '',
-        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯',  // Add a divider line
+        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯',
         'We will notify you once your appointment is confirmed.',
-        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯'   // Add a divider line
+        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯'
       ].join('\n');
 
       const alertButtons = [
@@ -276,7 +331,10 @@ const AddAppointment = ({ route, navigation }) => {
               reason_for_visit: reasons_for_visit
             });
             setShowWebAlert(false);
-            navigation.navigate('Appointment');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Appointment' }],
+            });
           }
         },
         {
@@ -289,10 +347,24 @@ const AddAppointment = ({ route, navigation }) => {
               reason_for_visit: reasons_for_visit
             });
             setShowWebAlert(false);
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Home' }],
-            });
+            // Modified navigation to match the expected URL format
+            if (Platform.OS === 'web') {
+              // For web platform
+              const timestamp = Date.now();
+              window.location.href = `/home?user_id=${user_id}&timestamp=${timestamp}`;
+            } else {
+              // For mobile platforms
+              navigation.reset({
+                index: 0,
+                routes: [{ 
+                  name: 'HomePage',
+                  params: {
+                    user_id: user_id,
+                    timestamp: Date.now()
+                  }
+                }],
+              });
+            }
           }
         }
       ];
@@ -317,7 +389,11 @@ const AddAppointment = ({ route, navigation }) => {
   // Format the date for display
   const getFormattedDate = () => {
     if (appointmentDate) {
-      return moment(appointmentDate).format('MMMM DD, YYYY');
+      const date = new Date(appointmentDate);
+      if (isNaN(date.getTime())) {
+        return 'Select Date';
+      }
+      return moment(date).format('MMMM DD, YYYY');
     }
     return 'Select Date';
   };
@@ -325,6 +401,7 @@ const AddAppointment = ({ route, navigation }) => {
   // Format the time for display
   const getFormattedTime = () => {
     if (appointmentTime) {
+      // Format time as "10:30 AM"
       return moment(appointmentTime, 'HH:mm').format('hh:mm A');
     }
     return 'Select Time';
@@ -394,7 +471,7 @@ const AddAppointment = ({ route, navigation }) => {
             onChange={(e) => setSelectedPet(e.target.value)}
             style={styles.webSelect}
           >
-            <option value="">Select your pet</option>
+            <option value="">Choose a pet</option>
             {pets.map(pet => (
               <option key={pet.id} value={pet.id.toString()}>
                 {pet.name}
@@ -416,7 +493,7 @@ const AddAppointment = ({ route, navigation }) => {
             value: pet.id.toString(),
           }))}
           placeholder={{
-            label: 'Select your pet',
+            label: 'Choose a pet',
             value: '',
             color: '#9CA3AF',
           }}
@@ -436,57 +513,161 @@ const AddAppointment = ({ route, navigation }) => {
   const renderDateTimePicker = () => {
     if (Platform.OS === 'web') {
       return (
-        <>
-          <View style={styles.webDateTimeContainer}>
-            <MaterialCommunityIcons name="calendar" size={24} color="#666" />
-            <input
-              type="date"
-              value={appointmentDate}
-              onChange={(e) => {
-                const date = e.target.value;
-                setAppointmentDate(date);
-                checkAvailability(new Date(date));
-              }}
-              style={styles.webDateTimeInput}
-            />
+        <View style={styles.scheduleContainer}>
+          <View style={styles.scheduleInputContainer}>
+            <View style={styles.scheduleInputWrapper}>
+              <MaterialCommunityIcons 
+                name="calendar" 
+                size={20} 
+                color={appointmentDate ? '#374151' : '#6B7280'} 
+                style={styles.scheduleIcon} 
+              />
+              <div style={{ position: 'relative', flex: 1 }}>
+                <input
+                  type="text"
+                  value={appointmentDate ? getFormattedDate() : ''}
+                  onFocus={(e) => {
+                    e.target.type = 'date';
+                    e.target.showPicker();
+                  }}
+                  onBlur={(e) => {
+                    if (!appointmentDate) {
+                      e.target.type = 'text';
+                    }
+                  }}
+                  onChange={(e) => {
+                    const date = e.target.value;
+                    if (date) {
+                      setAppointmentDate(date);
+                      checkAvailability(new Date(date));
+                      e.target.type = 'text';
+                    }
+                  }}
+                  style={{
+                    ...styles.scheduleInput,
+                    width: '100%',
+                    color: appointmentDate ? '#374151' : '#9CA3AF',
+                    fontSize: '14px',
+                    fontWeight: appointmentDate ? '500' : '400',
+                  }}
+                  placeholder="Select Date"
+                />
+              </div>
+              <MaterialCommunityIcons 
+                name="chevron-down" 
+                size={20} 
+                color={appointmentDate ? '#374151' : '#6B7280'} 
+                style={styles.scheduleArrow} 
+              />
+            </View>
           </View>
-          <View style={styles.webDateTimeContainer}>
-            <MaterialCommunityIcons name="clock-outline" size={24} color="#666" />
-            <input
-              type="time"
-              value={appointmentTime}
-              onChange={(e) => setAppointmentTime(e.target.value)}
-              style={styles.webDateTimeInput}
-            />
+
+          <View style={styles.scheduleInputContainer}>
+            <View style={styles.scheduleInputWrapper}>
+              <MaterialCommunityIcons 
+                name="clock-outline" 
+                size={20} 
+                color={appointmentTime ? '#374151' : '#6B7280'} 
+                style={styles.scheduleIcon} 
+              />
+              <div style={{ position: 'relative', flex: 1 }}>
+                <input
+                  type="time"
+                  value={appointmentTime}
+                  onChange={(e) => {
+                    const time = e.target.value;
+                    setAppointmentTime(time);
+                    e.target.blur(); // Hide the native time picker after selection
+                  }}
+                  style={{
+                    ...styles.scheduleInput,
+                    width: '100%',
+                    color: 'transparent', // Hide the default time display
+                    fontSize: '14px',
+                    fontWeight: appointmentTime ? '500' : '400',
+                    caretColor: 'transparent', // Hide the cursor
+                  }}
+                />
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: appointmentTime ? '#374151' : '#6B7280',
+                  fontSize: '14px',
+                  fontWeight: appointmentTime ? '500' : '400',
+                  pointerEvents: 'none',
+                  width: '100%'
+                }}>
+                  {appointmentTime ? getFormattedTime() : 'Select Time'}
+                </div>
+              </div>
+              <MaterialCommunityIcons 
+                name="chevron-down" 
+                size={20} 
+                color={appointmentTime ? '#374151' : '#6B7280'} 
+                style={styles.scheduleArrow} 
+              />
+            </View>
           </View>
-        </>
+        </View>
       );
     }
 
     return (
-      <>
+      <View style={styles.scheduleContainer}>
         <TouchableOpacity
-          style={styles.dateTimeButton}
+          style={styles.scheduleInputContainer}
           onPress={() => setShowDatePicker(true)}
         >
-          <MaterialCommunityIcons name="calendar" size={24} color="#666" />
-          <View style={styles.dateTimeContent}>
-            <Text style={styles.dateTimeLabel}>Date</Text>
-            <Text style={styles.dateTimeValue}>{getFormattedDate()}</Text>
+          <View style={styles.scheduleInputWrapper}>
+            <MaterialCommunityIcons 
+              name="calendar" 
+              size={20} 
+              color={appointmentDate ? '#374151' : '#6B7280'} 
+              style={styles.scheduleIcon} 
+            />
+            <Text style={[
+              styles.scheduleInput, 
+              !appointmentDate && styles.schedulePlaceholder,
+              appointmentDate && styles.selectedInput
+            ]}>
+              {appointmentDate ? getFormattedDate() : 'Select Date'}
+            </Text>
+            <MaterialCommunityIcons 
+              name="chevron-down" 
+              size={20} 
+              color={appointmentDate ? '#374151' : '#6B7280'} 
+              style={styles.scheduleArrow} 
+            />
           </View>
-          <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.dateTimeButton}
+          style={styles.scheduleInputContainer}
           onPress={() => setShowTimePicker(true)}
         >
-          <MaterialCommunityIcons name="clock-outline" size={24} color="#666" />
-          <View style={styles.dateTimeContent}>
-            <Text style={styles.dateTimeLabel}>Time</Text>
-            <Text style={styles.dateTimeValue}>{getFormattedTime()}</Text>
+          <View style={styles.scheduleInputWrapper}>
+            <MaterialCommunityIcons 
+              name="clock-outline" 
+              size={20} 
+              color={appointmentTime ? '#374151' : '#6B7280'} 
+              style={styles.scheduleIcon} 
+            />
+            <Text style={[
+              styles.scheduleInput, 
+              !appointmentTime && styles.schedulePlaceholder,
+              appointmentTime && styles.selectedInput
+            ]}>
+              {appointmentTime ? getFormattedTime() : 'Select Time'}
+            </Text>
+            <MaterialCommunityIcons 
+              name="chevron-down" 
+              size={20} 
+              color={appointmentTime ? '#374151' : '#6B7280'} 
+              style={styles.scheduleArrow} 
+            />
           </View>
-          <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
         </TouchableOpacity>
 
         <DateTimePickerModal
@@ -502,7 +683,7 @@ const AddAppointment = ({ route, navigation }) => {
           onConfirm={handleTimeConfirm}
           onCancel={() => setShowTimePicker(false)}
         />
-      </>
+      </View>
     );
   };
 
@@ -520,7 +701,7 @@ const AddAppointment = ({ route, navigation }) => {
           <View style={styles.section}>
             <View style={styles.sectionHeaderContainer}>
               <MaterialCommunityIcons name="paw" size={24} color="#CC38F2" />
-              <Text style={styles.sectionHeaderText}>Select Your Pet</Text>
+              <Text style={[styles.sectionHeaderText, { color: '#CC38F2' }]}>Select Your Pet</Text>
             </View>
             
             <View style={styles.pickerWrapper}>
@@ -539,7 +720,11 @@ const AddAppointment = ({ route, navigation }) => {
                     <View style={styles.petCard}>
                       <View style={styles.petCardHeader}>
                         <View style={styles.petAvatarContainer}>
-                          <MaterialCommunityIcons name="dog" size={32} color="#CC38F2" />
+                          <MaterialCommunityIcons 
+                            name={getPetTypeIcon(pet.type)} 
+                            size={32} 
+                            color="#CC38F2" 
+                          />
                         </View>
                         <View style={styles.petHeaderInfo}>
                           <Text style={styles.petName}>{pet.name}</Text>
@@ -591,7 +776,7 @@ const AddAppointment = ({ route, navigation }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
               <MaterialCommunityIcons name="clipboard-text" size={20} color="#CC38F2" />
-              <Text style={styles.sectionTitleText}> Reason for Visit</Text>
+              <Text style={[styles.sectionTitleText, { color: '#CC38F2' }]}> Reason for Visit</Text>
             </Text>
             <View style={styles.reasonButtonsContainer}>
               {[
@@ -631,7 +816,7 @@ const AddAppointment = ({ route, navigation }) => {
           <View style={styles.section}>
             <View style={styles.sectionHeaderContainer}>
               <MaterialCommunityIcons name="calendar-clock" size={24} color="#CC38F2" />
-              <Text style={styles.sectionHeaderText}>Schedule</Text>
+              <Text style={[styles.sectionHeaderText, { color: '#CC38F2' }]}>Schedule</Text>
             </View>
             {renderDateTimePicker()}
           </View>
@@ -721,7 +906,7 @@ const styles = StyleSheet.create({
   sectionTitleText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#CC38F2',
   },
   sectionHeaderContainer: {
     flexDirection: 'row',
@@ -730,9 +915,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   sectionHeaderText: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#CC38F2',
     marginLeft: 12,
   },
   pickerWrapper: {
@@ -741,7 +926,7 @@ const styles = StyleSheet.create({
   pickerLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#4B5563',
+    color: '#374151',
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -1069,6 +1254,54 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
   },
+  scheduleContainer: {
+    gap: 16,
+  },
+  scheduleInputContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    height: 48,
+  },
+  scheduleInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    height: '100%',
+  },
+  scheduleInput: {
+    flex: 1,
+    fontSize: 14,
+    height: '100%',
+    ...(Platform.OS === 'web' && {
+      border: 'none',
+      outline: 'none',
+      backgroundColor: 'transparent',
+      WebkitAppearance: 'none',
+      MozAppearance: 'none',
+      appearance: 'none',
+      cursor: 'pointer',
+      paddingLeft: 0,
+      paddingRight: 0,
+    }),
+  },
+  schedulePlaceholder: {
+    color: '#9CA3AF',
+    fontWeight: '400',
+  },
+  scheduleIcon: {
+    marginRight: 12,
+    color: '#6B7280',
+  },
+  scheduleArrow: {
+    marginLeft: 'auto',
+    color: '#6B7280',
+  },
+  selectedInput: {
+    color: '#374151',
+    fontWeight: '500',
+  },
 });
 
-export default AddAppointment;
+export default Consultation;

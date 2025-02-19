@@ -93,7 +93,7 @@ const PetDetailsModal = ({ pet, isVisible, onClose }) => {
                                 <Text style={styles.notesLabel}>Notes</Text>
                             </View>
                             <Text style={styles.notesValue}>
-                                {pet.notes ? pet.notes.trim() : "No notes"}
+                                {pet.notes?.trim() || "None"}
                             </Text>
                         </View>
                     </View>

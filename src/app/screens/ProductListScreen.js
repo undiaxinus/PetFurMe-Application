@@ -11,6 +11,7 @@ import {
   RefreshControl,
   Alert,
   Platform,
+  AsyncStorage,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { API_BASE_URL } from '../../utils/config';
@@ -23,6 +24,7 @@ const ProductListScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [userId, setUserId] = useState(route.params?.user_id);
 
   const categories = [
     { id: 'all', name: 'All' },
@@ -32,7 +34,26 @@ const ProductListScreen = ({ navigation, route }) => {
     { id: '4', name: 'Grooming' },
   ];
 
-  const user_id = route.params?.user_id;
+  useEffect(() => {
+    const getUserId = async () => {
+      if (!userId) {
+        try {
+          const storedUserId = await AsyncStorage.getItem('user_id');
+          if (storedUserId) {
+            setUserId(storedUserId);
+          } else {
+            console.error('No user_id found');
+            navigation.navigate('LoginScreen');
+          }
+        } catch (error) {
+          console.error('Error getting user_id:', error);
+          Alert.alert('Error', 'Failed to get user session');
+        }
+      }
+    };
+
+    getUserId();
+  }, [userId, navigation]);
 
   useEffect(() => {
     fetchProducts();
@@ -193,7 +214,7 @@ const ProductListScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      <BottomNavigation activeScreen="HomePage" user_id={user_id} />
+      <BottomNavigation activeScreen="ProductListScreen" user_id={userId} />
     </View>
   );
 };

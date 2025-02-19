@@ -311,3 +311,11 @@ Stack trace:
 [2025-02-17 07:41:55] Error in get_upcoming.php: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':user_id 
             AND a.appointment_date >= CURDATE()
             AND a...' at line 9
+[19-Feb-2025 18:04:40 Europe/Berlin] Received cancel request: {"appointment_id":48,"status":"completed"}
+[19-Feb-2025 18:04:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[19-Feb-2025 18:04:40 Europe/Berlin] Database connection successful
+[19-Feb-2025 18:04:40 Europe/Berlin] Executing cancel query for appointment ID: 48
+[19-Feb-2025 18:04:40 Europe/Berlin] Received cancel request: {"appointment_id":43,"status":"completed"}
+[19-Feb-2025 18:04:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[19-Feb-2025 18:04:40 Europe/Berlin] Database connection successful
+[19-Feb-2025 18:04:40 Europe/Berlin] Executing cancel query for appointment ID: 43
