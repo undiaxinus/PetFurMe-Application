@@ -157,12 +157,20 @@ const App = () => {
 		web: {
 			linking: {
 				enabled: true,
+				prefixes: ['http://localhost:8081'], // Add your domain
 				config: {
 					screens: {
 						HomeScreen: '',
 						LoginScreen: 'login',
 						Register: 'register',
-						Appointment: 'appointment',
+						Appointment: {
+							path: 'appointment',
+							parse: {
+								user_id: (user_id) => String(user_id),
+								timestamp: (timestamp) => Number(timestamp),
+								fromConsultation: (value) => value === 'true'
+							},
+						},
 						DrawerNavigator: {
 							screens: {
 								HomePage: 'home',

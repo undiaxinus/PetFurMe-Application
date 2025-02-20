@@ -1,6 +1,6 @@
 2025-02-11 17:53:44 Headers: Array
 (
-    [Host] => 192.168.1.12
+    [Host] => 192.168.1.7
     [Connection] => keep-alive
     [Upgrade-Insecure-Requests] => 1
     [User-Agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36

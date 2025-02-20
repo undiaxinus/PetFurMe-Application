@@ -19,6 +19,7 @@ import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import CustomHeader from '../components/CustomHeader';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Modify the WebAlert component to work on both platforms
 const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
@@ -145,21 +146,34 @@ const Consultation = ({ navigation, route }) => {
   ];
 
   useEffect(() => {
-    if (!user_id) {
-      console.log("No user_id found in Consultation, redirecting to login");
-      Alert.alert(
-        'Session Expired',
-        'Please login again to continue.',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.replace('LoginScreen')
+    const checkSession = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('user_id');
+        if (!storedUserId && !user_id) {
+          console.log("No user_id found in Consultation, redirecting to login");
+          Alert.alert(
+            'Session Expired',
+            'Please login again to continue.',
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.replace('LoginScreen')
+              }
+            ]
+          );
+        } else {
+          // If we have user_id from route but not in storage, store it
+          if (!storedUserId && user_id) {
+            await AsyncStorage.setItem('user_id', user_id.toString());
           }
-        ]
-      );
-    } else {
-      fetchUserPets();
-    }
+          fetchUserPets();
+        }
+      } catch (error) {
+        console.error('Session check error:', error);
+      }
+    };
+
+    checkSession();
   }, [user_id]);
 
   const fetchUserPets = async () => {
@@ -323,18 +337,44 @@ const Consultation = ({ navigation, route }) => {
       const alertButtons = [
         {
           text: 'View',
-          onPress: () => {
-            logActivity(ACTIVITY_TYPES.BOOK_APPOINTMENT, {
-              appointment_id: result.appointment_id,
-              pet_id: selectedPet,
-              appointment_date: appointmentDate,
-              reason_for_visit: reasons_for_visit
-            });
-            setShowWebAlert(false);
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Appointment' }],
-            });
+          onPress: async () => {
+            try {
+              await logActivity(ACTIVITY_TYPES.APPOINTMENT_BOOKED, {
+                appointment_id: result.appointment_id,
+                pet_id: selectedPet,
+                appointment_date: appointmentDate,
+                reason_for_visit: reasons_for_visit
+              });
+              
+              setShowWebAlert(false);
+              
+              // Get and verify user_id
+              const storedUserId = await AsyncStorage.getItem('user_id');
+              const currentUserId = storedUserId || user_id;
+              
+              if (!currentUserId) {
+                throw new Error('No user ID available');
+              }
+
+              if (Platform.OS === 'web') {
+                // For web, use direct navigation instead of window.location
+                navigation.navigate('Appointment', {
+                  user_id: currentUserId,
+                  timestamp: Date.now(),
+                  fromConsultation: true
+                });
+              } else {
+                // For mobile
+                navigation.navigate('Appointment', {
+                  user_id: currentUserId,
+                  timestamp: Date.now(),
+                  fromConsultation: true
+                });
+              }
+            } catch (error) {
+              console.error('Navigation error:', error);
+              Alert.alert('Error', 'Failed to view appointment. Please try again.');
+            }
           }
         },
         {

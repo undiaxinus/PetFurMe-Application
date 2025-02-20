@@ -1520,3 +1520,463 @@ Stack trace:
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
 [19-Feb-2025 20:16:21 Europe/Berlin] Executing statement...
 [19-Feb-2025 20:16:21 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":115}
+[20-Feb-2025 06:52:59 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 06:52:59 Europe/Berlin] Request Method: POST
+[20-Feb-2025 06:52:59 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 06:52:59 Europe/Berlin] Database connection successful
+[20-Feb-2025 06:52:59 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"13:52"}
+[20-Feb-2025 06:52:59 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 06:52:59 Europe/Berlin] Executing statement...
+[20-Feb-2025 06:52:59 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":116}
+[20-Feb-2025 06:53:09 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 06:53:09 Europe/Berlin] Request Method: POST
+[20-Feb-2025 06:53:09 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 06:53:09 Europe/Berlin] Database connection successful
+[20-Feb-2025 06:53:09 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"13:52"}
+[20-Feb-2025 06:53:09 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 06:53:09 Europe/Berlin] Executing statement...
+[20-Feb-2025 06:53:09 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":117}
+[20-Feb-2025 06:58:26 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 06:58:26 Europe/Berlin] Request Method: POST
+[20-Feb-2025 06:58:26 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 06:58:26 Europe/Berlin] Database connection successful
+[20-Feb-2025 06:58:26 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"13:52"}
+[20-Feb-2025 06:58:26 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 06:58:26 Europe/Berlin] Executing statement...
+[20-Feb-2025 06:58:26 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":118}
+[20-Feb-2025 06:58:37 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 06:58:37 Europe/Berlin] Request Method: POST
+[20-Feb-2025 06:58:37 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 06:58:37 Europe/Berlin] Database connection successful
+[20-Feb-2025 06:58:37 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"13:52"}
+[20-Feb-2025 06:58:37 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 06:58:37 Europe/Berlin] Executing statement...
+[20-Feb-2025 06:58:37 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":119}
+[20-Feb-2025 07:03:27 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 07:03:27 Europe/Berlin] Request Method: POST
+[20-Feb-2025 07:03:27 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 07:03:27 Europe/Berlin] Database connection successful
+[20-Feb-2025 07:03:27 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"35","pet_name":"Daija","pet_type":"cat","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"14:03"}
+[20-Feb-2025 07:03:27 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 07:03:27 Europe/Berlin] Executing statement...
+[20-Feb-2025 07:03:27 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":120}
+[20-Feb-2025 07:03:49 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 07:03:49 Europe/Berlin] Request Method: POST
+[20-Feb-2025 07:03:49 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 07:03:49 Europe/Berlin] Database connection successful
+[20-Feb-2025 07:03:49 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"34","pet_name":"Kaiju23","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-23","appointment_time":"17:03"}
+[20-Feb-2025 07:03:49 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 07:03:49 Europe/Berlin] Executing statement...
+[20-Feb-2025 07:03:49 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":121}
+[20-Feb-2025 07:05:31 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 07:05:31 Europe/Berlin] Request Method: POST
+[20-Feb-2025 07:05:31 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 07:05:31 Europe/Berlin] Database connection successful
+[20-Feb-2025 07:05:31 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"35","pet_name":"Daija","pet_type":"cat","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-24","appointment_time":"14:05"}
+[20-Feb-2025 07:05:31 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 07:05:31 Europe/Berlin] Executing statement...
+[20-Feb-2025 07:05:31 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":122}
+[20-Feb-2025 07:09:03 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 07:09:03 Europe/Berlin] Request Method: POST
+[20-Feb-2025 07:09:03 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 07:09:03 Europe/Berlin] Database connection successful
+[20-Feb-2025 07:09:03 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-24","appointment_time":"02:09"}
+[20-Feb-2025 07:09:03 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 07:09:03 Europe/Berlin] Executing statement...
+[20-Feb-2025 07:09:03 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":123}
+[20-Feb-2025 13:28:00 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:28:00 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:28:00 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:28:00 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:28:00 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"12","pet_name":"Doggy","pet_type":"dog","pet_age":"5","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-23","appointment_time":"20:27"}
+[20-Feb-2025 13:28:00 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:28:00 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:28:00 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":124}
+[20-Feb-2025 13:28:10 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:28:10 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:28:10 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:28:10 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:28:10 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"12","pet_name":"Doggy","pet_type":"dog","pet_age":"5","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-23","appointment_time":"20:27"}
+[20-Feb-2025 13:28:10 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:28:10 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:28:10 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":125}
+[20-Feb-2025 13:30:54 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:30:54 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:30:54 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:30:54 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:30:54 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-21","appointment_time":"20:30"}
+[20-Feb-2025 13:30:54 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:30:54 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:30:54 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":126}
+[20-Feb-2025 13:32:37 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:32:37 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:32:37 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:32:37 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:32:37 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"35","pet_name":"Daija","pet_type":"cat","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-23","appointment_time":"20:32"}
+[20-Feb-2025 13:32:37 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:32:37 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:32:37 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":127}
+[20-Feb-2025 13:41:23 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:41:23 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:41:23 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:41:23 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:41:23 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"12","pet_name":"Doggy","pet_type":"dog","pet_age":"5","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-21","appointment_time":"20:41"}
+[20-Feb-2025 13:41:23 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:41:23 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:41:23 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":128}
+[20-Feb-2025 13:51:43 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:51:43 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:51:43 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:51:43 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:51:43 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-24","appointment_time":"20:51"}
+[20-Feb-2025 13:51:43 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:51:43 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:51:43 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":129}
+[20-Feb-2025 13:52:32 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:52:32 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:52:32 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:52:32 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:52:32 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"33","pet_name":"Kaiju2","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-21","appointment_time":"20:52"}
+[20-Feb-2025 13:52:32 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:52:32 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:52:32 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":130}
+[20-Feb-2025 13:59:35 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 13:59:35 Europe/Berlin] Request Method: POST
+[20-Feb-2025 13:59:35 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 13:59:35 Europe/Berlin] Database connection successful
+[20-Feb-2025 13:59:35 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"35","pet_name":"Daija","pet_type":"cat","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-21","appointment_time":"20:59"}
+[20-Feb-2025 13:59:35 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 13:59:35 Europe/Berlin] Executing statement...
+[20-Feb-2025 13:59:35 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":131}
+[20-Feb-2025 14:03:20 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 14:03:20 Europe/Berlin] Request Method: POST
+[20-Feb-2025 14:03:20 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 14:03:20 Europe/Berlin] Database connection successful
+[20-Feb-2025 14:03:20 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"34","pet_name":"Kaiju23","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Grooming\"]","appointment_date":"2025-02-25","appointment_time":"21:03"}
+[20-Feb-2025 14:03:20 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 14:03:20 Europe/Berlin] Executing statement...
+[20-Feb-2025 14:03:20 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":132}
+[20-Feb-2025 14:10:04 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 14:10:04 Europe/Berlin] Request Method: POST
+[20-Feb-2025 14:10:04 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 14:10:04 Europe/Berlin] Database connection successful
+[20-Feb-2025 14:10:04 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"34","pet_name":"Kaiju23","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Deworming\"]","appointment_date":"2025-02-22","appointment_time":"21:10"}
+[20-Feb-2025 14:10:04 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 14:10:04 Europe/Berlin] Executing statement...
+[20-Feb-2025 14:10:04 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":133}
+[20-Feb-2025 14:13:46 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 14:13:46 Europe/Berlin] Request Method: POST
+[20-Feb-2025 14:13:46 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 14:13:46 Europe/Berlin] Database connection successful
+[20-Feb-2025 14:13:46 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"34","pet_name":"Kaiju23","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-25","appointment_time":"21:13"}
+[20-Feb-2025 14:13:46 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 14:13:46 Europe/Berlin] Executing statement...
+[20-Feb-2025 14:13:46 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":134}
+[20-Feb-2025 14:23:40 Europe/Berlin] === New Appointment Request ===
+[20-Feb-2025 14:23:40 Europe/Berlin] Request Method: POST
+[20-Feb-2025 14:23:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[20-Feb-2025 14:23:40 Europe/Berlin] Database connection successful
+[20-Feb-2025 14:23:40 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"34","pet_name":"Kaiju23","pet_type":"dog","pet_age":"2","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-26","appointment_time":"21:23"}
+[20-Feb-2025 14:23:40 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[20-Feb-2025 14:23:40 Europe/Berlin] Executing statement...
+[20-Feb-2025 14:23:40 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":135}

@@ -53,17 +53,40 @@ const Appointment = ({ navigation, route }) => {
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
 
   useEffect(() => {
-    fetchAppointments();
-  }, []);
+    const checkSession = async () => {
+      try {
+        // Get user_id from route params or AsyncStorage
+        const routeUserId = route.params?.user_id;
+        const storedUserId = await AsyncStorage.getItem('user_id');
+        const currentUserId = routeUserId || storedUserId;
 
-  const fetchAppointments = async () => {
+        if (!currentUserId) {
+          console.error('No user ID found');
+          navigation.replace('LoginScreen');
+          return;
+        }
+
+        // Store the current user_id
+        await AsyncStorage.setItem('user_id', currentUserId.toString());
+
+        // Fetch appointments
+        await fetchAppointments(currentUserId);
+
+      } catch (error) {
+        console.error('Session check error:', error);
+        navigation.replace('LoginScreen');
+      }
+    };
+
+    checkSession();
+  }, [route.params?.user_id]); // Only depend on user_id changes
+
+  const fetchAppointments = async (userId) => {
     try {
-      const userId = await AsyncStorage.getItem('user_id');
+      setLoading(true);
       
       if (!userId) {
-        console.error('No user ID found in AsyncStorage');
-        setLoading(false);
-        return;
+        throw new Error('No user ID available');
       }
 
       const url = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/get_appointments.php?user_id=${userId}`;
@@ -231,7 +254,7 @@ const Appointment = ({ navigation, route }) => {
           [
             {
               text: 'OK',
-              onPress: () => fetchAppointments() // Refresh the list
+              onPress: () => fetchAppointments(result.user_id) // Refresh the list
             }
           ]
         );
