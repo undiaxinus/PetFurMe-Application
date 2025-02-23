@@ -26,6 +26,7 @@ const API_BASE_URL = `http://${SERVER_IP}`;
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
+	console.log('HomePage initialized with user_id:', user_id);
 	const refresh = route.params?.refresh;
 	const [userPets, setUserPets] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -81,8 +82,9 @@ const HomePage = ({ navigation, route }) => {
 
 	useEffect(() => {
 		if (route.params?.refresh) {
-			refreshAllData();
-			// Clear the refresh param
+			console.log('Refreshing pet list due to update');
+			fetchUserPets();
+			// Clear the refresh parameter
 			navigation.setParams({ refresh: undefined });
 		}
 	}, [route.params?.refresh]);
@@ -122,50 +124,21 @@ const HomePage = ({ navigation, route }) => {
 	}, [isVerified]);
 
 	const fetchUserPets = async () => {
-		// Don't set loading state for auto refresh to avoid UI flicker
-		const isAutoRefresh = isLoading === false;
-		if (!isAutoRefresh) {
-			setIsLoading(true);
-		}
-		
 		try {
-			// Fix the URL to use the correct endpoint
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
-			console.log("Attempting to fetch from:", url);
+			console.log("Fetching updated pets from:", url);
 			
-			const response = await fetch(url, {
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				}
-			});
-			
-			// Add debug logging
-			console.log("Response status:", response.status);
+			const response = await fetch(url);
 			const data = await response.json();
-			console.log("Raw response data:", data);
 			
 			if (data.success) {
-				const loggablePets = data.pets.map(pet => {
-					console.log(`Processing pet ${pet.name} with photo URL:`, pet.photo);
-					return {
-						...pet,
-						photo: pet.photo ? pet.photo : null
-					};
-				});
-				console.log("Active pets found:", loggablePets);
-				setUserPets(loggablePets);
+				console.log("Updated pets data received:", data.pets);
+				setUserPets(data.pets);
 			} else {
-				throw new Error(data.message || 'Failed to load pets data');
+				console.error("Failed to fetch updated pets:", data.message);
 			}
 		} catch (error) {
-			console.error("Error fetching pets:", error);
-			Alert.alert("Error", "Unable to load pets. Please try again.");
-		} finally {
-			if (!isAutoRefresh) {
-				setIsLoading(false);
-			}
+			console.error("Error refreshing pets:", error);
 		}
 	};
 
@@ -257,7 +230,9 @@ const HomePage = ({ navigation, route }) => {
 		}
 		
 		await logActivity(ACTIVITY_TYPES.PET_ADDED, user_id);
-		navigation.navigate("AddPetName", { user_id: user_id });
+		navigation.navigate("AddPetName", { 
+			user_id: user_id 
+		});
 	};
 
 	// Add a function to refresh all data
@@ -293,7 +268,7 @@ const HomePage = ({ navigation, route }) => {
 			}
 
 			const text = await response.text();
-			console.log("Raw response:", text); // Debug log
+
 			
 			if (!text) {
 				console.error("Empty response received");
@@ -358,6 +333,19 @@ const HomePage = ({ navigation, route }) => {
 		}
 		setSelectedPet(pet);
 		setIsPetModalVisible(true);
+	};
+
+	// For updating existing pet
+	const handleEditPet = (pet) => {
+		navigation.navigate('UpdatePetProfile', { 
+			pet: pet,
+			user_id: user_id,
+			onComplete: () => {
+				// Refresh the pet list after update
+				fetchUserPets();
+				setIsPetModalVisible(false);
+			}
+		});
 	};
 
 	return (
@@ -658,10 +646,15 @@ const HomePage = ({ navigation, route }) => {
 			/>
 
 			{/* Add the PetDetailsModal component */}
+			{console.log('HomePage rendering PetDetailsModal with user_id:', user_id)}
 			<PetDetailsModal
 				pet={selectedPet}
 				isVisible={isPetModalVisible}
 				onClose={() => setIsPetModalVisible(false)}
+				user_id={user_id}
+				onEdit={() => {
+					fetchUserPets();
+				}}
 			/>
 		</View>
 	);

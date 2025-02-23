@@ -1,0 +1,1209 @@
+[21-Feb-2025 10:46:12 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 10:46:12 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 10:46:12 Europe/Berlin] Database connection successful
+[21-Feb-2025 10:46:12 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => bbfdf
+    [type] => rabbit
+    [breed] => fsdf
+    [age] => 22
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 10:46:12 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Warning:  Undefined variable $logDir in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 9
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Deprecated:  is_dir(): Passing null to parameter #1 ($filename) of type string is deprecated in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 9
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Warning:  Undefined variable $logDir in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Deprecated:  mkdir(): Passing null to parameter #1 ($directory) of type string is deprecated in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Warning:  mkdir(): Invalid path in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 10:54:26 Europe/Berlin] PHP Warning:  Undefined variable $logFile in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 14
+[21-Feb-2025 10:59:14 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 10:59:14 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 10:59:14 Europe/Berlin] Database connection successful
+[21-Feb-2025 10:59:14 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ffds
+    [type] => other
+    [breed] => fdfs
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Other
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 10:59:14 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 10:59:36 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 10:59:36 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 10:59:36 Europe/Berlin] Database connection successful
+[21-Feb-2025 10:59:36 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ffds
+    [type] => other
+    [breed] => fdfs
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Other
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 10:59:36 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 11:04:30 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:04:30 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:04:30 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:04:30 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsf
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:04:30 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 11:05:04 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:05:04 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:05:04 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:05:04 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsf
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:05:04 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 11:05:10 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:05:10 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:05:10 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:05:10 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsf
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:05:10 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:71
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 71
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Warning:  Undefined variable $logDir in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 9
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Deprecated:  is_dir(): Passing null to parameter #1 ($filename) of type string is deprecated in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 9
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Warning:  Undefined variable $logDir in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Deprecated:  mkdir(): Passing null to parameter #1 ($directory) of type string is deprecated in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Warning:  mkdir(): Invalid path in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 10
+[21-Feb-2025 11:05:43 Europe/Berlin] PHP Warning:  Undefined variable $logFile in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 14
+[21-Feb-2025 11:09:33 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:09:33 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:09:33 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:09:33 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gfdfg
+    [type] => rabbit
+    [breed] => dsfds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:09:33 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:70
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 70
+[21-Feb-2025 11:12:11 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:12:11 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:12:11 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:12:11 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dfsfsd
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 22
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:12:11 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:70
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 70
+[21-Feb-2025 11:12:39 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:12:39 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:12:39 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:12:39 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dfsfsd
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 22
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:12:39 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:70
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 70
+[21-Feb-2025 11:12:44 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:12:44 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:12:44 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:12:44 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dfsfsd
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 22
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:12:44 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:70
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 70
+[21-Feb-2025 11:13:12 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:13:12 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:13:12 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:13:12 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ds
+    [type] => rabbit
+    [breed] => asdsa
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:13:12 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:70
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 70
+[21-Feb-2025 11:15:41 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:15:41 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:15:41 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:15:41 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsds
+    [type] => rabbit
+    [breed] => sads
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:15:41 Europe/Berlin] Binding parameters: [108,108,"dsds","rabbit","sads",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:15:41 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #14 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:97
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 97
+[21-Feb-2025 11:15:44 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:15:44 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:15:44 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:15:44 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsds
+    [type] => rabbit
+    [breed] => sads
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:15:44 Europe/Berlin] Binding parameters: [108,108,"dsds","rabbit","sads",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:15:44 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #14 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:97
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 97
+[21-Feb-2025 11:16:17 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:16:17 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:16:17 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:16:17 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsds
+    [type] => rabbit
+    [breed] => sads
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:16:17 Europe/Berlin] Binding parameters: [108,108,"dsds","rabbit","sads",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:16:17 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #14 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:97
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 97
+[21-Feb-2025 11:18:18 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:18:18 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:18:18 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:18:18 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fd
+    [type] => rabbit
+    [breed] => fdsf
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:18:18 Europe/Berlin] Binding parameters: [108,108,"fd","rabbit","fdsf",2,"male",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:18:18 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:18:18 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:18:23 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:18:23 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:18:23 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:18:23 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fd
+    [type] => rabbit
+    [breed] => fdsf
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:18:23 Europe/Berlin] Binding parameters: [108,108,"fd","rabbit","fdsf",2,"male",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:18:23 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:18:23 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:18:35 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:18:35 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:18:35 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:18:35 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fd
+    [type] => rabbit
+    [breed] => fdsf
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:18:35 Europe/Berlin] Binding parameters: [108,108,"fd","rabbit","fdsf",2,"male",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:18:35 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:18:35 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:20:26 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:20:26 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:20:26 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:20:26 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gffg
+    [type] => rabbit
+    [breed] => reter
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:20:26 Europe/Berlin] Binding parameters: [108,108,"gffg","rabbit","reter",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:20:26 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:20:26 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:20:37 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:20:37 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:20:37 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:20:37 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gffg
+    [type] => rabbit
+    [breed] => reter
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:20:37 Europe/Berlin] Binding parameters: [108,108,"gffg","rabbit","reter",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:20:37 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:20:37 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:20:41 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:20:41 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:20:41 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:20:41 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gffg
+    [type] => rabbit
+    [breed] => reter
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:20:41 Europe/Berlin] Binding parameters: [108,108,"gffg","rabbit","reter",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:20:41 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:20:41 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:20:48 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:20:48 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:20:48 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:20:48 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gffg
+    [type] => rabbit
+    [breed] => reter
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:20:48 Europe/Berlin] Binding parameters: [108,108,"gffg","rabbit","reter",2,"female",2,null,null,null,"Rabbit",null]
+[21-Feb-2025 11:20:48 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","NULL","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:20:48 Europe/Berlin] Error in add_pet.php: Column 'size' cannot be null
+[21-Feb-2025 11:22:08 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:22:08 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:22:08 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:22:08 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fdsf
+    [type] => bird
+    [breed] => fdsf
+    [age] => 22
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:22:08 Europe/Berlin] Binding parameters: [108,108,"fdsf","bird","fdsf",22,"female",2,"unknown",null,null,"Bird",null]
+[21-Feb-2025 11:22:08 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:27:48 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:27:48 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:27:48 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:27:48 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fds
+    [type] => rabbit
+    [breed] => dad
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:27:48 Europe/Berlin] Binding parameters: [108,108,"fds","rabbit","dad",2,"female",2,"unknown",null,null,"Rabbit",null]
+[21-Feb-2025 11:27:48 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:28:22 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:28:22 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:28:22 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:28:22 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => kaw
+    [type] => rabbit
+    [breed] => fdfd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:28:22 Europe/Berlin] Binding parameters: [108,108,"kaw","rabbit","fdfd",2,"female",2,"unknown",null,null,"Rabbit",null]
+[21-Feb-2025 11:28:22 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:42:01 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:42:01 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:42:01 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:42:01 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Gaw
+    [type] => rabbit
+    [breed] => fds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:42:01 Europe/Berlin] Binding parameters: [108,108,"Gaw","rabbit","fds",2,"female",2,"unknown",null,null,"Rabbit",null]
+[21-Feb-2025 11:42:01 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:42:05 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:42:05 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:42:05 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:42:05 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Gaw
+    [type] => rabbit
+    [breed] => fds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:42:05 Europe/Berlin] Binding parameters: [108,108,"Gaw","rabbit","fds",2,"female",2,"unknown",null,null,"Rabbit",null]
+[21-Feb-2025 11:42:05 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:49:42 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:49:42 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:49:42 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:49:42 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fd
+    [type] => rabbit
+    [breed] => dsf
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:49:42 Europe/Berlin] Binding parameters: [108,108,"fd","rabbit","dsf",2,"male",2,"unknown",null,null,"Rabbit",null]
+[21-Feb-2025 11:49:42 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:52:27 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:52:27 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:52:27 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:52:27 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ds
+    [type] => bird
+    [breed] => dssd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:52:27 Europe/Berlin] Binding parameters: [108,108,"ds","bird","dssd",2,"female",2,"unknown",null,null,"Bird",null]
+[21-Feb-2025 11:52:27 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[21-Feb-2025 11:53:09 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:53:09 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:53:09 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:53:09 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ds
+    [type] => bird
+    [breed] => dssd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 2
+    [size] => 
+    [photo] => pet_108_1740135188427.jpg
+)
+
+[21-Feb-2025 11:53:09 Europe/Berlin] Binding parameters: [108,108,"ds","bird","dssd",2,"female",2,"unknown",null,null,"Bird","pet_108_1740135188427.jpg"]
+[21-Feb-2025 11:53:09 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","string"]
+[23-Feb-2025 03:35:40 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 03:35:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 03:35:40 Europe/Berlin] Database connection successful
+[23-Feb-2025 03:35:40 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Akaiju
+    [type] => bird
+    [breed] => fdfgd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[23-Feb-2025 03:35:40 Europe/Berlin] Binding parameters: [108,108,"Akaiju","bird","fdfgd",2,"male",2,"unknown",null,null,"Bird",null]
+[23-Feb-2025 03:35:40 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[23-Feb-2025 04:07:48 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 04:07:48 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 04:07:48 Europe/Berlin] Database connection successful
+[23-Feb-2025 04:07:48 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Akaiju
+    [type] => bird
+    [breed] => fdfgd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[23-Feb-2025 04:07:48 Europe/Berlin] Binding parameters: [108,108,"Akaiju","bird","fdfgd",2,"male",2,"unknown",null,null,"Bird",null]
+[23-Feb-2025 04:07:48 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[23-Feb-2025 04:10:01 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 04:10:01 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 04:10:01 Europe/Berlin] Database connection successful
+[23-Feb-2025 04:10:01 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gg
+    [type] => bird
+    [breed] => fd
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 2
+    [size] => 
+)
+
+[23-Feb-2025 04:10:01 Europe/Berlin] Binding parameters: [108,108,"gg","bird","fd",2,"male",2,"unknown",null,null,"Bird",null]
+[23-Feb-2025 04:10:01 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[23-Feb-2025 04:10:20 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 04:10:20 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 04:10:20 Europe/Berlin] Database connection successful
+[23-Feb-2025 04:10:20 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsfs
+    [type] => rabbit
+    [breed] => sdfds
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 04:10:20 Europe/Berlin] Error in add_pet.php: Missing required field: age
+[23-Feb-2025 04:10:54 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 04:10:54 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 04:10:54 Europe/Berlin] Database connection successful
+[23-Feb-2025 04:10:54 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Num
+    [type] => bird
+    [breed] => fddf
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 04:10:54 Europe/Berlin] Error in add_pet.php: Missing required field: age
+[23-Feb-2025 16:06:57 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 16:06:57 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 16:06:57 Europe/Berlin] Database connection successful
+[23-Feb-2025 16:06:57 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fssd
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 16:06:57 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:07:45 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:07:45 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:07:45 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:07:45 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:07:45 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:08:25 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:08:25 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:08:25 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:08:25 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:08:25 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:27:58 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:27:58 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:27:58 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:27:58 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:27:58 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:28:26 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:28:26 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:28:26 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:28:26 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:28:26 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:36:03 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:36:03 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:36:03 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:36:03 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:36:03 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:37:07 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:37:07 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:37:07 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:37:07 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:37:07 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:41:24 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:41:24 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:41:24 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:41:24 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => Mixed/Unknown
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:41:24 Europe/Berlin] Error in add_pet.php: Missing required field: age
+[23-Feb-2025 17:45:29 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:45:29 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:45:29 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:45:29 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => bird
+    [breed] => 
+    [age] => 0
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 0
+    [size] => 
+)
+
+[23-Feb-2025 17:45:29 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:48:18 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:48:18 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:48:18 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:48:18 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => sdfds
+    [type] => cat
+    [breed] => 
+    [age] => 0
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 0
+    [size] => 
+)
+
+[23-Feb-2025 17:48:18 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 17:56:45 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 17:56:45 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 17:56:45 Europe/Berlin] Database connection successful
+[23-Feb-2025 17:56:45 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hello
+    [type] => cat
+    [breed] => Unknown
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 17:56:45 Europe/Berlin] Error in add_pet.php: Missing required field: age
+[23-Feb-2025 18:01:25 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:01:25 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:01:25 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:01:25 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => sf
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 18:01:25 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 18:06:20 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:06:20 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:06:20 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:06:20 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dfsf
+    [type] => bird
+    [breed] => Mixed/Unknown
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 18:06:20 Europe/Berlin] Error in add_pet.php: Missing required field: age
+[23-Feb-2025 18:15:28 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:15:28 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:15:28 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:15:28 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => vvccv
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => 
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 18:15:28 Europe/Berlin] Error in add_pet.php: Missing required field: breed
+[23-Feb-2025 18:19:36 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:19:36 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:19:36 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:19:36 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gds
+    [type] => bird
+    [breed] => Mixed/Unknown
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 18:19:36 Europe/Berlin] Binding parameters: [108,108,"gds","bird","Mixed\/Unknown",null,"female",null,"unknown",null,null,"Bird",null]
+[23-Feb-2025 18:19:36 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[23-Feb-2025 18:28:34 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:28:34 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:28:34 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:28:34 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ffs
+    [type] => dog
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Dog
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[23-Feb-2025 18:28:34 Europe/Berlin] Binding parameters: [108,108,"ffs","dog","Not Specified",null,"female",null,"unknown",null,null,"Dog",null]
+[23-Feb-2025 18:28:34 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[23-Feb-2025 18:29:17 Europe/Berlin] Starting pet addition process
+[23-Feb-2025 18:29:17 Europe/Berlin] Attempting database connection to localhost/pet-management
+[23-Feb-2025 18:29:17 Europe/Berlin] Database connection successful
+[23-Feb-2025 18:29:17 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => sdfds
+    [type] => cat
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+    [size] => 
+    [photo] => pet_108_1740331755843.jpg
+)
+
+[23-Feb-2025 18:29:17 Europe/Berlin] Binding parameters: [108,108,"sdfds","cat","Not Specified",null,"female",null,"unknown",null,null,"Cat","pet_108_1740331755843.jpg"]
+[23-Feb-2025 18:29:17 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","string"]

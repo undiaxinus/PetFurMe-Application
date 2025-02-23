@@ -4,6 +4,9 @@
     # Enable headers module
     <IfModule mod_headers.c>
         Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+        Header set Access-Control-Allow-Credentials "true"
     </IfModule>
     
     # Allow direct access to PHP files in api directory
@@ -21,4 +24,7 @@
 
     RewriteCond %{REQUEST_URI} ^/api/
     RewriteRule ^api/(.*) http://localhost:3001/api/$1 [P,L]
+
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
 </IfModule> 

@@ -1,6 +1,6 @@
 import React from 'react';
 import defaultPetImage from '../../assets/images/doprof.png';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
@@ -15,16 +15,28 @@ const DetailCard = ({ label, value, icon }) => (
     </View>
 );
 
-const PetDetailsModal = ({ pet, isVisible, onClose }) => {
+const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
     const navigation = useNavigation();
+    
+    // Add comprehensive debug logging
+    console.log('PetDetailsModal rendered with props:', {
+        petInfo: pet,
+        isVisible,
+        userId: user_id
+    });
+    
     if (!pet) return null;
     
-    const handleEditProfile = () => {
-        onClose(); // Close the modal
-        navigation.navigate('AddPetName', {
-            user_id: pet.user_id,
-            isEditing: true, // Add this flag to indicate edit mode
-            pet: pet // Pass the existing pet data
+    const handleEdit = () => {
+        onClose(); // Use onClose instead of setIsVisible
+        navigation.navigate('UpdatePetProfile', {
+            pet: pet,
+            user_id: user_id,
+            onComplete: () => {
+                if (onEdit) {
+                    onEdit(pet); // Keep the onEdit callback if needed
+                }
+            }
         });
     };
     
@@ -41,7 +53,7 @@ const PetDetailsModal = ({ pet, isVisible, onClose }) => {
                 <View style={styles.modalHeader}>
                     <Text style={styles.modalTitle}>{pet.name}</Text>
                     <View style={styles.headerButtons}>
-                        <TouchableOpacity onPress={handleEditProfile} style={styles.editButton}>
+                        <TouchableOpacity onPress={handleEdit} style={styles.editButton}>
                             <MaterialCommunityIcons name="square-edit-outline" size={22} color="#8146C1" />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>

@@ -10,6 +10,7 @@ import {
 	Alert,
 	ScrollView,
 	SafeAreaView,
+	Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
@@ -19,13 +20,13 @@ import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import CustomHeader from '../components/CustomHeader';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const PET_TYPES = [
 	"Dog",
 	"Cat",
 	"Bird",
 	"Rabbit",
-	"Other"
 ];
 
 const PET_GENDERS = [
@@ -33,7 +34,24 @@ const PET_GENDERS = [
 	"Female"
 ];
 
-const AddPetProfile = ({ navigation, route }) => {
+const AddPetProfile = ({ route }) => {
+	const navigation = useNavigation();
+
+	// Log the entire route params first
+	console.log('AddPetName received route params:', route.params);
+
+	const isEditing = route.params?.isEditing || false;
+	const existingPet = route.params?.pet;
+	const user_id = route.params?.user_id;
+
+	// Add comprehensive debug logging
+	console.log('AddPetName initialized with:', {
+		isEditing,
+		existingPet,
+		user_id,
+		routeParams: route.params
+	});
+
 	const [petName, setPetName] = useState("");
 	const [petAge, setPetAge] = useState("");
 	const [petType, setPetType] = useState("");
@@ -45,30 +63,21 @@ const AddPetProfile = ({ navigation, route }) => {
 	const [loading, setLoading] = useState(false);
 	const [photo, setPhoto] = useState(null);
 	const [ageUnit, setAgeUnit] = useState('years');
-	const isEditing = route.params?.isEditing || false;
-	const existingPet = route.params?.pet;
 
-	// Get user_id from route params
-	const user_id = route.params?.user_id;
-
-	// Add this for debugging
-	console.log("AddPetName user_id:", user_id);
-
-	// Add useEffect to check for user_id
 	useEffect(() => {
+		// Validate user_id on mount
 		if (!user_id) {
+			console.error('Missing user_id in AddPetName', {
+				routeParams: route.params,
+				existingPet
+			});
 			Alert.alert(
 				"Error",
-				"User ID is missing. Please try logging in again.",
-				[
-					{
-						text: "OK",
-						onPress: () => navigation.navigate("LoginScreen")
-					}
-				]
+				"User ID is missing. Please try again.",
+				[{ text: "OK", onPress: () => navigation.goBack() }]
 			);
 		}
-	}, [user_id]);
+	}, []);
 
 	useEffect(() => {
 		(async () => {
@@ -86,12 +95,18 @@ const AddPetProfile = ({ navigation, route }) => {
 			setPetType(existingPet.type || '');
 			setPetBreed(existingPet.breed || '');
 			setPetWeight(existingPet.weight?.toString() || '');
-			setPetAllergies(existingPet.allergies || '');
-			setPetNotes(existingPet.notes || '');
+			setPetAllergies(existingPet.allergies === null ? 'None' : existingPet.allergies);
+			setPetNotes(existingPet.notes === null ? 'None' : existingPet.notes);
 			setPetGender(existingPet.gender || '');
 			setAgeUnit(existingPet.age_unit || 'years');
+			
+			// Handle existing photo
 			if (existingPet.photo) {
-				setPhoto({ uri: existingPet.photo });
+				setPhoto({
+					uri: `http://${SERVER_IP}/PetFurMe-Application/uploads/${existingPet.photo}`,
+					exists: true
+				});
+				console.log('Setting existing photo:', existingPet.photo);
 			}
 		}
 	}, [isEditing, existingPet]);
@@ -114,21 +129,16 @@ const AddPetProfile = ({ navigation, route }) => {
 			});
 
 			if (!result.canceled) {
-				const base64Size = result.assets[0].base64.length * 0.75;
-				const maxSize = 2 * 1024 * 1024;
-
-				if (base64Size > maxSize) {
-					Alert.alert(
-						'Image Too Large',
-						'Please select an image smaller than 2MB',
-						[{ text: 'OK' }]
-					);
-					return;
-				}
-
+				const asset = result.assets[0];
 				setPhoto({
-					uri: result.assets[0].uri,
-					base64: result.assets[0].base64
+					uri: asset.uri,
+					base64: asset.base64,
+					type: 'image/jpeg',
+					isNew: true
+				});
+				console.log('New photo selected:', {
+					hasUri: !!asset.uri,
+					hasBase64: !!asset.base64
 				});
 			}
 		} catch (error) {
@@ -138,155 +148,183 @@ const AddPetProfile = ({ navigation, route }) => {
 	};
 
 	const handleContinue = async () => {
-		if (!user_id) {
-			Alert.alert("Error", "User ID is missing");
-			return;
-		}
-
-		// Updated validation for required fields
-		if (
-			petName.trim() === "" ||
-			petAge.trim() === "" ||
-			!petType ||
-			!petGender
-		) {
-			Alert.alert("Error", "Please fill in the required fields: Name, Age, Type, and Gender");
-			return;
-		}
-
 		try {
 			setLoading(true);
-			
-			const formData = new FormData();
-			
-			// Handle photo
-			if (photo?.base64) {
-				const photoFile = {
-					uri: photo.uri,
-					type: 'image/jpeg',
-					name: 'photo.jpg'
-				};
-				formData.append('photo', photoFile);
+			console.log('Starting update process...');
+
+			// Validate only the truly required fields
+			if (!petName.trim()) {
+				Alert.alert("Error", "Pet name is required.");
+				return;
 			}
 
-			// Capitalize first letter of type for category
-			const capitalizedType = petType.charAt(0).toUpperCase() + petType.slice(1).toLowerCase();
+			if (!petType) {
+				Alert.alert("Error", "Pet type is required.");
+				return;
+			}
 
+			// Create FormData instance
+			const formData = new FormData();
+			
+			// Prepare pet data with proper null handling for optional fields
 			const petData = {
 				user_id: parseInt(user_id),
 				created_by: parseInt(user_id),
 				name: petName.trim(),
 				type: petType.toLowerCase(),
-				breed: petBreed.trim() || null,
-				age: parseInt(petAge),
-				age_unit: ageUnit,
+				breed: petBreed?.trim() || null,
+				age: petAge ? parseInt(petAge) : null,
+				age_unit: ageUnit || 'years',
 				owner_name: null,
 				allergies: petAllergies?.trim() || null,
-				notes: petNotes.trim() || null,
-				category: capitalizedType,
-				gender: petGender.toLowerCase(),
-				weight: petWeight.trim() ? parseFloat(petWeight) : null,
+				notes: petNotes?.trim() || null,
+				category: petType,
+				gender: petGender?.toLowerCase() || null,
+				weight: petWeight ? parseFloat(petWeight) : null,
 				size: null
 			};
 
-			if (isEditing) {
-				petData.id = existingPet.id;
+			// Log the data being sent
+			console.log('Sending pet data:', petData);
+
+			// Handle photo
+			if (photo) {
+				const filename = `pet_${user_id}_${Date.now()}.jpg`;
+				if (photo.base64) {
+					const blob = await fetch(`data:image/jpeg;base64,${photo.base64}`).then(r => r.blob());
+					formData.append('photo', blob, filename);
+					petData.photo = filename;
+				} else if (photo.uri) {
+					formData.append('photo', {
+						uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+						type: 'image/jpeg',
+						name: filename
+					});
+					petData.photo = filename;
+				}
 			}
 
-			// Add debugging log
-			console.log('Pet Data being sent:', petData);
+			// Add pet_id for updates
+			if (isEditing && existingPet?.id) {
+				petData.pet_id = existingPet.id;
+			}
 
-			// Append each field to FormData
-			Object.keys(petData).forEach(key => {
-				formData.append(key, petData[key]);
-			});
+			// Append the stringified pet data
+			formData.append('data', JSON.stringify(petData));
 
-			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/${isEditing ? 'update' : 'index'}.php`;
+			const endpoint = isEditing ? 'update_pet.php' : 'add_pet.php';
+			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/${endpoint}`;
 			
+			console.log('Sending request to:', url);
+			console.log('Pet Data:', petData);
+			console.log('FormData contents:', Array.from(formData.entries()));
+
 			const response = await fetch(url, {
-				method: isEditing ? 'POST' : 'POST',
+				method: 'POST',
 				headers: {
 					'Accept': 'application/json',
 				},
+				credentials: 'include',
 				body: formData
 			});
 
+			// Log the response status and headers
+			console.log('Response status:', response.status);
+			console.log('Response headers:', response.headers);
+
+			// Try to get the response text first
 			const responseText = await response.text();
-			const data = JSON.parse(responseText);
+			console.log('Raw response:', responseText);
 
-			if (data.success) {
-				// Log the activity
-				await logActivity(
-					isEditing ? ACTIVITY_TYPES.PET_UPDATED : ACTIVITY_TYPES.PET_ADDED,
-					user_id,
-					{
-						petName: petName.trim(),
-						petType: petType,
-						petBreed: petBreed,
-						petAge: petAge,
-						petGender: petGender,
-						details: {
-							weight: petWeight,
-							allergies: petAllergies || 'None',
-							notes: petNotes || 'None'
-						}
-					}
-				);
-
-				// Show success toast
-				Toast.show({
-					type: 'success',
-					text1: 'Success!',
-					text2: isEditing 
-						? `${petName}'s profile has been updated`
-						: `${petName} has been added to your pets`,
-					position: 'bottom',
-					visibilityTime: 3000,
-				});
-
-				// Navigate back to HomePage with refresh flag
-				navigation.reset({
-					index: 0,
-					routes: [
-						{
-							name: 'DrawerNavigator',
-							params: { 
-								user_id: user_id,
-								refresh: true
-							},
-							state: {
-								routes: [
-									{
-										name: 'HomePage',
-										params: { 
-											user_id: user_id,
-											refresh: true
-										}
-									}
-								]
-							}
-						}
-					],
-				});
-			} else {
-				Toast.show({
-					type: 'error',
-					text1: 'Error',
-					text2: data.message || `Failed to ${isEditing ? 'update' : 'create'} pet profile`,
-					position: 'bottom',
-				});
+			let result;
+			try {
+				result = JSON.parse(responseText);
+			} catch (e) {
+				console.error('Failed to parse JSON response:', e);
+				throw new Error('Invalid JSON response from server');
 			}
+
+			console.log('Parsed API Response:', result);
+
+			if (!result.success) {
+				throw new Error(result.message || 'Failed to add pet profile');
+			}
+
+			// Log the activity
+			await logActivity(
+				user_id,
+				isEditing ? ACTIVITY_TYPES.PET_UPDATED : ACTIVITY_TYPES.PET_ADDED,
+				`${isEditing ? 'Updated' : 'Added'} pet profile for ${petName}`
+			);
+
+			// Show success message
+			Toast.show({
+				type: 'success',
+				text1: 'Success',
+				text2: `Pet profile added successfully!`,
+				position: 'bottom',
+				visibilityTime: 3000,
+			});
+
+			// Navigate to HomePage with user_id
+			navigation.navigate('HomePage', {
+				user_id: user_id,
+				refresh: true,
+				showMessage: true,
+				message: `Pet profile added successfully!`,
+				messageType: 'success'
+			});
+
 		} catch (error) {
 			console.error('Error in handleContinue:', error);
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: `Failed to ${isEditing ? 'update' : 'create'} pet profile. Please try again.`,
-				position: 'bottom',
+			Alert.alert(
+				"Error",
+				`Failed to add pet profile. ${error.message}`
+			);
+			// Navigate to HomePage in case of error
+			navigation.navigate('HomePage', {
+				user_id: user_id,
+				refresh: true,
+				showMessage: true,
+				message: `Failed to add pet profile. ${error.message}`,
+				messageType: 'error'
 			});
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	// Skip button handlers
+	const handleSkipAge = () => {
+		setPetAge('Not Provided'); // More descriptive display value
+	};
+
+	const handleSkipWeight = () => {
+		setPetWeight('Not Provided'); // More descriptive display value
+	};
+
+	const handleSkipBreed = () => {
+		setPetBreed('Not Specified'); // More descriptive display value
+	};
+
+	// Add these validation helper functions
+	const isAllRequiredFieldsFilled = () => {
+		return petName.trim() !== '' && 
+			   petType !== '' && 
+			   petGender !== '';
+	};
+
+	const isAdditionalFieldsValid = () => {
+		// Check if additional fields have either valid data or are properly skipped
+		const isAgeValid = petAge === 'Not Provided' || (petAge && !isNaN(petAge));
+		const isWeightValid = petWeight === 'Not Provided' || (petWeight && !isNaN(petWeight));
+		const isBreedValid = petBreed === 'Not Specified' || petBreed.trim() !== '';
+		
+		// For allergies and notes, they're optional so they're valid if empty or have content
+		const isAllergiesValid = !petAllergies || petAllergies.trim() === '' || petAllergies === 'None';
+		const isNotesValid = !petNotes || petNotes.trim() === '' || petNotes === 'None';
+
+		return isAgeValid && isWeightValid && isBreedValid && isAllergiesValid && isNotesValid;
 	};
 
 	return (
@@ -340,8 +378,9 @@ const AddPetProfile = ({ navigation, route }) => {
 									<Text style={styles.sectionTitle}>Basic Information</Text>
 								</View>
 								
+								{/* Required Fields */}
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Name</Text>
+									<Text style={styles.label}>Name <Text style={styles.required}>*</Text></Text>
 									<View style={styles.inputWithIcon}>
 										<FontAwesome5 name="paw" size={14} color="#8146C1" style={styles.inputIcon} />
 										<TextInput
@@ -355,98 +394,123 @@ const AddPetProfile = ({ navigation, route }) => {
 								</View>
 
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Age <Text style={styles.required}>*</Text></Text>
-									<View style={styles.ageInputContainer}>
-										<View style={styles.ageInputWrapper}>
-											<TextInput
-												style={styles.ageInput}
-												placeholder="Age"
-												value={petAge}
-												onChangeText={setPetAge}
-												placeholderTextColor="#A3A3A3"
-												keyboardType="numeric"
-											/>
-										</View>
-										<View style={styles.ageUnitSelector}>
-											<TouchableOpacity 
-												style={[
-													styles.unitButton,
-													ageUnit === 'years' && styles.unitButtonActive
-												]}
-												onPress={() => setAgeUnit('years')}
-											>
-												<Text style={[
-													styles.unitButtonText,
-													ageUnit === 'years' && styles.unitButtonTextActive
-												]}>Yrs</Text>
-											</TouchableOpacity>
-											<TouchableOpacity 
-												style={[
-													styles.unitButton,
-													ageUnit === 'months' && styles.unitButtonActive
-												]}
-												onPress={() => setAgeUnit('months')}
-											>
-												<Text style={[
-													styles.unitButtonText,
-													ageUnit === 'months' && styles.unitButtonTextActive
-												]}>Mos</Text>
-											</TouchableOpacity>
-										</View>
-									</View>
-								</View>
-
-								<View style={styles.rowContainer}>
-									<View style={styles.halfInput}>
-										<Text style={styles.label}>Weight (kg)</Text>
-										<TextInput
-											style={styles.input}
-											placeholder="Optional"
-											value={petWeight}
-											onChangeText={setPetWeight}
-											placeholderTextColor="#A3A3A3"
-											keyboardType="decimal-pad"
-										/>
-									</View>
-									<View style={styles.halfInput}>
-										<Text style={styles.label}>Pet Type</Text>
-										<CustomDropdown
-											label="Select type"
-											options={PET_TYPES}
-											value={petType}
-											onSelect={setPetType}
-											placeholder="Choose type"
-										/>
-									</View>
-								</View>
-
-								<View style={styles.rowContainer}>
-									<View style={styles.halfInput}>
-										<Text style={styles.label}>Gender</Text>
-										<CustomDropdown
-											label="Select gender"
-											options={PET_GENDERS}
-											value={petGender}
-											onSelect={setPetGender}
-											placeholder="Choose gender"
-										/>
-									</View>
+									<Text style={styles.label}>Pet Type <Text style={styles.required}>*</Text></Text>
+									<CustomDropdown
+										label="Select type"
+										options={PET_TYPES}
+										value={petType}
+										onSelect={setPetType}
+										placeholder="Choose type"
+										style={styles.dropdown}
+									/>
 								</View>
 
 								<View style={styles.inputGroup}>
-									<Text style={styles.label}>Breed</Text>
-									<TextInput
-										style={styles.input}
-										placeholder="Optional"
-										value={petBreed}
-										onChangeText={setPetBreed}
-										placeholderTextColor="#A3A3A3"
+									<Text style={styles.label}>Gender <Text style={styles.required}>*</Text></Text>
+									<CustomDropdown
+										label="Select gender"
+										options={PET_GENDERS}
+										value={petGender}
+										onSelect={setPetGender}
+										placeholder="Choose gender"
+										style={styles.dropdown}
 									/>
+								</View>
+
+								{/* Additional Information Section */}
+								<View style={styles.additionalInfoContainer}>
+									<Text style={styles.additionalInfoHeader}>Additional Information</Text>
+
+									{/* Age Field */}
+									<View style={styles.optionalField}>
+										<View style={styles.fieldWrapper}>
+											<Text style={styles.label}>Age</Text>
+											<View style={styles.inputWithAction}>
+												<TextInput
+													style={[styles.optionalInput, petAge === 'Not Provided' && styles.skippedInput]}
+													placeholder={petAge === 'Not Provided' ? 'Age skipped' : 'Enter age'}
+													value={petAge === 'Not Provided' ? '' : petAge}
+													onChangeText={(text) => {
+														if (text.trim() === '') {
+															setPetAge('Not Provided');
+														} else {
+															setPetAge(text);
+														}
+													}}
+													placeholderTextColor="#A3A3A3"
+													keyboardType="numeric"
+													editable={petAge !== 'Not Provided'}
+												/>
+												<TouchableOpacity 
+													style={[styles.skipButton, petAge === 'Not Provided' && styles.skipButtonActive]}
+													onPress={handleSkipAge}
+													disabled={petAge === 'Not Provided'}
+												>
+													<Text style={[styles.skipButtonText, petAge === 'Not Provided' && styles.activeButtonText]}>
+														{petAge === 'Not Provided' ? 'Skipped' : 'Skip'}
+													</Text>
+												</TouchableOpacity>
+											</View>
+										</View>
+									</View>
+
+									{/* Weight Field */}
+									<View style={styles.optionalField}>
+										<View style={styles.fieldWrapper}>
+											<Text style={styles.label}>Weight (kg)</Text>
+											<View style={styles.inputWithAction}>
+												<TextInput
+													style={[styles.optionalInput, petWeight === 'Not Provided' && styles.skippedInput]}
+													placeholder={petWeight === 'Not Provided' ? 'Weight skipped' : 'Enter weight in kg'}
+													value={petWeight === 'Not Provided' ? '' : petWeight}
+													onChangeText={setPetWeight}
+													placeholderTextColor="#A3A3A3"
+													keyboardType="decimal-pad"
+													editable={petWeight !== 'Not Provided'}
+												/>
+												<TouchableOpacity 
+													style={[styles.skipButton, petWeight === 'Not Provided' && styles.skipButtonActive]}
+													onPress={handleSkipWeight}
+													disabled={petWeight === 'Not Provided'}
+												>
+													<Text style={[styles.skipButtonText, petWeight === 'Not Provided' && styles.activeButtonText]}>
+														{petWeight === 'Not Provided' ? 'Skipped' : 'Skip'}
+													</Text>
+												</TouchableOpacity>
+											</View>
+										</View>
+									</View>
+
+									{/* Breed Field */}
+									<View style={styles.optionalField}>
+										<View style={styles.fieldWrapper}>
+											<Text style={styles.label}>Breed</Text>
+											<View style={styles.inputWithAction}>
+												<TextInput
+													style={[styles.optionalInput, petBreed === 'Not Specified' && styles.skippedInput]}
+													placeholder={petBreed === 'Not Specified' ? 'Breed skipped' : 'Enter breed'}
+													value={petBreed === 'Not Specified' ? '' : petBreed}
+													onChangeText={setPetBreed}
+													placeholderTextColor="#A3A3A3"
+													editable={petBreed !== 'Not Specified'}
+												/>
+												<TouchableOpacity 
+													style={[styles.skipButton, petBreed === 'Not Specified' && styles.skipButtonActive]}
+													onPress={handleSkipBreed}
+													disabled={petBreed === 'Not Specified'}
+												>
+													<Text style={[styles.skipButtonText, petBreed === 'Not Specified' && styles.activeButtonText]}>
+														{petBreed === 'Not Specified' ? 'Skipped' : 'Skip'}
+													</Text>
+												</TouchableOpacity>
+											</View>
+										</View>
+									</View>
 								</View>
 							</View>
 
 							{/* Health Info Section */}
-							<View style={[styles.section, styles.optionalSection]}>
+							<View style={[styles.section, styles.optionalSection, styles.healthInfoContainer]}>
 								<View style={styles.sectionHeader}>
 									<MaterialIcons name="healing" size={14} color="#8146C1" />
 									<Text style={styles.sectionTitle}>Health Information</Text>
@@ -457,7 +521,7 @@ const AddPetProfile = ({ navigation, route }) => {
 									<TextInput
 										style={[styles.input, styles.textArea]}
 										placeholder="List any known allergies (if any)"
-										value={petAllergies}
+										value={petAllergies === 'null' || petAllergies === null ? 'None' : petAllergies}
 										onChangeText={setPetAllergies}
 										placeholderTextColor="#A3A3A3"
 										multiline
@@ -470,7 +534,7 @@ const AddPetProfile = ({ navigation, route }) => {
 									<TextInput
 										style={[styles.input, styles.textArea]}
 										placeholder="Add any special care instructions"
-										value={petNotes}
+										value={petNotes === 'null' || petNotes === null ? 'None' : petNotes}
 										onChangeText={setPetNotes}
 										placeholderTextColor="#A3A3A3"
 										multiline
@@ -486,11 +550,12 @@ const AddPetProfile = ({ navigation, route }) => {
 						<TouchableOpacity
 							style={[
 								styles.continueButton,
-								(!petName.trim() || !petAge.trim() || !petType || !petBreed || !petGender || !petWeight.trim()) && 
+								(!isAllRequiredFieldsFilled() || !isAdditionalFieldsValid()) && 
 								styles.continueButtonDisabled,
 							]}
 							onPress={handleContinue}
-							disabled={!petName.trim() || !petAge.trim() || !petType || !petBreed || !petGender || !petWeight.trim()}>
+							disabled={!isAllRequiredFieldsFilled() || !isAdditionalFieldsValid()}
+						>
 							<Text style={styles.continueButtonText}>
 								{isEditing ? 'Update Pet Profile' : 'Save Pet Profile'}
 							</Text>
@@ -801,6 +866,113 @@ const styles = StyleSheet.create({
 	unitButtonTextActive: {
 		color: '#FFFFFF',
 		fontWeight: '600',
+	},
+	optionalFieldsContainer: {
+		marginTop: 20,
+		gap: 16,
+	},
+	optionalFieldsHeader: {
+		fontSize: 12,
+		color: '#8146C1',
+		fontWeight: '600',
+		marginBottom: 12,
+		letterSpacing: 0.2,
+	},
+	optionalField: {
+		borderTopWidth: 1,
+		borderTopColor: '#F0F0F0',
+		padding: 16,
+	},
+	fieldWrapper: {
+		gap: 8,
+	},
+	inputWithAction: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+	},
+	optionalInput: {
+		flex: 1,
+		height: 40,
+		borderWidth: 1,
+		borderColor: "#E0E0E0",
+		borderRadius: 8,
+		paddingHorizontal: 12,
+		backgroundColor: "#FFFFFF",
+		color: "#2D3748",
+		fontSize: 13,
+	},
+	skipButton: {
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+		borderRadius: 8,
+		backgroundColor: '#F8F5FF',
+		borderWidth: 1,
+		borderColor: '#E9E3F5',
+		minWidth: 70,
+		alignItems: 'center'
+	},
+	skipButtonText: {
+		color: '#8146C1',
+		fontSize: 12,
+		fontWeight: '500'
+	},
+	activeButtonText: {
+		color: '#666666'
+	},
+	additionalInfoContainer: {
+		marginTop: 24,
+		backgroundColor: '#FFFFFF',
+		borderRadius: 12,
+		borderWidth: 1,
+		borderColor: '#F0F0F0',
+		overflow: 'hidden',
+	},
+	additionalInfoHeader: {
+		fontSize: 14,
+		fontWeight: '600',
+		color: '#8146C1',
+		marginBottom: 16,
+		paddingHorizontal: 16,
+		paddingTop: 16,
+	},
+	healthInfoContainer: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: '#E9E3F5',
+		padding: 16,
+		marginTop: 20,
+	},
+	skippedInput: {
+		backgroundColor: '#F5F5F5',
+		color: '#666666',
+		fontStyle: 'italic'
+	},
+	skippedButton: {
+		backgroundColor: '#8146C1',
+	},
+	skippedButtonText: {
+		color: '#FFFFFF',
+	},
+	activeButtonText: {
+		color: '#666666'
+	},
+	dropdown: {
+		borderWidth: 1,
+		borderColor: '#E0E0E0',
+		borderRadius: 8,
+		padding: 10,
+		backgroundColor: '#FFFFFF',
+		color: '#2D3748',
+		fontSize: 13,
+	},
+	skipButtonActive: {
+		backgroundColor: '#E9E3F5',
+		borderColor: '#D1C4E9'
+	},
+	activeButtonText: {
+		color: '#666666'
 	},
 });
 

@@ -251,6 +251,22 @@ const App = () => {
 								initialParams: { user_id: undefined }
 							}}
 						/>
+
+						<Stack.Screen 
+							name="CreatePetProfile" 
+							component={AddPetName}
+							options={{
+								title: 'Add New Pet',
+								headerShown: true,
+								headerStyle: {
+									backgroundColor: '#8146C1',
+								},
+								headerTintColor: '#FFFFFF',
+								headerTitleStyle: {
+									fontWeight: 'bold',
+								},
+							}}
+						/>
 					</Stack.Navigator>
 				</NavigationContainer>
 				<Toast config={toastConfig} />

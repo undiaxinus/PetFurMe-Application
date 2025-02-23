@@ -10,6 +10,8 @@ import NotificationHelpScreen from '../screens/NotificationHelpScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { screenTransitionConfig, forSlide } from '../config/transitions';
 import Appointment from '../screens/Appointment';
+import CreatePetProfile from '../screens/CreatePetProfile';
+import UpdatePetProfile from '../screens/UpdatePetProfile';
 // Import other screens...
 
 const Drawer = createDrawerNavigator();
@@ -41,6 +43,16 @@ function AppNavigator() {
       <Stack.Screen 
         name="Appointment" 
         component={Appointment}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="CreatePetProfile" 
+        component={CreatePetProfile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="UpdatePetProfile" 
+        component={UpdatePetProfile}
         options={{ headerShown: false }}
       />
       {/* Other drawer screens */}

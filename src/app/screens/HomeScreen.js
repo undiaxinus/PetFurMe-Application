@@ -13,6 +13,7 @@ import { useFonts } from "expo-font";
 import { Fredoka_400Regular } from "@expo-google-fonts/fredoka";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Path, Svg } from 'react-native-svg';
+import { API_BASE_URL } from '../../utils/config';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,6 +29,40 @@ const HomeScreen = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     Fredoka_400Regular,
   });
+
+  // Add state for pets
+  const [pets, setPets] = useState([]);
+
+  // Add useEffect to fetch pets
+  useEffect(() => {
+    fetchPets();
+  }, []);
+
+  const fetchPets = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pets.php`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Pet data:', data.pets);
+      
+      if (data.success) {
+        const transformedPets = data.pets.map(pet => ({
+          id: pet.id.toString(),
+          name: pet.name,
+          image: {
+            uri: pet.photo 
+              ? `${API_BASE_URL}/PetFurMe-Application/uploads/pet_photos/${pet.photo}`
+              : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/paw.png`
+          }
+        }));
+        setPets(transformedPets);
+      }
+    } catch (error) {
+      console.error('Error fetching pets:', error);
+    }
+  };
 
   // Cleanup function for animations
   useEffect(() => {
@@ -124,25 +159,51 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const renderPetIcons = () => {
-    const pets = generateRandomPets();
+    if (pets.length === 0) {
+      return generateRandomPets().map((pet, index) => (
+        <View
+          key={index}
+          style={[
+            styles.backgroundIcon,
+            {
+              top: `${pet.top}%`,
+              left: `${pet.left}%`,
+              transform: [
+                { rotate: `${pet.rotation}deg` },
+                { scale: pet.size / 40 }
+              ],
+              opacity: pet.opacity
+            }
+          ]}
+        >
+          <Image
+            source={require("../../../uploads/defaults/paw_solid.png")}
+            style={[styles.petIcon, {
+              transform: [{ scale: 0.8 }]
+            }]}
+          />
+        </View>
+      ));
+    }
+
     return pets.map((pet, index) => (
       <View
-        key={index}
+        key={pet.id}
         style={[
           styles.backgroundIcon,
           {
-            top: `${pet.top}%`,
-            left: `${pet.left}%`,
+            top: `${Math.random() * 80}%`,
+            left: `${Math.random() * 80}%`,
             transform: [
-              { rotate: `${pet.rotation}deg` },
-              { scale: pet.size / 40 }
+              { rotate: `${Math.random() * 360}deg` },
+              { scale: (Math.random() * 20 + 35) / 40 }
             ],
-            opacity: pet.opacity
+            opacity: Math.random() * 0.03 + 0.02
           }
         ]}
       >
         <Image
-          source={require("../../../uploads/defaults/paw_solid.png")}
+          source={pet.image}
           style={[styles.petIcon, {
             transform: [{ scale: 0.8 }]
           }]}

@@ -1,0 +1,75 @@
+[21-Feb-2025 11:06:31 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:06:31 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:06:31 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:06:31 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dsf
+    [type] => rabbit
+    [breed] => dsds
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:06:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:69
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 69
+[21-Feb-2025 11:06:56 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:06:56 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:06:56 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:06:56 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fdfd
+    [type] => rabbit
+    [breed] => fdsa
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:06:56 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:69
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 69
+[21-Feb-2025 11:07:04 Europe/Berlin] Starting pet addition process
+[21-Feb-2025 11:07:04 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:07:04 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:07:04 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fdfd
+    [type] => rabbit
+    [breed] => fdsa
+    [age] => 2
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Rabbit
+    [gender] => female
+    [weight] => 2
+    [size] => 
+)
+
+[21-Feb-2025 11:07:04 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #9 cannot be passed by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:69
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 69

@@ -18,6 +18,7 @@ import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import CustomHeader from '../components/CustomHeader';
 import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 // Constants for dropdown options
 const PET_TYPES = ['Dog', 'Cat', 'Bird', 'Others'];
 const PET_SIZES = ['Small', 'Medium', 'Large'];
@@ -27,11 +28,8 @@ const PET_GENDERS = ['Male', 'Female'];
 const API_BASE_URL = `http://${SERVER_IP}`;
 
 const UpdatePetProfile = ({ navigation, route }) => {
-  const { pet_id, user_id } = route.params;  // Make sure user_id is passed in route.params
-  console.log("Route params:", route.params);
-  console.log("Pet ID:", route.params?.pet_id);
-  console.log("User ID:", route.params?.user_id);
-
+  const { pet, user_id } = route.params;
+  
   const [petName, setPetName] = useState('');
   const [petAge, setPetAge] = useState('');
   const [petType, setPetType] = useState('');
@@ -43,25 +41,36 @@ const UpdatePetProfile = ({ navigation, route }) => {
   const [petGender, setPetGender] = useState('');
   const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const [ageUnit, setAgeUnit] = useState('years');
 
-  // Add useEffect to fetch pet data when component mounts
   useEffect(() => {
-    if (!user_id) {
+    if (!pet || !user_id) {
       Alert.alert(
-        'Error',
-        'User ID is missing. Please try again.',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.goBack()
-          }
-        ]
+        "Error",
+        "Missing required information",
+        [{ text: "OK", onPress: () => navigation.goBack() }]
       );
       return;
     }
 
-    fetchPetData();
-  }, [user_id]);
+    // Populate form with existing pet data
+    setPetName(pet.name || '');
+    setPetAge(pet.age?.toString() || '');
+    setPetType(pet.type || '');
+    setPetBreed(pet.breed || '');
+    setPetWeight(pet.weight?.toString() || '');
+    setPetAllergies(pet.allergies || '');
+    setPetNotes(pet.notes || '');
+    setPetGender(pet.gender || '');
+    setAgeUnit(pet.age_unit || 'years');
+    
+    if (pet.photo) {
+      setPhoto({
+        uri: `http://${SERVER_IP}/PetFurMe-Application/uploads/${pet.photo}`,
+        exists: true
+      });
+    }
+  }, [pet]);
 
   useEffect(() => {
     (async () => {
@@ -93,339 +102,263 @@ const UpdatePetProfile = ({ navigation, route }) => {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-        const formData = new FormData();
+      const formData = new FormData();
+      
+      // Add photo if selected
+      if (photo?.uri && !photo.uri.startsWith('data:image')) {
+        const localUri = photo.uri;
+        const filename = localUri.split('/').pop();
         
-        // Add photo if selected
-        if (photo?.uri && !photo.uri.startsWith('data:image')) {
-            const localUri = photo.uri;
-            const filename = localUri.split('/').pop();
-            
-            formData.append('photo', {
-                uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-                type: 'image/jpeg',
-                name: filename || 'pet_photo.jpg'
-            });
+        formData.append('photo', {
+          uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+          type: 'image/jpeg',
+          name: filename || 'pet_photo.jpg'
+        });
+      }
+
+      // Add pet data
+      const petData = {
+        pet_id: pet.id,
+        user_id: parseInt(user_id),
+        name: petName.trim(),
+        age: petAge ? parseInt(petAge) : null,
+        type: petType.toLowerCase(),
+        breed: petBreed.trim(),
+        gender: petGender.toLowerCase(),
+        weight: petWeight ? parseFloat(petWeight) : null,
+        size: petSize.toLowerCase(),
+        allergies: petAllergies.trim(),
+        notes: petNotes.trim()
+      };
+
+      console.log('Sending pet data:', petData);
+      formData.append('data', JSON.stringify(petData));
+
+      const response = await fetch(
+        `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
+        {
+          method: 'POST',
+          body: formData
         }
+      );
 
-        // Add pet data
-        const petData = {
-            pet_id: pet_id,
-            user_id: user_id,  // Make sure user_id is included
+      const result = await response.json();
+
+      if (result.success) {
+        // Log activity only after successful update
+        await logActivity(
+          ACTIVITY_TYPES.PET_UPDATED,
+          parseInt(user_id),
+          {
             name: petName.trim(),
-            age: petAge ? parseInt(petAge) : null,
-            type: petType.toLowerCase(),
-            breed: petBreed.trim(),
-            gender: petGender.toLowerCase(),
-            weight: petWeight ? parseFloat(petWeight) : null,
-            size: petSize.toLowerCase(),
-            allergies: petAllergies.trim(),
-            notes: petNotes.trim()
-        };
-
-        console.log('Sending pet data:', petData);
-        formData.append('data', JSON.stringify(petData));
-
-        const response = await fetch(
-            `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
-            {
-                method: 'POST',
-                body: formData
-            }
+            updatedFields: Object.entries({
+              name: petName.trim(),
+              age: petAge,
+              type: petType,
+              breed: petBreed,
+              gender: petGender,
+              weight: petWeight,
+              size: petSize,
+              allergies: petAllergies,
+              notes: petNotes,
+              photo: photo ? 'photo' : null
+            })
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+          }
         );
 
-        const result = await response.json();
-
-        if (result.success) {
-            // Log activity only after successful update
-            await logActivity(
-                ACTIVITY_TYPES.PET_UPDATED,
-                user_id,
-                {
-                    name: petName.trim(),
-                    updatedFields: Object.entries({
-                        name: petName.trim(),
-                        age: petAge,
-                        type: petType,
-                        breed: petBreed,
-                        gender: petGender,
-                        weight: petWeight,
-                        size: petSize,
-                        allergies: petAllergies,
-                        notes: petNotes,
-                        photo: photo ? 'photo' : null
-                    })
-                    .filter(([_, value]) => value)
-                    .map(([key]) => key)
-                }
-            );
-
-            Alert.alert('Success', 'Pet profile updated successfully', [
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        if (route.params?.onComplete) {
-                            route.params.onComplete();
-                        }
-                        navigation.goBack();
-                    }
-                }
-            ]);
-        } else {
-            throw new Error(result.message || 'Failed to update pet profile');
+        // Call onComplete if provided
+        if (route.params?.onComplete) {
+          route.params.onComplete();
         }
-    } catch (error) {
-        console.error('Error updating pet profile:', error);
-        Alert.alert('Error', 'Failed to update pet profile: ' + error.message);
-    } finally {
-        setLoading(false);
-    }
-};
 
-  const fetchPetData = async () => {
-    if (!pet_id) {
-      Alert.alert('Error', 'Pet ID is missing');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // First, get all pets for the user
-      const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
-      console.log('Fetching from URL:', url);
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch pet details');
-      }
-
-      const data = await response.json();
-      console.log('All pets data:', data);
-
-      if (data.success && data.pets) {
-        // Find the specific pet we want to edit
-        const petData = data.pets.find(pet => pet.id === parseInt(pet_id));
-        console.log('Found pet data:', petData);
-
-        if (petData) {
-          // Set all the pet data
-          setPetName(petData.name || '');
-          setPetAge(petData.age?.toString() || '');
-          setPetType(petData.type ? petData.type.charAt(0).toUpperCase() + petData.type.slice(1) : '');
-          setPetBreed(petData.breed || '');
-          setPetSize(petData.size ? petData.size.charAt(0).toUpperCase() + petData.size.slice(1) : '');
-          setPetWeight(petData.weight?.toString() || '');
-          setPetGender(petData.gender ? petData.gender.charAt(0).toUpperCase() + petData.gender.slice(1) : '');
-          
-          // Handle allergies and notes
-          console.log('Setting allergies:', petData.allergies);
-          console.log('Setting notes:', petData.notes);
-          
-          setPetAllergies(petData.allergies || '');
-          setPetNotes(petData.notes || '');
-
-          // Handle photo
-          if (petData.photo) {
-            setPhoto(petData.photo);
-          }
-        } else {
-          throw new Error('Pet not found in user\'s pets');
-        }
+        // Navigate back
+        navigation.goBack();
       } else {
-        throw new Error(data.message || 'Failed to load pets data');
+        throw new Error(result.message || 'Failed to update pet profile');
       }
     } catch (error) {
-      console.error('Error in fetchPetData:', error);
-      Alert.alert('Error', 'Failed to fetch pet data. Please check your connection.');
+      console.error('Error updating pet:', error);
+      Alert.alert("Error", `Failed to update pet profile: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.mainContainer}>
-      {/* Sticky Header */}
-      <View style={[
-        styles.headerLayer,
-        {
-          position: 'sticky',
-          top: 0,
-          zIndex: 1000,
-        }
-      ]}>
-        <CustomHeader 
-          title="Update Pet Profile"
-          showBack
-          navigation={navigation}
-        />
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Update Pet Profile</Text>
       </View>
 
-      {/* Content */}
-      <View style={styles.contentContainer}>
-        <ScrollView 
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          <View style={styles.formContainer}>
-            {/* Profile Photo Section */}
-            <View style={styles.imageContainer}>
-              <View style={styles.imageWrapper}>
-                <View style={styles.imageCircle}>
-                  <Image
-                    source={photo ? { uri: photo } : require("../../assets/images/doprof.png")}
-                    style={styles.petImage}
-                    defaultSource={require("../../assets/images/doprof.png")}
-                  />
-                  <TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
-                    <MaterialIcons name="photo-camera" size={11} color="#FFFFFF" />
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.uploadText}>Update Pet Photo</Text>
-              </View>
-            </View>
-
-            <View style={styles.formSections}>
-              {/* Basic Info Section */}
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <MaterialIcons name="pets" size={14} color="#8146C1" />
-                  <Text style={styles.sectionTitle}>Basic Information</Text>
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Pet's Name</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter pet's name"
-                    value={petName}
-                    onChangeText={setPetName}
-                    placeholderTextColor="#8146C1"
-                  />
-                </View>
-
-                {/* Age and Weight Row */}
-                <View style={styles.rowContainer}>
-                  <View style={styles.halfInput}>
-                    <Text style={styles.label}>Age</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Age"
-                      value={petAge}
-                      onChangeText={setPetAge}
-                      placeholderTextColor="#8146C1"
-                      keyboardType="numeric"
-                    />
-                  </View>
-                  <View style={styles.halfInput}>
-                    <Text style={styles.label}>Weight (kg)</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Weight"
-                      value={petWeight}
-                      onChangeText={setPetWeight}
-                      placeholderTextColor="#8146C1"
-                      keyboardType="decimal-pad"
-                    />
-                  </View>
-                </View>
-
-                {/* Type and Size Row */}
-                <View style={styles.rowContainer}>
-                  <View style={styles.halfInput}>
-                    <Text style={styles.label}>Type</Text>
-                    <CustomDropdown
-                      label="Select Pet Type"
-                      options={PET_TYPES}
-                      value={petType}
-                      onSelect={setPetType}
-                      placeholder="Select type"
-                    />
-                  </View>
-                  <View style={styles.halfInput}>
-                    <Text style={styles.label}>Size</Text>
-                    <CustomDropdown
-                      label="Select Pet Size"
-                      options={PET_SIZES}
-                      value={petSize}
-                      onSelect={setPetSize}
-                      placeholder="Select size"
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Breed</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter breed"
-                    value={petBreed}
-                    onChangeText={setPetBreed}
-                    placeholderTextColor="#8146C1"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Gender</Text>
-                  <CustomDropdown
-                    label="Select Pet Gender"
-                    options={PET_GENDERS}
-                    value={petGender}
-                    onSelect={setPetGender}
-                    placeholder="Select gender"
-                  />
-                </View>
-              </View>
-
-              {/* Health Info Section */}
-              <View style={[styles.section, styles.optionalSection]}>
-                <View style={styles.sectionHeader}>
-                  <MaterialIcons name="health-and-safety" size={14} color="#8146C1" />
-                  <Text style={styles.sectionTitle}>Health Information</Text>
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Allergies (Optional)</Text>
-                  <TextInput
-                    style={[styles.input, styles.textArea]}
-                    placeholder="List any allergies"
-                    value={petAllergies}
-                    onChangeText={setPetAllergies}
-                    placeholderTextColor="#8146C1"
-                    multiline
-                    numberOfLines={2}
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Notes (Optional)</Text>
-                  <TextInput
-                    style={[styles.input, styles.textArea]}
-                    placeholder="Any additional notes"
-                    value={petNotes}
-                    onChangeText={setPetNotes}
-                    placeholderTextColor="#8146C1"
-                    multiline
-                    numberOfLines={3}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-
-          {/* Update Button */}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.continueButton}
-              onPress={handleUpdate}
-            >
-              <Text style={styles.continueButtonText}>Save Changes</Text>
+      <ScrollView style={styles.content}>
+        {/* Photo Upload Box */}
+        <View style={styles.photoBox}>
+          <View style={styles.photoCircle}>
+            <Image 
+              source={require('../../assets/images/doprof.png')}
+              style={styles.pawIcon}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={pickImage}>
+              <MaterialIcons name="add" size={20} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+          <Text style={styles.addPhotoText}>Add Pet Photo</Text>
+        </View>
 
-      {/* Loading Overlay */}
+        {/* Basic Information Card */}
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="paw" size={20} color="#8146C1" />
+            <Text style={styles.sectionTitle}>BASIC INFORMATION</Text>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Name</Text>
+            <View style={styles.inputWrapper}>
+              <View style={styles.inputContainer}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="paw" size={20} color="#8146C1" />
+                </View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your pet's name"
+                  value={petName}
+                  onChangeText={setPetName}
+                  placeholderTextColor="#A3A3A3"
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Age <Text style={styles.required}>*</Text></Text>
+            <View style={styles.ageInputContainer}>
+              <TextInput
+                style={styles.ageInput}
+                placeholder="Age"
+                value={petAge}
+                onChangeText={setPetAge}
+                keyboardType="numeric"
+              />
+              <View style={styles.ageToggle}>
+                <TouchableOpacity 
+                  style={[styles.ageToggleButton, ageUnit === 'years' && styles.activeToggle]}
+                  onPress={() => setAgeUnit('years')}
+                >
+                  <Text style={[styles.toggleText, ageUnit === 'years' && styles.activeToggleText]}>Yrs</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.ageToggleButton, ageUnit === 'months' && styles.activeToggle]}
+                  onPress={() => setAgeUnit('months')}
+                >
+                  <Text style={[styles.toggleText, ageUnit === 'months' && styles.activeToggleText]}>Mos</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.rowContainer}>
+            <View style={styles.halfInput}>
+              <Text style={styles.label}>Weight (kg)</Text>
+              <View style={styles.inputWrapper}>
+                <View style={styles.inputContainer}>
+                  <View style={styles.iconContainer}>
+                    <Ionicons name="scale" size={20} color="#8146C1" />
+                  </View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Optional"
+                    value={petWeight}
+                    onChangeText={setPetWeight}
+                    keyboardType="decimal-pad"
+                    placeholderTextColor="#A3A3A3"
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={styles.halfInput}>
+              <Text style={styles.label}>Pet Type</Text>
+              <View style={styles.inputWrapper}>
+                <CustomDropdown
+                  options={PET_TYPES}
+                  value={petType}
+                  onSelect={setPetType}
+                  placeholder="Choose type"
+                  containerStyle={styles.dropdownContainer}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Gender</Text>
+            <CustomDropdown
+              options={PET_GENDERS}
+              value={petGender}
+              onSelect={setPetGender}
+              placeholder="Choose gender"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Breed</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Optional"
+                value={petBreed}
+                onChangeText={setPetBreed}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* Health Information Card */}
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="medical" size={20} color="#8146C1" />
+            <Text style={styles.sectionTitle}>HEALTH INFORMATION</Text>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Allergies</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="List any known allergies (if any)"
+              value={petAllergies}
+              onChangeText={setPetAllergies}
+              multiline
+              numberOfLines={3}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Special Notes</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="Add any special care instructions"
+              value={petNotes}
+              onChangeText={setPetNotes}
+              multiline
+              numberOfLines={3}
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity 
+          style={styles.saveButton}
+          onPress={handleUpdate}
+        >
+          <Text style={styles.saveButtonText}>Save Changes</Text>
+        </TouchableOpacity>
+      </ScrollView>
+
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#8146C1" />
@@ -436,131 +369,220 @@ const UpdatePetProfile = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFFFFF',
   },
-  headerLayer: {
+  header: {
     backgroundColor: '#8146C1',
-    padding: 15,
+    height: 80,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 45,
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
   },
-  contentContainer: {
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '600',
     flex: 1,
+    textAlign: 'center',
+    marginRight: 24,
   },
-  scrollView: {
+  content: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
   },
-  scrollViewContent: {
-    paddingBottom: 30,
-  },
-  formContainer: {
-    padding: 15,
-  },
-  imageContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  imageWrapper: {
+  photoBox: {
+    backgroundColor: '#F8F5FF',
+    borderRadius: 12,
+    padding: 20,
+    margin: 16,
     alignItems: 'center',
   },
-  imageCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#E1D9F0',
+  photoCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
+    borderWidth: 1,
+    borderColor: '#8146C1',
   },
-  petImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+  pawIcon: {
+    width: 40,
+    height: 40,
+    tintColor: '#8146C1',
   },
-  cameraButton: {
+  addButton: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
+    bottom: -10,
+    right: -10,
     backgroundColor: '#8146C1',
-    padding: 8,
-    borderRadius: 15,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
   },
-  uploadText: {
+  addPhotoText: {
     color: '#8146C1',
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginTop: 5,
+    fontSize: 14,
+    marginTop: 12,
+    fontWeight: '500',
   },
-  formSections: {
-    marginTop: 20,
-  },
-  section: {
-    marginBottom: 20,
+  sectionCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 16,
+    marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginLeft: 10,
+    color: '#8146C1',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 8,
   },
   inputGroup: {
-    marginBottom: 15,
+    marginBottom: 16,
+  },
+  inputWrapper: {
+    backgroundColor: '#F8F5FF',
+    borderRadius: 8,
+    padding: 2,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    height: 48,
+  },
+  iconContainer: {
+    paddingHorizontal: 12,
+  },
+  input: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#333333',
+  },
+  ageInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  ageInput: {
+    flex: 1,
+    maxWidth: '60%',
+    height: 48,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingLeft: 48,
+    fontSize: 16,
+    color: '#333333',
+  },
+  ageToggle: {
+    backgroundColor: '#F8F5FF',
+    borderRadius: 8,
+    padding: 2,
+    flexDirection: 'row',
+  },
+  ageToggleButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 6,
+  },
+  activeToggle: {
+    backgroundColor: '#8146C1',
+  },
+  toggleText: {
+    fontSize: 14,
+    color: '#8146C1',
+  },
+  activeToggleText: {
+    color: '#FFFFFF',
   },
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    gap: 12,
+    marginBottom: 20,
   },
   halfInput: {
-    width: '48%',
+    flex: 1,
   },
-  label: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
-    fontWeight: '500',
-  },
-  input: {
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    padding: 12,
+  dropdownContainer: {
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#8146C1',
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    height: 48,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  dropdown: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    height: 48,
+  },
+  dropdownText: {
     fontSize: 16,
+    color: '#333333',
   },
   textArea: {
-    height: 100,
+    height: 120,
     textAlignVertical: 'top',
+    paddingTop: 16,
   },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  continueButton: {
+  saveButton: {
     backgroundColor: '#8146C1',
-    padding: 15,
-    borderRadius: 10,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 24,
   },
-  continueButtonText: {
-    color: '#FFF',
+  saveButtonText: {
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000,
+  },
+  required: {
+    color: '#8146C1',
   },
 });
 

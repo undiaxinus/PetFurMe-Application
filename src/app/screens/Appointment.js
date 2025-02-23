@@ -232,7 +232,6 @@ const Appointment = ({ navigation, route }) => {
 
       console.log('Cancel response status:', response.status);
       const responseText = await response.text();
-      console.log('Raw response:', responseText);
 
       const result = JSON.parse(responseText);
       console.log('Parsed response:', result);

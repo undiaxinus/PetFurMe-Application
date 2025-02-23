@@ -1980,3 +1980,26 @@ Stack trace:
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
 [20-Feb-2025 14:23:40 Europe/Berlin] Executing statement...
 [20-Feb-2025 14:23:40 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":135}
+[21-Feb-2025 11:26:37 Europe/Berlin] === New Appointment Request ===
+[21-Feb-2025 11:26:37 Europe/Berlin] Request Method: POST
+[21-Feb-2025 11:26:37 Europe/Berlin] Attempting database connection to localhost/pet-management
+[21-Feb-2025 11:26:37 Europe/Berlin] Database connection successful
+[21-Feb-2025 11:26:37 Europe/Berlin] Raw request data: {"user_id":"108","pet_id":"37","pet_name":"fdsf","pet_type":"bird","pet_age":"22","reason_for_visit":"[\"Consultation\"]","appointment_date":"2025-02-22","appointment_time":"18:26"}
+[21-Feb-2025 11:26:37 Europe/Berlin] Preparing query: INSERT INTO appointment (
+        user_id, 
+        pet_id, 
+        pet_name, 
+        pet_type, 
+        pet_age,
+        reason_for_visit,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        created_by_type,
+        created_by_id,
+        created_at,
+        updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+[21-Feb-2025 11:26:37 Europe/Berlin] Executing statement...
+[21-Feb-2025 11:26:37 Europe/Berlin] Success response: {"success":true,"message":"Appointment saved successfully","appointment_id":136}

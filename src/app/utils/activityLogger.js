@@ -50,7 +50,6 @@ export const logActivity = async (type, userId, details) => {
         
         // Verify the save
         const savedLogs = await AsyncStorage.getItem('activityLogs');
-        console.log('Verified saved logs:', savedLogs); // Debug log
         
         return true;
     } catch (error) {

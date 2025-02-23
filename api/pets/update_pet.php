@@ -26,31 +26,23 @@ try {
         throw new Exception("Invalid JSON data");
     }
 
-    // Handle file upload if photo is included
-    $photo_path = null;
-    $photo_blob = null;
-    if (isset($_FILES['photo'])) {
-        $upload_dir = 'uploads/pet_photos/';
+    // Handle photo upload if provided
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $upload_dir = __DIR__ . '/../../uploads/pet_photos/';
         
         // Create directory if it doesn't exist
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
-        
-        // Generate unique filename
-        $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $unique_filename = 'pet_' . uniqid() . '.' . $file_extension;
-        $file_tmp = $_FILES['photo']['tmp_name'];
-        $target_path = $upload_dir . $unique_filename;
-        
-        // Read file contents for database storage
-        $photo_blob = file_get_contents($file_tmp);
-        
-        // Move uploaded file to filesystem
-        if (move_uploaded_file($file_tmp, $target_path)) {
-            $photo_path = $target_path;
+
+        $filename = $_FILES['photo']['name'];
+        $target_path = $upload_dir . $filename;
+
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_path)) {
+            // Update the photo path in petData
+            $data['photo'] = $filename;
         } else {
-            throw new Exception("Failed to upload photo");
+            throw new Exception("Failed to move uploaded file");
         }
     }
 
@@ -69,11 +61,10 @@ try {
     $types = "sssssssss"; // Initial types for the base parameters
 
     // Add photo to update if uploaded
-    if ($photo_path) {
-        $query .= ", photo = ?, photo_blob = ?";
-        $params[] = $photo_path;
-        $params[] = $photo_blob;
-        $types .= "sb"; // 's' for string path, 'b' for blob data
+    if (isset($data['photo'])) {
+        $query .= ", photo = ?";
+        $params[] = $data['photo'];
+        $types .= "s"; // 's' for string path
     }
 
     $query .= " WHERE id = ? AND user_id = ?";
@@ -98,7 +89,7 @@ try {
         echo json_encode([
             "success" => true, 
             "message" => "Pet updated successfully",
-            "photo_path" => $photo_path // Return the photo path for confirmation
+            "photo_path" => $data['photo'] // Return the photo path for confirmation
         ]);
     } else {
         throw new Exception("Failed to update pet: " . mysqli_error($conn));
