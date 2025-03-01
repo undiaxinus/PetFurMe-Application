@@ -31,17 +31,23 @@ const UpdatePetProfile = ({ navigation, route }) => {
   const { pet, user_id } = route.params;
   
   const [petName, setPetName] = useState('');
-  const [petAge, setPetAge] = useState('');
+  const [petAge, setPetAge] = useState('Not Specified');
   const [petType, setPetType] = useState('');
   const [petBreed, setPetBreed] = useState('');
   const [petSize, setPetSize] = useState('');
-  const [petWeight, setPetWeight] = useState('');
+  const [petWeight, setPetWeight] = useState('Not Specified');
   const [petAllergies, setPetAllergies] = useState('');
   const [petNotes, setPetNotes] = useState('');
   const [petGender, setPetGender] = useState('');
   const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [ageUnit, setAgeUnit] = useState('years');
+  const [previousAge, setPreviousAge] = useState('');
+  const [previousWeight, setPreviousWeight] = useState('');
+  const [previousBreed, setPreviousBreed] = useState('');
+  const [isAgeFocused, setIsAgeFocused] = useState(false);
+  const [isWeightFocused, setIsWeightFocused] = useState(false);
+  const [isBreedFocused, setIsBreedFocused] = useState(false);
 
   useEffect(() => {
     if (!pet || !user_id) {
@@ -96,6 +102,33 @@ const UpdatePetProfile = ({ navigation, route }) => {
     } catch (error) {
       console.error('Error picking image:', error);
       Alert.alert('Error', 'Failed to pick image. Please try again.');
+    }
+  };
+
+  const handleSkipAge = () => {
+    if (petAge === 'Not Specified') {
+        setPetAge(previousAge);
+    } else {
+        setPreviousAge(petAge);
+        setPetAge('Not Specified');
+    }
+  };
+
+  const handleSkipWeight = () => {
+    if (petWeight === 'Not Specified') {
+        setPetWeight(previousWeight);
+    } else {
+        setPreviousWeight(petWeight);
+        setPetWeight('Not Specified');
+    }
+  };
+
+  const handleSkipBreed = () => {
+    if (petBreed === 'Not Specified') {
+        setPetBreed(previousBreed);
+    } else {
+        setPreviousBreed(petBreed);
+        setPetBreed('Not Specified');
     }
   };
 
@@ -190,10 +223,10 @@ const UpdatePetProfile = ({ navigation, route }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Update Pet Profile</Text>
+        <Text style={styles.headerTitle}>Add Pet Profile</Text>
       </View>
 
       <ScrollView style={styles.content}>
@@ -201,7 +234,7 @@ const UpdatePetProfile = ({ navigation, route }) => {
         <View style={styles.photoBox}>
           <View style={styles.photoCircle}>
             <Image 
-              source={require('../../assets/images/doprof.png')}
+              source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
               style={styles.pawIcon}
             />
             <TouchableOpacity style={styles.addButton} onPress={pickImage}>
@@ -211,93 +244,41 @@ const UpdatePetProfile = ({ navigation, route }) => {
           <Text style={styles.addPhotoText}>Add Pet Photo</Text>
         </View>
 
-        {/* Basic Information Card */}
-        <View style={styles.sectionCard}>
+        {/* Basic Information */}
+        <View style={styles.infoSection}>
           <View style={styles.sectionHeader}>
             <Ionicons name="paw" size={20} color="#8146C1" />
             <Text style={styles.sectionTitle}>BASIC INFORMATION</Text>
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Name</Text>
-            <View style={styles.inputWrapper}>
-              <View style={styles.inputContainer}>
-                <View style={styles.iconContainer}>
-                  <Ionicons name="paw" size={20} color="#8146C1" />
-                </View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter your pet's name"
-                  value={petName}
-                  onChangeText={setPetName}
-                  placeholderTextColor="#A3A3A3"
-                />
+            <Text style={styles.label}>Name <Text style={styles.required}>*</Text></Text>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Ionicons name="paw" size={20} color="#8146C1" />
               </View>
-            </View>
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Age <Text style={styles.required}>*</Text></Text>
-            <View style={styles.ageInputContainer}>
               <TextInput
-                style={styles.ageInput}
-                placeholder="Age"
-                value={petAge}
-                onChangeText={setPetAge}
-                keyboardType="numeric"
+                style={styles.input}
+                placeholder="Enter your pet's name"
+                value={petName}
+                onChangeText={setPetName}
+                placeholderTextColor="#A3A3A3"
               />
-              <View style={styles.ageToggle}>
-                <TouchableOpacity 
-                  style={[styles.ageToggleButton, ageUnit === 'years' && styles.activeToggle]}
-                  onPress={() => setAgeUnit('years')}
-                >
-                  <Text style={[styles.toggleText, ageUnit === 'years' && styles.activeToggleText]}>Yrs</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={[styles.ageToggleButton, ageUnit === 'months' && styles.activeToggle]}
-                  onPress={() => setAgeUnit('months')}
-                >
-                  <Text style={[styles.toggleText, ageUnit === 'months' && styles.activeToggleText]}>Mos</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.rowContainer}>
-            <View style={styles.halfInput}>
-              <Text style={styles.label}>Weight (kg)</Text>
-              <View style={styles.inputWrapper}>
-                <View style={styles.inputContainer}>
-                  <View style={styles.iconContainer}>
-                    <Ionicons name="scale" size={20} color="#8146C1" />
-                  </View>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Optional"
-                    value={petWeight}
-                    onChangeText={setPetWeight}
-                    keyboardType="decimal-pad"
-                    placeholderTextColor="#A3A3A3"
-                  />
-                </View>
-              </View>
-            </View>
-            <View style={styles.halfInput}>
-              <Text style={styles.label}>Pet Type</Text>
-              <View style={styles.inputWrapper}>
-                <CustomDropdown
-                  options={PET_TYPES}
-                  value={petType}
-                  onSelect={setPetType}
-                  placeholder="Choose type"
-                  containerStyle={styles.dropdownContainer}
-                />
-              </View>
             </View>
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Gender</Text>
+            <Text style={styles.label}>Pet Type <Text style={styles.required}>*</Text></Text>
+            <CustomDropdown
+              options={PET_TYPES}
+              value={petType}
+              onSelect={setPetType}
+              placeholder="Choose type"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Gender <Text style={styles.required}>*</Text></Text>
             <CustomDropdown
               options={PET_GENDERS}
               value={petGender}
@@ -306,21 +287,118 @@ const UpdatePetProfile = ({ navigation, route }) => {
             />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Breed</Text>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder="Optional"
-                value={petBreed}
-                onChangeText={setPetBreed}
-              />
+          {/* Additional Information */}
+          <View style={styles.additionalInfoContainer}>
+            <Text style={styles.additionalInfoHeader}>Additional Information</Text>
+
+            {/* Age Field */}
+            <View style={styles.optionalField}>
+              <View style={styles.fieldWrapper}>
+                <Text style={styles.label}>Age</Text>
+                <View style={styles.inputWithAction}>
+                  <TextInput
+                    style={[styles.optionalInput, petAge === 'Not Specified' && styles.skippedInput]}
+                    placeholder={isAgeFocused || petAge !== 'Not Specified' ? '' : 'None'}
+                    value={petAge === 'Not Specified' || !petAge ? 'None' : petAge}
+                    onFocus={() => setIsAgeFocused(true)}
+                    onBlur={() => setIsAgeFocused(false)}
+                    onChangeText={(text) => {
+                      if (text.trim() === '' || text === 'None') {
+                        setPetAge('Not Specified');
+                      } else {
+                        setPetAge(text);
+                      }
+                    }}
+                    placeholderTextColor="#A3A3A3"
+                    keyboardType="numeric"
+                    editable={petAge !== 'Not Specified'}
+                  />
+                  <TouchableOpacity 
+                    style={[styles.skipButton, petAge === 'Not Specified' && styles.skipButtonActive]}
+                    onPress={handleSkipAge}
+                    disabled={false}
+                  >
+                    <Text style={[styles.skipButtonText, petAge === 'Not Specified' && styles.activeButtonText]}>
+                      {petAge === 'Not Specified' ? 'Undo' : 'Skip'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* Weight Field */}
+            <View style={styles.optionalField}>
+              <View style={styles.fieldWrapper}>
+                <Text style={styles.label}>Weight (kg)</Text>
+                <View style={styles.inputWithAction}>
+                  <TextInput
+                    style={[styles.optionalInput, petWeight === 'Not Specified' && styles.skippedInput]}
+                    placeholder={isWeightFocused || petWeight !== 'Not Specified' ? '' : 'None'}
+                    value={petWeight === 'Not Specified' || !petWeight ? 'None' : petWeight}
+                    onFocus={() => setIsWeightFocused(true)}
+                    onBlur={() => setIsWeightFocused(false)}
+                    onChangeText={(text) => {
+                      if (text.trim() === '' || text === 'None') {
+                        setPetWeight('Not Specified');
+                      } else {
+                        setPetWeight(text);
+                      }
+                    }}
+                    placeholderTextColor="#A3A3A3"
+                    keyboardType="decimal-pad"
+                    editable={petWeight !== 'Not Specified'}
+                  />
+                  <TouchableOpacity 
+                    style={[styles.skipButton, petWeight === 'Not Specified' && styles.skipButtonActive]}
+                    onPress={handleSkipWeight}
+                    disabled={false}
+                  >
+                    <Text style={[styles.skipButtonText, petWeight === 'Not Specified' && styles.activeButtonText]}>
+                      {petWeight === 'Not Specified' ? 'Undo' : 'Skip'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* Breed Field */}
+            <View style={styles.optionalField}>
+              <View style={styles.fieldWrapper}>
+                <Text style={styles.label}>Breed</Text>
+                <View style={styles.inputWithAction}>
+                  <TextInput
+                    style={[styles.optionalInput, petBreed === 'Not Specified' && styles.skippedInput]}
+                    placeholder={isBreedFocused || petBreed !== 'Not Specified' ? '' : 'None'}
+                    value={petBreed === 'Not Specified' || !petBreed ? 'None' : petBreed}
+                    onFocus={() => setIsBreedFocused(true)}
+                    onBlur={() => setIsBreedFocused(false)}
+                    onChangeText={(text) => {
+                      if (text.trim() === '' || text === 'None') {
+                        setPetBreed('Not Specified');
+                      } else {
+                        setPetBreed(text);
+                      }
+                    }}
+                    placeholderTextColor="#A3A3A3"
+                    editable={petBreed !== 'Not Specified'}
+                  />
+                  <TouchableOpacity 
+                    style={[styles.skipButton, petBreed === 'Not Specified' && styles.skipButtonActive]}
+                    onPress={handleSkipBreed}
+                    disabled={false}
+                  >
+                    <Text style={[styles.skipButtonText, petBreed === 'Not Specified' && styles.activeButtonText]}>
+                      {petBreed === 'Not Specified' ? 'Undo' : 'Skip'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* Health Information Card */}
-        <View style={styles.sectionCard}>
+        {/* Health Information */}
+        <View style={styles.infoSection}>
           <View style={styles.sectionHeader}>
             <Ionicons name="medical" size={20} color="#8146C1" />
             <Text style={styles.sectionTitle}>HEALTH INFORMATION</Text>
@@ -331,8 +409,9 @@ const UpdatePetProfile = ({ navigation, route }) => {
             <TextInput
               style={[styles.input, styles.textArea]}
               placeholder="List any known allergies (if any)"
-              value={petAllergies}
+              value={petAllergies || 'None'}
               onChangeText={setPetAllergies}
+              placeholderTextColor="#A3A3A3"
               multiline
               numberOfLines={3}
             />
@@ -343,19 +422,21 @@ const UpdatePetProfile = ({ navigation, route }) => {
             <TextInput
               style={[styles.input, styles.textArea]}
               placeholder="Add any special care instructions"
-              value={petNotes}
+              value={petNotes || 'None'}
               onChangeText={setPetNotes}
+              placeholderTextColor="#A3A3A3"
               multiline
               numberOfLines={3}
             />
           </View>
         </View>
 
+        {/* Save Button */}
         <TouchableOpacity 
           style={styles.saveButton}
           onPress={handleUpdate}
         >
-          <Text style={styles.saveButtonText}>Save Changes</Text>
+          <Text style={styles.saveButtonText}>Save Pet Profile</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -380,6 +461,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'ios' ? 40 : 20,
+    position: 'sticky',
+    top: 0,
+    zIndex: 1000,
+  },
+  backButton: {
+    padding: 8,
   },
   headerTitle: {
     color: '#FFFFFF',
@@ -392,7 +479,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
   },
   photoBox: {
     backgroundColor: '#F8F5FF',
@@ -435,12 +521,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontWeight: '500',
   },
-  sectionCard: {
+  infoSection: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
-    marginVertical: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -461,114 +549,117 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 8,
   },
+  additionalInfoContainer: {
+    marginTop: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    overflow: 'hidden',
+  },
+  additionalInfoHeader: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#8146C1',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  optionalField: {
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+    padding: 16,
+  },
+  fieldWrapper: {
+    gap: 8,
+  },
+  inputWithAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  optionalInput: {
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#FFFFFF",
+    color: "#2D3748",
+    fontSize: 13,
+  },
+  skipButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#F8F5FF',
+    borderWidth: 1,
+    borderColor: '#E9E3F5',
+    minWidth: 70,
+    alignItems: 'center'
+  },
+  skipButtonText: {
+    color: '#8146C1',
+    fontSize: 12,
+    fontWeight: '500'
+  },
+  activeButtonText: {
+    color: '#666666'
+  },
+  skipButtonActive: {
+    backgroundColor: '#E9E3F5',
+    borderColor: '#D1C4E9'
+  },
+  skippedInput: {
+    backgroundColor: '#F5F5F5',
+    color: '#666666',
+    fontStyle: 'italic'
+  },
   inputGroup: {
     marginBottom: 16,
   },
-  inputWrapper: {
-    backgroundColor: '#F8F5FF',
-    borderRadius: 8,
-    padding: 2,
+  label: {
+    fontSize: 14,
+    color: '#666666',
+    marginBottom: 8,
+  },
+  required: {
+    color: '#8146C1',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E0E0E0',
-    height: 48,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
   },
   iconContainer: {
-    paddingHorizontal: 12,
+    padding: 12,
   },
   input: {
-    height: 48,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#333333',
-  },
-  ageInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  ageInput: {
     flex: 1,
-    maxWidth: '60%',
     height: 48,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
     paddingHorizontal: 16,
-    paddingLeft: 48,
-    fontSize: 16,
-    color: '#333333',
-  },
-  ageToggle: {
-    backgroundColor: '#F8F5FF',
-    borderRadius: 8,
-    padding: 2,
-    flexDirection: 'row',
-  },
-  ageToggleButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 6,
-  },
-  activeToggle: {
-    backgroundColor: '#8146C1',
-  },
-  toggleText: {
-    fontSize: 14,
-    color: '#8146C1',
-  },
-  activeToggleText: {
-    color: '#FFFFFF',
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-    marginBottom: 20,
-  },
-  halfInput: {
-    flex: 1,
-  },
-  dropdownContainer: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    height: 48,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-  },
-  dropdown: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    height: 48,
-  },
-  dropdownText: {
     fontSize: 16,
     color: '#333333',
   },
   textArea: {
-    height: 120,
+    height: 100,
     textAlignVertical: 'top',
-    paddingTop: 16,
+    paddingTop: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
   },
   saveButton: {
     backgroundColor: '#8146C1',
+    margin: 16,
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 24,
   },
   saveButtonText: {
     color: '#FFFFFF',
@@ -580,9 +671,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  required: {
-    color: '#8146C1',
   },
 });
 

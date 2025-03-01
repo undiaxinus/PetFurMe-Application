@@ -296,15 +296,15 @@ const AddPetProfile = ({ route }) => {
 
 	// Skip button handlers
 	const handleSkipAge = () => {
-		setPetAge('Not Provided'); // More descriptive display value
+		setPetAge(prev => prev === 'Not Provided' ? '' : 'Not Provided'); // Toggle between skipped and empty
 	};
 
 	const handleSkipWeight = () => {
-		setPetWeight('Not Provided'); // More descriptive display value
+		setPetWeight(prev => prev === 'Not Provided' ? '' : 'Not Provided'); // Toggle between skipped and empty
 	};
 
 	const handleSkipBreed = () => {
-		setPetBreed('Not Specified'); // More descriptive display value
+		setPetBreed(prev => prev === null ? '' : null); // Toggle between null and empty
 	};
 
 	// Add these validation helper functions
@@ -318,7 +318,7 @@ const AddPetProfile = ({ route }) => {
 		// Check if additional fields have either valid data or are properly skipped
 		const isAgeValid = petAge === 'Not Provided' || (petAge && !isNaN(petAge));
 		const isWeightValid = petWeight === 'Not Provided' || (petWeight && !isNaN(petWeight));
-		const isBreedValid = petBreed === 'Not Specified' || petBreed.trim() !== '';
+		const isBreedValid = petBreed === null || petBreed.trim() !== '';
 		
 		// For allergies and notes, they're optional so they're valid if empty or have content
 		const isAllergiesValid = !petAllergies || petAllergies.trim() === '' || petAllergies === 'None';
@@ -444,7 +444,7 @@ const AddPetProfile = ({ route }) => {
 												<TouchableOpacity 
 													style={[styles.skipButton, petAge === 'Not Provided' && styles.skipButtonActive]}
 													onPress={handleSkipAge}
-													disabled={petAge === 'Not Provided'}
+													disabled={false} // Allow clicking even if already skipped
 												>
 													<Text style={[styles.skipButtonText, petAge === 'Not Provided' && styles.activeButtonText]}>
 														{petAge === 'Not Provided' ? 'Skipped' : 'Skip'}
@@ -471,7 +471,7 @@ const AddPetProfile = ({ route }) => {
 												<TouchableOpacity 
 													style={[styles.skipButton, petWeight === 'Not Provided' && styles.skipButtonActive]}
 													onPress={handleSkipWeight}
-													disabled={petWeight === 'Not Provided'}
+													disabled={false} // Allow clicking even if already skipped
 												>
 													<Text style={[styles.skipButtonText, petWeight === 'Not Provided' && styles.activeButtonText]}>
 														{petWeight === 'Not Provided' ? 'Skipped' : 'Skip'}
@@ -487,20 +487,20 @@ const AddPetProfile = ({ route }) => {
 											<Text style={styles.label}>Breed</Text>
 											<View style={styles.inputWithAction}>
 												<TextInput
-													style={[styles.optionalInput, petBreed === 'Not Specified' && styles.skippedInput]}
-													placeholder={petBreed === 'Not Specified' ? 'Breed skipped' : 'Enter breed'}
-													value={petBreed === 'Not Specified' ? '' : petBreed}
+													style={[styles.optionalInput, petBreed === null && styles.skippedInput]}
+													placeholder={petBreed === null ? 'Breed skipped' : 'Enter breed'}
+													value={petBreed === null ? '' : petBreed}
 													onChangeText={setPetBreed}
 													placeholderTextColor="#A3A3A3"
-													editable={petBreed !== 'Not Specified'}
+													editable={petBreed !== null}
 												/>
 												<TouchableOpacity 
-													style={[styles.skipButton, petBreed === 'Not Specified' && styles.skipButtonActive]}
+													style={[styles.skipButton, petBreed === null && styles.skipButtonActive]}
 													onPress={handleSkipBreed}
-													disabled={petBreed === 'Not Specified'}
+													disabled={false}
 												>
-													<Text style={[styles.skipButtonText, petBreed === 'Not Specified' && styles.activeButtonText]}>
-														{petBreed === 'Not Specified' ? 'Skipped' : 'Skip'}
+													<Text style={[styles.skipButtonText, petBreed === null && styles.activeButtonText]}>
+														{petBreed === null ? 'Skipped' : 'Skip'}
 													</Text>
 												</TouchableOpacity>
 											</View>
@@ -921,7 +921,7 @@ const styles = StyleSheet.create({
 		color: '#666666'
 	},
 	additionalInfoContainer: {
-		marginTop: 24,
+		marginTop: 5,
 		backgroundColor: '#FFFFFF',
 		borderRadius: 12,
 		borderWidth: 1,
@@ -942,7 +942,6 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: '#E9E3F5',
 		padding: 16,
-		marginTop: 20,
 	},
 	skippedInput: {
 		backgroundColor: '#F5F5F5',

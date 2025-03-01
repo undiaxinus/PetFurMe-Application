@@ -1207,3 +1207,119 @@ Stack trace:
 
 [23-Feb-2025 18:29:17 Europe/Berlin] Binding parameters: [108,108,"sdfds","cat","Not Specified",null,"female",null,"unknown",null,null,"Cat","pet_108_1740331755843.jpg"]
 [23-Feb-2025 18:29:17 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","string"]
+[25-Feb-2025 16:47:49 Europe/Berlin] Starting pet addition process
+[25-Feb-2025 16:47:49 Europe/Berlin] Attempting database connection to localhost/pet-management
+[25-Feb-2025 16:47:49 Europe/Berlin] Database connection successful
+[25-Feb-2025 16:47:49 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Rhode
+    [type] => bird
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+    [photo] => pet_108_1740498469106.jpg
+)
+
+[25-Feb-2025 16:47:49 Europe/Berlin] Binding parameters: [108,108,"Rhode","bird","Not Specified",null,"male",null,"unknown",null,null,"Bird","pet_108_1740498469106.jpg"]
+[25-Feb-2025 16:47:49 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","string"]
+[25-Feb-2025 16:58:10 Europe/Berlin] Starting pet addition process
+[25-Feb-2025 16:58:10 Europe/Berlin] Attempting database connection to localhost/pet-management
+[25-Feb-2025 16:58:10 Europe/Berlin] Database connection successful
+[25-Feb-2025 16:58:10 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Rhode
+    [type] => bird
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[25-Feb-2025 16:58:10 Europe/Berlin] Binding parameters: [108,108,"Rhode","bird","Not Specified",null,"female",null,"unknown",null,null,"Bird",null]
+[25-Feb-2025 16:58:10 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[25-Feb-2025 17:05:42 Europe/Berlin] Starting pet addition process
+[25-Feb-2025 17:05:42 Europe/Berlin] Attempting database connection to localhost/pet-management
+[25-Feb-2025 17:05:42 Europe/Berlin] Database connection successful
+[25-Feb-2025 17:05:42 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => fds
+    [type] => cat
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[25-Feb-2025 17:05:42 Europe/Berlin] Binding parameters: [108,108,"fds","cat","Not Specified",null,"male",null,"unknown",null,null,"Cat",null]
+[25-Feb-2025 17:05:42 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[26-Feb-2025 06:08:43 Europe/Berlin] Starting pet addition process
+[26-Feb-2025 06:08:43 Europe/Berlin] Attempting database connection to localhost/pet-management
+[26-Feb-2025 06:08:43 Europe/Berlin] Database connection successful
+[26-Feb-2025 06:08:43 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ret
+    [type] => bird
+    [breed] => Not Specified
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[26-Feb-2025 06:08:43 Europe/Berlin] Binding parameters: [108,108,"ret","bird","Not Specified",null,"female",null,"unknown",null,null,"Bird",null]
+[26-Feb-2025 06:08:43 Europe/Berlin] Types: ["integer","integer","string","string","string","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[26-Feb-2025 06:33:15 Europe/Berlin] Starting pet addition process
+[26-Feb-2025 06:33:15 Europe/Berlin] Attempting database connection to localhost/pet-management
+[26-Feb-2025 06:33:15 Europe/Berlin] Database connection successful
+[26-Feb-2025 06:33:15 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Kaiju
+    [type] => bird
+    [breed] => Kaiju
+    [age] => 3
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 3
+    [size] => 
+)
+
+[26-Feb-2025 06:33:15 Europe/Berlin] Binding parameters: [108,108,"Kaiju","bird","Kaiju",3,"female",3,"unknown",null,null,"Bird",null]
+[26-Feb-2025 06:33:15 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
