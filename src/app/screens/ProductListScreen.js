@@ -71,30 +71,46 @@ const ProductListScreen = ({ navigation, route }) => {
       
       const finalUrl = params.toString() ? `${url}?${params.toString()}` : url;
       
-      const response = await fetch(finalUrl);
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+      console.log('Fetching from URL:', finalUrl);
 
-      const data = await response.json();
+      const response = await fetch(finalUrl);
+      const responseText = await response.text();
       
-      if (data.success) {
-        const transformedProducts = data.products.map(product => ({
-          id: product.id.toString(),
-          name: product.name,
-          price: product.selling_price ? parseFloat(product.selling_price) : 0,
-          image: { 
-            uri: product.product_image 
-              ? `${API_BASE_URL}/PetFurMe-Application/${product.product_image}`
-              : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png`
-          },
-          category: product.category_name,
-          stock: product.quantity || 0,
-          description: product.notes || '',
-          category_id: product.category_id,
-        }));
-        setProducts(transformedProducts);
+      try {
+        const data = JSON.parse(responseText);
+        if (data.success) {
+          // Debug log to see what we're receiving
+          console.log('Raw product data sample:', data.products[0]);
+          
+          const transformedProducts = data.products.map(product => {
+            const imageUri = product.product_image_data 
+              ? `data:image/jpeg;base64,${product.product_image_data}`
+              : product.product_image
+                ? `${API_BASE_URL}/PetFurMe-Application/${product.product_image}`
+                : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png`;
+                
+            console.log(`Image URI for ${product.name}:`, imageUri.substring(0, 100) + '...');
+            
+            return {
+              id: product.id?.toString() || '',
+              name: product.name || '',
+              price: product.selling_price ? parseFloat(product.selling_price) / 100 : 0,
+              image: { uri: imageUri },
+              category: product.category_name || '',
+              stock: parseInt(product.quantity) || 0,
+              description: product.notes || '',
+              category_id: product.category_id?.toString() || '',
+            };
+          });
+          
+          setProducts(transformedProducts);
+        } else {
+          throw new Error(data.message || 'Failed to fetch products');
+        }
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        console.error('Invalid JSON received:', responseText);
+        throw new Error('Invalid response from server');
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -105,9 +121,11 @@ const ProductListScreen = ({ navigation, route }) => {
     }
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || product.category_id?.toString() === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const renderProduct = ({ item }) => (
     <TouchableOpacity 
@@ -119,8 +137,29 @@ const ProductListScreen = ({ navigation, route }) => {
         <Image 
           source={item.image} 
           style={styles.productImage}
+          onLoadStart={() => console.log('Starting to load image for:', item.name)}
+          onLoadEnd={() => console.log('Finished loading image for:', item.name)}
+          onError={(e) => {
+            console.error('Image loading error for:', item.name, e.nativeEvent.error);
+            const updatedProducts = products.map(p => {
+              if (p.id === item.id) {
+                return {
+                  ...p,
+                  image: { 
+                    uri: `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png` 
+                  }
+                };
+              }
+              return p;
+            });
+            setProducts(updatedProducts);
+          }}
         />
-        {item.stock < 10 && (
+        {item.stock === 0 ? (
+          <View style={styles.outOfStockOverlay}>
+            <Text style={styles.outOfStockText}>Out of Stock</Text>
+          </View>
+        ) : item.stock < 10 && (
           <View style={styles.stockBadge}>
             <Text style={styles.stockText}>Low Stock</Text>
           </View>
@@ -128,7 +167,6 @@ const ProductListScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
-        <Text style={styles.productCategory} numberOfLines={1}>{item.category}</Text>
         <Text style={styles.productPrice}>₱{item.price.toFixed(2)}</Text>
         <Text style={styles.stockCount}>In Stock: {item.stock}</Text>
       </View>
@@ -146,13 +184,22 @@ const ProductListScreen = ({ navigation, route }) => {
       <View style={styles.mainContent}>
         <View style={styles.scrollContent}>
           <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#666" />
+            <Ionicons name="search" size={22} color="#8146C1" />
             <TextInput
               style={styles.searchInput}
               placeholder="Search products..."
+              placeholderTextColor="#999"
               value={searchQuery}
               onChangeText={setSearchQuery}
+              returnKeyType="search"
+              autoCapitalize="none"
+              autoCorrect={false}
             />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={20} color="#666" />
+              </TouchableOpacity>
+            )}
           </View>
 
           <View style={styles.categoriesContainer}>
@@ -226,7 +273,6 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    marginBottom: Platform.OS === 'ios' ? 90 : 80, // Add margin for bottom navigation
   },
   scrollContent: {
     flex: 1,
@@ -237,9 +283,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     marginHorizontal: 16,
     marginVertical: 12,
-    padding: 12,
-    borderRadius: 8,
-    elevation: 2,
+    paddingHorizontal: 16,
+    height: 50,
+    borderRadius: 25,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    borderWidth: Platform.OS === 'ios' ? 1 : 0,
+    borderColor: '#E0E0E0',
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 12,
+    fontSize: 16,
+    color: '#333',
+    height: '100%',
+    paddingVertical: 8,
   },
   categoriesContainer: {
     backgroundColor: '#F5F5F5',
@@ -258,7 +322,6 @@ const styles = StyleSheet.create({
   },
   productList: {
     padding: 8,
-    paddingBottom: Platform.OS === 'ios' ? 120 : 100, // Account for bottom navigation
   },
   productCard: {
     flex: 1,
@@ -306,34 +369,26 @@ const styles = StyleSheet.create({
   },
   productInfo: {
     padding: 12,
-    height: 110,
+    height: 90,
     justifyContent: 'space-between',
   },
   productName: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginBottom: 4,
     height: 36,
     lineHeight: 18,
     color: '#333',
-  },
-  productCategory: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-    height: 16,
   },
   productPrice: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#8146C1',
     marginBottom: 4,
-    height: 24,
   },
   stockCount: {
     fontSize: 12,
     color: '#666',
-    height: 16,
   },
   loader: {
     flex: 1,
@@ -391,6 +446,26 @@ const styles = StyleSheet.create({
   },
   selectedCategoryText: {
     color: '#FFF',
+  },
+  outOfStockOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  outOfStockText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    backgroundColor: '#FF4444',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
   },
 });
 

@@ -1,0 +1,1274 @@
+[2025-02-26 17:27:12] Image path from DB: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:27:12] Full image path: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:27:12] WARNING: Image file not found at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:27:12] No image path for product ID: 7
+[2025-02-26 17:27:12] Returning 2 products
+[2025-02-26 17:27:12] Fetching image for product ID: 9
+[2025-02-26 17:30:04] Processing image for product ID: 4
+[2025-02-26 17:30:04] Source file: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:30:04] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:30:04] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:30:04] Processing image for product ID: 5
+[2025-02-26 17:30:04] Source file: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:30:04] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:30:04] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:30:04] Processing image for product ID: 6
+[2025-02-26 17:30:04] Source file: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:30:04] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:30:04] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:30:04] Processing image for product ID: 9
+[2025-02-26 17:30:04] Source file: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:04] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:04] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] Checking possible paths for image: FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] Checking path: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] Checking path: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] Checking path: D:\XAMPP\htdocs\PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] WARNING: Image not found in any location: FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:30:15] No image path for product ID: 7
+[2025-02-26 17:30:15] Returning 2 products
+[2025-02-26 17:30:15] Fetching image for product ID: 9
+[2025-02-26 17:41:56] === Starting Image Copy Process ===
+[2025-02-26 17:41:56] Found 5 products with images
+[2025-02-26 17:41:56] 
+Processing Product:
+[2025-02-26 17:41:56] ID: 4
+[2025-02-26 17:41:56] Name: Vetericyn
+[2025-02-26 17:41:56] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] Failed to copy file - Permission Error
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:41:56] WARNING: Image not found in any location for product ID 4
+[2025-02-26 17:41:56] 
+Processing Product:
+[2025-02-26 17:41:56] ID: 5
+[2025-02-26 17:41:56] Name: Dog Food
+[2025-02-26 17:41:56] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] Failed to copy file - Permission Error
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:41:56] WARNING: Image not found in any location for product ID 5
+[2025-02-26 17:41:56] 
+Processing Product:
+[2025-02-26 17:41:56] ID: 6
+[2025-02-26 17:41:56] Name: Comb
+[2025-02-26 17:41:56] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] Failed to copy file - Permission Error
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:41:56] WARNING: Image not found in any location for product ID 6
+[2025-02-26 17:41:56] 
+Processing Product:
+[2025-02-26 17:41:56] ID: 7
+[2025-02-26 17:41:56] Name: Cat Food
+[2025-02-26 17:41:56] Stored Image Path: 
+[2025-02-26 17:41:56] No image path stored for this product
+[2025-02-26 17:41:56] 
+Processing Product:
+[2025-02-26 17:41:56] ID: 9
+[2025-02-26 17:41:56] Name: Collar
+[2025-02-26 17:41:56] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:41:56] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:41:56] WARNING: Image not found in any location for product ID 9
+[2025-02-26 17:41:56] 
+=== Image Copy Process Completed ===
+[2025-02-26 17:42:02] Checking possible paths for image: FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:42:02] Checking path: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:42:02] Checking path: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:42:02] Checking path: D:\XAMPP\htdocs\PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:42:02] WARNING: Image not found in any location: FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:42:02] No image path for product ID: 7
+[2025-02-26 17:42:02] Returning 2 products
+[2025-02-26 17:42:02] Fetching image for product ID: 9
+[2025-02-26 17:43:27] === Starting Image Copy Process ===
+[2025-02-26 17:43:27] Found 5 products with images
+[2025-02-26 17:43:27] 
+Processing Product:
+[2025-02-26 17:43:27] ID: 4
+[2025-02-26 17:43:27] Name: Vetericyn
+[2025-02-26 17:43:27] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] Failed to copy file - Permission Error
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:43:27] WARNING: Image not found in any location for product ID 4
+[2025-02-26 17:43:27] 
+Processing Product:
+[2025-02-26 17:43:27] ID: 5
+[2025-02-26 17:43:27] Name: Dog Food
+[2025-02-26 17:43:27] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] Failed to copy file - Permission Error
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:43:27] WARNING: Image not found in any location for product ID 5
+[2025-02-26 17:43:27] 
+Processing Product:
+[2025-02-26 17:43:27] ID: 6
+[2025-02-26 17:43:27] Name: Comb
+[2025-02-26 17:43:27] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] Failed to copy file - Permission Error
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:43:27] WARNING: Image not found in any location for product ID 6
+[2025-02-26 17:43:27] 
+Processing Product:
+[2025-02-26 17:43:27] ID: 7
+[2025-02-26 17:43:27] Name: Cat Food
+[2025-02-26 17:43:27] Stored Image Path: 
+[2025-02-26 17:43:27] No image path stored for this product
+[2025-02-26 17:43:27] 
+Processing Product:
+[2025-02-26 17:43:27] ID: 9
+[2025-02-26 17:43:27] Name: Collar
+[2025-02-26 17:43:27] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:43:27] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:43:27] WARNING: Image not found in any location for product ID 9
+[2025-02-26 17:43:27] 
+=== Image Copy Process Completed ===
+[2025-02-26 17:45:07] Returning 2 products
+[2025-02-26 17:45:08] Fetching image for product ID: 9
+[2025-02-26 17:45:08] Found BLOB data of length: 53
+[2025-02-26 17:45:33] === Starting Image Copy Process ===
+[2025-02-26 17:45:33] Found 5 products with images
+[2025-02-26 17:45:33] 
+Processing Product:
+[2025-02-26 17:45:33] ID: 4
+[2025-02-26 17:45:33] Name: Vetericyn
+[2025-02-26 17:45:33] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] Failed to copy file - Permission Error
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:45:33] WARNING: Image not found in any location for product ID 4
+[2025-02-26 17:45:33] 
+Processing Product:
+[2025-02-26 17:45:33] ID: 5
+[2025-02-26 17:45:33] Name: Dog Food
+[2025-02-26 17:45:33] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] Failed to copy file - Permission Error
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:45:33] WARNING: Image not found in any location for product ID 5
+[2025-02-26 17:45:33] 
+Processing Product:
+[2025-02-26 17:45:33] ID: 6
+[2025-02-26 17:45:33] Name: Comb
+[2025-02-26 17:45:33] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] Failed to copy file - Permission Error
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:45:33] WARNING: Image not found in any location for product ID 6
+[2025-02-26 17:45:33] 
+Processing Product:
+[2025-02-26 17:45:33] ID: 7
+[2025-02-26 17:45:33] Name: Cat Food
+[2025-02-26 17:45:33] Stored Image Path: 
+[2025-02-26 17:45:33] No image path stored for this product
+[2025-02-26 17:45:33] 
+Processing Product:
+[2025-02-26 17:45:33] ID: 9
+[2025-02-26 17:45:33] Name: Collar
+[2025-02-26 17:45:33] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:45:33] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:45:33] WARNING: Image not found in any location for product ID 9
+[2025-02-26 17:45:33] 
+=== Image Copy Process Completed ===
+[2025-02-26 17:54:11] === Starting Image Copy Process ===
+[2025-02-26 17:54:11] Found 5 products with images
+[2025-02-26 17:54:11] 
+Processing Product:
+[2025-02-26 17:54:11] ID: 4
+[2025-02-26 17:54:11] Name: Vetericyn
+[2025-02-26 17:54:11] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] Failed to copy file - Permission Error
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:11] WARNING: Image not found in any location for product ID 4
+[2025-02-26 17:54:11] 
+Processing Product:
+[2025-02-26 17:54:11] ID: 5
+[2025-02-26 17:54:11] Name: Dog Food
+[2025-02-26 17:54:11] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] Failed to copy file - Permission Error
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:11] WARNING: Image not found in any location for product ID 5
+[2025-02-26 17:54:11] 
+Processing Product:
+[2025-02-26 17:54:11] ID: 6
+[2025-02-26 17:54:11] Name: Comb
+[2025-02-26 17:54:11] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] Failed to copy file - Permission Error
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:11] WARNING: Image not found in any location for product ID 6
+[2025-02-26 17:54:11] 
+Processing Product:
+[2025-02-26 17:54:11] ID: 7
+[2025-02-26 17:54:11] Name: Cat Food
+[2025-02-26 17:54:11] Stored Image Path: 
+[2025-02-26 17:54:11] No image path stored for this product
+[2025-02-26 17:54:11] 
+Processing Product:
+[2025-02-26 17:54:11] ID: 9
+[2025-02-26 17:54:11] Name: Collar
+[2025-02-26 17:54:11] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:11] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:11] WARNING: Image not found in any location for product ID 9
+[2025-02-26 17:54:11] 
+=== Image Copy Process Completed ===
+[2025-02-26 17:54:49] === Starting Image Copy Process ===
+[2025-02-26 17:54:49] Found 5 products with images
+[2025-02-26 17:54:49] 
+Processing Product:
+[2025-02-26 17:54:49] ID: 4
+[2025-02-26 17:54:49] Name: Vetericyn
+[2025-02-26 17:54:49] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] Failed to copy file - Permission Error
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 17:54:49] WARNING: Image not found in any location for product ID 4
+[2025-02-26 17:54:49] 
+Processing Product:
+[2025-02-26 17:54:49] ID: 5
+[2025-02-26 17:54:49] Name: Dog Food
+[2025-02-26 17:54:49] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] Failed to copy file - Permission Error
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 17:54:49] WARNING: Image not found in any location for product ID 5
+[2025-02-26 17:54:49] 
+Processing Product:
+[2025-02-26 17:54:49] ID: 6
+[2025-02-26 17:54:49] Name: Comb
+[2025-02-26 17:54:49] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] Failed to copy file - Permission Error
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 17:54:49] WARNING: Image not found in any location for product ID 6
+[2025-02-26 17:54:49] 
+Processing Product:
+[2025-02-26 17:54:49] ID: 7
+[2025-02-26 17:54:49] Name: Cat Food
+[2025-02-26 17:54:49] Stored Image Path: 
+[2025-02-26 17:54:49] No image path stored for this product
+[2025-02-26 17:54:49] 
+Processing Product:
+[2025-02-26 17:54:49] ID: 9
+[2025-02-26 17:54:49] Name: Collar
+[2025-02-26 17:54:49] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:49] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 17:54:49] WARNING: Image not found in any location for product ID 9
+[2025-02-26 17:54:49] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:06:06] Returning 2 products
+[2025-02-26 18:06:07] Fetching image for product ID: 9
+[2025-02-26 18:06:07] No valid image path found for product ID: 9
+[2025-02-26 18:09:33] Returning 2 products
+[2025-02-26 18:09:34] Fetching image for product ID: 9
+[2025-02-26 18:09:34] Checking file at: D:/XAMPP/htdocs/PetFurMe-Application/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:34] File not found: D:/XAMPP/htdocs/PetFurMe-Application/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:34] No valid image found for product ID: 9
+[2025-02-26 18:09:40] === Starting Image Copy Process ===
+[2025-02-26 18:09:40] Found 5 products with images
+[2025-02-26 18:09:40] 
+Processing Product:
+[2025-02-26 18:09:40] ID: 4
+[2025-02-26 18:09:40] Name: Vetericyn
+[2025-02-26 18:09:40] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] Failed to copy file - Permission Error
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:09:40] WARNING: Image not found in any location for product ID 4
+[2025-02-26 18:09:40] 
+Processing Product:
+[2025-02-26 18:09:40] ID: 5
+[2025-02-26 18:09:40] Name: Dog Food
+[2025-02-26 18:09:40] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] Failed to copy file - Permission Error
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:09:40] WARNING: Image not found in any location for product ID 5
+[2025-02-26 18:09:40] 
+Processing Product:
+[2025-02-26 18:09:40] ID: 6
+[2025-02-26 18:09:40] Name: Comb
+[2025-02-26 18:09:40] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] Failed to copy file - Permission Error
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:09:40] WARNING: Image not found in any location for product ID 6
+[2025-02-26 18:09:40] 
+Processing Product:
+[2025-02-26 18:09:40] ID: 7
+[2025-02-26 18:09:40] Name: Cat Food
+[2025-02-26 18:09:40] Stored Image Path: 
+[2025-02-26 18:09:40] No image path stored for this product
+[2025-02-26 18:09:40] 
+Processing Product:
+[2025-02-26 18:09:40] ID: 9
+[2025-02-26 18:09:40] Name: Collar
+[2025-02-26 18:09:40] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:40] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:09:40] WARNING: Image not found in any location for product ID 9
+[2025-02-26 18:09:40] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:13:03] === Starting Image Copy Process ===
+[2025-02-26 18:13:03] Found 5 products with images
+[2025-02-26 18:13:03] 
+Processing Product:
+[2025-02-26 18:13:03] ID: 4
+[2025-02-26 18:13:03] Name: Vetericyn
+[2025-02-26 18:13:03] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] Failed to copy file - Permission Error
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:13:03] WARNING: Image not found in any location for product ID 4
+[2025-02-26 18:13:03] 
+Processing Product:
+[2025-02-26 18:13:03] ID: 5
+[2025-02-26 18:13:03] Name: Dog Food
+[2025-02-26 18:13:03] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] Failed to copy file - Permission Error
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:13:03] WARNING: Image not found in any location for product ID 5
+[2025-02-26 18:13:03] 
+Processing Product:
+[2025-02-26 18:13:03] ID: 6
+[2025-02-26 18:13:03] Name: Comb
+[2025-02-26 18:13:03] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] Found image at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] Failed to copy file - Permission Error
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:13:03] WARNING: Image not found in any location for product ID 6
+[2025-02-26 18:13:03] 
+Processing Product:
+[2025-02-26 18:13:03] ID: 7
+[2025-02-26 18:13:03] Name: Cat Food
+[2025-02-26 18:13:03] Stored Image Path: 
+[2025-02-26 18:13:03] No image path stored for this product
+[2025-02-26 18:13:03] 
+Processing Product:
+[2025-02-26 18:13:03] ID: 9
+[2025-02-26 18:13:03] Name: Collar
+[2025-02-26 18:13:03] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/storage/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:13:03] Checking source location: D:/XAMPP/htdocs/PetFurMe-Application/public/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:13:03] WARNING: Image not found in any location for product ID 9
+[2025-02-26 18:13:03] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:22:31] === Starting Image Copy Process ===
+[2025-02-26 18:22:31] Found 5 products with images
+[2025-02-26 18:22:31] 
+Processing Product:
+[2025-02-26 18:22:31] ID: 4
+[2025-02-26 18:22:31] Name: Vetericyn
+[2025-02-26 18:22:31] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:22:31] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:22:31] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:22:31] Copy failed. Error: 
+[2025-02-26 18:22:31] Successfully copied using alternative method
+[2025-02-26 18:22:31] 
+Processing Product:
+[2025-02-26 18:22:31] ID: 5
+[2025-02-26 18:22:31] Name: Dog Food
+[2025-02-26 18:22:31] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:22:31] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:22:31] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:22:31] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:22:31] Successfully copied using alternative method
+[2025-02-26 18:22:31] 
+Processing Product:
+[2025-02-26 18:22:31] ID: 6
+[2025-02-26 18:22:31] Name: Comb
+[2025-02-26 18:22:31] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:22:31] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:22:31] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:22:31] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:22:31] Successfully copied using alternative method
+[2025-02-26 18:22:31] 
+Processing Product:
+[2025-02-26 18:22:31] ID: 7
+[2025-02-26 18:22:31] Name: Cat Food
+[2025-02-26 18:22:31] Stored Image Path: 
+[2025-02-26 18:22:31] 
+Processing Product:
+[2025-02-26 18:22:31] ID: 9
+[2025-02-26 18:22:31] Name: Collar
+[2025-02-26 18:22:31] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:22:31] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:22:31] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:22:31] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:22:31] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:24:02] === Starting Image Copy Process ===
+[2025-02-26 18:24:02] Found 5 products with images
+[2025-02-26 18:24:02] 
+Processing Product:
+[2025-02-26 18:24:02] ID: 4
+[2025-02-26 18:24:02] Name: Vetericyn
+[2025-02-26 18:24:02] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:24:02] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:24:02] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:24:02] Copy failed. Error: 
+[2025-02-26 18:24:02] Successfully copied using alternative method
+[2025-02-26 18:24:02] 
+Processing Product:
+[2025-02-26 18:24:02] ID: 5
+[2025-02-26 18:24:02] Name: Dog Food
+[2025-02-26 18:24:02] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:24:02] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:24:02] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:24:02] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:24:02] Successfully copied using alternative method
+[2025-02-26 18:24:02] 
+Processing Product:
+[2025-02-26 18:24:02] ID: 6
+[2025-02-26 18:24:02] Name: Comb
+[2025-02-26 18:24:02] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:24:02] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:24:02] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:24:02] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:24:02] Successfully copied using alternative method
+[2025-02-26 18:24:02] 
+Processing Product:
+[2025-02-26 18:24:02] ID: 7
+[2025-02-26 18:24:02] Name: Cat Food
+[2025-02-26 18:24:02] Stored Image Path: 
+[2025-02-26 18:24:02] 
+Processing Product:
+[2025-02-26 18:24:02] ID: 9
+[2025-02-26 18:24:02] Name: Collar
+[2025-02-26 18:24:02] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:24:02] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:24:02] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:24:02] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:24:02] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:25:27] === Starting Image Copy Process ===
+[2025-02-26 18:25:27] Found 5 products with images
+[2025-02-26 18:25:27] 
+Processing Product:
+[2025-02-26 18:25:27] ID: 4
+[2025-02-26 18:25:27] Name: Vetericyn
+[2025-02-26 18:25:27] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:25:27] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:25:27] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:25:27] Copy failed. Error: 
+[2025-02-26 18:25:27] Successfully copied using alternative method
+[2025-02-26 18:25:27] 
+Processing Product:
+[2025-02-26 18:25:27] ID: 5
+[2025-02-26 18:25:27] Name: Dog Food
+[2025-02-26 18:25:27] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:25:27] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:25:27] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:25:27] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:25:27] Successfully copied using alternative method
+[2025-02-26 18:25:27] 
+Processing Product:
+[2025-02-26 18:25:27] ID: 6
+[2025-02-26 18:25:27] Name: Comb
+[2025-02-26 18:25:27] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:25:27] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:25:27] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:25:27] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:25:27] Successfully copied using alternative method
+[2025-02-26 18:25:27] 
+Processing Product:
+[2025-02-26 18:25:27] ID: 7
+[2025-02-26 18:25:27] Name: Cat Food
+[2025-02-26 18:25:27] Stored Image Path: 
+[2025-02-26 18:25:27] 
+Processing Product:
+[2025-02-26 18:25:27] ID: 9
+[2025-02-26 18:25:27] Name: Collar
+[2025-02-26 18:25:27] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:25:27] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:25:27] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:25:27] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:25:27] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:27:28] Image not found at: D:/XAMPP/htdocs/PetFurMe-Application/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:27:28] Returning 2 products
+[2025-02-26 18:28:22] === Starting Image Copy Process ===
+[2025-02-26 18:28:22] Found 5 products with images
+[2025-02-26 18:28:22] 
+Processing Product:
+[2025-02-26 18:28:22] ID: 4
+[2025-02-26 18:28:22] Name: Vetericyn
+[2025-02-26 18:28:22] Stored Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:28:22] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:28:22] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:28:22] Copy failed. Error: 
+[2025-02-26 18:28:22] Successfully copied using alternative method
+[2025-02-26 18:28:22] 
+Processing Product:
+[2025-02-26 18:28:22] ID: 5
+[2025-02-26 18:28:22] Name: Dog Food
+[2025-02-26 18:28:22] Stored Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:28:22] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:28:22] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:28:22] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:28:22] Successfully copied using alternative method
+[2025-02-26 18:28:22] 
+Processing Product:
+[2025-02-26 18:28:22] ID: 6
+[2025-02-26 18:28:22] Name: Comb
+[2025-02-26 18:28:22] Stored Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:28:22] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:28:22] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:28:22] Copy failed. Error: Trying to access array offset on value of type null
+[2025-02-26 18:28:22] Successfully copied using alternative method
+[2025-02-26 18:28:22] 
+Processing Product:
+[2025-02-26 18:28:22] ID: 7
+[2025-02-26 18:28:22] Name: Cat Food
+[2025-02-26 18:28:22] Stored Image Path: 
+[2025-02-26 18:28:22] 
+Processing Product:
+[2025-02-26 18:28:22] ID: 9
+[2025-02-26 18:28:22] Name: Collar
+[2025-02-26 18:28:22] Stored Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:28:22] Source file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:28:22] Destination file: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:28:22] Source file not found: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:28:22] 
+=== Image Copy Process Completed ===
+[2025-02-26 18:34:05] Returning 2 products
+[2025-02-26 18:34:12] === Starting Image Check Process ===
+[2025-02-26 18:34:12] Found 5 products with images
+[2025-02-26 18:34:12] 
+Checking Product ID: 4
+[2025-02-26 18:34:12] Name: Vetericyn
+[2025-02-26 18:34:12] Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:34:12] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:34:12] Image already exists at correct location
+[2025-02-26 18:34:12] 
+Checking Product ID: 5
+[2025-02-26 18:34:12] Name: Dog Food
+[2025-02-26 18:34:12] Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:34:12] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:34:12] Image already exists at correct location
+[2025-02-26 18:34:12] 
+Checking Product ID: 6
+[2025-02-26 18:34:12] Name: Comb
+[2025-02-26 18:34:12] Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:34:12] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:34:12] Image already exists at correct location
+[2025-02-26 18:34:12] 
+Checking Product ID: 7
+[2025-02-26 18:34:12] Name: Cat Food
+[2025-02-26 18:34:12] Image Path: 
+[2025-02-26 18:34:12] 
+Checking Product ID: 9
+[2025-02-26 18:34:12] Name: Collar
+[2025-02-26 18:34:12] Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:34:12] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:34:12] Image not found at expected location
+[2025-02-26 18:34:12] 
+=== Image Check Process Completed ===
+[2025-02-26 18:34:21] === Starting Image Check Process ===
+[2025-02-26 18:34:21] Found 5 products with images
+[2025-02-26 18:34:21] 
+Checking Product ID: 4
+[2025-02-26 18:34:21] Name: Vetericyn
+[2025-02-26 18:34:21] Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:34:21] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:34:21] Image already exists at correct location
+[2025-02-26 18:34:21] 
+Checking Product ID: 5
+[2025-02-26 18:34:21] Name: Dog Food
+[2025-02-26 18:34:21] Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:34:21] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:34:21] Image already exists at correct location
+[2025-02-26 18:34:21] 
+Checking Product ID: 6
+[2025-02-26 18:34:21] Name: Comb
+[2025-02-26 18:34:21] Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:34:21] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:34:21] Image already exists at correct location
+[2025-02-26 18:34:21] 
+Checking Product ID: 7
+[2025-02-26 18:34:21] Name: Cat Food
+[2025-02-26 18:34:21] Image Path: 
+[2025-02-26 18:34:21] 
+Checking Product ID: 9
+[2025-02-26 18:34:21] Name: Collar
+[2025-02-26 18:34:21] Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:34:21] Checking if image exists at: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:34:21] Image not found at expected location
+[2025-02-26 18:34:21] 
+=== Image Check Process Completed ===
+[2025-02-26 18:42:45] === Starting Image Data Check ===
+[2025-02-26 18:42:45] Found 5 products with images
+[2025-02-26 18:42:45] 
+Checking Product ID: 4
+[2025-02-26 18:42:45] Name: Vetericyn
+[2025-02-26 18:42:45] Image Length: 54 bytes
+[2025-02-26 18:42:45] Image appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:42:45] 
+Checking Product ID: 5
+[2025-02-26 18:42:45] Name: Dog Food
+[2025-02-26 18:42:45] Image Length: 53 bytes
+[2025-02-26 18:42:45] Image appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:42:45] 
+Checking Product ID: 6
+[2025-02-26 18:42:45] Name: Comb
+[2025-02-26 18:42:45] Image Length: 53 bytes
+[2025-02-26 18:42:45] Image appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:42:45] 
+Checking Product ID: 7
+[2025-02-26 18:42:45] Name: Cat Food
+[2025-02-26 18:42:45] Image Length: 0 bytes
+[2025-02-26 18:42:45] Image appears to be a path: 
+[2025-02-26 18:42:45] 
+Checking Product ID: 9
+[2025-02-26 18:42:45] Name: Collar
+[2025-02-26 18:42:45] Image Length: 53 bytes
+[2025-02-26 18:42:45] Image appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:42:45] 
+=== Image Check Process Completed ===
+[2025-02-26 18:56:24] === Starting Product Image Check ===
+[2025-02-26 18:56:24] Found 5 products with images
+[2025-02-26 18:56:24] 
+Checking Product ID: 4
+[2025-02-26 18:56:24] Name: Vetericyn
+[2025-02-26 18:56:24] Image Length: 54 bytes
+[2025-02-26 18:56:24] Data appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 18:56:24] 
+Checking Product ID: 5
+[2025-02-26 18:56:24] Name: Dog Food
+[2025-02-26 18:56:24] Image Length: 53 bytes
+[2025-02-26 18:56:24] Data appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 18:56:24] 
+Checking Product ID: 6
+[2025-02-26 18:56:24] Name: Comb
+[2025-02-26 18:56:24] Image Length: 53 bytes
+[2025-02-26 18:56:24] Data appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 18:56:24] 
+Checking Product ID: 7
+[2025-02-26 18:56:24] Name: Cat Food
+[2025-02-26 18:56:24] Image Length: 0 bytes
+[2025-02-26 18:56:24] Data appears to be a path: 
+[2025-02-26 18:56:24] 
+Checking Product ID: 9
+[2025-02-26 18:56:24] Name: Collar
+[2025-02-26 18:56:24] Image Length: 53 bytes
+[2025-02-26 18:56:24] Data appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 18:56:24] 
+=== Starting Pet Photo Check ===
+[2025-02-26 18:56:24] Found 4 pets with photos
+[2025-02-26 18:56:24] 
+Checking Pet ID: 6
+[2025-02-26 18:56:24] Name: Riri
+[2025-02-26 18:56:24] Photo Length: 63 bytes
+[2025-02-26 18:56:24] Successfully saved photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_6_67bf55c841f99.jpg
+[2025-02-26 18:56:24] Updated database with new path: pet_photos/pet_6_67bf55c841f99.jpg
+[2025-02-26 18:56:24] 
+Checking Pet ID: 8
+[2025-02-26 18:56:24] Name: Doggy Tho
+[2025-02-26 18:56:24] Photo Length: 63 bytes
+[2025-02-26 18:56:24] Successfully saved photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_8_67bf55c842676.jpg
+[2025-02-26 18:56:24] Updated database with new path: pet_photos/pet_8_67bf55c842676.jpg
+[2025-02-26 18:56:24] 
+Checking Pet ID: 12
+[2025-02-26 18:56:24] Name: Doggy
+[2025-02-26 18:56:24] Photo Length: 44 bytes
+[2025-02-26 18:56:24] Successfully saved photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_12_67bf55c842d2f.jpg
+[2025-02-26 18:56:24] Updated database with new path: pet_photos/pet_12_67bf55c842d2f.jpg
+[2025-02-26 18:56:24] 
+Checking Pet ID: 56
+[2025-02-26 18:56:24] Name: Hena
+[2025-02-26 18:56:24] Photo Length: 25 bytes
+[2025-02-26 18:56:24] Successfully saved photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_56_67bf55c843528.jpg
+[2025-02-26 18:56:24] Updated database with new path: pet_photos/pet_56_67bf55c843528.jpg
+[2025-02-26 18:56:24] 
+=== Image Extraction Process Completed ===
+[2025-02-26 18:56:42] Returning 2 products
+[2025-02-26 19:01:21] === Starting Product Image Check ===
+[2025-02-26 19:01:21] Found 5 products with images
+[2025-02-26 19:01:21] 
+Checking Product ID: 4
+[2025-02-26 19:01:21] Name: Vetericyn
+[2025-02-26 19:01:21] Image Length: 54 bytes
+[2025-02-26 19:01:21] Data appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:01:21] 
+Checking Product ID: 5
+[2025-02-26 19:01:21] Name: Dog Food
+[2025-02-26 19:01:21] Image Length: 53 bytes
+[2025-02-26 19:01:21] Data appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:01:21] 
+Checking Product ID: 6
+[2025-02-26 19:01:21] Name: Comb
+[2025-02-26 19:01:21] Image Length: 53 bytes
+[2025-02-26 19:01:21] Data appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:01:21] 
+Checking Product ID: 7
+[2025-02-26 19:01:21] Name: Cat Food
+[2025-02-26 19:01:21] Image Length: 0 bytes
+[2025-02-26 19:01:21] Data appears to be a path: 
+[2025-02-26 19:01:21] 
+Checking Product ID: 9
+[2025-02-26 19:01:21] Name: Collar
+[2025-02-26 19:01:21] Image Length: 53 bytes
+[2025-02-26 19:01:21] Data appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:01:21] 
+=== Starting Pet Photo Check ===
+[2025-02-26 19:01:21] Found 4 pets with photos
+[2025-02-26 19:01:21] 
+Checking Pet ID: 6
+[2025-02-26 19:01:21] Name: Riri
+[2025-02-26 19:01:21] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_6_67bf56f13f53f.jpg
+[2025-02-26 19:01:21] Successfully saved photo
+[2025-02-26 19:01:21] Updated database with new path: uploads/pet_photos/pet_6_67bf56f13f53f.jpg
+[2025-02-26 19:01:21] 
+Checking Pet ID: 8
+[2025-02-26 19:01:21] Name: Doggy Tho
+[2025-02-26 19:01:21] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_8_67bf56f13fc8f.jpg
+[2025-02-26 19:01:21] Successfully saved photo
+[2025-02-26 19:01:21] Updated database with new path: uploads/pet_photos/pet_8_67bf56f13fc8f.jpg
+[2025-02-26 19:01:21] 
+Checking Pet ID: 12
+[2025-02-26 19:01:21] Name: Doggy
+[2025-02-26 19:01:21] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_12_67bf56f140375.jpg
+[2025-02-26 19:01:21] Successfully saved photo
+[2025-02-26 19:01:21] Updated database with new path: uploads/pet_photos/pet_12_67bf56f140375.jpg
+[2025-02-26 19:01:21] 
+Checking Pet ID: 56
+[2025-02-26 19:01:21] Name: Hena
+[2025-02-26 19:01:21] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_56_67bf56f140b0c.jpg
+[2025-02-26 19:01:21] Successfully saved photo
+[2025-02-26 19:01:21] Updated database with new path: uploads/pet_photos/pet_56_67bf56f140b0c.jpg
+[2025-02-26 19:01:21] 
+=== Image Extraction Process Completed ===
+[2025-02-26 19:09:40] === Starting Product Image Check ===
+[2025-02-26 19:09:40] Found 5 products with images
+[2025-02-26 19:09:40] 
+Checking Product ID: 4
+[2025-02-26 19:09:40] Name: Vetericyn
+[2025-02-26 19:09:40] Image Length: 54 bytes
+[2025-02-26 19:09:40] Data appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:09:40] 
+Checking Product ID: 5
+[2025-02-26 19:09:40] Name: Dog Food
+[2025-02-26 19:09:40] Image Length: 53 bytes
+[2025-02-26 19:09:40] Data appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:09:40] 
+Checking Product ID: 6
+[2025-02-26 19:09:40] Name: Comb
+[2025-02-26 19:09:40] Image Length: 53 bytes
+[2025-02-26 19:09:40] Data appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:09:40] 
+Checking Product ID: 7
+[2025-02-26 19:09:40] Name: Cat Food
+[2025-02-26 19:09:40] Image Length: 0 bytes
+[2025-02-26 19:09:40] Data appears to be a path: 
+[2025-02-26 19:09:40] 
+Checking Product ID: 9
+[2025-02-26 19:09:40] Name: Collar
+[2025-02-26 19:09:40] Image Length: 53 bytes
+[2025-02-26 19:09:40] Data appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:09:40] 
+=== Starting Pet Photo Check ===
+[2025-02-26 19:09:40] Found 4 pets with photos
+[2025-02-26 19:09:40] 
+Checking Pet ID: 6
+[2025-02-26 19:09:40] Name: Riri
+[2025-02-26 19:09:40] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_6_67bf58e40e30d.jpg
+[2025-02-26 19:09:40] Successfully saved photo
+[2025-02-26 19:09:40] Updated database with new path: uploads/pet_photos/pet_6_67bf58e40e30d.jpg
+[2025-02-26 19:09:40] 
+Checking Pet ID: 8
+[2025-02-26 19:09:40] Name: Doggy Tho
+[2025-02-26 19:09:40] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_8_67bf58e40e9fb.jpg
+[2025-02-26 19:09:40] Successfully saved photo
+[2025-02-26 19:09:40] Updated database with new path: uploads/pet_photos/pet_8_67bf58e40e9fb.jpg
+[2025-02-26 19:09:40] 
+Checking Pet ID: 12
+[2025-02-26 19:09:40] Name: Doggy
+[2025-02-26 19:09:40] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_12_67bf58e40f04e.jpg
+[2025-02-26 19:09:40] Successfully saved photo
+[2025-02-26 19:09:40] Updated database with new path: uploads/pet_photos/pet_12_67bf58e40f04e.jpg
+[2025-02-26 19:09:40] 
+Checking Pet ID: 56
+[2025-02-26 19:09:40] Name: Hena
+[2025-02-26 19:09:40] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_56_67bf58e40f88f.jpg
+[2025-02-26 19:09:40] Successfully saved photo
+[2025-02-26 19:09:40] Updated database with new path: uploads/pet_photos/pet_56_67bf58e40f88f.jpg
+[2025-02-26 19:09:40] 
+=== Image Extraction Process Completed ===
+[2025-02-26 19:18:56] === Starting Product Image Check ===
+[2025-02-26 19:18:56] Found 5 products with images
+[2025-02-26 19:18:56] 
+Checking Product ID: 4
+[2025-02-26 19:18:56] Name: Vetericyn
+[2025-02-26 19:18:56] Image Length: 54 bytes
+[2025-02-26 19:18:56] Data appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:18:56] 
+Checking Product ID: 5
+[2025-02-26 19:18:56] Name: Dog Food
+[2025-02-26 19:18:56] Image Length: 53 bytes
+[2025-02-26 19:18:56] Data appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:18:56] 
+Checking Product ID: 6
+[2025-02-26 19:18:56] Name: Comb
+[2025-02-26 19:18:56] Image Length: 53 bytes
+[2025-02-26 19:18:56] Data appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:18:56] 
+Checking Product ID: 7
+[2025-02-26 19:18:56] Name: Cat Food
+[2025-02-26 19:18:56] Image Length: 0 bytes
+[2025-02-26 19:18:56] Data appears to be a path: 
+[2025-02-26 19:18:56] 
+Checking Product ID: 9
+[2025-02-26 19:18:56] Name: Collar
+[2025-02-26 19:18:56] Image Length: 53 bytes
+[2025-02-26 19:18:56] Data appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:18:56] 
+=== Starting Pet Photo Check ===
+[2025-02-26 19:18:56] Found 4 pets with photos
+[2025-02-26 19:18:56] 
+Checking Pet ID: 6
+[2025-02-26 19:18:56] Name: Riri
+[2025-02-26 19:18:56] Photo already exists as file: uploads/pet_photos/pet_6_67bf58e40e30d.jpg
+[2025-02-26 19:18:56] 
+Checking Pet ID: 8
+[2025-02-26 19:18:56] Name: Doggy Tho
+[2025-02-26 19:18:56] Photo already exists as file: uploads/pet_photos/pet_8_67bf58e40e9fb.jpg
+[2025-02-26 19:18:56] 
+Checking Pet ID: 12
+[2025-02-26 19:18:56] Name: Doggy
+[2025-02-26 19:18:56] Photo already exists as file: uploads/pet_photos/pet_12_67bf58e40f04e.jpg
+[2025-02-26 19:18:56] 
+Checking Pet ID: 56
+[2025-02-26 19:18:56] Name: Hena
+[2025-02-26 19:18:56] Photo already exists as file: uploads/pet_photos/pet_56_67bf58e40f88f.jpg
+[2025-02-26 19:18:56] 
+=== Image Extraction Process Completed ===
+[2025-02-26 19:19:34] === Starting Product Image Check ===
+[2025-02-26 19:19:34] Found 5 products with images
+[2025-02-26 19:19:34] 
+Checking Product ID: 4
+[2025-02-26 19:19:34] Name: Vetericyn
+[2025-02-26 19:19:34] Image Length: 54 bytes
+[2025-02-26 19:19:34] Data appears to be a path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:19:34] 
+Checking Product ID: 5
+[2025-02-26 19:19:34] Name: Dog Food
+[2025-02-26 19:19:34] Image Length: 53 bytes
+[2025-02-26 19:19:34] Data appears to be a path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:19:34] 
+Checking Product ID: 6
+[2025-02-26 19:19:34] Name: Comb
+[2025-02-26 19:19:34] Image Length: 53 bytes
+[2025-02-26 19:19:34] Data appears to be a path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:19:34] 
+Checking Product ID: 7
+[2025-02-26 19:19:34] Name: Cat Food
+[2025-02-26 19:19:34] Image Length: 0 bytes
+[2025-02-26 19:19:34] Data appears to be a path: 
+[2025-02-26 19:19:34] 
+Checking Product ID: 9
+[2025-02-26 19:19:34] Name: Collar
+[2025-02-26 19:19:34] Image Length: 53 bytes
+[2025-02-26 19:19:34] Data appears to be a path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:19:34] 
+=== Starting Pet Photo Check ===
+[2025-02-26 19:19:34] Found 4 pets with photos
+[2025-02-26 19:19:34] 
+Checking Pet ID: 6
+[2025-02-26 19:19:34] Name: Riri
+[2025-02-26 19:19:34] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_6_67bf5b3681bd3.jpg
+[2025-02-26 19:19:34] Successfully saved photo
+[2025-02-26 19:19:34] Updated database with new path: uploads/pet_photos/pet_6_67bf5b3681bd3.jpg
+[2025-02-26 19:19:34] 
+Checking Pet ID: 8
+[2025-02-26 19:19:34] Name: Doggy Tho
+[2025-02-26 19:19:34] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_8_67bf5b36823d1.jpg
+[2025-02-26 19:19:34] Successfully saved photo
+[2025-02-26 19:19:34] Updated database with new path: uploads/pet_photos/pet_8_67bf5b36823d1.jpg
+[2025-02-26 19:19:34] 
+Checking Pet ID: 12
+[2025-02-26 19:19:34] Name: Doggy
+[2025-02-26 19:19:34] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_12_67bf5b3682b01.jpg
+[2025-02-26 19:19:34] Successfully saved photo
+[2025-02-26 19:19:34] Updated database with new path: uploads/pet_photos/pet_12_67bf5b3682b01.jpg
+[2025-02-26 19:19:34] 
+Checking Pet ID: 56
+[2025-02-26 19:19:34] Name: Hena
+[2025-02-26 19:19:34] Attempting to save photo to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/pet_photos/pet_56_67bf5b368319f.jpg
+[2025-02-26 19:19:34] Successfully saved photo
+[2025-02-26 19:19:34] Updated database with new path: uploads/pet_photos/pet_56_67bf5b368319f.jpg
+[2025-02-26 19:19:34] 
+=== Image Extraction Process Completed ===
+[2025-02-26 19:51:15] === Starting Image Download Process ===
+[2025-02-26 19:51:15] Found 5 products with images
+[2025-02-26 19:51:15] 
+Processing Product:
+[2025-02-26 19:51:15] ID: 4
+[2025-02-26 19:51:15] Name: Vetericyn
+[2025-02-26 19:51:15] Image Path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:51:15] Attempting to download from: http://localhost/PetFurMe-Application/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:51:15] Saving to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 19:51:15] File already exists locally
+[2025-02-26 19:51:15] File verification:
+[2025-02-26 19:51:15] - Size: 89138 bytes
+[2025-02-26 19:51:15] - Type: image/webp
+[2025-02-26 19:51:15] 
+Processing Product:
+[2025-02-26 19:51:15] ID: 5
+[2025-02-26 19:51:15] Name: Dog Food
+[2025-02-26 19:51:15] Image Path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:51:15] Attempting to download from: http://localhost/PetFurMe-Application/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:51:15] Saving to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 19:51:15] File already exists locally
+[2025-02-26 19:51:15] File verification:
+[2025-02-26 19:51:15] - Size: 15456 bytes
+[2025-02-26 19:51:15] - Type: image/jpeg
+[2025-02-26 19:51:15] 
+Processing Product:
+[2025-02-26 19:51:15] ID: 6
+[2025-02-26 19:51:15] Name: Comb
+[2025-02-26 19:51:15] Image Path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:51:15] Attempting to download from: http://localhost/PetFurMe-Application/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:51:15] Saving to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 19:51:15] File already exists locally
+[2025-02-26 19:51:15] File verification:
+[2025-02-26 19:51:15] - Size: 201745 bytes
+[2025-02-26 19:51:15] - Type: image/jpeg
+[2025-02-26 19:51:15] 
+Processing Product:
+[2025-02-26 19:51:15] ID: 7
+[2025-02-26 19:51:15] Name: Cat Food
+[2025-02-26 19:51:15] Image Path: 
+[2025-02-26 19:51:15] 
+Processing Product:
+[2025-02-26 19:51:15] ID: 9
+[2025-02-26 19:51:15] Name: Collar
+[2025-02-26 19:51:15] Image Path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:51:15] Attempting to download from: http://localhost/PetFurMe-Application/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:51:15] Saving to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:51:15] Failed to download image
+[2025-02-26 19:51:15] Trying alternative path: http://localhost/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 19:51:15] 
+=== Image Download Process Completed ===
+[2025-02-26 20:02:15] === Starting Database Image Extraction ===
+[2025-02-26 20:02:15] Found 5 products with images
+[2025-02-26 20:02:15] 
+Processing Product:
+[2025-02-26 20:02:15] ID: 4
+[2025-02-26 20:02:15] Name: Vetericyn
+[2025-02-26 20:02:15] Attempting to save image to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/product_4_67bf6537a3919.jpg
+[2025-02-26 20:02:15] Data appears to be a path or invalid format: 70726f64756374732f43...
+[2025-02-26 20:02:15] 
+Processing Product:
+[2025-02-26 20:02:15] ID: 5
+[2025-02-26 20:02:15] Name: Dog Food
+[2025-02-26 20:02:15] Attempting to save image to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/product_5_67bf6537a3f20.jpg
+[2025-02-26 20:02:15] Data appears to be a path or invalid format: 70726f64756374732f45...
+[2025-02-26 20:02:15] 
+Processing Product:
+[2025-02-26 20:02:15] ID: 6
+[2025-02-26 20:02:15] Name: Comb
+[2025-02-26 20:02:15] Attempting to save image to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/product_6_67bf6537a45eb.jpg
+[2025-02-26 20:02:15] Data appears to be a path or invalid format: 70726f64756374732f47...
+[2025-02-26 20:02:15] 
+Processing Product:
+[2025-02-26 20:02:15] ID: 7
+[2025-02-26 20:02:15] Name: Cat Food
+[2025-02-26 20:02:15] Attempting to save image to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/product_7_67bf6537a48a0.jpg
+[2025-02-26 20:02:15] Data appears to be a path or invalid format: ...
+[2025-02-26 20:02:15] 
+Processing Product:
+[2025-02-26 20:02:15] ID: 9
+[2025-02-26 20:02:15] Name: Collar
+[2025-02-26 20:02:15] Attempting to save image to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/product_9_67bf6537a4b2d.jpg
+[2025-02-26 20:02:15] Data appears to be a path or invalid format: 70726f64756374732f46...
+[2025-02-26 20:02:15] 
+=== Image Extraction Process Completed ===
+[2025-02-26 20:08:25] === Starting Product Image Process ===
+[2025-02-26 20:08:25] Found 5 products with images
+[2025-02-26 20:08:25] 
+Processing Product:
+[2025-02-26 20:08:25] ID: 4
+[2025-02-26 20:08:25] Name: Vetericyn
+[2025-02-26 20:08:25] 
+Processing Product:
+[2025-02-26 20:08:25] ID: 5
+[2025-02-26 20:08:25] Name: Dog Food
+[2025-02-26 20:08:25] 
+Processing Product:
+[2025-02-26 20:08:25] ID: 6
+[2025-02-26 20:08:25] Name: Comb
+[2025-02-26 20:08:25] 
+Processing Product:
+[2025-02-26 20:08:25] ID: 7
+[2025-02-26 20:08:25] Name: Cat Food
+[2025-02-26 20:08:25] 
+Processing Product:
+[2025-02-26 20:08:25] ID: 9
+[2025-02-26 20:08:25] Name: Collar
+[2025-02-26 20:08:25] Saving to: D:/XAMPP/htdocs/PetFurMe-Application/uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 20:08:25] Successfully saved image
+[2025-02-26 20:08:25] 
+=== Starting Pet Photo Process ===
+[2025-02-26 20:08:25] Found 4 pets with photos
+[2025-02-26 20:08:25] 
+Processing Pet:
+[2025-02-26 20:08:25] ID: 6
+[2025-02-26 20:08:25] Name: Riri
+[2025-02-26 20:08:25] 
+Processing Pet:
+[2025-02-26 20:08:25] ID: 8
+[2025-02-26 20:08:25] Name: Doggy Tho
+[2025-02-26 20:08:25] 
+Processing Pet:
+[2025-02-26 20:08:25] ID: 12
+[2025-02-26 20:08:25] Name: Doggy
+[2025-02-26 20:08:25] 
+Processing Pet:
+[2025-02-26 20:08:25] ID: 56
+[2025-02-26 20:08:25] Name: Hena
+[2025-02-26 20:08:25] 
+=== Image Processing Completed ===
+[2025-02-26 20:08:37] Returning 2 products
+[2025-02-26 20:11:19] 
+=== Verifying Product Images ===
+[2025-02-26 20:11:19] Found 5 products with images
+[2025-02-26 20:11:19] 
+Checking Product ID: 4
+[2025-02-26 20:11:19] Name: Vetericyn
+[2025-02-26 20:11:19] Image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 20:11:19] WARNING: Invalid or corrupted image
+[2025-02-26 20:11:19] First 32 bytes: 70726f64756374732f4363366d6f6b6573453141616f74794d5066566e417461
+[2025-02-26 20:11:19] 
+Checking Product ID: 5
+[2025-02-26 20:11:19] Name: Dog Food
+[2025-02-26 20:11:19] Image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 20:11:19] WARNING: Invalid or corrupted image
+[2025-02-26 20:11:19] First 32 bytes: 70726f64756374732f45663765395343334a4a49686d796d34435a6c3955584c
+[2025-02-26 20:11:19] 
+Checking Product ID: 6
+[2025-02-26 20:11:19] Name: Comb
+[2025-02-26 20:11:19] Image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 20:11:19] WARNING: Invalid or corrupted image
+[2025-02-26 20:11:19] First 32 bytes: 70726f64756374732f477641677a3332627437626246447a4338777551665850
+[2025-02-26 20:11:19] 
+Checking Product ID: 7
+[2025-02-26 20:11:19] Name: Cat Food
+[2025-02-26 20:11:19] Image path: 
+[2025-02-26 20:11:19] Found base64 encoded image
+[2025-02-26 20:11:19] WARNING: Invalid or corrupted image
+[2025-02-26 20:11:19] First 32 bytes: 
+[2025-02-26 20:11:19] 
+Checking Product ID: 9
+[2025-02-26 20:11:19] Name: Collar
+[2025-02-26 20:11:19] Image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 20:11:19] WARNING: Invalid or corrupted image
+[2025-02-26 20:11:19] First 32 bytes: 70726f64756374732f46584e62784d386c65327a614348376f6779534e67444c
+[2025-02-26 20:11:19] 
+=== Image Verification Complete ===
+[2025-02-26 20:12:08] 
+=== Verifying Product Images ===
+[2025-02-26 20:12:08] Found 5 products with images
+[2025-02-26 20:12:08] 
+Checking Product ID: 4
+[2025-02-26 20:12:08] Name: Vetericyn
+[2025-02-26 20:12:08] Image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 20:12:08] WARNING: Invalid or corrupted image
+[2025-02-26 20:12:08] First 32 bytes: 70726f64756374732f4363366d6f6b6573453141616f74794d5066566e417461
+[2025-02-26 20:12:08] 
+Checking Product ID: 5
+[2025-02-26 20:12:08] Name: Dog Food
+[2025-02-26 20:12:08] Image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 20:12:08] WARNING: Invalid or corrupted image
+[2025-02-26 20:12:08] First 32 bytes: 70726f64756374732f45663765395343334a4a49686d796d34435a6c3955584c
+[2025-02-26 20:12:08] 
+Checking Product ID: 6
+[2025-02-26 20:12:08] Name: Comb
+[2025-02-26 20:12:08] Image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 20:12:08] WARNING: Invalid or corrupted image
+[2025-02-26 20:12:08] First 32 bytes: 70726f64756374732f477641677a3332627437626246447a4338777551665850
+[2025-02-26 20:12:08] 
+Checking Product ID: 7
+[2025-02-26 20:12:08] Name: Cat Food
+[2025-02-26 20:12:08] Image path: 
+[2025-02-26 20:12:08] Found base64 encoded image
+[2025-02-26 20:12:08] WARNING: Invalid or corrupted image
+[2025-02-26 20:12:08] First 32 bytes: 
+[2025-02-26 20:12:08] 
+Checking Product ID: 9
+[2025-02-26 20:12:08] Name: Collar
+[2025-02-26 20:12:08] Image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 20:12:08] WARNING: Invalid or corrupted image
+[2025-02-26 20:12:08] First 32 bytes: 70726f64756374732f46584e62784d386c65327a614348376f6779534e67444c
+[2025-02-26 20:12:08] 
+=== Image Verification Complete ===
+[2025-02-26 20:14:58] Starting verification process...
+[2025-02-26 20:14:58] 
+=== Verifying Product Images ===
+[2025-02-26 20:14:58] Found 5 products with images
+[2025-02-26 20:14:58] 
+Checking Product ID: 4
+[2025-02-26 20:14:58] Name: Vetericyn
+[2025-02-26 20:14:58] Image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 20:14:58] Retrieved image data length: 54 bytes
+[2025-02-26 20:14:58] WARNING: Invalid or corrupted image
+[2025-02-26 20:14:58] First 32 bytes: 70726f64756374732f4363366d6f6b6573453141616f74794d5066566e417461
+[2025-02-26 20:14:58] 
+Checking Product ID: 5
+[2025-02-26 20:14:58] Name: Dog Food
+[2025-02-26 20:14:58] Image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 20:14:58] Retrieved image data length: 53 bytes
+[2025-02-26 20:14:58] WARNING: Invalid or corrupted image
+[2025-02-26 20:14:58] First 32 bytes: 70726f64756374732f45663765395343334a4a49686d796d34435a6c3955584c
+[2025-02-26 20:14:58] 
+Checking Product ID: 6
+[2025-02-26 20:14:58] Name: Comb
+[2025-02-26 20:14:58] Image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 20:14:58] Retrieved image data length: 53 bytes
+[2025-02-26 20:14:58] WARNING: Invalid or corrupted image
+[2025-02-26 20:14:58] First 32 bytes: 70726f64756374732f477641677a3332627437626246447a4338777551665850
+[2025-02-26 20:14:58] 
+Checking Product ID: 7
+[2025-02-26 20:14:58] Name: Cat Food
+[2025-02-26 20:14:58] Image path: 
+[2025-02-26 20:14:58] Retrieved image data length: 0 bytes
+[2025-02-26 20:14:58] Found base64 encoded image
+[2025-02-26 20:14:58] WARNING: Invalid or corrupted image
+[2025-02-26 20:14:58] First 32 bytes: 
+[2025-02-26 20:14:58] 
+Checking Product ID: 9
+[2025-02-26 20:14:58] Name: Collar
+[2025-02-26 20:14:58] Image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 20:14:58] Retrieved image data length: 53 bytes
+[2025-02-26 20:14:58] WARNING: Invalid or corrupted image
+[2025-02-26 20:14:58] First 32 bytes: 70726f64756374732f46584e62784d386c65327a614348376f6779534e67444c
+[2025-02-26 20:14:58] 
+=== Image Verification Complete ===
+[2025-02-26 20:15:18] Starting verification process...
+[2025-02-26 20:15:18] 
+=== Verifying Product Images ===
+[2025-02-26 20:15:18] Found 5 products with images
+[2025-02-26 20:15:18] 
+Checking Product ID: 4
+[2025-02-26 20:15:18] Name: Vetericyn
+[2025-02-26 20:15:18] Image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-26 20:15:18] Retrieved image data length: 54 bytes
+[2025-02-26 20:15:18] WARNING: Invalid or corrupted image
+[2025-02-26 20:15:18] First 32 bytes: 70726f64756374732f4363366d6f6b6573453141616f74794d5066566e417461
+[2025-02-26 20:15:18] 
+Checking Product ID: 5
+[2025-02-26 20:15:18] Name: Dog Food
+[2025-02-26 20:15:18] Image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-26 20:15:18] Retrieved image data length: 53 bytes
+[2025-02-26 20:15:18] WARNING: Invalid or corrupted image
+[2025-02-26 20:15:18] First 32 bytes: 70726f64756374732f45663765395343334a4a49686d796d34435a6c3955584c
+[2025-02-26 20:15:18] 
+Checking Product ID: 6
+[2025-02-26 20:15:18] Name: Comb
+[2025-02-26 20:15:18] Image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-26 20:15:18] Retrieved image data length: 53 bytes
+[2025-02-26 20:15:18] WARNING: Invalid or corrupted image
+[2025-02-26 20:15:18] First 32 bytes: 70726f64756374732f477641677a3332627437626246447a4338777551665850
+[2025-02-26 20:15:18] 
+Checking Product ID: 7
+[2025-02-26 20:15:18] Name: Cat Food
+[2025-02-26 20:15:18] Image path: 
+[2025-02-26 20:15:18] Retrieved image data length: 0 bytes
+[2025-02-26 20:15:18] Found base64 encoded image
+[2025-02-26 20:15:18] WARNING: Invalid or corrupted image
+[2025-02-26 20:15:18] First 32 bytes: 
+[2025-02-26 20:15:18] 
+Checking Product ID: 9
+[2025-02-26 20:15:18] Name: Collar
+[2025-02-26 20:15:18] Image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-26 20:15:18] Retrieved image data length: 53 bytes
+[2025-02-26 20:15:18] WARNING: Invalid or corrupted image
+[2025-02-26 20:15:18] First 32 bytes: 70726f64756374732f46584e62784d386c65327a614348376f6779534e67444c
+[2025-02-26 20:15:18] 
+=== Image Verification Complete ===
+[2025-02-27 04:11:45] Returning 2 products

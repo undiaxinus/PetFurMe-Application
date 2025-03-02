@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const CustomDropdown = ({ label, options, value, onSelect, placeholder }) => {
+const CustomDropdown = ({ label, options, value, onSelect, placeholder, style, headerText }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSelect = (item) => {
@@ -11,21 +12,22 @@ const CustomDropdown = ({ label, options, value, onSelect, placeholder }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <TouchableOpacity 
-                onPress={() => setIsOpen(!isOpen)} 
-                style={[styles.dropdown, value && styles.dropdownSelected]}
+                style={[
+                    styles.dropdownButton,
+                    value ? styles.dropdownButtonWithValue : null
+                ]} 
+                onPress={() => setIsOpen(!isOpen)}
             >
-                <Text style={[
-                    styles.dropdownText,
-                    !value && styles.placeholderText,
-                    value && styles.selectedText
-                ]}>
-                    {value || placeholder}
-                </Text>
-                <Ionicons 
-                    name={isOpen ? "chevron-up" : "chevron-down"} 
-                    size={20} 
+                {value ? (
+                    <Text style={styles.selectedValueText}>{value}</Text>
+                ) : (
+                    <Text style={styles.placeholderText}>{placeholder}</Text>
+                )}
+                <MaterialIcons 
+                    name={isOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"} 
+                    size={24} 
                     color="#8146C1" 
                 />
             </TouchableOpacity>
@@ -41,7 +43,7 @@ const CustomDropdown = ({ label, options, value, onSelect, placeholder }) => {
                         <TouchableWithoutFeedback>
                             <View style={styles.modalContent}>
                                 <View style={styles.modalHeader}>
-                                    <Text style={styles.modalTitle}>{label}</Text>
+                                    <Text style={styles.modalTitle}>Select {label}</Text>
                                     <TouchableOpacity 
                                         onPress={() => setIsOpen(false)}
                                         style={styles.closeButton}
@@ -88,39 +90,84 @@ const CustomDropdown = ({ label, options, value, onSelect, placeholder }) => {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 16,
+        backgroundColor: 'transparent',
     },
     dropdown: {
+        height: 42,
         borderWidth: 1,
-        borderColor: '#E0E0E0',
-        borderRadius: 8,
-        padding: 12,
-        backgroundColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        borderColor: "#E0E0E0",
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        backgroundColor: "#FFFFFF",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.08,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.04,
         shadowRadius: 2,
         elevation: 1,
     },
-    dropdownSelected: {
-        borderColor: '#8146C1',
-    },
-    dropdownText: {
+    dropdownLabel: {
         fontSize: 14,
-        color: '#2D3748',
+        color: '#666666',
+        marginBottom: 8,
+    },
+    required: {
+        color: '#8146C1',
+    },
+    dropdownButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        height: 48,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
+    },
+    dropdownButtonWithValue: {
+        borderColor: '#8146C1',
+        borderWidth: 2,
+    },
+    headerText: {
+        fontSize: 16,
+        color: '#333333',
     },
     placeholderText: {
+        fontSize: 16,
         color: '#A3A3A3',
     },
-    selectedText: {
-        color: '#2D3748',
-        fontWeight: '500',
+    optionsContainer: {
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        right: 0,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+        borderRadius: 8,
+        marginTop: 4,
+        zIndex: 1000,
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    option: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E0E0E0',
+    },
+    optionText: {
+        fontSize: 16,
+        color: '#333333',
+    },
+    selectedOptionText: {
+        color: '#8146C1',
+        fontWeight: '600',
     },
     modalOverlay: {
         flex: 1,
@@ -162,22 +209,16 @@ const styles = StyleSheet.create({
     optionsList: {
         paddingVertical: 8,
     },
-    option: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 16,
-        paddingHorizontal: 20,
-    },
     optionSelected: {
         backgroundColor: '#F8F5FF',
     },
-    optionText: {
-        fontSize: 15,
-        color: '#2D3748',
-    },
     optionTextSelected: {
         color: '#8146C1',
+        fontWeight: '500',
+    },
+    selectedValueText: {
+        fontSize: 16,
+        color: '#333333',
         fontWeight: '500',
     },
 });

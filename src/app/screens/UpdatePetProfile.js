@@ -253,7 +253,10 @@ const UpdatePetProfile = ({ navigation, route }) => {
 
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Name <Text style={styles.required}>*</Text></Text>
-            <View style={styles.inputContainer}>
+            <View style={[
+              styles.inputContainer,
+              petName.trim() && styles.inputContainerWithValue
+            ]}>
               <View style={styles.iconContainer}>
                 <Ionicons name="paw" size={20} color="#8146C1" />
               </View>
@@ -268,22 +271,24 @@ const UpdatePetProfile = ({ navigation, route }) => {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Pet Type <Text style={styles.required}>*</Text></Text>
             <CustomDropdown
-              options={PET_TYPES}
-              value={petType}
-              onSelect={setPetType}
-              placeholder="Choose type"
+                label="Pet Type"
+                options={PET_TYPES}
+                value={petType}
+                onSelect={setPetType}
+                placeholder="Choose type"
+                headerText={petType || ''}
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Gender <Text style={styles.required}>*</Text></Text>
             <CustomDropdown
-              options={PET_GENDERS}
-              value={petGender}
-              onSelect={setPetGender}
-              placeholder="Choose gender"
+                label="Gender"
+                options={PET_GENDERS}
+                value={petGender}
+                onSelect={setPetGender}
+                placeholder="Choose gender"
+                headerText={petGender || ''}
             />
           </View>
 
@@ -297,7 +302,11 @@ const UpdatePetProfile = ({ navigation, route }) => {
                 <Text style={styles.label}>Age</Text>
                 <View style={styles.inputWithAction}>
                   <TextInput
-                    style={[styles.optionalInput, petAge === 'Not Specified' && styles.skippedInput]}
+                    style={[
+                      styles.optionalInput,
+                      petAge !== 'Not Specified' && petAge !== '' && styles.optionalInputWithValue,
+                      petAge === 'Not Specified' && styles.skippedInput
+                    ]}
                     placeholder={isAgeFocused || petAge !== 'Not Specified' ? '' : 'None'}
                     value={petAge === 'Not Specified' || !petAge ? 'None' : petAge}
                     onFocus={() => setIsAgeFocused(true)}
@@ -332,7 +341,11 @@ const UpdatePetProfile = ({ navigation, route }) => {
                 <Text style={styles.label}>Weight (kg)</Text>
                 <View style={styles.inputWithAction}>
                   <TextInput
-                    style={[styles.optionalInput, petWeight === 'Not Specified' && styles.skippedInput]}
+                    style={[
+                      styles.optionalInput,
+                      petWeight !== 'Not Specified' && petWeight !== '' && styles.optionalInputWithValue,
+                      petWeight === 'Not Specified' && styles.skippedInput
+                    ]}
                     placeholder={isWeightFocused || petWeight !== 'Not Specified' ? '' : 'None'}
                     value={petWeight === 'Not Specified' || !petWeight ? 'None' : petWeight}
                     onFocus={() => setIsWeightFocused(true)}
@@ -367,7 +380,11 @@ const UpdatePetProfile = ({ navigation, route }) => {
                 <Text style={styles.label}>Breed</Text>
                 <View style={styles.inputWithAction}>
                   <TextInput
-                    style={[styles.optionalInput, petBreed === 'Not Specified' && styles.skippedInput]}
+                    style={[
+                      styles.optionalInput,
+                      petBreed !== 'Not Specified' && petBreed !== '' && styles.optionalInputWithValue,
+                      petBreed === 'Not Specified' && styles.skippedInput
+                    ]}
                     placeholder={isBreedFocused || petBreed !== 'Not Specified' ? '' : 'None'}
                     value={petBreed === 'Not Specified' || !petBreed ? 'None' : petBreed}
                     onFocus={() => setIsBreedFocused(true)}
@@ -407,7 +424,11 @@ const UpdatePetProfile = ({ navigation, route }) => {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Allergies</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={[
+                styles.input,
+                styles.textArea,
+                petAllergies.trim() && styles.textAreaWithValue
+              ]}
               placeholder="List any known allergies (if any)"
               value={petAllergies || 'None'}
               onChangeText={setPetAllergies}
@@ -420,7 +441,11 @@ const UpdatePetProfile = ({ navigation, route }) => {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Special Notes</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={[
+                styles.input,
+                styles.textArea,
+                petNotes.trim() && styles.textAreaWithValue
+              ]}
               placeholder="Add any special care instructions"
               value={petNotes || 'None'}
               onChangeText={setPetNotes}
@@ -578,6 +603,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+  },
+  inputContainerWithValue: {
+    borderColor: '#8146C1',
+    borderWidth: 2,
+  },
+  iconContainer: {
+    padding: 12,
+  },
+  input: {
+    flex: 1,
+    height: 48,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#333333',
+  },
   optionalInput: {
     flex: 1,
     height: 40,
@@ -588,6 +635,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     color: "#2D3748",
     fontSize: 13,
+  },
+  optionalInputWithValue: {
+    borderColor: '#8146C1',
+    borderWidth: 2,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+    paddingTop: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+  },
+  textAreaWithValue: {
+    borderColor: '#8146C1',
+    borderWidth: 2,
   },
   skipButton: {
     paddingHorizontal: 12,
@@ -626,32 +689,6 @@ const styles = StyleSheet.create({
   },
   required: {
     color: '#8146C1',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-  },
-  iconContainer: {
-    padding: 12,
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#333333',
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-    paddingTop: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
   },
   saveButton: {
     backgroundColor: '#8146C1',

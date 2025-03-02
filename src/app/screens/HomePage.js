@@ -21,6 +21,7 @@ import CompleteProfileBar from '../components/CompleteProfileBar';
 import CustomToast from '../components/CustomToast';
 import PetDetailsModal from '../components/PetDetailsModal';
 import PetProductsSection from '../components/PetProductsSection';
+import PetsSection from '../components/PetsSection';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -348,6 +349,35 @@ const HomePage = ({ navigation, route }) => {
 		});
 	};
 
+	// Add this style object near the other style definitions
+	const statusStyles = {
+		pending: {
+			backgroundColor: '#FFF3CD',
+			color: '#856404',
+			borderColor: '#FFEEBA'
+		},
+		confirmed: {
+			backgroundColor: '#D4EDDA',
+			color: '#155724',
+			borderColor: '#C3E6CB'
+		},
+		completed: {
+			backgroundColor: '#CCE5FF',
+			color: '#004085',
+			borderColor: '#B8DAFF'
+		},
+		cancelled: {
+			backgroundColor: '#F8D7DA',
+			color: '#721C24',
+			borderColor: '#F5C6CB'
+		},
+		no_show: {
+			backgroundColor: '#E2E3E5',
+			color: '#383D41',
+			borderColor: '#D6D8DB'
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			{toastConfig && (
@@ -477,17 +507,47 @@ const HomePage = ({ navigation, route }) => {
 									onPress={() => navigation.navigate('AppointmentDetails', { appointmentId: appointment.appointment_id })}
 								>
 									<View style={styles.appointmentHeader}>
-										<Text style={styles.appointmentType}>
-											{Array.isArray(appointment.reason) ? appointment.reason.join(', ') : ''}
-										</Text>
-										<Text style={styles.appointmentDate}>
-											{appointment.appointment_date}
-										</Text>
+										<View style={styles.appointmentTitleRow}>
+											<Text style={styles.appointmentPet}>{appointment.pet_name}</Text>
+											<View style={[
+												styles.statusTag,
+												{ 
+													backgroundColor: statusStyles[appointment.status]?.backgroundColor,
+													borderColor: statusStyles[appointment.status]?.borderColor
+												}
+											]}>
+												<Text style={[
+													styles.statusText,
+													{ color: statusStyles[appointment.status]?.color }
+												]}>
+													{appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+												</Text>
+											</View>
+										</View>
+										
+										<View style={styles.appointmentInfo}>
+											<View style={styles.infoRow}>
+												<Ionicons name="calendar-outline" size={14} color="#666" />
+												<Text style={styles.appointmentDate}>
+													{appointment.appointment_date}
+												</Text>
+											</View>
+											
+											<View style={styles.infoRow}>
+												<Ionicons name="time-outline" size={14} color="#666" />
+												<Text style={styles.appointmentTime}>
+													{formatTime(appointment.appointment_time)}
+												</Text>
+											</View>
+											
+											<View style={styles.infoRow}>
+												<Ionicons name="medical-outline" size={14} color="#666" />
+												<Text style={styles.appointmentType}>
+													{Array.isArray(appointment.reason) ? appointment.reason.join(', ') : ''}
+												</Text>
+											</View>
+										</View>
 									</View>
-									<Text style={styles.appointmentPet}>{appointment.pet_name}</Text>
-									<Text style={styles.appointmentTime}>
-										{formatTime(appointment.appointment_time)}
-									</Text>
 								</TouchableOpacity>
 							))}
 						</ScrollView>
@@ -539,93 +599,14 @@ const HomePage = ({ navigation, route }) => {
 				{isLoading ? (
 					<ActivityIndicator size="large" color="#8146C1" />
 				) : (
-					<View style={styles.petsSection}>
-						<View style={styles.petsSectionHeader}>
-							<View style={styles.petsTitleContainer}>
-								<Ionicons name="paw" size={24} color="#8146C1" />
-								<Text style={styles.sectionTitle}>My Pets</Text>
-							</View>
-							<View style={styles.petsCountBadge}>
-								<Text style={styles.petsCountText}>{userPets.length}</Text>
-							</View>
-						</View>
-						<ScrollView 
-							horizontal 
-							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={styles.petsScrollContainer}
-						>
-							{userPets.map((pet) => (
-								<TouchableOpacity 
-									onPress={() => handlePetPress(pet)}
-									key={pet.id} 
-									style={[
-										styles.petItem,
-										!isVerified && styles.disabledItem
-									]}
-								>
-									<View style={styles.petImageContainer}>
-										<Image
-											source={
-												pet.photo 
-													? { 
-														uri: pet.photo,
-														headers: {
-															'Cache-Control': 'no-cache'
-														}
-													}
-													: require("../../assets/images/doprof.png")
-											}
-											style={styles.petImage}
-											defaultSource={require("../../assets/images/doprof.png")}
-											resizeMode="contain"
-											onError={(e) => {
-												console.log('Image loading error:', e.nativeEvent.error);
-												setImageLoadErrors(prev => ({...prev, [pet.id]: true}));
-											}}
-										/>
-									</View>
-									<View style={styles.petInfoContainer}>
-										<Text style={styles.petName}>{pet.name}</Text>
-										<View style={styles.petDetailsChip}>
-											<Text style={styles.petDetailsText}>Pet Details</Text>
-											<Ionicons name="paw" size={12} color="#8146C1" />
-										</View>
-									</View>
-									{!isVerified && (
-										<View style={styles.petLockOverlay}>
-											<Ionicons name="lock-closed" size={20} color="#FFFFFF" />
-										</View>
-									)}
-								</TouchableOpacity>
-							))}
-							<TouchableOpacity 
-								onPress={() => {
-									if (!isVerified) {
-										showVerificationAlert();
-										return;
-									}
-									handleAddNewPet();
-								}}
-								style={[
-									styles.addPetItem,
-									!isVerified && styles.disabledItem
-								]}
-							>
-								<View style={styles.addPetContent}>
-									<View style={styles.addPetIconContainer}>
-										<Ionicons name="add-circle" size={32} color="#8146C1" />
-									</View>
-									<Text style={styles.addPetText}>Add New Pet</Text>
-									<Text style={styles.addPetSubtext}>Register your pet companion</Text>
-								</View>
-								{!isVerified && (
-									<View style={styles.verificationBadge}>
-										<Ionicons name="lock-closed" size={12} color="#FFFFFF" />
-									</View>
-								)}
-							</TouchableOpacity>
-						</ScrollView>
-					</View>
+					<PetsSection 
+						userPets={userPets}
+						isVerified={isVerified}
+						isLoading={isLoading}
+						onPetPress={handlePetPress}
+						onAddNewPet={handleAddNewPet}
+						showVerificationAlert={showVerificationAlert}
+					/>
 				)}
 
 				{/* Pet Products Section */}
@@ -1301,32 +1282,55 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		padding: 16,
 		marginRight: 12,
-		width: 200,
+		width: 250,
 	},
 	appointmentHeader: {
+		gap: 12,
+	},
+	appointmentTitleRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 8,
+		marginBottom: 4,
 	},
-	appointmentType: {
-		fontSize: 14,
-		fontWeight: '600',
-		color: '#8146C1',
+	appointmentInfo: {
+		gap: 8,
 	},
-	appointmentDate: {
-		fontSize: 12,
-		color: '#666',
+	infoRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
 	},
 	appointmentPet: {
 		fontSize: 16,
 		fontWeight: 'bold',
 		color: '#333',
-		marginBottom: 4,
+		flex: 1,
+	},
+	appointmentType: {
+		fontSize: 13,
+		color: '#8146C1',
+		flex: 1,
+	},
+	appointmentDate: {
+		fontSize: 13,
+		color: '#666',
 	},
 	appointmentTime: {
-		fontSize: 14,
+		fontSize: 13,
 		color: '#666',
+	},
+	statusTag: {
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 12,
+		borderWidth: 1,
+		alignSelf: 'flex-start',
+	},
+	statusText: {
+		fontSize: 10,
+		fontWeight: '600',
+		textTransform: 'capitalize',
 	},
 	emptyStateContainer: {
 		alignItems: 'center',

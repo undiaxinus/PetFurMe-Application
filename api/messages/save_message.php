@@ -36,18 +36,14 @@ try {
     
     logDebug("Decoded data: " . json_encode($data));
 
-    // Validate required fields
-    if (!isset($data['sender_id'])) logDebug("Missing sender_id");
-    if (!isset($data['receiver_id'])) logDebug("Missing receiver_id");
-    if (!isset($data['message'])) logDebug("Missing message");
-    
-    if (!isset($data['sender_id']) || !isset($data['receiver_id']) || !isset($data['message'])) {
-        throw new Exception('Missing required fields');
+    // Only require sender_id and message
+    if (!isset($data['sender_id']) || !isset($data['message'])) {
+        throw new Exception('Missing required fields: sender_id and message are required');
     }
 
     // Validate data types
-    if (!is_numeric($data['sender_id']) || !is_numeric($data['receiver_id'])) {
-        logDebug("Invalid ID format - sender_id: {$data['sender_id']}, receiver_id: {$data['receiver_id']}");
+    if (!is_numeric($data['sender_id'])) {
+        logDebug("Invalid ID format - sender_id: {$data['sender_id']}");
         throw new Exception('Invalid ID format');
     }
 
@@ -56,58 +52,110 @@ try {
     $conn = $database->connect();
     logDebug("Database connection established");
 
-    $query = "INSERT INTO messages (
-                conversation_id,
-                sender_id,
-                receiver_id,
-                message,
-                sent_at,
-                created_at,
-                updated_at
-              ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())";
+    // Get sender's role
+    $senderQuery = "SELECT role FROM users WHERE id = ?";
+    $senderStmt = $conn->prepare($senderQuery);
+    $senderStmt->bind_param("i", $data['sender_id']);
+    $senderStmt->execute();
+    $senderResult = $senderStmt->get_result();
     
-    logDebug("Preparing query: " . $query);
-    
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        logDebug("Prepare failed: " . $conn->error);
-        throw new Exception("Prepare failed: " . $conn->error);
+    if (!$senderResult) {
+        throw new Exception('Failed to get sender information');
     }
-
-    $sender_id = (int)$data['sender_id'];
-    $receiver_id = (int)$data['receiver_id'];
-    $message = $data['message'];
-    $conversation_id = $data['conversation_id'] ?? null;
-
-    logDebug("Binding parameters:");
-    logDebug("sender_id: $sender_id");
-    logDebug("receiver_id: $receiver_id");
-    logDebug("message: $message");
-    logDebug("conversation_id: " . var_export($conversation_id, true));
-
-    $stmt->bind_param("iiis", 
-        $conversation_id,
-        $sender_id,
-        $receiver_id,
-        $message
-    );
     
-    logDebug("Executing query...");
-    if (!$stmt->execute()) {
-        logDebug("Execute failed: " . $stmt->error);
-        throw new Exception('Failed to save message: ' . $stmt->error);
+    $senderData = $senderResult->fetch_assoc();
+    $senderRole = $senderData['role'];
+
+    if ($senderRole === 'pet_owner') {
+        // Get all active admins and sub-admins
+        $receivers = "SELECT id, role FROM users 
+                     WHERE role IN ('admin', 'sub_admin') 
+                     AND deleted_at IS NULL 
+                     ORDER BY last_activity DESC";
+        $receiverStmt = $conn->prepare($receivers);
+        $receiverStmt->execute();
+        $result = $receiverStmt->get_result();
+        
+        // Create receivers array
+        $receiversArray = [];
+        while ($receiver = $result->fetch_assoc()) {
+            $receiversArray[] = [
+                'id' => $receiver['id'],
+                'role' => $receiver['role']
+            ];
+        }
+
+        // Store message with JSON receivers
+        $query = "INSERT INTO messages (
+            conversation_id,
+            sender_id,
+            receivers,
+            message,
+            sent_at,
+            created_at,
+            updated_at
+        ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())";
+
+        $stmt = $conn->prepare($query);
+        $receiversJson = json_encode($receiversArray);
+        
+        $stmt->bind_param("iiss", 
+            $data['conversation_id'],
+            $data['sender_id'],
+            $receiversJson,
+            $data['message']
+        );
+
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to save message");
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message_id' => $conn->insert_id,
+            'message' => 'Message sent to all administrators'
+        ]);
+
+    } else {
+        // Admin/sub-admin sending to specific pet owner
+        if (!isset($data['receiver_id'])) {
+            throw new Exception('receiver_id is required for admin messages');
+        }
+
+        $receiversArray = [
+            ['id' => $data['receiver_id'], 'role' => 'pet_owner']
+        ];
+
+        $query = "INSERT INTO messages (
+            conversation_id,
+            sender_id,
+            receivers,
+            message,
+            sent_at,
+            created_at,
+            updated_at
+        ) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())";
+
+        $stmt = $conn->prepare($query);
+        $receiversJson = json_encode($receiversArray);
+        
+        $stmt->bind_param("iiss", 
+            $data['conversation_id'],
+            $data['sender_id'],
+            $receiversJson,
+            $data['message']
+        );
+
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to save message");
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message_id' => $conn->insert_id,
+            'message' => 'Message sent successfully'
+        ]);
     }
-
-    $message_id = $conn->insert_id;
-    logDebug("Message saved successfully with ID: $message_id");
-
-    $response = [
-        'success' => true,
-        'message_id' => $message_id,
-        'message' => 'Message saved successfully'
-    ];
-    logDebug("Sending response: " . json_encode($response));
-    echo json_encode($response);
 
 } catch (Exception $e) {
     logDebug("Error occurred: " . $e->getMessage());
@@ -122,6 +170,14 @@ try {
     if (isset($stmt)) {
         $stmt->close();
         logDebug("Statement closed");
+    }
+    if (isset($senderStmt)) {
+        $senderStmt->close();
+        logDebug("Sender statement closed");
+    }
+    if (isset($receiverStmt)) {
+        $receiverStmt->close();
+        logDebug("Receiver statement closed");
     }
     if (isset($conn)) {
         $conn->close();

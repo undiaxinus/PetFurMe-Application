@@ -8,10 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 const DetailCard = ({ label, value, icon }) => (
     <View style={styles.detailCard}>
         <View style={styles.cardHeader}>
-            <MaterialCommunityIcons name={icon} size={22} color="#8146C1" />
+            <MaterialCommunityIcons name={icon} size={20} color="#8146C1" />
             <Text style={styles.cardLabel}>{label}</Text>
         </View>
-        <Text style={styles.cardValue}>{value}</Text>
+        <Text style={styles.cardValue}>
+            {value ? value : 'None'}
+        </Text>
     </View>
 );
 
@@ -65,11 +67,7 @@ const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
                 <ScrollView style={styles.modalScroll}>
                     <View style={styles.petImageContainer}>
                         <Image
-                            source={
-                                pet.photo
-                                    ? { uri: pet.photo }
-                                    : defaultPetImage
-                            }
+                            source={pet.photo ? { uri: pet.photo } : defaultPetImage}
                             style={styles.modalPetImage}
                             resizeMode="contain"
                         />
@@ -79,7 +77,7 @@ const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
                         <View style={styles.detailsGrid}>
                             <DetailCard 
                                 label="Age" 
-                                value={`${pet.age} yrs`}
+                                value={pet.age ? `${pet.age} yrs` : null}
                                 icon="calendar-heart"
                             />
                             <DetailCard 
@@ -94,14 +92,14 @@ const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
                             />
                             <DetailCard 
                                 label="Weight" 
-                                value={`${pet.weight} kg`}
+                                value={pet.weight ? `${pet.weight} kg` : null}
                                 icon="scale-bathroom"
                             />
                         </View>
 
                         <View style={styles.notesContainer}>
                             <View style={styles.notesHeader}>
-                                <MaterialCommunityIcons name="text-box-outline" size={22} color="#8146C1" />
+                                <MaterialCommunityIcons name="text-box-outline" size={20} color="#8146C1" />
                                 <Text style={styles.notesLabel}>Notes</Text>
                             </View>
                             <Text style={styles.notesValue}>
@@ -124,8 +122,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        maxHeight: '85%',
-        paddingBottom: 20,
+        maxHeight: '80%',
+        paddingBottom: 16,
     },
     modalHeader: {
         flexDirection: 'row',
@@ -166,68 +164,69 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#F0F0F0',
+        overflow: 'hidden',
     },
     modalPetImage: {
         width: '100%',
         height: '100%',
     },
     contentContainer: {
-        padding: 20,
-        paddingTop: 15,
-        gap: 16,
+        padding: 16,
+        paddingTop: 12,
+        gap: 12,
     },
     detailsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        gap: 16,
+        gap: 12,
     },
     detailCard: {
-        width: '47%',
+        width: '48%',
         backgroundColor: '#F8F8F8',
-        padding: 16,
-        borderRadius: 12,
-        elevation: 2,
+        padding: 12,
+        borderRadius: 10,
+        elevation: 1,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 1,
         },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
+        shadowOpacity: 0.08,
+        shadowRadius: 1.5,
         borderWidth: 1,
         borderColor: '#F0F0F0',
     },
     cardHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     cardLabel: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#666',
-        marginLeft: 8,
+        marginLeft: 6,
         fontWeight: '500',
     },
     cardValue: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '600',
         color: '#333',
-        marginTop: 4,
-        marginLeft: 30,
+        marginTop: 2,
+        marginLeft: 26,
     },
     notesContainer: {
         backgroundColor: '#F8F8F8',
-        padding: 16,
-        borderRadius: 12,
-        elevation: 2,
+        padding: 12,
+        borderRadius: 10,
+        elevation: 1,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 1,
         },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
+        shadowOpacity: 0.08,
+        shadowRadius: 1.5,
         borderWidth: 1,
         borderColor: '#F0F0F0',
     },
@@ -243,10 +242,10 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     notesValue: {
-        fontSize: 15,
+        fontSize: 14,
         color: '#333',
-        lineHeight: 22,
-        marginLeft: 30,
+        lineHeight: 20,
+        marginLeft: 26,
     },
 });
 

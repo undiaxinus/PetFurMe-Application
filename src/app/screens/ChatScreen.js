@@ -35,135 +35,89 @@ const ChatScreen = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   
-  // Load messages immediately when component mounts
-  useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        const url = `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`;
-        const response = await axios.get(url);
+  // Add polling interval state
+  const [pollingInterval, setPollingInterval] = useState(null);
 
-        if (!response.data) {
-          throw new Error('No data received from server');
-        }
+  // Add a new state for temporary message notice
+  const [showTempNotice, setShowTempNotice] = useState(false);
 
-        if (!response.data.success) {
-          throw new Error(response.data.message || 'Server returned error');
-        }
+  // Add separate states for bot and live messages
+  const [botMessages, setBotMessages] = useState([]);
+  const [liveMessages, setLiveMessages] = useState([]);
 
-        if (!Array.isArray(response.data.messages)) {
-          throw new Error('Messages is not an array');
-        }
-
-        if (response.data.messages.length > 0) {
-          const dbMessages = response.data.messages.map(msg => ({
-            id: msg.id.toString(),
-            text: msg.message,
-            sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
-            type: 'database',
-            timestamp: msg.sent_at,
-            conversation_id: msg.conversation_id
-          }));
-
-          dbMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-          setMessages(dbMessages);
-        } else {
-          setMessages([]);
-        }
-      } catch (error) {
-        console.error('Error loading messages:', error.message);
-      }
-    };
-
-    if (user_id) {
-      loadMessages();
-    }
-  }, [user_id]);
-
-  // Modify the useEffect for mode changes
-  useEffect(() => {
-    if (isAutomated) {
-      // When switching to automated mode, keep database messages and add welcome message
-      const hasAutomatedMessages = messages.some(msg => msg.type === 'automated');
-      if (!hasAutomatedMessages) {
-        const welcomeMessage = {
-          id: Date.now().toString(),
-          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
-          sender: 'other',
-          type: 'automated'
-        };
-        setMessages(prevMessages => {
-          const databaseMessages = prevMessages.filter(msg => msg.type === 'database');
-          return [...databaseMessages, welcomeMessage];
-        });
-      }
-    } else {
-      // When switching to live chat, remove automated messages but keep database messages
-      setMessages(prevMessages => {
-        const databaseMessages = prevMessages.filter(msg => msg.type === 'database');
-        return databaseMessages;
-      });
-    }
-  }, [isAutomated]);
-
-  // Modify fetchMessages to properly handle message updates
+  // Function to fetch messages
   const fetchMessages = async () => {
     try {
       const response = await axios.get(
         `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`
       );
-      
-      if (response.data.success && response.data.messages) {
-        const dbMessages = response.data.messages.map(msg => ({
-          id: msg.id.toString(),
-          text: msg.message,
-          sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
-          type: 'database',
-          timestamp: msg.sent_at,
-          conversation_id: msg.conversation_id
-        }));
 
-        setMessages(prevMessages => {
-          // Get existing message IDs
-          const existingIds = new Set(prevMessages.filter(msg => msg.type === 'database').map(msg => msg.id));
-          
-          // Only add messages that don't already exist
-          const newMessages = dbMessages.filter(msg => !existingIds.has(msg.id));
-          
-          if (newMessages.length === 0) {
-            return prevMessages;
-          }
+      if (response.data.success) {
+        const formattedMessages = response.data.messages.map(msg => {
+          const isReceiver = msg.receivers?.some(receiver => 
+            receiver.id.toString() === user_id.toString()
+          );
 
-          // Combine all messages and sort
-          const allMessages = [...prevMessages, ...newMessages].sort((a, b) => {
-            if (!a.timestamp || !b.timestamp) return 0;
-            return new Date(a.timestamp) - new Date(b.timestamp);
-          });
-
-          return allMessages;
+          return {
+            id: msg.id.toString(),
+            text: msg.message,
+            sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
+            senderName: msg.sender_name,
+            senderRole: msg.sender_role,
+            type: 'database',
+            timestamp: msg.sent_at,
+            conversation_id: msg.conversation_id,
+            isReceiver: isReceiver
+          };
         });
+
+        setLiveMessages(formattedMessages);
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
 
-  // Add polling for new messages in live chat mode
+  // Initial load of messages
   useEffect(() => {
-    let messagePolling;
-    
-    if (!isAutomated && user_id) {
-      // Poll for new messages every 5 seconds
-      messagePolling = setInterval(() => {
-        fetchMessages();
-      }, 5000);
-    }
+    fetchMessages();
+  }, [user_id]);
 
-    return () => {
-      if (messagePolling) {
-        clearInterval(messagePolling);
+  // Modify useEffect for mode changes
+  useEffect(() => {
+    if (isAutomated) {
+      // Show temporary message notice when switching to bot mode
+      setShowTempNotice(true);
+      
+      // Add welcome message if no bot messages exist
+      if (botMessages.length === 0) {
+        const welcomeMessage = {
+          id: Date.now().toString(),
+          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
+          sender: 'other',
+          type: 'automated'
+        };
+        setBotMessages([welcomeMessage]);
       }
-    };
-  }, [isAutomated, user_id]);
+
+      // Stop polling when in bot mode
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        setPollingInterval(null);
+      }
+    } else {
+      // When switching to live chat
+      setShowTempNotice(false);
+      fetchMessages();
+      
+      // Start polling for live chat messages
+      const interval = setInterval(fetchMessages, 5000);
+      setPollingInterval(interval);
+      return () => {
+        if (interval) clearInterval(interval);
+      };
+    }
+  }, [isAutomated]);
 
   const [input, setInput] = useState('');
   const flatListRef = useRef(null);
@@ -197,21 +151,33 @@ const ChatScreen = ({ navigation, route }) => {
   // Add state for conversation
   const [currentConversation, setCurrentConversation] = useState(null);
 
-  // Add function to start conversation
+  // Modify the startConversation function
   const startConversation = async () => {
     try {
+      // First get all active admins and sub-admins
+      const adminResponse = await axios.get(
+        `http://${SERVER_IP}/PetFurMe-Application/api/users/get_admins.php`
+      );
+
+      if (!adminResponse.data.success || !adminResponse.data.admins.length) {
+        throw new Error('No administrators available');
+      }
+
+      // Get the first available admin/sub-admin
+      const availableAdmin = adminResponse.data.admins[0];
+
       const response = await axios.post(
         `http://${SERVER_IP}/PetFurMe-Application/api/messages/start_conversation.php`,
         { 
           user_id: user_id,
-          admin_id: 1 // Always use admin ID 1
+          admin_id: availableAdmin.id // Use the ID of the first available admin
         }
       );
       
       if (response.data.success) {
         setCurrentConversation({
           id: response.data.conversation_id,
-          admin_id: 1
+          admin_id: availableAdmin.id
         });
         return response.data.conversation_id;
       } else {
@@ -408,12 +374,12 @@ const ChatScreen = ({ navigation, route }) => {
     });
   }, []);
 
-  // Modify the sendMessage function to better handle local state
+  // Modify sendMessage function
   const sendMessage = async () => {
     if (input.trim()) {
       try {
         if (!isAutomated) {
-          // Make sure we have a conversation ID
+          // Handle live chat message
           let conversationId = currentConversation?.id;
           if (!conversationId) {
             conversationId = await startConversation();
@@ -422,54 +388,34 @@ const ChatScreen = ({ navigation, route }) => {
             }
           }
 
-          // Create message object
-          const newMessage = {
-            id: Date.now().toString(),
-            text: input.trim(),
-            sender: 'user',
-            type: 'database',
-            timestamp: new Date().toISOString(),
-            conversation_id: conversationId
-          };
-
-          // Clear input early
           const messageText = input.trim();
           setInput('');
 
-          // Update UI immediately with the new message
-          setMessages(prevMessages => [...prevMessages, newMessage]);
-
-          // Save message to database
           const response = await axios.post(
             `http://${SERVER_IP}/PetFurMe-Application/api/messages/save_message.php`,
             {
               sender_id: parseInt(user_id),
-              receiver_id: 1, // Admin ID
               message: messageText,
               conversation_id: conversationId,
-              is_automated: 0,
-              sent_at: new Date().toISOString(),
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              is_automated: 0
             }
           );
 
           if (!response.data.success) {
-            throw new Error('Failed to save message');
+            throw new Error(response.data.message || 'Failed to save message');
           }
 
-          // Instead of fetching all messages, just append any server response if needed
-          // Only fetch messages periodically through the existing polling mechanism
+          await fetchMessages();
         } else {
-          // Handle automated chat messages as before
+          // Handle bot chat message
           const userMessage = {
             id: Date.now().toString(),
-            text: input,
+            text: input.trim(),
             sender: 'user',
             type: 'automated'
           };
 
-          const botResponseText = getBotResponse(input);
+          const botResponseText = getBotResponse(input.trim());
           const botResponse = {
             id: (Date.now() + 1).toString(),
             text: botResponseText,
@@ -477,7 +423,7 @@ const ChatScreen = ({ navigation, route }) => {
             type: 'automated'
           };
 
-          setMessages(prevMessages => [...prevMessages, userMessage, botResponse]);
+          setBotMessages(prevMessages => [...prevMessages, userMessage, botResponse]);
           setInput('');
         }
       } catch (error) {
@@ -534,40 +480,33 @@ const ChatScreen = ({ navigation, route }) => {
   }, [isAutomated]);
 
   const renderMessage = ({ item }) => (
-    <View
-      style={[
-        styles.messageContainer,
-        item.sender === 'user' ? styles.userMessageContainer : styles.otherMessageContainer,
-      ]}
-    >
+    <View style={[
+      styles.messageContainer,
+      item.sender === 'user' ? { justifyContent: 'flex-end' } : { justifyContent: 'flex-start' }
+    ]}>
       {item.sender === 'other' && (
-        <View style={styles.chatHead}>
+        <View style={styles.otherChatHead}>
           <MaterialIcons 
-            name={isAutomated ? "android" : "support-agent"}
-            size={24} 
-            color="#A259B5"
+            name="support-agent"
+            size={20}
+            color="#9C27B0"
           />
         </View>
       )}
-      
-      <View
-        style={[
-          styles.messageBubble,
-          item.sender === 'user' ? styles.userBubble : styles.otherBubble,
-        ]}
-      >
-        <Text style={[
-          styles.messageText,
-          item.sender === 'other' && styles.otherMessageText
-        ]}>
+
+      <View style={[
+        styles.messageBubble,
+        item.sender === 'user' ? styles.userMessage : styles.otherMessage
+      ]}>
+        <Text style={styles.messageText}>
           {item.text}
         </Text>
-        
         {item.timestamp && (
           <Text style={styles.timestampText}>
             {new Date(item.timestamp).toLocaleTimeString([], { 
               hour: '2-digit', 
-              minute: '2-digit' 
+              minute: '2-digit',
+              hour12: true 
             })}
           </Text>
         )}
@@ -577,7 +516,7 @@ const ChatScreen = ({ navigation, route }) => {
         <View style={styles.userChatHead}>
           <MaterialIcons 
             name="person"
-            size={24} 
+            size={20}
             color="#A259B5"
           />
         </View>
@@ -609,6 +548,16 @@ const ChatScreen = ({ navigation, route }) => {
     </View>
   );
 
+  // Add the temporary message notice component
+  const TempMessageNotice = () => (
+    <View style={styles.tempNoticeContainer}>
+      <MaterialIcons name="info" size={20} color="#fff" />
+      <Text style={styles.tempNoticeText}>
+        Bot chat messages are temporary and will be cleared when you refresh the page
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -621,10 +570,13 @@ const ChatScreen = ({ navigation, route }) => {
 
       {renderToggleButton()}
 
+      {/* Temporary Message Notice */}
+      {isAutomated && showTempNotice && <TempMessageNotice />}
+
       <View style={styles.chatWrapper}>
         <FlatList
           ref={flatListRef}
-          data={messages}
+          data={isAutomated ? botMessages : liveMessages}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.chatContainer}
           renderItem={renderMessage}
@@ -676,27 +628,27 @@ const styles = StyleSheet.create({
   chatWrapper: {
     flex: 1,
     marginBottom: 80,
-    paddingTop: 8,
+    backgroundColor: '#F8F9FA',
   },
   chatContainer: {
-    padding: 16,
+    padding: 12,
     paddingBottom: 24,
   },
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginBottom: 12,
-    maxWidth: '90%',
+    marginVertical: 3,
+    paddingHorizontal: 8,
   },
-  userMessageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+  userMessage: {
     marginLeft: 'auto',
+    backgroundColor: '#A259B5',
+    borderBottomRightRadius: 4,
   },
-  otherMessageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+  otherMessage: {
     marginRight: 'auto',
+    backgroundColor: '#9C27B0',
+    borderBottomLeftRadius: 4,
   },
   chatHead: {
     width: 36,
@@ -708,65 +660,38 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   userChatHead: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F0E6F5',
+    width: 24,
+    height: 24,
+    marginLeft: 6,
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
+  },
+  otherChatHead: {
+    width: 24,
+    height: 24,
+    marginRight: 6,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   messageBubble: {
-    maxWidth: '70%',
+    maxWidth: '80%',
     padding: 10,
-    paddingHorizontal: 14,
-    marginBottom: 2,
-  },
-  userBubble: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#8E44AD',
-    borderRadius: 16,
-    borderBottomRightRadius: 4,
-    padding: 12,
-    paddingHorizontal: 16,
-    marginLeft: 'auto',
-    marginRight: 0,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  otherBubble: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    borderBottomLeftRadius: 4,
-    padding: 10,
-    paddingHorizontal: 14,
-    marginLeft: 0,
+    borderRadius: 20,
+    backgroundColor: '#A259B5',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
   messageText: {
-    fontSize: 15,
-    lineHeight: 22,
-    marginBottom: 4,
     color: '#FFFFFF',
-    fontWeight: '400',
-    letterSpacing: 0.3,
-  },
-  otherMessageText: {
-    color: '#2C3E50',
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.2,
   },
   inputContainer: {
     backgroundColor: 'transparent',
@@ -860,11 +785,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   timestampText: {
-    fontSize: 11,
+    fontSize: 10,
     color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 4,
+    marginRight: 2,
     alignSelf: 'flex-end',
   },
+  tempNoticeContainer: {
+    backgroundColor: 'rgba(162, 89, 181, 0.4)',
+    padding: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 12,
+    marginTop: 6,
+    marginBottom: 2,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  tempNoticeText: {
+    color: '#FFFFFF',
+    marginLeft: 6,
+    fontSize: 11,
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  }
 });
 
 export default ChatScreen;

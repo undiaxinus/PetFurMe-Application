@@ -1,0 +1,155 @@
+[2025-02-27 17:26:36] === Starting Product Fetch Process ===
+[2025-02-27 17:26:36] Attempting database connection
+[2025-02-27 17:26:36] Database connection successful
+[2025-02-27 17:26:36] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              WHERE p.status = 1
+[2025-02-27 17:26:36] CRITICAL ERROR: Unknown column 'p.status' in 'where clause'
+[2025-02-27 17:26:36] Stack trace: #0 D:\XAMPP\htdocs\PetFurMe-Application\api\products\get_products.php(38): mysqli->prepare('SELECT p.*, c.n...')
+#1 {main}
+[2025-02-27 17:27:32] === Starting Product Fetch Process ===
+[2025-02-27 17:27:32] Attempting database connection
+[2025-02-27 17:27:32] Database connection successful
+[2025-02-27 17:27:32] Checking products table structure
+[2025-02-27 17:27:32] Products table columns: id, uuid, user_id, name, slug, code, quantity, buying_price, selling_price, quantity_alert, expiry_date, tax, tax_type, notes, product_image, product_image_data, category_id, unit_id, created_at, updated_at
+[2025-02-27 17:27:32] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              ORDER BY p.created_at DESC
+[2025-02-27 17:27:32] Executing query
+[2025-02-27 17:27:32] Query executed successfully. Found 5 products
+[2025-02-27 17:27:32] Processing product ID: 9
+[2025-02-27 17:27:32] Original image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:27:32] Updated image path: uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:27:32] Processing product ID: 7
+[2025-02-27 17:27:32] No image path found for product ID: 7
+[2025-02-27 17:27:32] Processing product ID: 6
+[2025-02-27 17:27:32] Original image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:27:32] Updated image path: uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:27:32] Processing product ID: 4
+[2025-02-27 17:27:32] Original image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:27:32] Updated image path: uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:27:32] Processing product ID: 5
+[2025-02-27 17:27:32] Original image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:27:32] Updated image path: uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:27:32] Successfully processed 5 products
+[2025-02-27 17:27:32] Returning response with 5 products
+[2025-02-27 17:27:32] === Product Fetch Process Completed ===
+
+[2025-02-27 17:27:55] === Starting Product Fetch Process ===
+[2025-02-27 17:27:55] Attempting database connection
+[2025-02-27 17:27:55] Database connection successful
+[2025-02-27 17:27:55] Checking products table structure
+[2025-02-27 17:27:55] Products table columns: id, uuid, user_id, name, slug, code, quantity, buying_price, selling_price, quantity_alert, expiry_date, tax, tax_type, notes, product_image, product_image_data, category_id, unit_id, created_at, updated_at
+[2025-02-27 17:27:55] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              ORDER BY p.created_at DESC
+[2025-02-27 17:27:55] Executing query
+[2025-02-27 17:27:55] Query executed successfully. Found 5 products
+[2025-02-27 17:27:55] Processing product ID: 9
+[2025-02-27 17:27:55] Original image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:27:55] Updated image path: uploads/products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:27:55] Processing product ID: 7
+[2025-02-27 17:27:55] No image path found for product ID: 7
+[2025-02-27 17:27:55] Processing product ID: 6
+[2025-02-27 17:27:55] Original image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:27:55] Updated image path: uploads/products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:27:55] Processing product ID: 4
+[2025-02-27 17:27:55] Original image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:27:55] Updated image path: uploads/products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:27:55] Processing product ID: 5
+[2025-02-27 17:27:55] Original image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:27:55] Updated image path: uploads/products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:27:55] Successfully processed 5 products
+[2025-02-27 17:27:55] Returning response with 5 products
+[2025-02-27 17:27:55] === Product Fetch Process Completed ===
+
+[2025-02-27 17:29:45] === Starting Product Fetch Process ===
+[2025-02-27 17:29:45] Attempting database connection
+[2025-02-27 17:29:45] Database connection successful
+[2025-02-27 17:29:45] Checking products table structure
+[2025-02-27 17:29:45] Products table columns: id, uuid, user_id, name, slug, code, quantity, buying_price, selling_price, quantity_alert, expiry_date, tax, tax_type, notes, product_image, product_image_data, category_id, unit_id, created_at, updated_at
+[2025-02-27 17:29:45] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              ORDER BY p.created_at DESC
+[2025-02-27 17:29:45] Executing query
+[2025-02-27 17:29:45] Query executed successfully. Found 5 products
+[2025-02-27 17:29:45] Processing product ID: 9
+[2025-02-27 17:29:45] Original image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:45] Updated image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:45] Processing product ID: 7
+[2025-02-27 17:29:45] No image path found for product ID: 7
+[2025-02-27 17:29:45] Processing product ID: 6
+[2025-02-27 17:29:45] Original image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:45] Updated image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:45] Processing product ID: 4
+[2025-02-27 17:29:45] Original image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:45] Updated image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:45] Processing product ID: 5
+[2025-02-27 17:29:45] Original image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:45] Updated image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:45] Successfully processed 5 products
+[2025-02-27 17:29:45] Returning response with 5 products
+[2025-02-27 17:29:45] === Product Fetch Process Completed ===
+
+[2025-02-27 17:29:46] === Starting Product Fetch Process ===
+[2025-02-27 17:29:46] Attempting database connection
+[2025-02-27 17:29:46] Database connection successful
+[2025-02-27 17:29:46] Checking products table structure
+[2025-02-27 17:29:46] Products table columns: id, uuid, user_id, name, slug, code, quantity, buying_price, selling_price, quantity_alert, expiry_date, tax, tax_type, notes, product_image, product_image_data, category_id, unit_id, created_at, updated_at
+[2025-02-27 17:29:46] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              ORDER BY p.created_at DESC
+[2025-02-27 17:29:46] Executing query
+[2025-02-27 17:29:46] Query executed successfully. Found 5 products
+[2025-02-27 17:29:46] Processing product ID: 9
+[2025-02-27 17:29:46] Original image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:46] Updated image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:46] Processing product ID: 7
+[2025-02-27 17:29:46] No image path found for product ID: 7
+[2025-02-27 17:29:46] Processing product ID: 6
+[2025-02-27 17:29:46] Original image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:46] Updated image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:46] Processing product ID: 4
+[2025-02-27 17:29:46] Original image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:46] Updated image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:46] Processing product ID: 5
+[2025-02-27 17:29:46] Original image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:46] Updated image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:46] Successfully processed 5 products
+[2025-02-27 17:29:46] Returning response with 5 products
+[2025-02-27 17:29:46] === Product Fetch Process Completed ===
+
+[2025-02-27 17:29:47] === Starting Product Fetch Process ===
+[2025-02-27 17:29:47] Attempting database connection
+[2025-02-27 17:29:47] Database connection successful
+[2025-02-27 17:29:47] Checking products table structure
+[2025-02-27 17:29:47] Products table columns: id, uuid, user_id, name, slug, code, quantity, buying_price, selling_price, quantity_alert, expiry_date, tax, tax_type, notes, product_image, product_image_data, category_id, unit_id, created_at, updated_at
+[2025-02-27 17:29:47] Preparing query: SELECT p.*, c.name as category_name 
+              FROM products p 
+              LEFT JOIN categories c ON p.category_id = c.id 
+              ORDER BY p.created_at DESC
+[2025-02-27 17:29:47] Executing query
+[2025-02-27 17:29:47] Query executed successfully. Found 5 products
+[2025-02-27 17:29:47] Processing product ID: 9
+[2025-02-27 17:29:47] Original image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:47] Updated image path: products/FXNbxM8le2zaCH7ogySNgDL4PGBhYm3UUZPah9iy.jpg
+[2025-02-27 17:29:47] Processing product ID: 7
+[2025-02-27 17:29:47] No image path found for product ID: 7
+[2025-02-27 17:29:47] Processing product ID: 6
+[2025-02-27 17:29:47] Original image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:47] Updated image path: products/GvAgz32bt7bbFDzC8wuQfXPOZL2nArrXgMpbAAcx.jpg
+[2025-02-27 17:29:47] Processing product ID: 4
+[2025-02-27 17:29:47] Original image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:47] Updated image path: products/Cc6mokesE1AaotyMPfVnAtaCnvgNHwkyCRblXNpG.webp
+[2025-02-27 17:29:47] Processing product ID: 5
+[2025-02-27 17:29:47] Original image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:47] Updated image path: products/Ef7e9SC3JJIhmym4CZl9UXLTASv7RtfQB8zO9yTV.jpg
+[2025-02-27 17:29:47] Successfully processed 5 products
+[2025-02-27 17:29:47] Returning response with 5 products
+[2025-02-27 17:29:47] === Product Fetch Process Completed ===
+

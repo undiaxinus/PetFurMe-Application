@@ -27,10 +27,15 @@ try {
     error_log("Fetching pets for user_id: " . $user_id);
 
     // Fetch pets with BLOB data
-    $query = "SELECT id, name, type, breed, age, gender, weight, size, photo, allergies, notes, deleted_at 
-             FROM pets 
-             WHERE user_id = ? AND deleted_at IS NULL";
-             
+    $query = "SELECT id, name, type, breed, age, gender, weight, size, 
+              CASE 
+                  WHEN photo_data IS NOT NULL THEN TO_BASE64(photo_data)
+                  ELSE NULL 
+              END as photo_base64,
+              allergies, notes, deleted_at 
+              FROM pets 
+              WHERE user_id = ? AND deleted_at IS NULL";
+              
     $stmt = $db->prepare($query);
     
     if (!$stmt) {
@@ -50,42 +55,12 @@ try {
             
             // Handle photo
             $photoUrl = null;
-            if (!empty($row['photo'])) {
-                try {
-                    // Get the file path from database
-                    $photo_path = $row['photo'];
-                    
-                    // Update the absolute path to point to the correct directory
-                    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/PetFurMe-Application/uploads/pet_photos/' . $photo_path;
-                    error_log("Checking file at: " . $absolute_path);
-                    
-                    if (file_exists($absolute_path)) {
-                        // Construct the correct photo URL
-                        $photoUrl = $API_BASE_URL . '/PetFurMe-Application/uploads/pet_photos/' . $photo_path;
-                        error_log("Photo URL created: " . $photoUrl);
-                    } else {
-                        error_log("Photo file not found at: " . $absolute_path);
-                        error_log("Database photo path: " . $photo_path);
-                    }
-                    
-                } catch (Exception $e) {
-                    error_log("Error processing photo for " . $row['name'] . ": " . $e->getMessage());
-                }
+            if (!empty($row['photo_base64'])) {
+                $row['photo'] = 'data:image/jpeg;base64,' . $row['photo_base64'];
+                unset($row['photo_base64']); // Remove the raw base64 from response
             }
             
-            $pets[] = array(
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'type' => $row['type'] ?? '',
-                'breed' => $row['breed'] ?? '',
-                'age' => $row['age'] ?? '',
-                'gender' => $row['gender'] ?? '',
-                'weight' => $row['weight'] ?? '',
-                'size' => $row['size'] ?? '',
-                'photo' => $photoUrl,
-                'allergies' => $row['allergies'] ?? '',
-                'notes' => $row['notes'] ?? ''
-            );
+            $pets[] = $row;
         }
         
         $stmt->close();

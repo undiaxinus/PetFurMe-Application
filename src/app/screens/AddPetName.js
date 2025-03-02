@@ -163,10 +163,9 @@ const AddPetProfile = ({ route }) => {
 				return;
 			}
 
-			// Create FormData instance
 			const formData = new FormData();
 			
-			// Prepare pet data with proper null handling for optional fields
+			// Prepare pet data
 			const petData = {
 				user_id: parseInt(user_id),
 				created_by: parseInt(user_id),
@@ -181,26 +180,34 @@ const AddPetProfile = ({ route }) => {
 				category: petType,
 				gender: petGender?.toLowerCase() || null,
 				weight: petWeight ? parseFloat(petWeight) : null,
-				size: null
 			};
 
-			// Log the data being sent
-			console.log('Sending pet data:', petData);
-
-			// Handle photo
+			// Handle photo as binary data
 			if (photo) {
-				const filename = `pet_${user_id}_${Date.now()}.jpg`;
-				if (photo.base64) {
-					const blob = await fetch(`data:image/jpeg;base64,${photo.base64}`).then(r => r.blob());
-					formData.append('photo', blob, filename);
-					petData.photo = filename;
-				} else if (photo.uri) {
-					formData.append('photo', {
-						uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
-						type: 'image/jpeg',
-						name: filename
-					});
-					petData.photo = filename;
+				try {
+					if (photo.base64) {
+						// Directly append base64 data
+						formData.append('photo_binary', photo.base64);
+						formData.append('is_base64', 'true');
+					} else if (photo.uri) {
+						// For URI, we'll need to read the file and convert to base64
+						const response = await fetch(photo.uri);
+						const blob = await response.blob();
+						const reader = new FileReader();
+						
+						const base64Data = await new Promise((resolve, reject) => {
+							reader.onload = () => resolve(reader.result.split(',')[1]);
+							reader.onerror = reject;
+							reader.readAsDataURL(blob);
+						});
+						
+						formData.append('photo_binary', base64Data);
+						formData.append('is_base64', 'true');
+					}
+				} catch (error) {
+					console.error('Error processing photo:', error);
+					Alert.alert('Error', 'Failed to process photo. Please try again.');
+					return;
 				}
 			}
 
@@ -209,7 +216,6 @@ const AddPetProfile = ({ route }) => {
 				petData.pet_id = existingPet.id;
 			}
 
-			// Append the stringified pet data
 			formData.append('data', JSON.stringify(petData));
 
 			const endpoint = isEditing ? 'update_pet.php' : 'add_pet.php';
@@ -358,9 +364,14 @@ const AddPetProfile = ({ route }) => {
 							<View style={styles.imageWrapper}>
 								<View style={styles.imageCircle}>
 									<Image
-										source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
+										source={{
+											uri: photo && (
+												photo.base64 
+													? `data:image/jpeg;base64,${photo.base64}`
+													: photo.uri
+											)
+										}}
 										style={styles.petImage}
-										defaultSource={require("../../assets/images/doprof.png")}
 									/>
 									<TouchableOpacity style={styles.cameraButton} onPress={pickImage}>
 										<MaterialIcons name="photo-camera" size={11} color="#FFFFFF" />
@@ -396,7 +407,7 @@ const AddPetProfile = ({ route }) => {
 								<View style={styles.inputGroup}>
 									<Text style={styles.label}>Pet Type <Text style={styles.required}>*</Text></Text>
 									<CustomDropdown
-										label="Select type"
+										label="Pet Type"
 										options={PET_TYPES}
 										value={petType}
 										onSelect={setPetType}
@@ -408,7 +419,7 @@ const AddPetProfile = ({ route }) => {
 								<View style={styles.inputGroup}>
 									<Text style={styles.label}>Gender <Text style={styles.required}>*</Text></Text>
 									<CustomDropdown
-										label="Select gender"
+										label="Gender"
 										options={PET_GENDERS}
 										value={petGender}
 										onSelect={setPetGender}
@@ -958,13 +969,9 @@ const styles = StyleSheet.create({
 		color: '#666666'
 	},
 	dropdown: {
-		borderWidth: 1,
-		borderColor: '#E0E0E0',
-		borderRadius: 8,
-		padding: 10,
-		backgroundColor: '#FFFFFF',
-		color: '#2D3748',
-		fontSize: 13,
+		padding: 0,
+		backgroundColor: 'transparent',
+		borderWidth: 0,
 	},
 	skipButtonActive: {
 		backgroundColor: '#E9E3F5',

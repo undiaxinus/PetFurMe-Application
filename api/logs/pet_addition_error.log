@@ -1323,3 +1323,270 @@ Stack trace:
 
 [26-Feb-2025 06:33:15 Europe/Berlin] Binding parameters: [108,108,"Kaiju","bird","Kaiju",3,"female",3,"unknown",null,null,"Bird",null]
 [26-Feb-2025 06:33:15 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","NULL","NULL","string","NULL"]
+[26-Feb-2025 10:48:14 Europe/Berlin] Starting pet addition process
+[26-Feb-2025 10:48:14 Europe/Berlin] Attempting database connection to localhost/pet-management
+[26-Feb-2025 10:48:14 Europe/Berlin] Database connection successful
+[26-Feb-2025 10:48:14 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Hena
+    [type] => dog
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Dog
+    [gender] => male
+    [weight] => 
+    [size] => 
+    [photo] => pet_108_1740563294410.jpg
+)
+
+[26-Feb-2025 10:48:14 Europe/Berlin] Binding parameters: [108,108,"Hena","dog",null,null,"male",null,"unknown",null,null,"Dog","pet_108_1740563294410.jpg"]
+[26-Feb-2025 10:48:14 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","string"]
+[01-Mar-2025 10:45:14 Europe/Berlin] Starting pet addition process
+[01-Mar-2025 10:45:14 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 10:45:14 Europe/Berlin] Database connection successful
+[01-Mar-2025 10:45:14 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => erw
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+    [photo] => pet_108_1740822313700.jpg
+)
+
+[01-Mar-2025 10:45:14 Europe/Berlin] Binding parameters: [108,108,"erw","bird",null,null,"male",null,"unknown",null,null,"Bird","pet_108_1740822313700.jpg"]
+[01-Mar-2025 10:45:14 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","string"]
+[01-Mar-2025 11:02:55 Europe/Berlin] Starting pet addition process
+[01-Mar-2025 11:02:55 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 11:02:55 Europe/Berlin] Database connection successful
+[01-Mar-2025 11:02:55 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => tret
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[01-Mar-2025 11:02:55 Europe/Berlin] Binding parameters: [108,108,"tret","bird",null,null,"female",null,"unknown",null,null,"Bird",null]
+[01-Mar-2025 11:02:55 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[01-Mar-2025 11:18:16 Europe/Berlin] Starting pet addition process
+[01-Mar-2025 11:18:16 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 11:18:16 Europe/Berlin] Database connection successful
+[01-Mar-2025 11:18:16 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => re
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+    [size] => 
+    [photo] => pet_photos/pet_108_1740824295885.jpg
+)
+
+[01-Mar-2025 11:18:16 Europe/Berlin] Binding parameters: [108,108,"re","cat",null,null,"female",null,"unknown",null,null,"Cat","pet_photos\/pet_108_1740824295885.jpg"]
+[01-Mar-2025 11:18:16 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","string"]
+[02-Mar-2025 07:08:32 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 07:08:32 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 07:08:32 Europe/Berlin] Database connection successful
+[02-Mar-2025 07:08:32 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => uhiuh
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => male
+    [weight] => 
+    [size] => 
+    [photo] => pet_photos/pet_108_1740895712365.jpg
+)
+
+[02-Mar-2025 07:08:32 Europe/Berlin] Binding parameters: [108,108,"uhiuh","cat",null,null,"male",null,"unknown",null,null,"Cat","pet_photos\/pet_108_1740895712365.jpg"]
+[02-Mar-2025 07:08:32 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","string"]
+[02-Mar-2025 07:41:51 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 07:41:51 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 07:41:51 Europe/Berlin] Database connection successful
+[02-Mar-2025 07:41:51 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => etre
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[02-Mar-2025 07:41:51 Europe/Berlin] Binding parameters: [108,108,"etre","bird",null,null,"female",null,"unknown",null,null,"Bird",null]
+[02-Mar-2025 07:41:51 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[02-Mar-2025 07:42:57 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 07:42:57 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 07:42:57 Europe/Berlin] Database connection successful
+[02-Mar-2025 07:42:57 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gdg
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+    [size] => 
+    [photo] => pet_photos/pet_108_1740897777369.jpg
+)
+
+[02-Mar-2025 07:42:57 Europe/Berlin] Binding parameters: [108,108,"gdg","cat",null,null,"female",null,"unknown",null,null,"Cat","pet_photos\/pet_108_1740897777369.jpg"]
+[02-Mar-2025 07:42:57 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","string"]
+[02-Mar-2025 07:54:12 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 07:54:12 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 07:54:12 Europe/Berlin] Database connection successful
+[02-Mar-2025 07:54:12 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => gfdg
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+)
+
+[02-Mar-2025 07:54:12 Europe/Berlin] Binding parameters: [108,108,"gfdg","cat",null,null,"female",null,"unknown",null,null,"Cat",null]
+[02-Mar-2025 07:54:12 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[02-Mar-2025 07:54:12 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot access uninitialized non-nullable property mysqli::$insert_id by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:144
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 144
+[02-Mar-2025 07:57:40 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 07:57:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 07:57:40 Europe/Berlin] Database connection successful
+[02-Mar-2025 07:57:40 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dfg
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+)
+
+[02-Mar-2025 07:57:40 Europe/Berlin] Binding parameters: [108,108,"dfg","cat",null,null,"female",null,"unknown",null,null,"Cat",null]
+[02-Mar-2025 07:57:40 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[02-Mar-2025 07:57:40 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot access uninitialized non-nullable property mysqli::$insert_id by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:144
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 144
+[02-Mar-2025 08:05:40 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 08:05:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 08:05:40 Europe/Berlin] Database connection successful
+[02-Mar-2025 08:05:40 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => dgd
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+)
+
+[02-Mar-2025 08:05:40 Europe/Berlin] Binding parameters: [108,108,"dgd","bird",null,null,"female",null,"unknown",null,null,"Bird",null]
+[02-Mar-2025 08:05:40 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[02-Mar-2025 08:05:40 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot access uninitialized non-nullable property mysqli::$insert_id by reference in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:144
+Stack trace:
+#0 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 144
+[02-Mar-2025 08:10:23 Europe/Berlin] Starting pet addition process
+[02-Mar-2025 08:10:23 Europe/Berlin] Attempting database connection to localhost/pet-management
+[02-Mar-2025 08:10:23 Europe/Berlin] Database connection successful
+[02-Mar-2025 08:10:23 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => bvc
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => female
+    [weight] => 
+)
+
+[02-Mar-2025 08:10:23 Europe/Berlin] Binding parameters: [108,108,"bvc","cat",null,null,"female",null,"unknown",null,null,"Cat",null]
+[02-Mar-2025 08:10:23 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
+[02-Mar-2025 08:10:23 Europe/Berlin] Successfully stored binary image data for pet ID: 66

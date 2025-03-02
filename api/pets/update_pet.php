@@ -28,19 +28,19 @@ try {
 
     // Handle photo upload if provided
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = __DIR__ . '/../../uploads/pet_photos/';
+        $upload_dir = 'uploads/pet_photos/';
         
         // Create directory if it doesn't exist
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
 
-        $filename = $_FILES['photo']['name'];
+        $filename = 'pet_' . $data['user_id'] . '_' . uniqid() . '.jpg';
         $target_path = $upload_dir . $filename;
 
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_path)) {
-            // Update the photo path in petData
-            $data['photo'] = $filename;
+            // Store only the relative path
+            $data['photo'] = $target_path;
         } else {
             throw new Exception("Failed to move uploaded file");
         }
@@ -97,6 +97,44 @@ try {
 
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
+
+    if (isset($_POST['photo_binary']) && isset($_POST['is_base64'])) {
+        $binary_data = base64_decode($_POST['photo_binary']);
+        
+        // Add photo_data to the UPDATE query
+        $sql = "UPDATE pets SET 
+                name = ?, 
+                type = ?,
+                age = ?,
+                breed = ?,
+                size = ?,
+                weight = ?,
+                gender = ?,
+                allergies = ?,
+                notes = ?,
+                photo_data = ?
+                WHERE id = ? AND user_id = ?";
+                
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssssssbsii", 
+            $data['name'],
+            $data['type'],
+            $data['age'],
+            $data['breed'],
+            $data['size'],
+            $data['weight'],
+            $data['gender'],
+            $data['allergies'],
+            $data['notes'],
+            $binary_data,
+            $data['pet_id'],
+            $data['user_id']
+        );
+
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to store photo data: " . $stmt->error);
+        }
+    }
 
 } catch (Exception $e) {
     http_response_code(500);

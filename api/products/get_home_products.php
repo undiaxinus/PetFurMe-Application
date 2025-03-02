@@ -4,96 +4,95 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
-require_once __DIR__ . '/../config/Database.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Log the start of the request
+error_log("Starting get_home_products.php request");
+
+require_once '../config/database.php';
 
 try {
     $database = new Database();
-    $db = $database->connect();
+    $conn = $database->connect();
 
-    if (!$db) {
-        throw new Exception("Database connection failed");
-    }
+    // Log the connection status
+    error_log("Database connection status: " . ($conn ? "success" : "failed"));
 
-    // First, let's check how many products we have in total
-    $countQuery = "SELECT COUNT(*) as total FROM products";
-    $countStmt = $db->prepare($countQuery);
-    $countStmt->execute();
-    $totalCount = $countStmt->get_result()->fetch_assoc()['total'];
-    error_log("Total products in database: " . $totalCount);
-
-    // Query to get exactly 2 products
+    // Modified query to include product_image_data and limit to 2
     $query = "SELECT p.*, c.name as category_name 
               FROM products p 
               LEFT JOIN categories c ON p.category_id = c.id 
+              WHERE p.product_image_data IS NOT NULL 
               ORDER BY p.created_at DESC 
               LIMIT 2";
-              
-    $stmt = $db->prepare($query);
+
+    $stmt = $conn->prepare($query);
     
     if (!$stmt) {
-        error_log("Prepare failed: " . $db->error);
-        throw new Exception("Prepare failed: " . $db->error);
+        throw new Exception("Prepare failed: " . $conn->error);
     }
 
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        $products = array();
-        $count = 0;
-        
-        while ($row = $result->fetch_assoc()) {
-            $count++;
-            // Ensure all necessary fields exist
-            $row['id'] = $row['id'] ?? null;
-            $row['name'] = $row['name'] ?? '';
-            $row['selling_price'] = $row['selling_price'] ?? 0;
-            $row['quantity'] = $row['quantity'] ?? 0;
-            $row['notes'] = $row['notes'] ?? '';
-            $row['category_name'] = $row['category_name'] ?? 'Pet Product';
-            
-            // Clean up the product image path if it exists
-            if (!empty($row['product_image'])) {
-                if (!str_starts_with($row['product_image'], 'http')) {
-                    $row['product_image'] = 'uploads/products/' . basename($row['product_image']);
-                }
-            }
-            
-            $products[] = $row;
-            error_log("Added product: " . json_encode($row));
-        }
-        
-        error_log("Found and processed $count products");
-        
-        // If we have less than 2 products, add dummy products to make it exactly 2
-        while (count($products) < 2) {
-            $dummyProduct = [
-                'id' => 'dummy' . count($products),
-                'name' => 'Pet Product ' . count($products),
-                'notes' => '500g',
-                'product_image' => null,
-                'category_name' => 'Pet Product'
-            ];
-            $products[] = $dummyProduct;
-            error_log("Added dummy product: " . json_encode($dummyProduct));
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'products' => $products,
-            'count' => count($products)
-        ]);
-    } else {
+    if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
     }
+
+    $result = $stmt->get_result();
+    $products = array();
+
+    while ($row = $result->fetch_assoc()) {
+        // Convert BLOB to base64
+        $imageData = null;
+        if (!empty($row['product_image_data'])) {
+            $imageData = base64_encode($row['product_image_data']);
+        }
+        
+        $products[] = array(
+            'id' => $row['id'],
+            'name' => $row['name'],
+            'code' => $row['code'],
+            'quantity' => $row['quantity'],
+            'selling_price' => $row['selling_price'],
+            'quantity_alert' => $row['quantity_alert'],
+            'notes' => $row['notes'],
+            'product_image_data' => $imageData,
+            'category_id' => $row['category_id'],
+            'category_name' => $row['category_name']
+        );
+    }
+
+    // If we have less than 2 products, add dummy products
+    while (count($products) < 2) {
+        $products[] = array(
+            'id' => 'dummy' . count($products),
+            'name' => 'Sample Product ' . (count($products) + 1),
+            'code' => 'SAMPLE' . (count($products) + 1),
+            'quantity' => 10,
+            'selling_price' => 10000,
+            'quantity_alert' => 5,
+            'notes' => 'Sample product',
+            'product_image_data' => null,
+            'category_id' => '1',
+            'category_name' => 'Pet Product'
+        );
+    }
+
+    echo json_encode([
+        'success' => true,
+        'products' => $products,
+        'count' => count($products)
+    ]);
+
+} catch (Exception $e) {
+    error_log("Error in get_home_products.php: " . $e->getMessage());
+    error_log("Stack trace: " . $e->getTraceAsString());
     
-    $stmt->close();
-    $db->close();
-    
-} catch(Exception $e) {
-    error_log("Product fetch error: " . $e->getMessage());
-    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Error: ' . $e->getMessage()
+        'message' => 'Failed to fetch products: ' . $e->getMessage()
     ]);
 }
+
+// Log the end of the request
+error_log("Completed get_home_products.php request");
 ?> 

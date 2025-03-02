@@ -1,2 +1,24 @@
 [18-Feb-2025 08:34:46 Europe/Berlin] Attempting database connection to localhost/pet-management
 [18-Feb-2025 08:34:46 Europe/Berlin] Database connection successful
+[01-Mar-2025 02:23:00 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 02:23:00 Europe/Berlin] Database connection successful
+[01-Mar-2025 02:28:09 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 02:28:09 Europe/Berlin] Database connection successful
+[01-Mar-2025 02:28:09 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt object is already closed in D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php:175
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php(175): mysqli_stmt->close()
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php on line 175
+[01-Mar-2025 02:28:18 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 02:28:18 Europe/Berlin] Database connection successful
+[01-Mar-2025 02:28:18 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli_stmt object is already closed in D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php:175
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php(175): mysqli_stmt->close()
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\messages\save_message.php on line 175
+[01-Mar-2025 02:37:18 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 02:37:18 Europe/Berlin] Database connection successful
+[01-Mar-2025 02:39:24 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 02:39:24 Europe/Berlin] Database connection successful
+[01-Mar-2025 04:20:07 Europe/Berlin] Attempting database connection to localhost/pet-management
+[01-Mar-2025 04:20:07 Europe/Berlin] Database connection successful

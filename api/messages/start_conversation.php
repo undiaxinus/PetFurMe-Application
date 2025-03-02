@@ -14,8 +14,13 @@ try {
     $database = new Database();
     $conn = $database->connect();
 
-    // Get an available admin
-    $adminQuery = "SELECT id FROM users WHERE role IN ('admin', 'sub_admin') LIMIT 1";
+    // Get the most recently active admin/sub-admin
+    $adminQuery = "SELECT id FROM users 
+                  WHERE role IN ('admin', 'sub_admin') 
+                    AND deleted_at IS NULL 
+                  ORDER BY last_activity DESC 
+                  LIMIT 1";
+                  
     $adminStmt = $conn->prepare($adminQuery);
     $adminStmt->execute();
     $adminResult = $adminStmt->get_result();
@@ -23,6 +28,25 @@ try {
 
     if (!$admin) {
         throw new Exception('No admin available');
+    }
+
+    // Check if conversation already exists
+    $checkQuery = "SELECT id FROM conversations 
+                  WHERE pet_owner_id = ? AND admin_id = ? 
+                  ORDER BY updated_at DESC LIMIT 1";
+    $checkStmt = $conn->prepare($checkQuery);
+    $checkStmt->bind_param("ii", $data['user_id'], $admin['id']);
+    $checkStmt->execute();
+    $existingConv = $checkStmt->get_result()->fetch_assoc();
+
+    if ($existingConv) {
+        // Return existing conversation
+        echo json_encode([
+            'success' => true,
+            'conversation_id' => $existingConv['id'],
+            'admin_id' => $admin['id']
+        ]);
+        exit;
     }
 
     // Create a new conversation
@@ -53,6 +77,7 @@ try {
     ]);
 } finally {
     if (isset($stmt)) $stmt->close();
+    if (isset($checkStmt)) $checkStmt->close();
     if (isset($adminStmt)) $adminStmt->close();
     if (isset($conn)) $conn->close();
 } 

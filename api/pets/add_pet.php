@@ -127,6 +127,29 @@ try {
             'message' => 'Pet added successfully',
             'pet_id' => $db->insert_id
         ]);
+
+        // Inside the try block where photo is handled
+        if (isset($_POST['photo_binary']) && isset($_POST['is_base64'])) {
+            // Convert base64 to binary
+            $binary_data = base64_decode($_POST['photo_binary']);
+            
+            // Update the SQL query to include photo_data
+            $sql = "UPDATE pets SET photo_data = ? WHERE id = ? AND user_id = ?";
+            $stmt = $db->prepare($sql);
+            
+            if (!$stmt) {
+                throw new Exception("Failed to prepare statement: " . $db->error);
+            }
+            
+            $stmt->bind_param("bii", $binary_data, $db->insert_id, $data['user_id']);
+            
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to store photo data: " . $stmt->error);
+            }
+            
+            // Log success
+            error_log("Successfully stored binary image data for pet ID: " . $db->insert_id);
+        }
     } else {
         throw new Exception("Failed to insert pet data: " . $stmt->error);
     }

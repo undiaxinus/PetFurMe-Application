@@ -8,7 +8,14 @@ try {
     $database = new Database();
     $conn = $database->connect();
 
-    $query = "SELECT id, name, email FROM users WHERE role IN ('admin', 'sub_admin')";
+    // Get active admins and sub-admins, ordered by last_activity
+    $query = "SELECT id, name, role, last_activity 
+              FROM users 
+              WHERE role IN ('admin', 'sub_admin') 
+                AND deleted_at IS NULL 
+              ORDER BY last_activity DESC 
+              LIMIT 1";
+              
     $stmt = $conn->prepare($query);
     
     if (!$stmt->execute()) {
@@ -20,6 +27,10 @@ try {
     
     while ($row = $result->fetch_assoc()) {
         $admins[] = $row;
+    }
+
+    if (empty($admins)) {
+        throw new Exception('No administrators available');
     }
 
     echo json_encode([

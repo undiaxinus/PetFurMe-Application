@@ -1,10 +1,16 @@
 <?php
+// Clear any previous output
+ob_clean();
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
 require_once __DIR__ . '/../config/Database.php';
+
+// Start output buffering
+ob_start();
 
 try {
     $database = new Database();
@@ -14,7 +20,9 @@ try {
         throw new Exception("Database connection failed");
     }
 
-    // Modified query to get all products regardless of quantity
+    // Debug database connection
+    error_log("Database connected successfully");
+
     $query = "SELECT p.*, c.name as category_name 
               FROM products p 
               LEFT JOIN categories c ON p.category_id = c.id 
@@ -23,7 +31,6 @@ try {
     $stmt = $db->prepare($query);
     
     if (!$stmt) {
-        error_log("Prepare failed: " . $db->error);
         throw new Exception("Prepare failed: " . $db->error);
     }
 
@@ -34,26 +41,36 @@ try {
         
         while ($row = $result->fetch_assoc()) {
             $count++;
-            // Ensure all necessary fields exist
-            $row['id'] = $row['id'] ?? null;
-            $row['name'] = $row['name'] ?? '';
-            $row['selling_price'] = $row['selling_price'] ?? 0;
-            $row['quantity'] = $row['quantity'] ?? 0;
-            $row['notes'] = $row['notes'] ?? '';
+            error_log("Processing product: " . $row['id']);
             
-            // Clean up the product image path if it exists
-            if (!empty($row['product_image'])) {
-                if (!str_starts_with($row['product_image'], 'http')) {
-                    $row['product_image'] = 'uploads/products/' . basename($row['product_image']);
-                }
+            // Clean data and handle image data
+            $productData = array(
+                'id' => $row['id'] ?? null,
+                'name' => $row['name'] ?? '',
+                'selling_price' => (int)($row['selling_price'] ?? 0),
+                'quantity' => (int)($row['quantity'] ?? 0),
+                'notes' => $row['notes'] ?? '',
+                'category_name' => $row['category_name'] ?? null,
+                'category_id' => $row['category_id'] ?? null
+            );
+
+            // Handle the BLOB data
+            if (!empty($row['product_image_data'])) {
+                $productData['product_image_data'] = base64_encode($row['product_image_data']);
+                error_log("Image data encoded for product: " . $row['id']);
+            } else if (!empty($row['product_image'])) {
+                // Fallback to file path if exists
+                $productData['product_image'] = 'uploads/products/' . basename($row['product_image']);
+                error_log("Using file path for product: " . $row['id']);
             }
-            
-            $products[] = $row;
+
+            $products[] = $productData;
         }
         
         error_log("Found $count products");
-        error_log("Products data: " . json_encode($products));
         
+        // Clear any previous output and send JSON response
+        ob_clean();
         echo json_encode([
             'success' => true,
             'products' => $products,
@@ -63,15 +80,16 @@ try {
         throw new Exception("Execute failed: " . $stmt->error);
     }
     
-    $stmt->close();
-    $db->close();
-    
 } catch(Exception $e) {
     error_log("Product fetch error: " . $e->getMessage());
+    ob_clean();
     http_response_code(500);
     echo json_encode([
         'success' => false,
         'message' => 'Error: ' . $e->getMessage()
     ]);
+} finally {
+    if (isset($stmt)) $stmt->close();
+    if (isset($db)) $db->close();
 }
 ?> 

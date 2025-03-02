@@ -5,12 +5,24 @@ import {
     StyleSheet, 
     TouchableOpacity, 
     Image, 
-    ActivityIndicator 
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SERVER_IP } from '../config/constants';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
+
+console.log('SERVER_IP:', SERVER_IP);
+console.log('Full API URL:', `${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
+
+const categoryColors = {
+    '1': { bg: '#FFE8E8', tag: '#FF4444', text: '#FFFFFF' }, // Food
+    '2': { bg: '#E8FFF1', tag: '#44FF88', text: '#FFFFFF' }, // Medicine
+    '3': { bg: '#E8F1FF', tag: '#4488FF', text: '#FFFFFF' }, // Accessories
+    '4': { bg: '#FFE8FF', tag: '#FF44FF', text: '#FFFFFF' }, // Grooming
+    'default': { bg: '#F8F8F8', tag: '#8146C1', text: '#FFFFFF' }
+};
 
 const PetProductsSection = ({ navigation, user_id }) => {
     const [petProducts, setPetProducts] = useState([]);
@@ -19,67 +31,61 @@ const PetProductsSection = ({ navigation, user_id }) => {
     const fetchPetProducts = async () => {
         try {
             setIsProductsLoading(true);
-            const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
             
-            if (!response.ok) {
-                throw new Error('Failed to fetch products');
-            }
-
-            const data = await response.json();
-            console.log('Received products data:', data);
-
-            const categoryColors = {
-                1: {
-                    bg: '#FFF5F9',
-                    tag: '#FF4D8D',
-                    text: '#FFFFFF'
-                }, // Food category
-                2: {
-                    bg: '#F0F5FF',
-                    tag: '#4D79FF',
-                    text: '#FFFFFF'
-                }, // Medicine category
-                3: {
-                    bg: '#F2FFF5',
-                    tag: '#4DAF6E',
-                    text: '#FFFFFF'
-                }, // Accessories category
-                4: {
-                    bg: '#FFF8F0',
-                    tag: '#FF8B4D',
-                    text: '#FFFFFF'
-                }, // Grooming category
-                default: {
-                    bg: '#F5F5F5',
-                    tag: '#8146C1',
-                    text: '#FFFFFF'
+            const response = await fetch(
+                `${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
                 }
-            };
+            );
 
-            if (data.success) {
-                const transformedProducts = data.products.map(product => ({
-                    id: product.id.toString(),
-                    name: product.name,
-                    code: product.code,
-                    quantity: parseInt(product.quantity) || 0,
-                    buyingPrice: parseFloat(product.buying_price) || 0,
-                    sellingPrice: parseFloat(product.selling_price) || 0,
-                    quantityAlert: parseInt(product.quantity_alert) || 0,
-                    tax: parseFloat(product.tax) || 0,
-                    notes: product.notes || '',
-                    image: product.product_image 
-                        ? { uri: `${API_BASE_URL}/PetFurMe-Application/${product.product_image}` }
-                        : require("../../assets/images/meowmix.png"),
-                    categoryId: product.category_id,
-                    type: product.category_name || 'Pet Product',
-                    backgroundColor: categoryColors[product.category_id]?.bg || categoryColors.default.bg,
-                    tagColor: categoryColors[product.category_id]?.tag || categoryColors.default.tag,
-                    tagTextColor: categoryColors[product.category_id]?.text || categoryColors.default.text
-                }));
-                setPetProducts(transformedProducts);
+            const responseText = await response.text();
+            console.log('Response status:', response.status);
+
+            if (!responseText.trim()) {
+                throw new Error('Empty response from server');
             }
+
+            const data = JSON.parse(responseText);
+            
+            if (!data || !data.success) {
+                throw new Error(data.message || 'Failed to fetch products');
+            }
+
+            if (!Array.isArray(data.products)) {
+                throw new Error('Invalid products data structure');
+            }
+
+            const transformedProducts = data.products.map(product => ({
+                id: product.id?.toString() || '',
+                name: product.name || '',
+                code: product.code || '',
+                quantity: parseInt(product.quantity) || 0,
+                sellingPrice: parseInt(product.selling_price || 0) / 100,
+                quantityAlert: parseInt(product.quantity_alert) || 5,
+                notes: product.notes || '',
+                image: { 
+                    uri: product.product_image_data
+                        ? `data:image/jpeg;base64,${product.product_image_data}`
+                        : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png`
+                },
+                categoryId: product.category_id?.toString() || 'default',
+                type: product.category_name || 'Pet Product'
+            }));
+
+            console.log(`Transformed ${transformedProducts.length} products`);
+            setPetProducts(transformedProducts);
+
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error('Fetch error:', error);
+            Alert.alert(
+                'Error',
+                'Failed to load products. Please check your connection and try again.'
+            );
         } finally {
             setIsProductsLoading(false);
         }
@@ -89,16 +95,60 @@ const PetProductsSection = ({ navigation, user_id }) => {
         fetchPetProducts();
     }, []);
 
+    const renderProduct = (item) => (
+        <TouchableOpacity 
+            key={item.id}
+            style={styles.productCard}
+            onPress={() => navigation.navigate("ProductDetails", { product: item })}
+            activeOpacity={0.7}
+        >
+            <View style={styles.imageContainer}>
+                <Image 
+                    source={item.image} 
+                    style={styles.productImage}
+                    resizeMode="cover"
+                    onError={(e) => {
+                        console.error('Image loading error:', e.nativeEvent.error);
+                        // Update the product's image to default if loading fails
+                        const updatedProducts = petProducts.map(p => {
+                            if (p.id === item.id) {
+                                return {
+                                    ...p,
+                                    image: { 
+                                        uri: `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png` 
+                                    }
+                                };
+                            }
+                            return p;
+                        });
+                        setPetProducts(updatedProducts);
+                    }}
+                />
+                {item.quantity === 0 ? (
+                    <View style={styles.outOfStockOverlay}>
+                        <Text style={styles.outOfStockText}>Out of Stock</Text>
+                    </View>
+                ) : item.quantity <= item.quantityAlert && (
+                    <View style={styles.stockBadge}>
+                        <Text style={styles.stockText}>Low Stock</Text>
+                    </View>
+                )}
+            </View>
+            <View style={styles.productInfo}>
+                <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
+                <Text style={styles.productPrice}>
+                    ₱{item.sellingPrice.toFixed(2)}
+                </Text>
+                <Text style={styles.stockCount}>In Stock: {item.quantity}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
     return (
         <View style={styles.petProductsBox}>
             <View style={styles.sectionHeader}>
                 <View style={styles.leftHeader}>
-                    <Ionicons 
-                        name="bag" 
-                        size={24} 
-                        color="#8146C1" 
-                        style={styles.productIcon}
-                    />
+                    <Ionicons name="bag" size={24} color="#8146C1" style={styles.productIcon} />
                     <Text style={styles.petproducts}>Pet Products</Text>
                 </View>
                 <TouchableOpacity 
@@ -110,49 +160,14 @@ const PetProductsSection = ({ navigation, user_id }) => {
             </View>
 
             {isProductsLoading ? (
-                <ActivityIndicator size="small" color="#8146C1" />
+                <ActivityIndicator size="large" color="#8146C1" style={styles.loader} />
+            ) : petProducts.length === 0 ? (
+                <View style={styles.emptyState}>
+                    <Text style={styles.emptyStateText}>No products available</Text>
+                </View>
             ) : (
                 <View style={styles.productsGrid}>
-                    {petProducts.map((item) => (
-                        <TouchableOpacity 
-                            key={item.id} 
-                            style={[styles.petProductCard, { backgroundColor: item.backgroundColor }]}
-                            onPress={() => navigation.navigate("ProductDetails", { productId: item.id })}
-                        >
-                            <View style={styles.productImageContainer}>
-                                <View style={styles.productImageWrapper}>
-                                    <Image 
-                                        source={item.image} 
-                                        style={styles.productImage}
-                                        resizeMode="contain"
-                                    />
-                                </View>
-                                <View style={[styles.badge, { backgroundColor: item.tagColor }]}>
-                                    <Text style={[styles.badgeText, { color: item.tagTextColor }]}>{item.type}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.productDetails}>
-                                <Text style={styles.productName} numberOfLines={1}>
-                                    {item.name}
-                                </Text>
-                                <View style={styles.productFooter}>
-                                    <Text style={styles.productPrice}>
-                                        ₱{item.sellingPrice.toLocaleString()}
-                                    </Text>
-                                    {item.quantity <= item.quantityAlert && (
-                                        <Text style={styles.lowStock}>
-                                            {item.quantity === 0 ? 'Out of Stock' : `${item.quantity} left`}
-                                        </Text>
-                                    )}
-                                </View>
-                                {item.notes && (
-                                    <Text style={styles.productNotes} numberOfLines={1}>
-                                        {item.notes}
-                                    </Text>
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                    ))}
+                    {petProducts.slice(0, 4).map(renderProduct)}
                 </View>
             )}
         </View>
@@ -220,108 +235,105 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        gap: 12,
+        gap: 8,
         paddingHorizontal: 4,
     },
-    petProductCard: {
+    productCard: {
+        width: '48%',
+        backgroundColor: '#FFF',
         borderRadius: 12,
-        width: '47%',
+        elevation: 3,
         overflow: 'hidden',
-        elevation: 4,
-        marginBottom: 12,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
-            height: 3,
+            height: 2,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        backgroundColor: '#FFFFFF',
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.05)',
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
     },
-    productImageContainer: {
-        position: 'relative',
+    imageContainer: {
         width: '100%',
-        height: 130,
-        backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-        overflow: 'hidden',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 8,
-    },
-    productImageWrapper: {
-        width: '90%',
-        height: '90%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        aspectRatio: 1,
+        backgroundColor: '#F8F8F8',
+        position: 'relative',
     },
     productImage: {
         width: '100%',
         height: '100%',
-        resizeMode: 'contain',
-        padding: 8,
+        resizeMode: 'cover',
     },
-    badge: {
-        position: 'absolute',
-        top: 8,
-        left: 8,
-        paddingVertical: 4,
-        paddingHorizontal: 8,
-        borderRadius: 8,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-    },
-    badgeText: {
-        fontSize: 10,
-        fontWeight: '600',
-        letterSpacing: 0.3,
-    },
-    productDetails: {
-        padding: 8,
-        backgroundColor: '#FFFFFF',
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
+    productInfo: {
+        padding: 12,
+        height: 90,
+        justifyContent: 'space-between',
     },
     productName: {
         fontSize: 14,
-        fontWeight: "600",
-        color: '#333',
-        marginBottom: 6,
+        fontWeight: '600',
+        marginBottom: 4,
+        height: 36,
         lineHeight: 18,
-    },
-    productFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        color: '#333',
     },
     productPrice: {
-        fontSize: 15,
-        fontWeight: "700",
+        fontSize: 16,
+        fontWeight: 'bold',
         color: '#8146C1',
+        marginBottom: 4,
     },
-    productNotes: {
-        fontSize: 11,
+    stockCount: {
+        fontSize: 12,
         color: '#666',
-        marginTop: 2,
     },
-    lowStock: {
+    stockBadge: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        backgroundColor: 'rgba(255, 68, 68, 0.9)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+    stockText: {
+        color: '#FFF',
         fontSize: 10,
-        color: '#FF4444',
-        fontWeight: '600',
-        backgroundColor: 'rgba(255,68,68,0.1)',
-        paddingHorizontal: 6,
-        paddingVertical: 2,
+        fontWeight: 'bold',
+    },
+    outOfStockOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    outOfStockText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        backgroundColor: '#FF4444',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
         borderRadius: 4,
+    },
+    loader: {
+        padding: 20,
+    },
+    emptyState: {
+        padding: 20,
+        alignItems: 'center',
+    },
+    emptyStateText: {
+        fontSize: 16,
+        color: '#666',
+        fontStyle: 'italic',
     },
 });
 
