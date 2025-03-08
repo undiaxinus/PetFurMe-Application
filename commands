@@ -1,8 +1,0 @@
-mkdir -p api/logs
-touch api/logs/appointment_debug.log
-chmod 777 api/logs
-chmod 777 api/logs/appointment_debug.log
-
-# For Windows XAMPP users, use these commands in Command Prompt as Administrator:
-# icacls "api/logs" /grant Everyone:F
-# icacls "api/logs/appointment_debug.log" /grant Everyone:F 
