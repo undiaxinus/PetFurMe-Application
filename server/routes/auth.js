@@ -4,39 +4,40 @@ const nodemailer = require('nodemailer');
 const mysql = require('mysql2/promise');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
-
-// Move CORS middleware to the top
-router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
+const rateLimit = require('express-rate-limit');
+const jwt = require('jsonwebtoken');
 
 // Create email transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'petmanagementt@gmail.com', // Replace with your Gmail
-    pass: 'ajlwvhzglwasoqku' // Replace with your app-specific password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
+
+// Add input validation middleware
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 
 // Verify if email exists
 router.post('/verify-email', async (req, res) => {
   try {
     const { email } = req.body;
-    const connection = await mysql.createConnection(config);
+    if (!email || !validateEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    const pool = mysql.createPool(config);
+    const connection = await pool.getConnection();
 
     const [rows] = await connection.execute(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );
 
-    await connection.end();
+    await connection.release();
 
     if (rows.length === 0) {
       return res.json({ exists: false });
@@ -49,8 +50,14 @@ router.post('/verify-email', async (req, res) => {
   }
 });
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: { error: 'Too many attempts, please try again later' }
+});
+
 // Verify OTP endpoint
-router.post('/verify-otp', async (req, res) => {
+router.post('/verify-otp', authLimiter, async (req, res) => {
   try {
     console.log('Received verify-otp request:', {
       body: req.body,
@@ -69,7 +76,8 @@ router.post('/verify-otp', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
+    const pool = mysql.createPool(config);
+    const connection = await pool.getConnection();
 
     try {
       // Log the actual values being checked
@@ -106,7 +114,7 @@ router.post('/verify-otp', async (req, res) => {
         message: 'OTP verified successfully'
       });
     } finally {
-      await connection.end();
+      await connection.release();
     }
   } catch (error) {
     console.error('Detailed verify-otp error:', {
@@ -136,7 +144,8 @@ router.post('/send-otp', async (req, res) => {
 
         // Generate 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const connection = await mysql.createConnection(config);
+        const pool = mysql.createPool(config);
+        const connection = await pool.getConnection();
 
         try {
             // Store OTP in database
@@ -166,7 +175,7 @@ router.post('/send-otp', async (req, res) => {
                 message: 'OTP sent successfully'
             });
         } finally {
-            await connection.end();
+            await connection.release();
         }
     } catch (error) {
         console.error('Detailed error:', {
@@ -180,6 +189,19 @@ router.post('/send-otp', async (req, res) => {
         });
     }
 });
+
+const handleError = (error, res) => {
+  console.error('Operation error:', {
+    message: error.message,
+    stack: error.stack,
+    code: error.code
+  });
+  
+  return res.status(500).json({
+    success: false,
+    error: 'An internal server error occurred'
+  });
+};
 
 // Reset password endpoint
 router.post('/reset-password', async (req, res) => {
@@ -197,7 +219,25 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
+    // Add password strength validation
+    if (!newPassword || newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters long'
+      });
+    }
+
+    // Add complexity check
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+      });
+    }
+
+    const pool = mysql.createPool(config);
+    const connection = await pool.getConnection();
 
     try {
       // First verify if user exists
@@ -240,18 +280,10 @@ router.post('/reset-password', async (req, res) => {
         message: 'Password updated successfully'
       });
     } finally {
-      await connection.end();
+      await connection.release();
     }
   } catch (error) {
-    console.error('Detailed reset password error:', {
-      message: error.message,
-      stack: error.stack,
-      code: error.code
-    });
-    res.status(500).json({
-      success: false,
-      error: 'Failed to reset password. Please try again.'
-    });
+    return handleError(error, res);
   }
 });
 
@@ -261,7 +293,8 @@ router.post('/register', async (req, res) => {
         const { email, username, password, role, name } = req.body;
         console.log('Received registration request for:', email);
 
-        const connection = await mysql.createConnection(config);
+        const pool = mysql.createPool(config);
+        const connection = await pool.getConnection();
         
         try {
             // Hash the password
@@ -275,12 +308,20 @@ router.post('/register', async (req, res) => {
 
             console.log('User registered successfully:', result);
 
+            // After successful registration
+            const token = jwt.sign(
+                { userId: result.insertId, email, role },
+                process.env.JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+
             res.json({
                 success: true,
-                message: 'Registration successful'
+                message: 'Registration successful',
+                token
             });
         } finally {
-            await connection.end();
+            await connection.release();
         }
     } catch (error) {
         console.error('Registration error:', error);
@@ -302,6 +343,49 @@ router.use((req, res, next) => {
     body: req.body
   });
   next();
+});
+
+// Add this middleware to check verification status
+const checkVerification = async (req, res, next) => {
+    try {
+        const userId = req.user.id; // Assuming you have user info in req.user
+        
+        const [user] = await db.query(
+            'SELECT verified_by FROM users WHERE id = ?',
+            [userId]
+        );
+        
+        if (!user || !user[0]) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // If verified_by is greater than 0, user is verified
+        const isVerified = parseInt(user[0].verified_by, 10) > 0;
+        
+        if (!isVerified) {
+            return res.status(403).json({
+                success: false,
+                message: 'Account pending verification',
+                requiresVerification: true
+            });
+        }
+        
+        next();
+    } catch (error) {
+        console.error('Verification check error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error checking verification status'
+        });
+    }
+};
+
+// Use this middleware for protected routes that require verification
+router.use('/protected-route', checkVerification, (req, res) => {
+    // Route handler
 });
 
 module.exports = router; 

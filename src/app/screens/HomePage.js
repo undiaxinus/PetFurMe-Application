@@ -22,6 +22,7 @@ import CustomToast from '../components/CustomToast';
 import PetDetailsModal from '../components/PetDetailsModal';
 import PetProductsSection from '../components/PetProductsSection';
 import PetsSection from '../components/PetsSection';
+import axios from 'axios';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -147,52 +148,34 @@ const HomePage = ({ navigation, route }) => {
 		if (!user_id) return;
 		
 		try {
-			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
+			const url = `${API_BASE_URL}/api/users/profile-status/${user_id}`;
 			console.log("Checking profile status at:", url);
 			
-			const response = await fetch(url);
-			const data = await response.json();
+			const response = await axios.get(url);
+			const data = response.data;
 			
-			// Add detailed logging
-			console.log("Full profile data:", data.profile);
-			console.log("Verified by value (raw):", data.profile.verified_by);
-			console.log("Verified by type:", typeof data.profile.verified_by);
+			console.log("Profile status response:", data);
 			
 			if (data.success) {
-				// Convert to number and check if greater than 0
-				const verifiedByValue = Number(data.profile.verified_by);
-				console.log("Verified by value (converted):", verifiedByValue);
-				const verifiedStatus = !isNaN(verifiedByValue) && verifiedByValue > 0;
-				console.log("Final verified status:", verifiedStatus);
+				const verifiedByValue = parseInt(data.profile.verified_by, 10);
+				setIsVerified(verifiedByValue > 0);
 				
-				setIsVerified(verifiedStatus);
+				const hasRequiredFields = Boolean(
+					data.profile.name &&
+					data.profile.email &&
+					data.profile.phone &&
+					data.profile.photo
+				);
 				
-				const hasRequiredFields = data.profile.name && 
-										data.profile.email && 
-										data.profile.phone && 
-										data.profile.photo;
-									
-				const credentialsStatus = data.profile.complete_credentials === 1;
-				
-				console.log("Has required fields:", hasRequiredFields);
-				console.log("Credentials status:", credentialsStatus);
-				
-				setCredentialsComplete(credentialsStatus);
-				setIsProfileComplete(hasRequiredFields && credentialsStatus);
+				setIsProfileComplete(hasRequiredFields);
 				
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
-					setUserPhoto(data.profile.photo 
-						? `${API_BASE_URL}/PetFurMe-Application/${data.profile.photo}`
-						: null
-					);
+					setUserPhoto(data.profile.photo ? `${API_BASE_URL}/uploads/${data.profile.photo}` : null);
 				}
 			}
 		} catch (error) {
 			console.error("Profile check error:", error);
-			setIsProfileComplete(false);
-			setCredentialsComplete(false);
-			setIsVerified(false);
 		}
 	};
 
