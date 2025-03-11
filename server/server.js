@@ -1,34 +1,4 @@
-const result = require('dotenv').config();
-
-if (result.error) {
-	console.error('Error loading .env file:', result.error);
-	process.exit(1);
-}
-
-// Add this to debug environment variables
-console.log('Environment variables loaded:', {
-	DB_HOST: process.env.DB_HOST,
-	DB_USER: process.env.DB_USER,
-	DB_NAME: process.env.DB_NAME,
-	PORT: process.env.PORT
-});
-
-// Validate required environment variables
-const requiredEnvVars = [
-	'DB_HOST',
-	'DB_USER',
-	'DB_NAME',
-	'JWT_SECRET',
-	'PORT'
-];
-
-for (const envVar of requiredEnvVars) {
-	if (!process.env[envVar]) {
-		console.error(`Missing required environment variable: ${envVar}`);
-		process.exit(1);
-	}
-}
-
+require('dotenv').config();
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
@@ -41,18 +11,17 @@ const http = require('http');
 	
 // Server configuration
 const PORT = process.env.PORT || 3001;
-const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+const HOST = process.env.HOST || "0.0.0.0";  // This allows connections from all network interfaces
 
 // Set the path to your XAMPP htdocs directory
 const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api');
 
 // Database configuration
 const dbConfig = {
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME,
-	port: process.env.DB_PORT,
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "pet-management",
 	waitForConnections: true,
 	connectionLimit: 10,
 	queueLimit: 0,
@@ -67,13 +36,13 @@ const app = express();
 
 // CORS configuration - this must come BEFORE other middleware
 app.use(cors({
-	origin: ['http://localhost:8081', 'http://localhost:3000', 'http://192.168.1.13:3000', 'http://192.168.1.13:8081'],
+	origin: '*', // Allow all origins during development
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-	allowedHeaders: ['Content-Type', 'Authorization'],
+	allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
 	credentials: true
 }));
 
-// Remove any other CORS middleware in the file
+// Remove any other CORS-related middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -144,15 +113,14 @@ app.use((err, req, res, next) => {
 	});
 });
 
-// Add this function before startServer
+// Test database connection
 const testConnection = async () => {
 	try {
-		const connection = await db.getConnection();
-		await connection.ping();
-		connection.release();
+		await db.query("SELECT 1");
+		console.log("Database connected successfully");
 		return true;
-	} catch (error) {
-		console.error('Database connection test failed:', error);
+	} catch (err) {
+		console.error("Database connection failed:", err);
 		return false;
 	}
 };
@@ -421,62 +389,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Add this after your routes but before app.listen
-app.use((err, req, res, next) => {
-	console.error('Error:', err);
-	res.status(500).json({
-		success: false,
-		message: err.message || 'Internal server error',
-		error: process.env.NODE_ENV === 'development' ? err : {}
-	});
-});
-
-// Add request logging
-app.use((req, res, next) => {
-	console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
-	console.log('Headers:', req.headers);
-	next();
-});
-
-// Add this endpoint for profile status checks
-app.get('/api/users/profile-status/:userId', async (req, res) => {
-	try {
-		const userId = req.params.userId;
-		
-		const [user] = await db.query(
-			`SELECT id, name, email, phone, photo, verified_by 
-			 FROM users 
-			 WHERE id = ?`,
-			[userId]
-		);
-
-		if (!user || user.length === 0) {
-			return res.status(404).json({
-				success: false,
-				message: 'User not found'
-			});
-		}
-
-		// Log the user data for debugging
-		console.log('User data:', user[0]);
-
-		res.json({
-			success: true,
-			profile: {
-				...user[0],
-				verified: parseInt(user[0].verified_by, 10) > 0
-			}
-		});
-
-	} catch (error) {
-		console.error('Profile status check error:', error);
-		res.status(500).json({
-			success: false,
-			message: 'Failed to check profile status'
-		});
-	}
-});
-
 // Create HTTP server separately
 const server = http.createServer(app);
 
@@ -501,13 +413,13 @@ const startServer = async () => {
 			throw new Error("Database connection failed");
 		}
 
-		// Start the server - bind to all network interfaces
-		server.listen(PORT, '0.0.0.0', () => {
+		// Start the server
+		server.listen(PORT, HOST, () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
 			console.log(`- Network: http://${SERVER_IP}:${PORT}`);
-			console.log(`- Your IP: http://192.168.1.13:${PORT}`);
+			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");
 		});
