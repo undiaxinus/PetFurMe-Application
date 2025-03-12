@@ -35,3 +35,11 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Logs
+*.log
+**/*.log
+logs
+*.logs
+log/
+logs/

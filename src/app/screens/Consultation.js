@@ -108,6 +108,8 @@ const getPetTypeIcon = (petType) => {
 const Consultation = ({ navigation, route }) => {
   const user_id = route.params?.user_id;
   const selected_pet = route.params?.selected_pet;
+  const isRescheduling = route.params?.isRescheduling || false;
+  const originalAppointment = route.params?.originalAppointment || null;
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(selected_pet || null);
   const [reasons_for_visit, setReasons] = useState([]);
@@ -167,6 +169,11 @@ const Consultation = ({ navigation, route }) => {
             await AsyncStorage.setItem('user_id', user_id.toString());
           }
           fetchUserPets();
+          
+          // Handle rescheduling scenario
+          if (isRescheduling && originalAppointment) {
+            populateReschedulingData();
+          }
         }
       } catch (error) {
         console.error('Session check error:', error);
@@ -174,7 +181,7 @@ const Consultation = ({ navigation, route }) => {
     };
 
     checkSession();
-  }, [user_id]);
+  }, [user_id, isRescheduling, originalAppointment]);
 
   const fetchUserPets = async () => {
     try {
@@ -227,6 +234,72 @@ const Consultation = ({ navigation, route }) => {
           }
         ]
       );
+    }
+  };
+
+  const populateReschedulingData = () => {
+    console.log('Populating rescheduling data:', originalAppointment);
+    try {
+      // Set pet selection
+      if (originalAppointment.pet_id) {
+        setSelectedPet(originalAppointment.pet_id.toString());
+      }
+      
+      // Set reasons for visit
+      if (originalAppointment.reason_for_visit) {
+        let reasons = [];
+        try {
+          reasons = JSON.parse(originalAppointment.reason_for_visit);
+          if (!Array.isArray(reasons)) {
+            reasons = [reasons];
+          }
+        } catch (e) {
+          // If parsing fails, treat it as a single string
+          reasons = [originalAppointment.reason_for_visit];
+        }
+        setReasons(reasons);
+      }
+      
+      // Set appointment date
+      if (originalAppointment.appointment_date) {
+        const dateObj = new Date(originalAppointment.appointment_date);
+        setDate(dateObj);
+        const formattedDate = moment(dateObj).format('YYYY-MM-DD');
+        setAppointmentDate(formattedDate);
+      }
+      
+      // Set appointment time
+      if (originalAppointment.appointment_time) {
+        const timeObj = moment(originalAppointment.appointment_time, 'HH:mm').toDate();
+        setTime(timeObj);
+        setAppointmentTime(originalAppointment.appointment_time);
+      }
+      
+      // If this is a vaccination appointment, set vaccine types
+      if (originalAppointment.reason_for_visit && 
+          JSON.parse(originalAppointment.reason_for_visit).includes('Vaccination') &&
+          originalAppointment.vaccine_types) {
+        try {
+          const vaccineTypes = JSON.parse(originalAppointment.vaccine_types);
+          setSelectedVaccineTypes(vaccineTypes);
+        } catch (e) {
+          console.error('Error parsing vaccine types:', e);
+        }
+      }
+      
+      // If this is a consultation appointment, set consultation reasons
+      if (originalAppointment.reason_for_visit && 
+          JSON.parse(originalAppointment.reason_for_visit).includes('Consultation') &&
+          originalAppointment.consultation_reasons) {
+        try {
+          const consultReasons = JSON.parse(originalAppointment.consultation_reasons);
+          setSelectedConsultationReasons(consultReasons);
+        } catch (e) {
+          console.error('Error parsing consultation reasons:', e);
+        }
+      }
+    } catch (error) {
+      console.error('Error populating rescheduling data:', error);
     }
   };
 
@@ -301,6 +374,12 @@ const Consultation = ({ navigation, route }) => {
         appointment_date: moment(appointmentDate).format('YYYY-MM-DD'),
         appointment_time: moment(appointmentTime, 'HH:mm').format('HH:mm')
       };
+
+      // If rescheduling, include the original appointment ID
+      if (isRescheduling && originalAppointment) {
+        formattedAppointmentData.original_appointment_id = originalAppointment.id;
+        formattedAppointmentData.is_rescheduling = true;
+      }
 
       const endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`;
 

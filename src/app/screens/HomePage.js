@@ -153,24 +153,17 @@ const HomePage = ({ navigation, route }) => {
 			const response = await fetch(url);
 			const data = await response.json();
 			
-			// Add detailed logging
-			console.log("Full profile data:", data.profile);
-			console.log("Verified by value (raw):", data.profile.verified_by);
-			console.log("Verified by type:", typeof data.profile.verified_by);
-			
 			if (data.success) {
-				// Convert to number and check if greater than 0
 				const verifiedByValue = Number(data.profile.verified_by);
 				console.log("Verified by value (converted):", verifiedByValue);
 				const verifiedStatus = !isNaN(verifiedByValue) && verifiedByValue > 0;
-				console.log("Final verified status:", verifiedStatus);
 				
 				setIsVerified(verifiedStatus);
 				
+				// Check only required fields (photo not required)
 				const hasRequiredFields = data.profile.name && 
 										data.profile.email && 
-										data.profile.phone && 
-										data.profile.photo;
+										data.profile.phone;
 									
 				const credentialsStatus = data.profile.complete_credentials === 1;
 				
@@ -182,10 +175,14 @@ const HomePage = ({ navigation, route }) => {
 				
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
-					setUserPhoto(data.profile.photo 
-						? `${API_BASE_URL}/PetFurMe-Application/${data.profile.photo}`
-						: null
-					);
+					// Handle photo separately if needed
+					if (data.profile.hasPhoto) {
+						// Fetch photo using a separate endpoint if needed
+						const photoUrl = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_photo.php?user_id=${user_id}`;
+						setUserPhoto(photoUrl);
+					} else {
+						setUserPhoto(null);
+					}
 				}
 			}
 		} catch (error) {

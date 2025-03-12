@@ -73,45 +73,27 @@ const ProfileVerification = ({ navigation, route }) => {
         setIsLoading(true);
         try {
             const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${user_id}`;
-            console.log("Fetching user data from:", url);
-
-            const response = await axios.get(url, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    t: Date.now() // Cache busting
-                }
-            });
-
-            console.log("Full API Response:", response.data);
+            const response = await axios.get(url);
 
             if (response.data.success && response.data.profile) {
                 const userData = response.data.profile;
                 
-                // Update state with user data
                 setName(userData.name || '');
                 setEmail(userData.email || '');
                 setPhoneNumber(userData.phone || '');
                 setAddress(userData.address || '');
 
-                // Handle photo
+                // Handle blob photo
                 if (userData.photo) {
-                    const photoUrl = `${API_BASE_URL}/uploads/${userData.photo}`;
-                    console.log("Photo URL:", photoUrl);
-                    
+                    // Convert blob to base64
+                    const base64Image = `data:image/jpeg;base64,${userData.photo}`;
                     setProfilePhoto({
-                        uri: photoUrl,
-                        headers: {
-                            'Cache-Control': 'no-cache'
-                        }
+                        uri: base64Image
                     });
                 } else {
                     setProfilePhoto(null);
                 }
 
-                // Store in AsyncStorage
                 await AsyncStorage.setItem('userData', JSON.stringify({
                     user_id,
                     ...userData
@@ -145,13 +127,15 @@ const ProfileVerification = ({ navigation, route }) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [1, 1],
-                quality: 0.5,
+                quality: 1,
+                base64: true
             });
 
             if (!result.canceled) {
                 const asset = result.assets[0];
                 setProfilePhoto({
                     uri: asset.uri,
+                    base64: asset.base64,
                     width: 120,
                     height: 120
                 });
@@ -163,79 +147,75 @@ const ProfileVerification = ({ navigation, route }) => {
     };
 
     const handleUpdateInfo = async () => {
-        setIsLoading(true);
         try {
-            console.log('Starting profile update with data:', {
-                name,
-                address,
-                phoneNumber,
-                email,
-                profilePhoto
-            });
+            setIsLoading(true);
+            console.log('Starting update process...');
 
+            // Create FormData object instead of plain JSON
             const formData = new FormData();
             
-            // Only include fields that have values
-            const userData = {};
-            
-            if (name !== undefined) userData.name = name.trim();
-            if (address !== undefined) userData.address = address.trim();
-            if (phoneNumber !== undefined) userData.phone = phoneNumber.trim();
-            if (email !== undefined) userData.email = email.trim();
-            userData.user_id = user_id;
+            // Add text fields
+            formData.append('user_id', user_id);
+            formData.append('name', name?.trim());
+            formData.append('address', address?.trim());
+            formData.append('phone', phoneNumber?.trim());
+            formData.append('email', email?.trim());
 
-            // Handle profile photo
+            // Handle profile photo - comprehensive approach
             if (profilePhoto?.uri) {
-                const localUri = profilePhoto.uri;
-                let filename;
+                console.log('Processing image:', profilePhoto);
                 
-                // Handle base64 image
-                if (localUri.startsWith('data:image')) {
-                    const ext = 'png';
-                    filename = `user_${user_id}_${Date.now()}.${ext}`;
-                    
-                    // Convert base64 to blob
-                    const base64Data = localUri.split(',')[1];
-                    const byteCharacters = atob(base64Data);
-                    const byteArrays = [];
-                    
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteArrays.push(byteCharacters.charCodeAt(i));
+                try {
+                    if (profilePhoto.uri.startsWith('data:image')) {
+                        // For data URLs (like the one you're seeing in the logs)
+                        const base64Data = profilePhoto.uri.split(',')[1];
+                        if (base64Data) {
+                            formData.append('photo_base64', base64Data);
+                            console.log('Added base64 photo, length:', base64Data.length);
+                        } else {
+                            throw new Error('Failed to extract base64 data from URI');
+                        }
+                    } else if (profilePhoto.base64) {
+                        // For images with direct base64 property (from ImagePicker)
+                        formData.append('photo_base64', profilePhoto.base64);
+                        console.log('Added direct base64 photo, length:', profilePhoto.base64.length);
+                    } else {
+                        // For file URIs (from camera roll/gallery)
+                        const uriParts = profilePhoto.uri.split('.');
+                        const fileType = uriParts[uriParts.length - 1];
+                        
+                        formData.append('photo', {
+                            uri: profilePhoto.uri,
+                            name: `photo.${fileType}`,
+                            type: `image/${fileType}`
+                        });
+                        console.log('Added photo file:', profilePhoto.uri);
                     }
-                    
-                    const blob = new Blob([new Uint8Array(byteArrays)], { type: 'image/png' });
-                    
-                    // Append to formData
-                    formData.append('photo', blob, filename);
-                    userData.photo = `user_photos/${filename}`;
-                } else {
-                    // Handle file URI
-                    filename = localUri.split('/').pop();
-                    formData.append('photo', {
-                        uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-                        type: 'image/jpeg',
-                        name: filename
-                    });
-                    userData.photo = `user_photos/${filename}`;
+                } catch (error) {
+                    console.error('Error processing photo:', error);
                 }
-                console.log('Photo path to be saved:', userData.photo);
             }
 
-            console.log('Sending user data:', userData);
-            formData.append('data', JSON.stringify(userData));
+            console.log('Sending form data with fields:', {
+                user_id: user_id,
+                name: name?.trim() || '[empty]',
+                address: address?.trim() || '[empty]',
+                phone: phoneNumber?.trim() || '[empty]',
+                email: email?.trim() || '[empty]',
+                photo: profilePhoto?.uri ? 
+                    (profilePhoto.uri.startsWith('data:image') ? 'Base64 data URL included' : 
+                    (profilePhoto.base64 ? 'Direct base64 included' : 'File URI included')) 
+                    : 'No photo'
+            });
 
             const updateUrl = `${API_BASE_URL}/api/users/update_user_data.php`;
-            console.log('Sending update request to:', updateUrl);
-
-            const response = await axios.post(
-                updateUrl,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
+            const response = await axios.post(updateUrl, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                },
+                withCredentials: false
+            });
 
             console.log('Profile update response:', response.data);
 
@@ -271,11 +251,21 @@ const ProfileVerification = ({ navigation, route }) => {
                 // Refresh user data to confirm update
                 await fetchUserData();
             } else {
-                throw new Error(response.data.message || 'Failed to update profile');
+                throw new Error(response.data.message || 'Update failed');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', error.message || 'Failed to update profile');
+            console.error('Error response:', error.response?.data);
+            
+            const errorMessage = error.response?.data?.message || 
+                                error.message || 
+                                'Failed to update profile';
+                                
+            Alert.alert(
+                'Error',
+                errorMessage,
+                [{ text: 'OK' }]
+            );
         } finally {
             setIsLoading(false);
         }

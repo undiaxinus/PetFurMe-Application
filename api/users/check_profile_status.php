@@ -67,7 +67,7 @@ try {
             throw new Exception("Failed to check users table structure");
         }
         
-        $required_columns = ['id', 'name', 'email', 'phone', 'photo', 'role'];
+        $required_columns = ['id', 'name', 'email', 'phone', 'role'];
         $existing_columns = [];
         while ($row = $structure_check->fetch_assoc()) {
             $existing_columns[] = $row['Field'];
@@ -120,7 +120,12 @@ try {
     }
 
     // Get profile details
-    $query = "SELECT name, email, phone, photo, complete_credentials, verified_by 
+    $query = "SELECT name, email, phone, 
+              CASE 
+                  WHEN photo IS NOT NULL THEN 1 
+                  ELSE 0 
+              END as has_photo,
+              complete_credentials, verified_by 
               FROM users 
               WHERE id = ?";
     $stmt = $db->prepare($query);
@@ -141,14 +146,13 @@ try {
         'name' => $row['name'] ?? null,
         'email' => $row['email'] ?? null,
         'phone' => $row['phone'] ?? null,
-        'hasPhoto' => !empty($row['photo']),
+        'hasPhoto' => (bool)($row['has_photo'] ?? false),
         'complete_credentials' => $row['complete_credentials']
     ]));
     
     $isComplete = !empty($row['name']) && 
                  !empty($row['email']) && 
-                 !empty($row['phone']) && 
-                 !empty($row['photo']);
+                 !empty($row['phone']);
     
     error_log("Profile complete status: " . ($isComplete ? 'true' : 'false'));
     
@@ -165,8 +169,7 @@ try {
             'name' => $row['name'] ?? null,
             'email' => $row['email'] ?? null,
             'phone' => $row['phone'] ?? null,
-            'hasPhoto' => !empty($row['photo']),
-            'photo' => $row['photo'] ?? null,
+            'hasPhoto' => (bool)($row['has_photo'] ?? false),
             'complete_credentials' => (int)$row['complete_credentials'],
             'verified_by' => $row['verified_by'] ?? null
         ]
