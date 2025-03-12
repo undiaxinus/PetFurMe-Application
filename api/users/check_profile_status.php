@@ -1,4 +1,16 @@
 <?php
+// Add these headers at the very top of the file
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Content-Type: application/json');
+
+// If it's a preflight request, return early
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 // Prevent any output before headers
 ob_start();
 
@@ -7,12 +19,6 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', '1');
 ini_set('error_log', __DIR__ . '/../../error.log');
-
-// Set headers
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 // Log request details
 error_log("=== New Request to check_profile_status.php ===");
@@ -148,7 +154,8 @@ try {
     $isComplete = !empty($row['name']) && 
                  !empty($row['email']) && 
                  !empty($row['phone']) && 
-                 !empty($row['photo']);
+                 !empty($row['photo']) &&
+                 $row['complete_credentials'] == 1;
     
     error_log("Profile complete status: " . ($isComplete ? 'true' : 'false'));
     
@@ -168,7 +175,7 @@ try {
             'hasPhoto' => !empty($row['photo']),
             'photo' => $row['photo'] ?? null,
             'complete_credentials' => (int)$row['complete_credentials'],
-            'verified_by' => $row['verified_by'] ?? null
+            'verified_by' => $row['verified_by'] ? (int)$row['verified_by'] : null
         ]
     ];
     

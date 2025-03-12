@@ -72,7 +72,7 @@ const ProfileVerification = ({ navigation, route }) => {
     const fetchUserData = async () => {
         setIsLoading(true);
         try {
-            const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${user_id}`;
+            const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${user_id}&t=${Date.now()}`;
             console.log("Fetching user data from:", url);
 
             const response = await axios.get(url, {
@@ -120,7 +120,7 @@ const ProfileVerification = ({ navigation, route }) => {
                 throw new Error(response.data.message || 'Failed to load user data');
             }
         } catch (error) {
-            console.error('Error in fetchUserData:', error);
+            console.error('Error fetching user data:', error);
             console.error('Error details:', {
                 message: error.message,
                 response: error.response?.data,

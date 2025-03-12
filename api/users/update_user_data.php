@@ -123,11 +123,26 @@ try {
     $result = $select_stmt->get_result();
     $updated_data = $result->fetch_assoc();
 
+    // Add this before sending the response
+    $isComplete = !empty($updated_data['name']) && 
+                  !empty($updated_data['email']) && 
+                  !empty($updated_data['phone']) && 
+                  ($photo_path || !empty($updated_data['photo']));
+
+    if ($isComplete) {
+        $complete_query = "UPDATE users SET complete_credentials = 1 WHERE id = ?";
+        $complete_stmt = $db->prepare($complete_query);
+        $complete_stmt->bind_param("i", $jsonData['user_id']);
+        $complete_stmt->execute();
+    }
+
     $response = [
         'success' => true,
         'message' => 'Profile updated successfully',
         'photo_path' => $photo_path ?? $jsonData['photo'],
-        'updated_data' => $updated_data
+        'updated_data' => [
+            'complete_credentials' => $isComplete ? 1 : 0
+        ]
     ];
 
     echo json_encode($response);

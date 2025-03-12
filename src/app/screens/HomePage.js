@@ -125,6 +125,20 @@ const HomePage = ({ navigation, route }) => {
 		console.log("Verification status changed:", isVerified);
 	}, [isVerified]);
 
+	useEffect(() => {
+		const checkStatus = async () => {
+			try {
+				await checkProfileStatus();
+			} catch (error) {
+				console.error('Profile status check failed:', error);
+				// Optionally show an error message to the user
+				Alert.alert('Error', 'Failed to check profile status');
+			}
+		};
+		
+		checkStatus();
+	}, [user_id]);
+
 	const fetchUserPets = async () => {
 		try {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
@@ -148,34 +162,57 @@ const HomePage = ({ navigation, route }) => {
 		if (!user_id) return;
 		
 		try {
-			const url = `${API_BASE_URL}/api/users/profile-status/${user_id}`;
-			console.log("Checking profile status at:", url);
+			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
+			console.log('Checking profile status at URL:', url);
 			
-			const response = await axios.get(url);
+			const response = await axios.get(url, {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				withCredentials: false
+			});
+			
 			const data = response.data;
+			console.log('Profile status raw response:', data);
 			
-			console.log("Profile status response:", data);
-			
-			if (data.success) {
-				const verifiedByValue = parseInt(data.profile.verified_by, 10);
-				setIsVerified(verifiedByValue > 0);
+			if (data.success && data.profile) {
+				const profile = data.profile;
 				
-				const hasRequiredFields = Boolean(
-					data.profile.name &&
-					data.profile.email &&
-					data.profile.phone &&
-					data.profile.photo
-				);
+				// Check if all required fields are present
+				const hasAllFields = profile.name && 
+								   profile.email && 
+								   profile.phone && 
+								   profile.photo;
+
+				// Check complete_credentials and verified_by status
+				const isComplete = hasAllFields && profile.complete_credentials === 1;
+				const isVerified = profile.verified_by !== null && profile.verified_by > 0;
 				
-				setIsProfileComplete(hasRequiredFields);
+				console.log('Profile completion check:', {
+					hasAllFields,
+					completeCredentials: profile.complete_credentials,
+					isComplete,
+					isVerified,
+					verifiedBy: profile.verified_by
+				});
 				
-				if (data.profile) {
-					setUserName(data.profile.name || 'Guest');
-					setUserPhoto(data.profile.photo ? `${API_BASE_URL}/uploads/${data.profile.photo}` : null);
+				setIsProfileComplete(isComplete);
+				setCredentialsComplete(isComplete);
+				setIsVerified(isVerified); // Update verification status
+				
+				if (profile) {
+					setUserName(profile.name || 'Guest');
+					setUserPhoto(profile.photo ? `${API_BASE_URL}/PetFurMe-Application/uploads/${profile.photo}` : null);
 				}
 			}
 		} catch (error) {
-			console.error("Profile check error:", error);
+			console.error('Error checking profile status:', error);
+			if (error.response) {
+				console.error('Error response data:', error.response.data);
+				console.error('Error response status:', error.response.status);
+				console.error('Error response headers:', error.response.headers);
+			}
 		}
 	};
 
@@ -363,6 +400,9 @@ const HomePage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
+			{/* Add debug output */}
+			{__DEV__ && console.log('Render state:', { isProfileComplete, credentialsComplete })}
+			
 			{toastConfig && (
 				<CustomToast
 					message={toastConfig.message}
@@ -454,13 +494,12 @@ const HomePage = ({ navigation, route }) => {
 				</View>
 			)}
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{(!isProfileComplete || !credentialsComplete) && (
+				{/* Only show CompleteProfileBar if profile is not complete */}
+				{!isProfileComplete && (
 					<CompleteProfileBar 
 						onPress={() => navigation.navigate('Profile', { 
 							user_id: user_id,
-							onComplete: () => {
-								refreshAllData();
-							}
+							onComplete: refreshAllData
 						})}
 					/>
 				)}

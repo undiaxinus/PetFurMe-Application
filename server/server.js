@@ -18,15 +18,14 @@ const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api
 
 // Database configuration
 const dbConfig = {
-	host: "localhost",
-	user: "root",
-	password: "",
-	database: "pet-management",
+	host: 'localhost',
+	user: 'root',  // default XAMPP username
+	password: '',  // default XAMPP password is empty
+	database: 'pet-management',
+	port: 3306,
 	waitForConnections: true,
 	connectionLimit: 10,
-	queueLimit: 0,
-	debug: false,
-	trace: false
+	queueLimit: 0
 };
 
 // Create database pool
@@ -114,13 +113,14 @@ app.use((err, req, res, next) => {
 });
 
 // Test database connection
-const testConnection = async () => {
+const testDatabaseConnection = async () => {
 	try {
-		await db.query("SELECT 1");
-		console.log("Database connected successfully");
+		const connection = await db.getConnection();
+		console.log('Database connection successful');
+		connection.release();
 		return true;
-	} catch (err) {
-		console.error("Database connection failed:", err);
+	} catch (error) {
+		console.error('Database connection error:', error);
 		return false;
 	}
 };
@@ -129,7 +129,7 @@ const testConnection = async () => {
 app.get('/health', async (req, res) => {
 	try {
 		// Test database connection
-		const dbConnected = await testConnection();
+		const dbConnected = await testDatabaseConnection();
 		
 		res.json({
 			status: 'ok',
@@ -351,7 +351,7 @@ app.use((req, res, next) => {
 // Add pet endpoint
 // app.post("/api/pets/create", async (req, res) => { ... });
 
-app.use('/api', authRoutes);
+app.use('/api', authRoutes(db));
 
 // Add this right after your app declaration
 app.use((req, res, next) => {
@@ -408,13 +408,13 @@ server.on('error', (error) => {
 const startServer = async () => {
 	try {
 		// Test database connection first
-		const isConnected = await testConnection();
+		const isConnected = await testDatabaseConnection();
 		if (!isConnected) {
 			throw new Error("Database connection failed");
 		}
 
 		// Start the server
-		server.listen(PORT, HOST, () => {
+		server.listen(PORT, HOST, async () => {
 			console.log("=================================");
 			console.log(`Server running on:`);
 			console.log(`- Local: http://localhost:${PORT}`);
@@ -422,6 +422,7 @@ const startServer = async () => {
 			console.log(`- Android: http://10.0.2.2:${PORT}`);
 			console.log("Database Status: Connected");
 			console.log("=================================");
+			await testDatabaseConnection();
 		});
 
 		// Handle graceful shutdown
