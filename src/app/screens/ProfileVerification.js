@@ -127,13 +127,15 @@ const ProfileVerification = ({ navigation, route }) => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [1, 1],
-                quality: 0.5,
+                quality: 1,
+                base64: true
             });
 
             if (!result.canceled) {
                 const asset = result.assets[0];
                 setProfilePhoto({
                     uri: asset.uri,
+                    base64: asset.base64,
                     width: 120,
                     height: 120
                 });
@@ -149,61 +151,71 @@ const ProfileVerification = ({ navigation, route }) => {
             setIsLoading(true);
             console.log('Starting update process...');
 
-            // Validate only the truly required fields
-            if (!name.trim()) {
-                Alert.alert("Error", "Name is required.");
-                return;
-            }
-
-            if (!email.trim()) {
-                Alert.alert("Error", "Email is required.");
-                return;
-            }
-
-            if (!phoneNumber.trim()) {
-                Alert.alert("Error", "Phone number is required.");
-                return;
-            }
-
-            console.log('Starting profile update');
-
+            // Create FormData object instead of plain JSON
             const formData = new FormData();
-            const userData = {
-                user_id: user_id,
-                name: name?.trim(),
-                address: address?.trim(),
-                phone: phoneNumber?.trim(),
-                email: email?.trim()
-            };
+            
+            // Add text fields
+            formData.append('user_id', user_id);
+            formData.append('name', name?.trim());
+            formData.append('address', address?.trim());
+            formData.append('phone', phoneNumber?.trim());
+            formData.append('email', email?.trim());
 
-            // Handle profile photo
+            // Handle profile photo - comprehensive approach
             if (profilePhoto?.uri) {
-                // For local files (from image picker)
-                if (profilePhoto.uri.startsWith('file://')) {
-                    formData.append('photo', {
-                        uri: profilePhoto.uri,
-                        type: 'image/jpeg',
-                        name: 'user_photo.jpg'
-                    });
-                } 
-                // For base64 images (from API or previous upload)
-                else if (profilePhoto.uri.startsWith('data:image')) {
-                    userData.photo_base64 = profilePhoto.uri.split(',')[1];
+                console.log('Processing image:', profilePhoto);
+                
+                try {
+                    if (profilePhoto.uri.startsWith('data:image')) {
+                        // For data URLs (like the one you're seeing in the logs)
+                        const base64Data = profilePhoto.uri.split(',')[1];
+                        if (base64Data) {
+                            formData.append('photo_base64', base64Data);
+                            console.log('Added base64 photo, length:', base64Data.length);
+                        } else {
+                            throw new Error('Failed to extract base64 data from URI');
+                        }
+                    } else if (profilePhoto.base64) {
+                        // For images with direct base64 property (from ImagePicker)
+                        formData.append('photo_base64', profilePhoto.base64);
+                        console.log('Added direct base64 photo, length:', profilePhoto.base64.length);
+                    } else {
+                        // For file URIs (from camera roll/gallery)
+                        const uriParts = profilePhoto.uri.split('.');
+                        const fileType = uriParts[uriParts.length - 1];
+                        
+                        formData.append('photo', {
+                            uri: profilePhoto.uri,
+                            name: `photo.${fileType}`,
+                            type: `image/${fileType}`
+                        });
+                        console.log('Added photo file:', profilePhoto.uri);
+                    }
+                } catch (error) {
+                    console.error('Error processing photo:', error);
                 }
             }
 
-            formData.append('data', JSON.stringify(userData));
+            console.log('Sending form data with fields:', {
+                user_id: user_id,
+                name: name?.trim() || '[empty]',
+                address: address?.trim() || '[empty]',
+                phone: phoneNumber?.trim() || '[empty]',
+                email: email?.trim() || '[empty]',
+                photo: profilePhoto?.uri ? 
+                    (profilePhoto.uri.startsWith('data:image') ? 'Base64 data URL included' : 
+                    (profilePhoto.base64 ? 'Direct base64 included' : 'File URI included')) 
+                    : 'No photo'
+            });
 
             const updateUrl = `${API_BASE_URL}/api/users/update_user_data.php`;
-            const response = await axios.post(
-                updateUrl,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
+            const response = await axios.post(updateUrl, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                },
+                withCredentials: false
+            });
 
             console.log('Profile update response:', response.data);
 
@@ -239,11 +251,21 @@ const ProfileVerification = ({ navigation, route }) => {
                 // Refresh user data to confirm update
                 await fetchUserData();
             } else {
-                throw new Error(response.data.message || 'Failed to update profile');
+                throw new Error(response.data.message || 'Update failed');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            Alert.alert('Error', error.message || 'Failed to update profile');
+            console.error('Error response:', error.response?.data);
+            
+            const errorMessage = error.response?.data?.message || 
+                                error.message || 
+                                'Failed to update profile';
+                                
+            Alert.alert(
+                'Error',
+                errorMessage,
+                [{ text: 'OK' }]
+            );
         } finally {
             setIsLoading(false);
         }
