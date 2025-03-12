@@ -321,16 +321,14 @@ const AddPetProfile = ({ route }) => {
 	};
 
 	const isAdditionalFieldsValid = () => {
-		// Check if additional fields have either valid data or are properly skipped
-		const isAgeValid = petAge === 'Not Provided' || (petAge && !isNaN(petAge));
-		const isWeightValid = petWeight === 'Not Provided' || (petWeight && !isNaN(petWeight));
-		const isBreedValid = petBreed === null || petBreed.trim() !== '';
+		// Since these are optional fields, they should be valid by default
+		// Only validate them if they have content
+		const isAgeValid = !petAge || petAge === 'Not Provided' || !isNaN(petAge);
+		const isWeightValid = !petWeight || petWeight === 'Not Provided' || !isNaN(petWeight);
+		const isBreedValid = !petBreed || petBreed === null || petBreed.trim() !== '';
 		
-		// For allergies and notes, they're optional so they're valid if empty or have content
-		const isAllergiesValid = !petAllergies || petAllergies.trim() === '' || petAllergies === 'None';
-		const isNotesValid = !petNotes || petNotes.trim() === '' || petNotes === 'None';
-
-		return isAgeValid && isWeightValid && isBreedValid && isAllergiesValid && isNotesValid;
+		// Allergies and notes are always valid since they're optional
+		return isAgeValid && isWeightValid && isBreedValid;
 	};
 
 	return (

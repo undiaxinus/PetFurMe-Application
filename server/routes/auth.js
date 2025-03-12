@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const mysql = require('mysql2/promise');
-const config = require('../config/database');
+const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 
 // Move CORS middleware to the top
@@ -29,14 +29,11 @@ const transporter = nodemailer.createTransport({
 router.post('/verify-email', async (req, res) => {
   try {
     const { email } = req.body;
-    const connection = await mysql.createConnection(config);
-
-    const [rows] = await connection.execute(
+    
+    const [rows] = await pool.execute(
       'SELECT * FROM users WHERE email = ?',
-      [email]
+      [email.trim()]
     );
-
-    await connection.end();
 
     if (rows.length === 0) {
       return res.json({ exists: false });
@@ -69,8 +66,6 @@ router.post('/verify-otp', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
-
     try {
       // Log the actual values being checked
       console.log('Checking database with values:', {
@@ -78,7 +73,7 @@ router.post('/verify-otp', async (req, res) => {
         otp: otp.toString().trim()
       });
 
-      const [rows] = await connection.execute(
+      const [rows] = await pool.execute(
         `SELECT * FROM password_resets 
          WHERE email = ? 
          AND otp = ?
@@ -96,7 +91,7 @@ router.post('/verify-otp', async (req, res) => {
       }
 
       // If OTP is valid, clear it from the database
-      await connection.execute(
+      await pool.execute(
         'DELETE FROM password_resets WHERE email = ?',
         [email.trim()]
       );
@@ -105,8 +100,13 @@ router.post('/verify-otp', async (req, res) => {
         success: true,
         message: 'OTP verified successfully'
       });
-    } finally {
-      await connection.end();
+    } catch (innerError) {
+      console.error('Database operation error:', {
+        message: innerError.message,
+        stack: innerError.stack,
+        code: innerError.code
+      });
+      throw innerError; // Re-throw to be caught by outer catch block
     }
   } catch (error) {
     console.error('Detailed verify-otp error:', {
@@ -136,38 +136,32 @@ router.post('/send-otp', async (req, res) => {
 
         // Generate 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const connection = await mysql.createConnection(config);
+        // Store OTP in database
+        await pool.execute(
+            'INSERT INTO password_resets (email, otp, created_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE otp = ?, created_at = NOW()',
+            [email.trim(), otp, otp]
+        );
 
-        try {
-            // Store OTP in database
-            await connection.execute(
-                'INSERT INTO password_resets (email, otp, created_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE otp = ?, created_at = NOW()',
-                [email.trim(), otp, otp]
-            );
+        // Send email with OTP
+        const mailOptions = {
+            from: 'petmanagementt@gmail.com',
+            to: email.trim(),
+            subject: 'Email Verification OTP',
+            html: `
+                <h1>Email Verification</h1>
+                <p>Your verification code is: <strong>${otp}</strong></p>
+                <p>This code will expire in 10 minutes.</p>
+                <p>If you didn't request this, please ignore this email.</p>
+            `
+        };
 
-            // Send email with OTP
-            const mailOptions = {
-                from: 'petmanagementt@gmail.com',
-                to: email.trim(),
-                subject: 'Email Verification OTP',
-                html: `
-                    <h1>Email Verification</h1>
-                    <p>Your verification code is: <strong>${otp}</strong></p>
-                    <p>This code will expire in 10 minutes.</p>
-                    <p>If you didn't request this, please ignore this email.</p>
-                `
-            };
+        await transporter.sendMail(mailOptions);
+        console.log('Successfully sent OTP email to:', email.trim());
 
-            await transporter.sendMail(mailOptions);
-            console.log('Successfully sent OTP email to:', email.trim());
-
-            res.json({ 
-                success: true,
-                message: 'OTP sent successfully'
-            });
-        } finally {
-            await connection.end();
-        }
+        res.json({ 
+            success: true,
+            message: 'OTP sent successfully'
+        });
     } catch (error) {
         console.error('Detailed error:', {
             message: error.message,
@@ -197,51 +191,45 @@ router.post('/reset-password', async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection(config);
+    // First verify if user exists
+    const [users] = await pool.execute(
+      'SELECT * FROM users WHERE email = ?',
+      [email.trim()]
+    );
 
-    try {
-      // First verify if user exists
-      const [users] = await connection.execute(
-        'SELECT * FROM users WHERE email = ?',
-        [email.trim()]
-      );
-
-      if (users.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'User not found'
-        });
-      }
-
-      // Hash the new password
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      console.log('Password hashed successfully');
-
-      // Update the user's password
-      const [result] = await connection.execute(
-        'UPDATE users SET password = ? WHERE email = ?',
-        [hashedPassword, email.trim()]
-      );
-
-      console.log('Password update result:', {
-        affectedRows: result.affectedRows,
-        email: email.trim()
+    if (users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
       });
-
-      if (result.affectedRows === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'Failed to update password'
-        });
-      }
-
-      res.json({
-        success: true,
-        message: 'Password updated successfully'
-      });
-    } finally {
-      await connection.end();
     }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log('Password hashed successfully');
+
+    // Update the user's password
+    const [result] = await pool.execute(
+      'UPDATE users SET password = ? WHERE email = ?',
+      [hashedPassword, email.trim()]
+    );
+
+    console.log('Password update result:', {
+      affectedRows: result.affectedRows,
+      email: email.trim()
+    });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Failed to update password'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Password updated successfully'
+    });
   } catch (error) {
     console.error('Detailed reset password error:', {
       message: error.message,
@@ -304,4 +292,4 @@ router.use((req, res, next) => {
   next();
 });
 
-module.exports = router; 
+module.exports = router;

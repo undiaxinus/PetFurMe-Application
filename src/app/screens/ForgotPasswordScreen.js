@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -23,10 +23,34 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // Update API URL configuration to match your server setup
   const API_URL = Platform.select({
     ios: 'http://localhost:3001',
-    android: `http://${SERVER_IP}:3001`,
+    android: `http://${SERVER_IP}:${SERVER_PORT}`,
+    web: BASE_URL || `http://${SERVER_IP}:${SERVER_PORT}`
+  });
+
+  // Add debug logging
+  useEffect(() => {
+    console.log('ForgotPasswordScreen initialized with API_URL:', API_URL);
+    console.log('Environment:', {
+      Platform: Platform.OS,
+      SERVER_IP,
+      SERVER_PORT,
+      BASE_URL
+    });
+  }, []);
+
+  // Create axios instance with proper configuration
+  const axiosInstance = axios.create({
+    baseURL: API_URL,
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
   });
 
   const handleSendOTP = async () => {
@@ -39,10 +63,21 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('Please enter a valid email address');
+        return;
+      }
+
+      console.log('Sending email verification request to:', `${API_URL}/api/verify-email`);
+      
       // First, verify if the email exists
-      const verifyResponse = await axios.post(`${API_URL}/api/verify-email`, {
+      const verifyResponse = await axiosInstance.post('/api/verify-email', {
         email: email.trim()
       });
+
+      console.log('Email verification response:', verifyResponse.data);
 
       if (!verifyResponse.data.exists) {
         setError('Email address not found. Please check your email or register.');
@@ -50,17 +85,39 @@ const ForgotPasswordScreen = ({ navigation }) => {
       }
 
       // If email exists, proceed with sending OTP
-      const response = await axios.post(`${API_URL}/api/send-otp`, {
+      console.log('Sending OTP request to:', `${API_URL}/api/send-otp`);
+      
+      const response = await axiosInstance.post('/api/send-otp', {
         email: email.trim()
       });
 
+      console.log('OTP request response:', response.data);
+
       if (response.data.success) {
+        Alert.alert(
+          'OTP Sent',
+          'A verification code has been sent to your email address.',
+          [{ text: 'OK' }]
+        );
         setStep(2);
       } else {
         setError(response.data.error || 'Failed to send OTP');
       }
     } catch (error) {
-      setError(error.response?.data?.error || 'Failed to send OTP. Please try again.');
+      console.error('Send OTP error:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        config: error.config
+      });
+      
+      if (error.code === 'ECONNABORTED') {
+        setError('Connection timed out. Please try again.');
+      } else if (error.code === 'ERR_NETWORK') {
+        setError(`Network error. Please check if the server is running at ${SERVER_IP}:${SERVER_PORT}`);
+      } else {
+        setError(error.response?.data?.error || 'Failed to send OTP. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -76,12 +133,13 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
-      console.log('Sending OTP verification request:', {
+      console.log('Sending OTP verification request to:', `${API_URL}/api/verify-otp`);
+      console.log('OTP verification data:', {
         email,
-        otp
+        otp: otp.trim()
       });
 
-      const response = await axios.post(`${API_URL}/api/verify-otp`, {
+      const response = await axiosInstance.post('/api/verify-otp', {
         email,
         otp: otp.trim()
       });
@@ -96,9 +154,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
     } catch (error) {
       console.error('OTP verification error:', {
         message: error.message,
-        response: error.response?.data
+        code: error.code,
+        response: error.response?.data,
+        config: error.config
       });
-      setError(error.response?.data?.error || 'Failed to verify OTP');
+      
+      if (error.code === 'ECONNABORTED') {
+        setError('Connection timed out. Please try again.');
+      } else if (error.code === 'ERR_NETWORK') {
+        setError(`Network error. Please check if the server is running at ${SERVER_IP}:${SERVER_PORT}`);
+      } else {
+        setError(error.response?.data?.error || 'Failed to verify OTP. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -119,35 +186,38 @@ const ForgotPasswordScreen = ({ navigation }) => {
         return;
       }
 
-      console.log('Sending reset password request:', {
+      // Password strength validation (minimum 6 characters)
+      if (newPassword.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return;
+      }
+
+      console.log('Sending reset password request to:', `${API_URL}/api/reset-password`);
+      console.log('Reset password data:', {
         email,
         hasPassword: !!newPassword
       });
 
-      const response = await axios.post(`${API_URL}/api/reset-password`, {
+      const response = await axiosInstance.post('/api/reset-password', {
         email: email.trim(),
         newPassword
       });
-
+      
       console.log('Reset password response:', response.data);
 
       if (response.data.success) {
-        Alert.alert(
-          'Success',
-          'Password has been reset successfully',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.replace('LoginScreen')
-            }
-          ]
-        );
+        setLoading(false);
+        
+        // Directly navigate to login screen without alert
+        navigation.navigate('LoginScreen');
+        return;
       } else {
         setError(response.data.error || 'Failed to reset password');
       }
     } catch (error) {
-      console.error('Reset password error:', error.response?.data || error.message);
-      setError(error.response?.data?.error || 'Failed to reset password');
+      // Error handling remains the same
+      console.error('Reset password error:', error);
+      setError('Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -195,6 +265,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 placeholderTextColor="#8146C1"
               />
             </View>
+            <TouchableOpacity onPress={handleSendOTP} style={styles.resendLink}>
+              <Text style={styles.resendText}>Didn't receive code? Resend OTP</Text>
+            </TouchableOpacity>
           </>
         );
 
@@ -230,9 +303,16 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showConfirmPassword}
                 placeholderTextColor="#8146C1"
               />
+              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                <Ionicons
+                  name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color="#8146C1"
+                />
+              </TouchableOpacity>
             </View>
           </>
         );
@@ -271,8 +351,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.formContainer}>
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
         {renderStep()}
+        
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
         
         <TouchableOpacity
           style={[styles.actionButton, loading && styles.disabledButton]}
@@ -285,20 +366,24 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={styles.actionButtonText}>{getButtonText()}</Text>
           )}
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.backToLoginButton}
+          onPress={() => navigation.navigate('LoginScreen')}
+        >
+          <Text style={styles.backToLoginText}>Back to Login</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          if (step > 1) {
-            setStep(step - 1);
-          } else {
-            navigation.goBack();
-          }
-        }}
-      >
-        <Text style={styles.backButtonText}>⬅ Back</Text>
-      </TouchableOpacity>
+      {step > 1 && (
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => setStep(step - 1)}
+        >
+          <Ionicons name="arrow-back" size={24} color="#8146C1" />
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -306,31 +391,29 @@ const ForgotPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   logo: {
-    width: 180,
-    height: 180,
-    resizeMode: 'contain',
+    width: 130,
+    height: 130,
   },
   formContainer: {
-    width: '100%',
+    width: '90%',
     padding: 20,
     backgroundColor: '#D1ACDA',
-    borderRadius: 20,
+    borderRadius: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 8,
-    marginBottom: 20,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
     fontSize: 24,
@@ -341,61 +424,80 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 14,
-    color: '#666',
+    color: '#333',
     textAlign: 'center',
     marginBottom: 20,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#8146C1',
-    borderRadius: 12,
+    borderRadius: 10,
     backgroundColor: '#F5F5F5',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    height: 50,
   },
   icon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   input: {
     flex: 1,
     fontSize: 16,
     color: '#8146C1',
-    paddingVertical: 8,
   },
   actionButton: {
     backgroundColor: '#8146C1',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingVertical: 12,
     alignItems: 'center',
-    marginTop: 20,
-    width: '50%',
-    alignSelf: 'center',
+    marginTop: 10,
   },
   actionButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  disabledButton: {
+    opacity: 0.7,
+  },
   errorText: {
     color: '#FF0000',
     textAlign: 'center',
-    marginBottom: 10,
+    marginVertical: 10,
+  },
+  resendLink: {
+    alignSelf: 'center',
+    marginTop: -10,
+    marginBottom: 15,
+  },
+  resendText: {
+    color: '#8146C1',
     fontSize: 14,
+    textDecorationLine: 'underline',
+  },
+  backToLoginButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  backToLoginText: {
+    color: '#8146C1',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   backButton: {
-    marginTop: 20,
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   backButtonText: {
     color: '#8146C1',
     fontSize: 16,
-    fontWeight: '500',
-  },
-  disabledButton: {
-    opacity: 0.7,
+    marginLeft: 5,
   },
 });
 
-export default ForgotPasswordScreen; 
+export default ForgotPasswordScreen;

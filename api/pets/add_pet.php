@@ -54,9 +54,17 @@ try {
     $data['age'] = $data['age'] ?? null; // Allow age to be null
     $data['age_unit'] = $data['age_unit'] ?? 'years'; // Default to 'years' if not provided
 
-    // Prepare the query
+    // Handle photo data first
+    $photo_data = null;
+    if (isset($_POST['photo_binary']) && isset($_POST['is_base64'])) {
+        // Convert base64 to binary
+        $photo_data = base64_decode($_POST['photo_binary']);
+        error_log("Photo data processed successfully");
+    }
+
+    // Prepare the query including photo column
     $query = "INSERT INTO pets (user_id, created_by, name, type, breed, age, gender, weight, size, allergies, notes, category, photo) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
     
     $stmt = $db->prepare($query);
     if (!$stmt) {
@@ -64,14 +72,15 @@ try {
     }
 
     // Bind parameters
-    $weight = $data['weight'] ?? null; // Ensure this is a variable
-    $size = isset($data['size']) && $data['size'] !== '' ? $data['size'] : 'unknown'; // Set to 'unknown' if not provided
-    $allergies = $data['allergies'] ?? null; // Ensure this is a variable
-    $notes = $data['notes'] ?? null;         // Ensure this is a variable
-    $photo = $data['photo'] ?? null;         // Ensure this is a variable
+    $weight = $data['weight'] ?? null;
+    $size = isset($data['size']) && $data['size'] !== '' ? $data['size'] : 'unknown';
+    $allergies = $data['allergies'] ?? null;
+    $notes = $data['notes'] ?? null;
 
     // Log the parameters being bound
-    error_log("Binding parameters: " . json_encode([
+    error_log("Binding parameters for pet insertion");
+
+    $stmt->bind_param("iisssisssssbs",
         $data['user_id'],
         $data['created_by'],
         $data['name'],
@@ -80,44 +89,11 @@ try {
         $data['age'],
         $data['gender'],
         $weight,
-        $size, // This will now be 'unknown' if not provided
+        $size,
         $allergies,
         $notes,
         $data['category'],
-        $photo
-    ]));
-
-    // Log the types of parameters being bound
-    error_log("Types: " . json_encode([
-        gettype($data['user_id']),
-        gettype($data['created_by']),
-        gettype($data['name']),
-        gettype($data['type']),
-        gettype($data['breed']),
-        gettype($data['age']),
-        gettype($data['gender']),
-        gettype($weight),
-        gettype($size),
-        gettype($allergies),
-        gettype($notes),
-        gettype($data['category']),
-        gettype($photo)
-    ]));
-
-    $stmt->bind_param("iisssisssssss",
-        $data['user_id'],
-        $data['created_by'],
-        $data['name'],
-        $data['type'],
-        $data['breed'],
-        $data['age'],
-        $data['gender'],
-        $weight,
-        $size, // This will now be 'unknown' if not provided
-        $allergies,
-        $notes,
-        $data['category'],
-        $photo // Ensure this is a variable
+        $photo_data
     );
 
     // Execute the statement
@@ -127,29 +103,6 @@ try {
             'message' => 'Pet added successfully',
             'pet_id' => $db->insert_id
         ]);
-
-        // Inside the try block where photo is handled
-        if (isset($_POST['photo_binary']) && isset($_POST['is_base64'])) {
-            // Convert base64 to binary
-            $binary_data = base64_decode($_POST['photo_binary']);
-            
-            // Update the SQL query to include photo_data
-            $sql = "UPDATE pets SET photo_data = ? WHERE id = ? AND user_id = ?";
-            $stmt = $db->prepare($sql);
-            
-            if (!$stmt) {
-                throw new Exception("Failed to prepare statement: " . $db->error);
-            }
-            
-            $stmt->bind_param("bii", $binary_data, $db->insert_id, $data['user_id']);
-            
-            if (!$stmt->execute()) {
-                throw new Exception("Failed to store photo data: " . $stmt->error);
-            }
-            
-            // Log success
-            error_log("Successfully stored binary image data for pet ID: " . $db->insert_id);
-        }
     } else {
         throw new Exception("Failed to insert pet data: " . $stmt->error);
     }
@@ -162,4 +115,4 @@ try {
         'error' => $e->getMessage()
     ]);
 }
-?> 
+?>

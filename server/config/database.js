@@ -2,8 +2,8 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
   host: 'localhost',
-  user: 'root',  // your database username
-  password: '',  // your database password
+  user: 'root',  // XAMPP default username
+  password: '',    // XAMPP default empty password
   database: 'pet-management',
   waitForConnections: true,
   connectionLimit: 10,
@@ -33,4 +33,4 @@ pool.getConnection()
     console.error('Error message:', err.message);
   });
 
-module.exports = pool; 
+module.exports = pool;

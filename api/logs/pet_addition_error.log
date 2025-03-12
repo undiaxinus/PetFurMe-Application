@@ -1590,3 +1590,78 @@ Stack trace:
 [02-Mar-2025 08:10:23 Europe/Berlin] Binding parameters: [108,108,"bvc","cat",null,null,"female",null,"unknown",null,null,"Cat",null]
 [02-Mar-2025 08:10:23 Europe/Berlin] Types: ["integer","integer","string","string","NULL","NULL","string","NULL","string","NULL","NULL","string","NULL"]
 [02-Mar-2025 08:10:23 Europe/Berlin] Successfully stored binary image data for pet ID: 66
+[12-Mar-2025 20:15:40 Europe/Berlin] Starting pet addition process
+[12-Mar-2025 20:15:40 Europe/Berlin] Attempting database connection to localhost/pet-management
+[12-Mar-2025 20:15:40 Europe/Berlin] Database connection successful
+[12-Mar-2025 20:15:40 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => cxv
+    [type] => bird
+    [breed] => 5
+    [age] => 1
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 343fds
+    [notes] => dfgfd
+    [category] => Bird
+    [gender] => female
+    [weight] => 2
+)
+
+[12-Mar-2025 20:15:40 Europe/Berlin] Binding parameters: [143,143,"cxv","bird","5",1,"female",2,"unknown","343fds","dfgfd","Bird",null]
+[12-Mar-2025 20:15:40 Europe/Berlin] Types: ["integer","integer","string","string","string","integer","string","integer","string","string","string","string","NULL"]
+[12-Mar-2025 20:15:40 Europe/Berlin] PHP Fatal error:  Uncaught Error: Cannot access uninitialized non-nullable property mysqli::$insert_id by reference in C:\xampp\htdocs\PetFurMe-Application\api\pets\add_pet.php:144
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 144
+[12-Mar-2025 20:22:05 Europe/Berlin] Starting pet addition process
+[12-Mar-2025 20:22:05 Europe/Berlin] Attempting database connection to localhost/pet-management
+[12-Mar-2025 20:22:05 Europe/Berlin] Database connection successful
+[12-Mar-2025 20:22:05 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => hehe
+    [type] => cat
+    [breed] => sdasd
+    [age] => 3
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => dsfsdfj djsfds
+    [notes] => dfdsfsd
+    [category] => Cat
+    [gender] => male
+    [weight] => 2
+)
+
+[12-Mar-2025 20:22:05 Europe/Berlin] Photo data processed successfully
+[12-Mar-2025 20:22:05 Europe/Berlin] Binding parameters for pet insertion
+[12-Mar-2025 20:22:05 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in C:\xampp\htdocs\PetFurMe-Application\api\pets\add_pet.php:83
+Stack trace:
+#0 C:\xampp\htdocs\PetFurMe-Application\api\pets\add_pet.php(83): mysqli_stmt->bind_param('iisssisssssb', 143, 143, 'hehe', 'cat', 'sdasd', 3, 'male', 2, 'unknown', 'dsfsdfj djsfds', 'dfdsfsd', 'Cat', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in C:\xampp\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 83
+[12-Mar-2025 20:25:43 Europe/Berlin] Starting pet addition process
+[12-Mar-2025 20:25:43 Europe/Berlin] Attempting database connection to localhost/pet-management
+[12-Mar-2025 20:25:43 Europe/Berlin] Database connection successful
+[12-Mar-2025 20:25:43 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => sdsad
+    [type] => dog
+    [breed] => dfsd
+    [age] => 3
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => vdssd
+    [notes] => dfdsf
+    [category] => Dog
+    [gender] => female
+    [weight] => 34
+)
+
+[12-Mar-2025 20:25:43 Europe/Berlin] Photo data processed successfully
+[12-Mar-2025 20:25:43 Europe/Berlin] Binding parameters for pet insertion
