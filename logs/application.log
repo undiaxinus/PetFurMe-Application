@@ -2219,42 +2219,42 @@ Stack trace:
 [26-Jan-2025 10:30:03 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:30:03 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:30:03 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:30:03 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:30:03 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 [26-Jan-2025 10:30:35 Europe/Berlin] Pet details script started
 [26-Jan-2025 10:30:35 Europe/Berlin] Request method: GET
 [26-Jan-2025 10:30:35 Europe/Berlin] GET params: {"pet_id":"212"}
 [26-Jan-2025 10:30:35 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:30:35 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:30:35 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:30:35 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:30:35 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 [26-Jan-2025 10:33:32 Europe/Berlin] Pet details script started
 [26-Jan-2025 10:33:32 Europe/Berlin] Request method: GET
 [26-Jan-2025 10:33:32 Europe/Berlin] GET params: {"pet_id":"212"}
 [26-Jan-2025 10:33:32 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:33:32 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:33:32 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:33:32 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:33:32 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 [26-Jan-2025 10:33:37 Europe/Berlin] Pet details script started
 [26-Jan-2025 10:33:37 Europe/Berlin] Request method: GET
 [26-Jan-2025 10:33:37 Europe/Berlin] GET params: {"pet_id":"212"}
 [26-Jan-2025 10:33:37 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:33:37 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:33:37 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:33:37 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:33:37 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 [26-Jan-2025 10:34:14 Europe/Berlin] Pet details script started
 [26-Jan-2025 10:34:14 Europe/Berlin] Request method: GET
 [26-Jan-2025 10:34:14 Europe/Berlin] GET params: {"pet_id":"212"}
 [26-Jan-2025 10:34:14 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:34:14 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:34:14 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:34:14 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:34:14 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 [26-Jan-2025 10:35:13 Europe/Berlin] Pet details script started
 [26-Jan-2025 10:35:13 Europe/Berlin] Request method: GET
 [26-Jan-2025 10:35:13 Europe/Berlin] GET params: {"pet_id":"212"}
 [26-Jan-2025 10:35:13 Europe/Berlin] Processing request for pet_id: 212
 [26-Jan-2025 10:35:13 Europe/Berlin] Database connection successful
 [26-Jan-2025 10:35:13 Europe/Berlin] Pet found: {"id":212,"user_id":107,"name":"hdcbx","breed":"dbdbs","age":5,"owner_name":null,"allergies":"dbdbf","notes":"dbdnd","category":"bird","created_at":"2025-01-26 17:04:39","updated_at":"2025-01-26 17:04:39","gender":"male","weight":8,"photo":"uploads\/pet_photos\/6795faa7b930f.jpg","type":"bird","size":"extra large"}
-[26-Jan-2025 10:35:13 Europe/Berlin] Photo URL constructed: http:// 192.168.1.13/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
+[26-Jan-2025 10:35:13 Europe/Berlin] Photo URL constructed: http:// 192.168.6.198/PetFurMe-Application/uploads/pet_photos/6795faa7b930f.jpg
 
 [2025-02-11 02:41:54][INFO][LogMigration] Migrating logs from error.log - Data: [17-Jan-2025 15:41:17 Europe/Berlin] === New Request to check_profile_status.php ===
 [17-Jan-2025 15:41:17 Europe/Berlin] Request URI: /PetFurMe-Application/api/users/check_profile_status.php?user_id=104

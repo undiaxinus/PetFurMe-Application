@@ -37,23 +37,48 @@ try {
         throw new Exception("User ID is required");
     }
 
-    // Handle file upload
+    // Initialize photo variables
+    $photo_binary = null;
     $photo_path = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../../uploads/user_photos/';
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
+    $upload_dir = '../../uploads/user_photos/';
 
-        $filename = basename($_FILES['photo']['name']);
+    // Ensure upload directory exists
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
+    // Handle file upload
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        // Generate unique filename
+        $filename = 'user_' . $jsonData['user_id'] . '_' . time() . '.png';
         $target_path = $upload_dir . $filename;
 
+        // Get binary data from uploaded file
+        $photo_binary = file_get_contents($_FILES['photo']['tmp_name']);
+        
+        // Save physical file
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_path)) {
             $photo_path = 'user_photos/' . $filename;
-            error_log("Photo uploaded successfully: " . $photo_path);
+            chmod($target_path, 0666); // Set proper permissions
+            error_log("Photo saved successfully at: " . $target_path);
         } else {
-            error_log("Failed to upload photo");
-            throw new Exception("Failed to upload photo");
+            error_log("Failed to move uploaded file to: " . $target_path);
+            throw new Exception("Failed to save photo file");
+        }
+    }
+    // Handle base64 image data
+    else if (isset($jsonData['photo_base64'])) {
+        $photo_binary = base64_decode($jsonData['photo_base64']);
+        $filename = 'user_' . $jsonData['user_id'] . '_' . time() . '.png';
+        $target_path = $upload_dir . $filename;
+        
+        if (file_put_contents($target_path, $photo_binary)) {
+            $photo_path = 'user_photos/' . $filename;
+            chmod($target_path, 0666);
+            error_log("Base64 photo saved successfully");
+        } else {
+            error_log("Failed to save base64 photo");
+            throw new Exception("Failed to save base64 photo");
         }
     }
 
@@ -87,12 +112,11 @@ try {
         $types .= "s";
     }
 
-    // Add photo path to update
-    if ($photo_path || isset($jsonData['photo'])) {
+    // Add photo binary data if available
+    if ($photo_binary !== null) {
         $updates[] = "photo = ?";
-        $params[] = $photo_path ?? $jsonData['photo'];
-        $types .= "s";
-        error_log("Adding photo to update: " . ($photo_path ?? $jsonData['photo']));
+        $params[] = $photo_binary;
+        $types .= "b"; // 'b' for BLOB data
     }
 
     // Add user_id to parameters
@@ -123,10 +147,15 @@ try {
     $result = $select_stmt->get_result();
     $updated_data = $result->fetch_assoc();
 
+    // Convert BLOB to base64 for response
+    if (isset($updated_data['photo'])) {
+        $updated_data['photo'] = base64_encode($updated_data['photo']);
+    }
+
     $response = [
         'success' => true,
         'message' => 'Profile updated successfully',
-        'photo_path' => $photo_path ?? $jsonData['photo'],
+        'photo_path' => $photo_path,
         'updated_data' => $updated_data
     ];
 

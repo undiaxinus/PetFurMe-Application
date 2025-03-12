@@ -13,7 +13,7 @@ try {
 
     $user_id = $_GET['user_id'];
     
-    // Specifically handle MEDIUMBLOB data
+    // Specifically handle BLOB data
     $query = "SELECT photo FROM users WHERE id = ?";
     $stmt = $db->prepare($query);
     
@@ -32,15 +32,13 @@ try {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
-        // Handle MEDIUMBLOB photo data
+        // Handle BLOB photo data
         if ($row['photo'] !== null) {
-            // Get the raw MEDIUMBLOB data
+            // Get the raw BLOB data
             $blobData = $row['photo'];
-            error_log("BLOB data length: " . strlen($blobData));
             
-            // Convert MEDIUMBLOB to base64
+            // Convert BLOB to base64
             $base64Image = base64_encode($blobData);
-            error_log("Base64 length: " . strlen($base64Image));
             
             $response = [
                 'success' => true,

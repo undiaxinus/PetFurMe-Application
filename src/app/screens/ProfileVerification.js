@@ -73,45 +73,27 @@ const ProfileVerification = ({ navigation, route }) => {
         setIsLoading(true);
         try {
             const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${user_id}`;
-            console.log("Fetching user data from:", url);
-
-            const response = await axios.get(url, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    t: Date.now() // Cache busting
-                }
-            });
-
-            console.log("Full API Response:", response.data);
+            const response = await axios.get(url);
 
             if (response.data.success && response.data.profile) {
                 const userData = response.data.profile;
                 
-                // Update state with user data
                 setName(userData.name || '');
                 setEmail(userData.email || '');
                 setPhoneNumber(userData.phone || '');
                 setAddress(userData.address || '');
 
-                // Handle photo
+                // Handle blob photo
                 if (userData.photo) {
-                    const photoUrl = `${API_BASE_URL}/uploads/${userData.photo}`;
-                    console.log("Photo URL:", photoUrl);
-                    
+                    // Convert blob to base64
+                    const base64Image = `data:image/jpeg;base64,${userData.photo}`;
                     setProfilePhoto({
-                        uri: photoUrl,
-                        headers: {
-                            'Cache-Control': 'no-cache'
-                        }
+                        uri: base64Image
                     });
                 } else {
                     setProfilePhoto(null);
                 }
 
-                // Store in AsyncStorage
                 await AsyncStorage.setItem('userData', JSON.stringify({
                     user_id,
                     ...userData
@@ -163,70 +145,56 @@ const ProfileVerification = ({ navigation, route }) => {
     };
 
     const handleUpdateInfo = async () => {
-        setIsLoading(true);
         try {
-            console.log('Starting profile update with data:', {
-                name,
-                address,
-                phoneNumber,
-                email,
-                profilePhoto
-            });
+            setIsLoading(true);
+            console.log('Starting update process...');
+
+            // Validate only the truly required fields
+            if (!name.trim()) {
+                Alert.alert("Error", "Name is required.");
+                return;
+            }
+
+            if (!email.trim()) {
+                Alert.alert("Error", "Email is required.");
+                return;
+            }
+
+            if (!phoneNumber.trim()) {
+                Alert.alert("Error", "Phone number is required.");
+                return;
+            }
+
+            console.log('Starting profile update');
 
             const formData = new FormData();
-            
-            // Only include fields that have values
-            const userData = {};
-            
-            if (name !== undefined) userData.name = name.trim();
-            if (address !== undefined) userData.address = address.trim();
-            if (phoneNumber !== undefined) userData.phone = phoneNumber.trim();
-            if (email !== undefined) userData.email = email.trim();
-            userData.user_id = user_id;
+            const userData = {
+                user_id: user_id,
+                name: name?.trim(),
+                address: address?.trim(),
+                phone: phoneNumber?.trim(),
+                email: email?.trim()
+            };
 
             // Handle profile photo
             if (profilePhoto?.uri) {
-                const localUri = profilePhoto.uri;
-                let filename;
-                
-                // Handle base64 image
-                if (localUri.startsWith('data:image')) {
-                    const ext = 'png';
-                    filename = `user_${user_id}_${Date.now()}.${ext}`;
-                    
-                    // Convert base64 to blob
-                    const base64Data = localUri.split(',')[1];
-                    const byteCharacters = atob(base64Data);
-                    const byteArrays = [];
-                    
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteArrays.push(byteCharacters.charCodeAt(i));
-                    }
-                    
-                    const blob = new Blob([new Uint8Array(byteArrays)], { type: 'image/png' });
-                    
-                    // Append to formData
-                    formData.append('photo', blob, filename);
-                    userData.photo = `user_photos/${filename}`;
-                } else {
-                    // Handle file URI
-                    filename = localUri.split('/').pop();
+                // For local files (from image picker)
+                if (profilePhoto.uri.startsWith('file://')) {
                     formData.append('photo', {
-                        uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                        uri: profilePhoto.uri,
                         type: 'image/jpeg',
-                        name: filename
+                        name: 'user_photo.jpg'
                     });
-                    userData.photo = `user_photos/${filename}`;
+                } 
+                // For base64 images (from API or previous upload)
+                else if (profilePhoto.uri.startsWith('data:image')) {
+                    userData.photo_base64 = profilePhoto.uri.split(',')[1];
                 }
-                console.log('Photo path to be saved:', userData.photo);
             }
 
-            console.log('Sending user data:', userData);
             formData.append('data', JSON.stringify(userData));
 
             const updateUrl = `${API_BASE_URL}/api/users/update_user_data.php`;
-            console.log('Sending update request to:', updateUrl);
-
             const response = await axios.post(
                 updateUrl,
                 formData,
