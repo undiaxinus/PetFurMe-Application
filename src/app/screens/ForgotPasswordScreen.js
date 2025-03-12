@@ -202,46 +202,22 @@ const ForgotPasswordScreen = ({ navigation }) => {
         email: email.trim(),
         newPassword
       });
-
+      
       console.log('Reset password response:', response.data);
 
       if (response.data.success) {
-        // Show success alert and navigate to login screen
-        Alert.alert(
-          'Success',
-          'Password has been reset successfully!',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                console.log('Navigating to LoginScreen after password reset');
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'LoginScreen' }],
-                });
-              }
-            }
-          ],
-          { cancelable: false }
-        );
+        setLoading(false);
+        
+        // Directly navigate to login screen without alert
+        navigation.navigate('LoginScreen');
+        return;
       } else {
         setError(response.data.error || 'Failed to reset password');
       }
     } catch (error) {
-      console.error('Reset password error:', {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data,
-        config: error.config
-      });
-      
-      if (error.code === 'ECONNABORTED') {
-        setError('Connection timed out. Please try again.');
-      } else if (error.code === 'ERR_NETWORK') {
-        setError(`Network error. Please check if the server is running at ${SERVER_IP}:${SERVER_PORT}`);
-      } else {
-        setError(error.response?.data?.error || 'Failed to reset password. Please try again.');
-      }
+      // Error handling remains the same
+      console.error('Reset password error:', error);
+      setError('Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
     }
