@@ -20,6 +20,9 @@ error_log("Request URI: " . $_SERVER['REQUEST_URI']);
 error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
 error_log("User ID: " . ($_GET['user_id'] ?? 'not set'));
 
+// Include the centralized Logger at the top
+require_once __DIR__ . '/../utils/Logger.php';
+
 try {
     // Clear any buffered output
     ob_clean();
@@ -175,9 +178,19 @@ try {
     error_log("Sending success response: " . json_encode($response));
     echo json_encode($response);
 
+    // Instead of error_log or custom debug functions, use:
+    Logger::info("Checking profile status for user ID: " . $user_id);
+    
+    // Debug information only when needed
+    if (DEBUG_ENABLED) {
+        Logger::debug("Profile data:", $response);
+    }
+    
 } catch (Exception $e) {
-    error_log("ERROR in check_profile_status.php: " . $e->getMessage());
-    error_log("Stack trace: " . $e->getTraceAsString());
+    Logger::error("Exception in profile check", [
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
     
     // Ensure clean output buffer
     ob_clean();

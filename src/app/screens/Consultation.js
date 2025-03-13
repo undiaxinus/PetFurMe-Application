@@ -183,6 +183,18 @@ const Consultation = ({ navigation, route }) => {
     checkSession();
   }, [user_id, isRescheduling, originalAppointment]);
 
+  useEffect(() => {
+    // Log the route params to understand what we're getting
+    if (isRescheduling) {
+      console.log('Rescheduling is true');
+      console.log('Original appointment data:', originalAppointment);
+      // Check if originalAppointment is just [object Object] string
+      if (typeof originalAppointment === 'string' && originalAppointment.includes('[object Object]')) {
+        console.error('Original appointment is not properly serialized');
+      }
+    }
+  }, []);
+
   const fetchUserPets = async () => {
     try {
       if (!user_id) {
@@ -375,13 +387,53 @@ const Consultation = ({ navigation, route }) => {
         appointment_time: moment(appointmentTime, 'HH:mm').format('HH:mm')
       };
 
-      // If rescheduling, include the original appointment ID
-      if (isRescheduling && originalAppointment) {
-        formattedAppointmentData.original_appointment_id = originalAppointment.id;
-        formattedAppointmentData.is_rescheduling = true;
+      // Choose the appropriate endpoint based on whether we're rescheduling or creating
+      let endpoint;
+      
+      // Enhanced rescheduling logic
+      if (isRescheduling) {
+        console.log('Processing rescheduling request with:', originalAppointment);
+        
+        // Try multiple ways to get the ID
+        let originalId = null;
+        
+        if (typeof originalAppointment === 'object' && originalAppointment !== null) {
+          originalId = originalAppointment.id || originalAppointment.appointment_id;
+          console.log('Found ID from object:', originalId);
+        } 
+        else if (typeof originalAppointment === 'string') {
+          // Try to parse if it's a JSON string
+          try {
+            const parsed = JSON.parse(originalAppointment);
+            originalId = parsed.id || parsed.appointment_id;
+            console.log('Found ID from parsed string:', originalId);
+          } catch (e) {
+            console.error('Failed to parse originalAppointment string:', e);
+          }
+        }
+        
+        if (!originalId) {
+          console.error('Could not extract original appointment ID');
+          Alert.alert(
+            'Error',
+            'Cannot reschedule - original appointment data is missing. Please try again or book a new appointment.'
+          );
+          setLoading(false);
+          return;
+        }
+        
+        // Use the reschedule endpoint instead of save endpoint
+        endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/reschedule.php`;
+        
+        // Add to the request data
+        formattedAppointmentData.original_appointment_id = originalId.toString();
+      } else {
+        // For new appointments, use the regular save endpoint
+        endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`;
       }
 
-      const endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`;
+      console.log('Sending appointment data to API:', formattedAppointmentData);
+      console.log('Using endpoint:', endpoint);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -392,7 +444,17 @@ const Consultation = ({ navigation, route }) => {
         body: JSON.stringify(formattedAppointmentData)
       });
 
-      const result = await response.json();
+      // Log the raw response for debugging
+      const responseText = await response.text();
+      console.log('Raw API response:', responseText);
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse API response as JSON:', e);
+        throw new Error('Invalid response from server');
+      }
 
       if (!result.success) {
         throw new Error(result.message || 'Failed to save appointment');
@@ -400,7 +462,11 @@ const Consultation = ({ navigation, route }) => {
 
       setLoading(false);
 
-      // Update success message for rescheduling
+      // Update success message
+      const alertTitle = isRescheduling 
+        ? 'Appointment Rescheduled Successfully! 🎉' 
+        : 'Appointment Booked Successfully! 🎉';
+
       const successMessage = [
         `${getFormattedDate()}`,
         `${getFormattedTime()}`,
@@ -409,7 +475,9 @@ const Consultation = ({ navigation, route }) => {
         `Service: ${reasons_for_visit.join(', ')}`,
         '',
         '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯',
-        'We will notify you once your appointment is confirmed.',
+        isRescheduling 
+          ? 'We will notify you once your rescheduled appointment is confirmed.'
+          : 'We will notify you once your appointment is confirmed.',
         '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯'
       ].join('\n');
 
@@ -418,12 +486,14 @@ const Consultation = ({ navigation, route }) => {
           text: 'View',
           onPress: async () => {
             try {
-              await logActivity(ACTIVITY_TYPES.APPOINTMENT_BOOKED, {
-                appointment_id: result.appointment_id,
-                pet_id: selectedPet,
-                appointment_date: appointmentDate,
-                reason_for_visit: reasons_for_visit
-              });
+              await logActivity(
+                isRescheduling ? ACTIVITY_TYPES.APPOINTMENT_RESCHEDULED : ACTIVITY_TYPES.APPOINTMENT_BOOKED, 
+                {
+                  appointment_id: result.appointment_id,
+                  pet_id: selectedPet,
+                  appointment_date: appointmentDate,
+                  reason_for_visit: reasons_for_visit
+                });
               
               setShowWebAlert(false);
               
@@ -435,19 +505,22 @@ const Consultation = ({ navigation, route }) => {
                 throw new Error('No user ID available');
               }
 
+              // Force refresh by adding timestamp and forceRefresh flag
               if (Platform.OS === 'web') {
-                // For web, use direct navigation instead of window.location
+                // For web platform
                 navigation.navigate('Appointment', {
                   user_id: currentUserId,
                   timestamp: Date.now(),
-                  fromConsultation: true
+                  fromConsultation: true,
+                  forceRefresh: true
                 });
               } else {
-                // For mobile
+                // For mobile platform with refresh
                 navigation.navigate('Appointment', {
                   user_id: currentUserId,
                   timestamp: Date.now(),
-                  fromConsultation: true
+                  fromConsultation: true,
+                  forceRefresh: true
                 });
               }
             } catch (error) {
@@ -459,27 +532,31 @@ const Consultation = ({ navigation, route }) => {
         {
           text: 'Home',
           onPress: () => {
-            logActivity(ACTIVITY_TYPES.BOOK_APPOINTMENT, {
-              appointment_id: result.appointment_id,
-              pet_id: selectedPet,
-              appointment_date: appointmentDate,
-              reason_for_visit: reasons_for_visit
-            });
+            logActivity(
+              isRescheduling ? ACTIVITY_TYPES.APPOINTMENT_RESCHEDULED : ACTIVITY_TYPES.APPOINTMENT_BOOKED,
+              {
+                appointment_id: result.appointment_id,
+                pet_id: selectedPet,
+                appointment_date: appointmentDate,
+                reason_for_visit: reasons_for_visit
+              }
+            );
             setShowWebAlert(false);
             // Modified navigation to match the expected URL format
             if (Platform.OS === 'web') {
-              // For web platform
+              // For web platform with refresh parameter
               const timestamp = Date.now();
-              window.location.href = `/home?user_id=${user_id}&timestamp=${timestamp}`;
+              window.location.href = `/home?user_id=${user_id}&timestamp=${timestamp}&refreshed=true`;
             } else {
-              // For mobile platforms
+              // For mobile platforms with refresh flag
               navigation.reset({
                 index: 0,
                 routes: [{ 
                   name: 'HomePage',
                   params: {
                     user_id: user_id,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    refreshed: true
                   }
                 }],
               });
@@ -489,7 +566,7 @@ const Consultation = ({ navigation, route }) => {
       ];
 
       showAlert(
-        'Appointment Booked Successfully! 🎉',
+        alertTitle,
         successMessage,
         alertButtons
       );
@@ -954,7 +1031,9 @@ const Consultation = ({ navigation, route }) => {
           ) : (
             <View style={styles.bookButtonContent}>
               <MaterialCommunityIcons name="calendar-check" size={24} color="#FFF" />
-              <Text style={styles.bookButtonText}>Book Appointment</Text>
+              <Text style={styles.bookButtonText}>
+                {isRescheduling ? "Reschedule Appointment" : "Book Appointment"}
+              </Text>
             </View>
           )}
         </TouchableOpacity>

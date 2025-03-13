@@ -7,36 +7,33 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 include_once '../config/Database.php';
 include_once '../models/Appointment.php';
 
+// Create database connection
 $database = new Database();
 $db = $database->connect();
 
+// Initialize appointment object with database connection
 $appointment = new Appointment($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
 try {
-    // Update the status of the original appointment to 'rescheduled'
-    $appointment->updateStatus($data->original_appointment_id, 'rescheduled');
+    // Validate required fields
+    if (!isset($data->original_appointment_id) || !isset($data->pet_id) || 
+        !isset($data->appointment_date) || !isset($data->appointment_time)) {
+        throw new Exception('Missing required fields for rescheduling');
+    }
     
-    // Create the new appointment
-    $appointment->user_id = $data->user_id;
-    $appointment->pet_id = $data->pet_id;
-    $appointment->pet_name = $data->pet_name;
-    $appointment->pet_type = $data->pet_type;
-    $appointment->pet_age = $data->pet_age;
-    $appointment->reason_for_visit = $data->reason_for_visit;
-    $appointment->appointment_date = $data->appointment_date;
-    $appointment->appointment_time = $data->appointment_time;
-    $appointment->status = 'pending';
-
-    if($appointment->create()) {
+    // Update the appointment with new details instead of creating a new one
+    $originalId = $data->original_appointment_id;
+    
+    if ($appointment->updateAppointment($originalId, $data)) {
         echo json_encode(array(
             'success' => true,
             'message' => 'Appointment rescheduled successfully',
-            'appointment_id' => $appointment->id
+            'appointment_id' => $originalId
         ));
     } else {
-        throw new Exception('Failed to create new appointment');
+        throw new Exception('Failed to reschedule appointment');
     }
 } catch(Exception $e) {
     echo json_encode(array(

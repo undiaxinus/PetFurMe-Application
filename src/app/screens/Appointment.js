@@ -81,6 +81,26 @@ const Appointment = ({ navigation, route }) => {
     checkSession();
   }, [route.params?.user_id]); // Only depend on user_id changes
 
+  useEffect(() => {
+    // Get appointments when the screen loads or when forceRefresh is passed
+    if (route.params?.forceRefresh) {
+      console.log('Force refreshing appointments due to rescheduling');
+      // Get the user ID from AsyncStorage or route params
+      AsyncStorage.getItem('user_id')
+        .then(storedUserId => {
+          const currentUserId = route.params?.user_id || storedUserId;
+          if (currentUserId) {
+            fetchAppointments(currentUserId);
+          } else {
+            console.error('No user ID available for refreshing appointments');
+          }
+        })
+        .catch(error => {
+          console.error('Error getting user ID for refresh:', error);
+        });
+    }
+  }, [route.params?.forceRefresh, route.params?.timestamp]);
+
   const fetchAppointments = async (userId) => {
     try {
       setLoading(true);

@@ -13,6 +13,11 @@ require_once '../config/Database.php';
 // Update the debugLog function
 function debugLog($message, $data = null) {
     try {
+        // Only log if debugging is enabled - you can control this with a constant or config
+        if (!defined('DEBUG_ENABLED') || !DEBUG_ENABLED) {
+            return;
+        }
+        
         $logMessage = "[" . date('Y-m-d H:i:s') . "] " . $message;
         if ($data !== null) {
             $logMessage .= "\nData: " . print_r($data, true);
@@ -33,6 +38,26 @@ function debugLog($message, $data = null) {
             chmod($logFile, 0777);
         }
         
+        // Implement log rotation - check file size
+        if (file_exists($logFile) && filesize($logFile) > 1024 * 1024) { // 1MB limit
+            $backupFile = $logFile . '.' . date('Y-m-d-H-i-s') . '.bak';
+            rename($logFile, $backupFile);
+            touch($logFile);
+            chmod($logFile, 0777);
+            
+            // Limit the number of backup files (keep last 5)
+            $backupFiles = glob($logDir . '/appointment_debug.log.*.bak');
+            if (count($backupFiles) > 5) {
+                usort($backupFiles, function($a, $b) {
+                    return filemtime($a) - filemtime($b);
+                });
+                $filesToDelete = array_slice($backupFiles, 0, count($backupFiles) - 5);
+                foreach ($filesToDelete as $fileToDelete) {
+                    unlink($fileToDelete);
+                }
+            }
+        }
+        
         // Add error logging to see if file is writable
         if (!is_writable($logFile)) {
             error_log("Log file is not writable: " . $logFile);
@@ -45,14 +70,17 @@ function debugLog($message, $data = null) {
     }
 }
 
-// Add initial debug log to test logging
-debugLog("Debug logging initialized");
+// Define DEBUG_ENABLED constant to control logging
+define('DEBUG_ENABLED', false); // Set to true only when debugging is needed
 
 // Wrap everything in an output buffer to catch any unexpected output
 ob_start();
 
 try {
-    debugLog("Starting appointment fetch process");
+    // Only log if debugging is enabled
+    if (DEBUG_ENABLED) {
+        debugLog("Starting appointment fetch process");
+    }
     
     if (!isset($_GET['user_id'])) {
         throw new Exception('User ID is required');
@@ -63,7 +91,10 @@ try {
         throw new Exception('Invalid user ID');
     }
 
-    debugLog("Processing request for user_id: " . $user_id);
+    // Log only in debug mode and only once per request
+    if (DEBUG_ENABLED) {
+        debugLog("Processing request for user_id: " . $user_id);
+    }
 
     $database = new Database();
     $db = $database->connect();
@@ -72,8 +103,8 @@ try {
         throw new Exception('Database connection failed');
     }
 
-    debugLog("Database connected successfully");
-
+    // Removed excessive debugging here
+    
     $query = "
         SELECT 
             a.id as appointment_id,
@@ -98,17 +129,15 @@ try {
         LIMIT 10
     ";
 
-    debugLog("Preparing query");
+    // We'll only keep critical logs and make them conditional
     $stmt = $db->prepare($query);
 
     if (!$stmt) {
         throw new Exception('Failed to prepare statement: ' . $db->error);
     }
 
-    debugLog("Binding parameters");
     $stmt->bind_param("i", $user_id);
 
-    debugLog("Executing query");
     if (!$stmt->execute()) {
         throw new Exception('Failed to execute query: ' . $stmt->error);
     }
@@ -120,7 +149,10 @@ try {
         $appointments[] = $row;
     }
     
-    debugLog("Fetched " . count($appointments) . " appointments");
+    // Log appointment count only when debugging
+    if (DEBUG_ENABLED && count($appointments) > 0) {
+        debugLog("Fetched " . count($appointments) . " appointments");
+    }
 
     // Process appointments
     $processed_appointments = [];
@@ -130,7 +162,8 @@ try {
             $appointment['reason'] = is_array($reason) ? $reason : [];
             $processed_appointments[] = $appointment;
         } catch (Exception $e) {
-            debugLog("Error processing appointment " . $appointment['appointment_id'] . ": " . $e->getMessage());
+            // Still log errors, even in production
+            error_log("Error processing appointment " . $appointment['appointment_id'] . ": " . $e->getMessage());
             $appointment['reason'] = [];
             $processed_appointments[] = $appointment;
         }
@@ -144,7 +177,10 @@ try {
         'appointments' => $processed_appointments
     ];
     
-    debugLog("Sending response: " . json_encode($response));
+    // Only log response in debug mode
+    if (DEBUG_ENABLED) {
+        debugLog("Sending response with " . count($processed_appointments) . " appointments");
+    }
     echo json_encode($response);
 
 } catch (Exception $e) {
@@ -152,15 +188,21 @@ try {
     
     $error_response = [
         'success' => false,
-        'message' => $e->getMessage(),
-        'debug_info' => [
+        'message' => $e->getMessage()
+    ];
+    
+    // In production, don't include detailed debug info
+    if (DEBUG_ENABLED) {
+        $error_response['debug_info'] = [
             'error' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine()
-        ]
-    ];
+        ];
+        
+        debugLog("Error occurred: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+    }
     
-    debugLog("Error occurred: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+    // Always log actual errors to error_log
     error_log("Appointment fetch error: " . $e->getMessage());
     
     echo json_encode($error_response);

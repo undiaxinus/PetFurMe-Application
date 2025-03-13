@@ -1,9 +1,12 @@
 <?php
 // Update error logging configuration
 error_reporting(E_ALL);
-ini_set('display_errors', 1); // Temporarily enable this for debugging
+ini_set('display_errors', 0); // Change to 0 for production
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../../logs/appointments.log'); // Use absolute path
+ini_set('error_log', __DIR__ . '/../../logs/appointments.log');
+
+// Add debug flag similar to get_upcoming.php
+define('DEBUG_ENABLED', false);
 
 // Add additional headers for debugging
 header('Access-Control-Allow-Origin: *');
@@ -20,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../config/Database.php';
 
 try {
-    error_log("=== New Appointment Request ===");
-    error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+    // Only log detailed request info when debugging
+    if (DEBUG_ENABLED) {
+        error_log("=== New Appointment Request ===");
+        error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+    }
     
     $database = new Database();
     $db = $database->connect();
@@ -32,7 +38,11 @@ try {
 
     // Get raw data
     $rawData = file_get_contents("php://input");
-    error_log("Raw request data: " . $rawData);
+    
+    // Only log raw data when debugging is enabled
+    if (DEBUG_ENABLED) {
+        error_log("Raw request data: " . $rawData);
+    }
     
     // Parse JSON
     $data = json_decode($rawData);
@@ -138,7 +148,11 @@ try {
         updated_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-    error_log("Preparing query: " . $query);
+    // Reduce query logging
+    if (DEBUG_ENABLED) {
+        error_log("Preparing query: " . $query);
+        error_log("Executing statement...");
+    }
     
     $stmt = $db->prepare($query);
     if (!$stmt) {
@@ -169,7 +183,10 @@ try {
         throw new Exception("Bind failed: " . $stmt->error);
     }
 
-    error_log("Executing statement...");
+    // Make this conditional
+    if (DEBUG_ENABLED) {
+        error_log("Executing statement...");
+    }
     if (!$stmt->execute()) {
         throw new Exception("Execute failed: " . $stmt->error);
     }
@@ -183,7 +200,10 @@ try {
         'appointment_id' => $appointment_id
     );
     
-    error_log("Success response: " . json_encode($response));
+    // Success response
+    if (DEBUG_ENABLED) {
+        error_log("Success response: " . json_encode($response));
+    }
     echo json_encode($response);
     
 } catch(Exception $e) {
