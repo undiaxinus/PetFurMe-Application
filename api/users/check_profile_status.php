@@ -123,68 +123,51 @@ try {
     }
 
     // Get profile details
-    $query = "SELECT name, email, phone, photo, complete_credentials, verified_by 
+    $query = "SELECT 
+                name, 
+                email, 
+                phone, 
+                photo, 
+                complete_credentials,
+                verified_by,
+                address 
               FROM users 
               WHERE id = ?";
+              
     $stmt = $db->prepare($query);
     
     if (!$stmt) {
-        throw new Exception("Failed to prepare profile statement: " . $db->error);
+        throw new Exception("Failed to prepare statement: " . $db->error);
     }
     
     $stmt->bind_param("i", $user_id);
     
     if (!$stmt->execute()) {
-        throw new Exception("Failed to execute profile statement: " . $stmt->error);
+        throw new Exception("Failed to execute statement: " . $stmt->error);
     }
     
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    error_log("Profile data retrieved: " . json_encode([
-        'name' => $row['name'] ?? null,
-        'email' => $row['email'] ?? null,
-        'phone' => $row['phone'] ?? null,
-        'hasPhoto' => !empty($row['photo']),
-        'complete_credentials' => $row['complete_credentials']
-    ]));
     
-    $isComplete = !empty($row['name']) && 
-                 !empty($row['email']) && 
-                 !empty($row['phone']) && 
-                 !empty($row['photo']);
+    if (!$row) {
+        throw new Exception("User not found");
+    }
     
-    error_log("Profile complete status: " . ($isComplete ? 'true' : 'false'));
-    
-    // Add more detailed logging
-    error_log("Checking profile status for user: " . $user_id);
-    error_log("Raw row data: " . json_encode($row));
-    error_log("Complete credentials value: " . $row['complete_credentials']);
-    
+    // Build response
     $response = [
         'success' => true,
-        'isProfileComplete' => $isComplete,
-        'user_id' => $user_id,
         'profile' => [
             'name' => $row['name'] ?? null,
             'email' => $row['email'] ?? null,
             'phone' => $row['phone'] ?? null,
-            'hasPhoto' => !empty($row['photo']),
+            'address' => $row['address'] ?? null,
             'photo' => $row['photo'] ?? null,
             'complete_credentials' => (int)$row['complete_credentials'],
-            'verified_by' => $row['verified_by'] ?? null
+            'verified_by' => $row['verified_by']
         ]
     ];
     
-    error_log("Sending success response: " . json_encode($response));
     echo json_encode($response);
-
-    // Instead of error_log or custom debug functions, use:
-    Logger::info("Checking profile status for user ID: " . $user_id);
-    
-    // Debug information only when needed
-    if (DEBUG_ENABLED) {
-        Logger::debug("Profile data:", $response);
-    }
     
 } catch (Exception $e) {
     Logger::error("Exception in profile check", [

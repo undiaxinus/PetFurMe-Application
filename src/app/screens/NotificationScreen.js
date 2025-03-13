@@ -8,7 +8,7 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
-import { Swipeable } from 'react-native-gesture-handler';
+import { useNotifications } from '../context/NotificationContext';
 
 // Add this at the top level
 const configureNotifications = Platform.OS === 'web' 
@@ -35,7 +35,8 @@ const NOTIFICATION_TYPES = {
   APPOINTMENT_REMINDER: 'appointment_reminder',
   NEW_PRODUCT: 'new_product',
   LOW_STOCK: 'low_stock',
-  CHECKUP_RESULT: 'checkup_result'
+  CHECKUP_RESULT: 'checkup_result',
+  APPOINTMENT_CONFIRMED: 'appointment_confirmed'
 };
 
 const NotificationScreen = ({ navigation, route }) => {
@@ -49,6 +50,7 @@ const NotificationScreen = ({ navigation, route }) => {
   const lastFetchRef = useRef(Date.now());
   const REFRESH_COOLDOWN = 1000;
   const [permissionStatus, setPermissionStatus] = useState('unknown');
+  const { updateNotificationStatus } = useNotifications();
 
   // Load notifications immediately when user_id is available
   useEffect(() => {
@@ -80,8 +82,10 @@ const NotificationScreen = ({ navigation, route }) => {
   // Set up auto-refresh separately
   useEffect(() => {
     if (user_id) {
+      // Check for new notifications every 30 seconds
       refreshIntervalRef.current = setInterval(() => {
         fetchNotifications(user_id);
+        checkAppointmentStatusChanges(user_id);
       }, 30000);
 
       // Request permissions after initial load
@@ -227,31 +231,33 @@ const NotificationScreen = ({ navigation, route }) => {
           created_at: notification.created_at
         }));
 
-        // Show only new notifications
-        const currentNotificationIds = notifications.map(n => n.id);
-        const newNotifications = formattedNotifications.filter(
-          notification => !notification.read && !currentNotificationIds.includes(notification.id)
-        );
-
-        // Show notifications for new items
-        newNotifications.forEach(notification => {
-          const data = JSON.parse(notification.data);
-          showLocalNotification(
-            notification.type.split('_').map(word => 
-              word.charAt(0).toUpperCase() + word.slice(1)
-            ).join(' '),
-            data.message
-          );
-        });
-
         setNotifications(formattedNotifications);
-        setError(null);
+        
+        // Update global notification status based on whether any notifications are unread
+        const hasUnread = formattedNotifications.some(notification => !notification.read);
+        updateNotificationStatus(hasUnread);
       }
     } catch (err) {
       console.error('Error fetching notifications:', err);
       setError('Failed to load notifications');
     } finally {
       setIsRefreshing(false);
+    }
+  };
+
+  const checkAppointmentStatusChanges = async (currentUserId) => {
+    try {
+      const response = await axios.get(
+        `http://${SERVER_IP}/PetFurMe-Application/api/appointments/check_status_changes.php?user_id=${currentUserId}`,
+        { timeout: 5000 }
+      );
+
+      if (response.data?.success && response.data.new_notifications > 0) {
+        // Fetch notifications again to get the new ones
+        await fetchNotifications(currentUserId);
+      }
+    } catch (err) {
+      console.error('Error checking appointment status changes:', err);
     }
   };
 
@@ -280,11 +286,14 @@ const NotificationScreen = ({ navigation, route }) => {
       console.log('Mark as read response:', response.data);
       
       if (response.data.success) {
-        setNotifications((prev) =>
-          prev.map((notification) =>
-            notification.id === id ? { ...notification, read: true } : notification
-          )
+        const updatedNotifications = notifications.map((notification) =>
+          notification.id === id ? { ...notification, read: true } : notification
         );
+        setNotifications(updatedNotifications);
+        
+        // Check if there are any remaining unread notifications
+        const hasUnread = updatedNotifications.some(notification => !notification.read);
+        updateNotificationStatus(hasUnread);
       } else {
         throw new Error(response.data.message || 'Failed to mark notification as read');
       }
@@ -343,103 +352,77 @@ const NotificationScreen = ({ navigation, route }) => {
           return <MaterialIcons name="warning" size={24} color="#FFA500" />;
         case NOTIFICATION_TYPES.CHECKUP_RESULT:
           return <MaterialIcons name="medical-services" size={24} color="#8146C1" />;
+        case NOTIFICATION_TYPES.APPOINTMENT_CONFIRMED:
+          return <MaterialIcons name="check-circle" size={24} color="#4CAF50" />;
         default:
           return <MaterialIcons name="notifications" size={24} color="#8146C1" />;
       }
     };
 
-    const handleNotificationPress = () => {
-      switch (item.type) {
-        case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
-          navigation.navigate('AppointmentDetails', { 
-            appointment_id: item.notifiable_id 
-          });
-          break;
-        case NOTIFICATION_TYPES.NEW_PRODUCT:
-          navigation.navigate('ProductDetails', { 
-            product_id: JSON.parse(item.data).product_id 
-          });
-          break;
-        case NOTIFICATION_TYPES.CHECKUP_RESULT:
-          navigation.navigate('CheckupDetails', { 
-            checkup_id: JSON.parse(item.data).checkup_id 
-          });
-          break;
-        default:
-          break;
+    // Add handlePress function to mark notification as read
+    const handlePress = async () => {
+      if (!item.read) {
+        try {
+          const response = await axios.post(
+            `http://${SERVER_IP}/PetFurMe-Application/api/notifications/mark_as_read.php`,
+            {
+              notification_id: item.id,
+              user_id: user_id
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              }
+            }
+          );
+          
+          if (response.data.success) {
+            const updatedNotifications = notifications.map((notification) =>
+              notification.id === item.id ? { ...notification, read: true } : notification
+            );
+            setNotifications(updatedNotifications);
+            
+            // Check if there are any remaining unread notifications
+            const hasUnread = updatedNotifications.some(notification => !notification.read);
+            updateNotificationStatus(hasUnread);
+          }
+        } catch (error) {
+          console.error('Error marking notification as read:', error);
+        }
       }
-      markAsRead(item.id);
-    };
-
-    const getNotificationColor = () => {
-      switch (item.type) {
-        case NOTIFICATION_TYPES.LOW_STOCK:
-          return styles.warningNotification;
-        case NOTIFICATION_TYPES.APPOINTMENT_REMINDER:
-          return styles.appointmentNotification;
-        case NOTIFICATION_TYPES.NEW_PRODUCT:
-          return styles.newProductNotification;
-        default:
-          return item.read ? styles.read : styles.unread;
-      }
-    };
-
-    const renderRightActions = (progress, dragX) => {
-      return (
-        <View style={styles.actionContainer}>
-          <TouchableOpacity 
-            style={styles.markReadAction}
-            onPress={() => markAsRead(item.id)}>
-            <MaterialIcons name="check" size={24} color="#fff" />
-            <Text style={styles.actionText}>Mark Read</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.deleteAction}
-            onPress={() => deleteNotification(item.id)}>
-            <MaterialIcons name="delete" size={24} color="#fff" />
-            <Text style={styles.actionText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      );
     };
 
     return (
-      <Swipeable renderRightActions={renderRightActions}>
-        <TouchableOpacity onPress={handleNotificationPress}>
-          <Animated.View style={[
-            styles.notificationItem,
-            getNotificationColor()
-          ]}>
-            <View style={styles.iconContainer}>
-              {getNotificationIcon()}
-              {!item.read && <View style={styles.unreadDot} />}
-            </View>
-            <View style={styles.textContainer}>
-              <Text style={[
-                styles.notificationTitle,
-                !item.read && styles.boldTitle
-              ]}>
-                {item.type.split('_').map(word => 
-                  word.charAt(0).toUpperCase() + word.slice(1)
-                ).join(' ')}
-              </Text>
-              <Text style={styles.notificationDescription} numberOfLines={2}>
-                {JSON.parse(item.data).message}
-              </Text>
-              <Text style={styles.notificationTime}>
-                {new Date(item.created_at).toLocaleDateString('en-US', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  month: 'short',
-                  day: 'numeric'
-                })}
-              </Text>
-            </View>
-          </Animated.View>
-        </TouchableOpacity>
-      </Swipeable>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={[
+          styles.notificationItem,
+          item.read ? styles.read : styles.unread,
+          item.type === NOTIFICATION_TYPES.LOW_STOCK && styles.warningNotification,
+          item.type === NOTIFICATION_TYPES.APPOINTMENT_CONFIRMED && styles.appointmentNotification,
+          item.type === NOTIFICATION_TYPES.NEW_PRODUCT && styles.newProductNotification,
+        ]}>
+          <View style={styles.iconContainer}>
+            {getNotificationIcon()}
+            {!item.read && <View style={styles.unreadDot} />}
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={[styles.notificationTitle, !item.read && styles.boldTitle]}>
+              {item.type.split('_').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+              ).join(' ')}
+            </Text>
+            <Text style={styles.notificationDescription}>
+              {JSON.parse(item.data).message}
+            </Text>
+            <Text style={styles.notificationTime}>
+              {new Date(item.created_at).toLocaleString()}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
     );
-  }, []);
+  }, [notifications, user_id, updateNotificationStatus]);
 
   return (
     <View style={styles.container}>
@@ -464,6 +447,7 @@ const NotificationScreen = ({ navigation, route }) => {
             tintColor="#8146C1"
           />
         }
+        scrollEnabled={true}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
@@ -507,7 +491,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginRight: 14,
     padding: 8,
-    backgroundColor: '#f0e6ff',
+    backgroundColor: '#f8f4ff',
     borderRadius: 10,
     alignSelf: 'flex-start',
   },
@@ -533,11 +517,10 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   unread: {
-    backgroundColor: '#f8f4ff',
+    backgroundColor: '#f0e6ff',
   },
   read: {
     backgroundColor: '#ffffff',
-    opacity: 0.9,
   },
   unreadDot: {
     position: 'absolute',

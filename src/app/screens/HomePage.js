@@ -44,6 +44,7 @@ const HomePage = ({ navigation, route }) => {
 	const [petRecords, setPetRecords] = useState([]);
 	const [selectedPet, setSelectedPet] = useState(null);
 	const [isPetModalVisible, setIsPetModalVisible] = useState(false);
+	const { updateDetails } = route.params || {};
 
 	// Add refresh interval reference
 	const refreshIntervalRef = React.useRef(null);
@@ -124,6 +125,19 @@ const HomePage = ({ navigation, route }) => {
 		console.log("Verification status changed:", isVerified);
 	}, [isVerified]);
 
+	useEffect(() => {
+		console.log("Profile status updated:", {
+			credentialsComplete,
+			isVerified
+		});
+	}, [credentialsComplete, isVerified]);
+
+	useEffect(() => {
+		if (updateDetails) {
+			Alert.alert('Profile Update', updateDetails);
+		}
+	}, [updateDetails]);
+
 	const fetchUserPets = async () => {
 		try {
 			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
@@ -153,32 +167,12 @@ const HomePage = ({ navigation, route }) => {
 			const response = await fetch(url);
 			const data = await response.json();
 			
-			// Add detailed logging
-			console.log("Full profile data:", data.profile);
-			console.log("Verified by value (raw):", data.profile.verified_by);
-			console.log("Verified by type:", typeof data.profile.verified_by);
+			console.log("Profile status response:", data); // Add this for debugging
 			
-			if (data.success) {
-				// Convert to number and check if greater than 0
-				const verifiedByValue = Number(data.profile.verified_by);
-				console.log("Verified by value (converted):", verifiedByValue);
-				const verifiedStatus = !isNaN(verifiedByValue) && verifiedByValue > 0;
-				console.log("Final verified status:", verifiedStatus);
-				
-				setIsVerified(verifiedStatus);
-				
-				const hasRequiredFields = data.profile.name && 
-										data.profile.email && 
-										data.profile.phone && 
-										data.profile.photo;
-									
-				const credentialsStatus = data.profile.complete_credentials === 1;
-				
-				console.log("Has required fields:", hasRequiredFields);
-				console.log("Credentials status:", credentialsStatus);
-				
-				setCredentialsComplete(credentialsStatus);
-				setIsProfileComplete(hasRequiredFields && credentialsStatus);
+			if (data.success && data.profile) {
+				// Update states based on profile data
+				setCredentialsComplete(data.profile.complete_credentials === 1);
+				setIsVerified(data.profile.verified_by !== null);
 				
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
@@ -190,9 +184,6 @@ const HomePage = ({ navigation, route }) => {
 			}
 		} catch (error) {
 			console.error("Profile check error:", error);
-			setIsProfileComplete(false);
-			setCredentialsComplete(false);
-			setIsVerified(false);
 		}
 	};
 
@@ -396,90 +387,89 @@ const HomePage = ({ navigation, route }) => {
 				user_id={user_id}
 			/>
 
-			{!isVerified && (
-				<View style={styles.verificationBanner}>
-					<Ionicons name="hourglass-outline" size={18} color="#8146C1" />
-					<Text style={styles.verificationBannerText}>
-						Account pending verification. Some features are limited until an admin verifies your account.
-					</Text>
-				</View>
-			)}
-
-			{showWelcomePopup && (
-				<View style={styles.popupOverlay}>
-					<View style={styles.popupContainer}>
-						<Ionicons name="paw" size={50} color="#8146C1" style={styles.welcomeIcon} />
-						<Text style={styles.popupTitle}>Welcome!</Text>
-						<Text style={styles.popupText}>
-							Hi {userName}, we're so excited to have you here. To make the most of your experience, join our pet-loving community and unlock amazing features for you and your furry friend.
+			<ScrollView contentContainerStyle={styles.scrollContent}>
+				{/* Only show verification banner if not verified */}
+				{!isVerified && (
+					<View style={styles.verificationBanner}>
+						<Ionicons name="hourglass-outline" size={18} color="#8146C1" />
+						<Text style={styles.verificationBannerText}>
+							Account pending verification. Some features are limited until an admin verifies your account.
 						</Text>
-						
-						<View style={styles.popupFeatures}>
-							<Text style={styles.popupFeatureItem}>
-								<Ionicons name="heart-outline" size={16} /> Personalized Care Tips
-							</Text>
-							<Text style={styles.popupFeatureItem}>
-								<Ionicons name="star-outline" size={16} /> Premium Features
-							</Text>
-							<Text style={styles.popupFeatureItem}>
-								<Ionicons name="people-outline" size={16} /> Expert Support
-							</Text>
-						</View>
-						
-						<View style={styles.popupButtons}>
-							<TouchableOpacity 
-								style={styles.setupButton} 
-								onPress={handleSetUpNow}
-							>
-								<Text style={styles.setupButtonText}>Get Started</Text>
-							</TouchableOpacity>
-							
-							<TouchableOpacity 
-								style={styles.laterButton} 
-								onPress={handleMaybeLater}
-							>
-								<Text style={styles.laterButtonText}>Maybe Later</Text>
-							</TouchableOpacity>
-						</View>
 					</View>
-				</View>
-			)}
-			{showProfileTutorial && !isProfileComplete && (
-				<TouchableWithoutFeedback>
-					<View style={styles.tutorialOverlay}>
-						<View style={styles.tutorialCutoutContainer}>
-							<View style={styles.tutorialCutout} />
-							<View style={styles.tutorialTextContainer}>
-								<Text style={styles.tutorialTitle}>One More Thing!</Text>
-								<Text style={styles.tutorialText}>
-									Complete your profile to unlock all features and get personalized care for your pets
+				)}
+
+				{/* Only show profile completion bar if credentials are not complete */}
+				{!credentialsComplete && (
+					<CompleteProfileBar 
+						navigation={navigation}
+						user_id={user_id}
+					/>
+				)}
+
+				{showWelcomePopup && (
+					<View style={styles.popupOverlay}>
+						<View style={styles.popupContainer}>
+							<Ionicons name="paw" size={50} color="#8146C1" style={styles.welcomeIcon} />
+							<Text style={styles.popupTitle}>Welcome!</Text>
+							<Text style={styles.popupText}>
+								Hi {userName}, we're so excited to have you here. To make the most of your experience, join our pet-loving community and unlock amazing features for you and your furry friend.
+							</Text>
+							
+							<View style={styles.popupFeatures}>
+								<Text style={styles.popupFeatureItem}>
+									<Ionicons name="heart-outline" size={16} /> Personalized Care Tips
 								</Text>
+								<Text style={styles.popupFeatureItem}>
+									<Ionicons name="star-outline" size={16} /> Premium Features
+								</Text>
+								<Text style={styles.popupFeatureItem}>
+									<Ionicons name="people-outline" size={16} /> Expert Support
+								</Text>
+							</View>
+							
+							<View style={styles.popupButtons}>
 								<TouchableOpacity 
-									style={styles.tutorialButton}
-									onPress={() => setShowProfileTutorial(false)}
+									style={styles.setupButton} 
+									onPress={handleSetUpNow}
 								>
-									<Text style={styles.tutorialButtonText}>Got it!</Text>
+									<Text style={styles.setupButtonText}>Get Started</Text>
+								</TouchableOpacity>
+								
+								<TouchableOpacity 
+									style={styles.laterButton} 
+									onPress={handleMaybeLater}
+								>
+									<Text style={styles.laterButtonText}>Maybe Later</Text>
 								</TouchableOpacity>
 							</View>
 						</View>
 					</View>
-				</TouchableWithoutFeedback>
-			)}
-			{isLoading && (
-				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" color="#8146C1" />
-				</View>
-			)}
-			<ScrollView contentContainerStyle={styles.scrollContent}>
-				{(!isProfileComplete || !credentialsComplete) && (
-					<CompleteProfileBar 
-						onPress={() => navigation.navigate('Profile', { 
-							user_id: user_id,
-							onComplete: () => {
-								refreshAllData();
-							}
-						})}
-					/>
+				)}
+				{showProfileTutorial && !isProfileComplete && (
+					<TouchableWithoutFeedback>
+						<View style={styles.tutorialOverlay}>
+							<View style={styles.tutorialCutoutContainer}>
+								<View style={styles.tutorialCutout} />
+								<View style={styles.tutorialTextContainer}>
+									<Text style={styles.tutorialTitle}>One More Thing!</Text>
+									<Text style={styles.tutorialText}>
+										Complete your profile to unlock all features and get personalized care for your pets
+									</Text>
+									<TouchableOpacity 
+										style={styles.tutorialButton}
+										onPress={() => setShowProfileTutorial(false)}
+									>
+										<Text style={styles.tutorialButtonText}>Got it!</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
+				)}
+				{isLoading && (
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size="large" color="#8146C1" />
+					</View>
 				)}
 
 				{/* Welcome Card */}

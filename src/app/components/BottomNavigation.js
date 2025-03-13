@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNotifications } from '../context/NotificationContext';
 
 const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { hasUnreadNotifications, checkUnreadNotifications } = useNotifications();
   
+  // Check for unread notifications when component mounts
+  useEffect(() => {
+    checkUnreadNotifications();
+  }, []);
+
   // If user_id is not passed as prop, try to get it from route params
   const currentUserId = user_id || route.params?.user_id;
 
@@ -90,6 +97,107 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
     };
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      position: 'sticky',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: 'transparent',
+      height: Platform.OS === 'ios' ? 110 : 96,
+      zIndex: 1000,
+      elevation: 8,
+      borderTopWidth: 0,
+    },
+    background: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: '100%',
+      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: -4,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 10,
+      borderTopWidth: 0,
+      marginTop: -1,
+    },
+    bottomNav: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      height: '100%',
+      paddingHorizontal: 15,
+      paddingBottom: 0,
+    },
+    navItem: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 50,
+      marginHorizontal: 5,
+    },
+    homeItem: {
+      marginTop: -25,
+    },
+    homeIconContainer: {
+      backgroundColor: '#f0e6f7',
+      padding: 16,
+      borderRadius: 30,
+      borderWidth: 2,
+      borderColor: '#8146C1',
+      elevation: 4,
+      shadowColor: '#8146C1',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+    },
+    iconContainer: {
+      position: 'relative',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    navText: {
+      fontSize: 11,
+      color: '#8146C1',
+      marginTop: 4,
+      opacity: 0.8,
+    },
+    activeText: {
+      fontWeight: '600',
+      opacity: 1,
+      color: '#8146C1',
+    },
+    notificationBadge: {
+      position: 'absolute',
+      right: -2,
+      top: -2,
+      backgroundColor: '#FF4444',
+      borderRadius: 8,
+      width: 16,
+      height: 16,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1.5,
+      borderColor: '#fff',
+    },
+    badgeText: {
+      color: '#FFF',
+      fontSize: 10,
+      fontWeight: 'bold',
+    },
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.bottomNav}>
@@ -120,6 +228,11 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
                 size={screen === 'HomePage' ? 32 : 24}
                 color="#8146C1"
               />
+              {screen === 'NotificationScreen' && hasUnreadNotifications && (
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.badgeText}>•</Text>
+                </View>
+              )}
               <Text style={[
                 styles.navText, 
                 currentScreen === screen && styles.activeText
@@ -131,90 +244,5 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'sticky',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'transparent',
-    height: Platform.OS === 'ios' ? 110 : 96,
-    zIndex: 1000,
-    elevation: 8,
-    borderTopWidth: 0,
-  },
-  background: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.98)',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 10,
-    borderTopWidth: 0,
-    marginTop: -1,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: '100%',
-    paddingHorizontal: 15,
-    paddingBottom: 0,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 50,
-    marginHorizontal: 5,
-  },
-  homeItem: {
-    marginTop: -25,
-  },
-  homeIconContainer: {
-    backgroundColor: '#f0e6f7',
-    padding: 16,
-    borderRadius: 30,
-    borderWidth: 2,
-    borderColor: '#8146C1',
-    elevation: 4,
-    shadowColor: '#8146C1',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 8,
-    borderRadius: 12,
-    backgroundColor: 'transparent',
-  },
-  navText: {
-    fontSize: 11,
-    color: '#8146C1',
-    marginTop: 4,
-    opacity: 0.8,
-  },
-  activeText: {
-    fontWeight: '600',
-    opacity: 1,
-    color: '#8146C1',
-  },
-});
 
 export default BottomNavigation; 

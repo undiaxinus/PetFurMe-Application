@@ -240,36 +240,30 @@ const ProfileVerification = ({ navigation, route }) => {
             console.log('Profile update response:', response.data);
 
             if (response.data.success) {
-                // Show success popup with different messages based on profile completion
-                Alert.alert(
-                    'Success',
-                    response.data.updated_data?.complete_credentials === 1
-                        ? '🎉 Hooray! Your profile is now complete! All features are now unlocked!'
-                        : '✅ Profile updated successfully! Complete all fields to unlock all features.',
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => {
-                                // Navigate to HomePage after user clicks OK
-                                if (navigation && !route.params?.testing) {
-                                    navigation.reset({
-                                        index: 0,
-                                        routes: [{ 
-                                            name: 'DrawerNavigator',
-                                            params: {
-                                                screen: 'HomePage',
-                                                params: { user_id: user_id }
-                                            }
-                                        }],
-                                    });
+                // Prepare update details
+                const updatedFields = [];
+                if (name) updatedFields.push('name');
+                if (address) updatedFields.push('address');
+                if (phoneNumber) updatedFields.push('phone number');
+                if (email) updatedFields.push('email');
+                if (profilePhoto) updatedFields.push('profile photo');
+
+                // Navigate to HomePage with update details
+                if (navigation && !route.params?.testing) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ 
+                            name: 'DrawerNavigator',
+                            params: {
+                                screen: 'HomePage',
+                                params: { 
+                                    user_id: user_id,
+                                    updateDetails: `Updated fields: ${updatedFields.join(', ')}`
                                 }
                             }
-                        }
-                    ]
-                );
-                
-                // Refresh user data to confirm update
-                await fetchUserData();
+                        }],
+                    });
+                }
             } else {
                 throw new Error(response.data.message || 'Failed to update profile');
             }
@@ -348,6 +342,29 @@ const ProfileVerification = ({ navigation, route }) => {
         }
     };
 
+    const validateProfileData = () => {
+        const requiredFields = [
+            { field: name, name: 'Name' },
+            { field: email, name: 'Email' },
+            { field: phoneNumber, name: 'Phone number' },
+            { field: address, name: 'Address' }  // Changed from profilePhoto to address
+        ];
+        
+        const missingFields = requiredFields
+            .filter(item => !item.field || item.field.trim() === '')
+            .map(item => item.name);
+        
+        if (missingFields.length > 0) {
+            Alert.alert(
+                'Incomplete Profile',
+                `Please fill in the following required fields: ${missingFields.join(', ')}`
+            );
+            return false;
+        }
+        
+        return true;
+    };
+
     return (
         <View style={styles.mainContainer}>
             {isLoading && (
@@ -364,7 +381,6 @@ const ProfileVerification = ({ navigation, route }) => {
 
             <ScrollView 
                 style={styles.container}
-                contentContainerStyle={{ paddingBottom: 100 }}
                 showsVerticalScrollIndicator={true}
                 bounces={true}
             >

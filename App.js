@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import ErrorBoundary from './src/app/components/ErrorBoundary';
 import * as Font from 'expo-font';
+import { NotificationProvider } from './src/app/context/NotificationContext';
 
 // Import all screens
 import HomeScreen from "./src/app/screens/HomeScreen";
@@ -189,89 +190,91 @@ const App = () => {
 	});
 
 	return (
-		<GestureHandlerRootView style={{ flex: 1 }}>
-			<ErrorBoundary>
-				<NavigationContainer {...navigationConfig} fallback={<Text>Loading...</Text>}>
-					<Stack.Navigator
-						initialRouteName="HomeScreen"
-						screenOptions={{
-							headerShown: false,
-							gestureEnabled: true,
-							cardStyleInterpolator: ({ current, layouts }) => ({
-								cardStyle: {
-									transform: [
-										{
-											translateX: current.progress.interpolate({
-												inputRange: [0, 1],
-												outputRange: [layouts.screen.width, 0],
-											}),
-										},
-									],
-								},
-							}),
-						}}
-					>
-						{/* Authentication and Landing Screens */}
-						<Stack.Screen name="HomeScreen" component={HomeScreen} />
-						<Stack.Screen name="LoginScreen" component={LoginScreen} />
-						<Stack.Screen name="Register" component={RegistrationScreen} />
-						<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-						<Stack.Screen name="LandingPage" component={LandingPage} />
-
-						{/* Add ProfileVerification screen here */}
-						<Stack.Screen name="ProfileVerification" component={ProfileVerification} />
-
-						{/* Add ViewMorePro screen here */}
-						<Stack.Screen name="ViewMorePro" component={ViewMorePro} />
-
-						{/* Remove duplicate screens that are in DrawerNavigator */}
-						<Stack.Screen name="PetProfile" component={PetProfile} />
-						<Stack.Screen name="AddPetName" component={AddPetName} />
-						<Stack.Screen name="AddPetSize" component={AddPetSize} />
-						<Stack.Screen name="BookAppointment" component={BookAppointment} />
-						<Stack.Screen name="Consultation" component={Consultation} />
-						<Stack.Screen name="Vaccination" component={Vaccination} />
-						<Stack.Screen name="Deworming" component={Deworming} />
-						<Stack.Screen name="Grooming" component={Grooming} />
-						<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
-
-						{/* DrawerNavigator (which now includes Appointment) */}
-						<Stack.Screen 
-							name="DrawerNavigator" 
-							component={DrawerNavigator}
-							options={{ headerShown: false }}
-						/>
-
-						{/* Add ProductListScreen */}
-						<Stack.Screen 
-							name="ProductListScreen" 
-							component={ProductListScreen}
-							options={{ 
+		<NotificationProvider>
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<ErrorBoundary>
+					<NavigationContainer {...navigationConfig} fallback={<Text>Loading...</Text>}>
+						<Stack.Navigator
+							initialRouteName="HomeScreen"
+							screenOptions={{
 								headerShown: false,
-								initialParams: { user_id: undefined }
+								gestureEnabled: true,
+								cardStyleInterpolator: ({ current, layouts }) => ({
+									cardStyle: {
+										transform: [
+											{
+												translateX: current.progress.interpolate({
+													inputRange: [0, 1],
+													outputRange: [layouts.screen.width, 0],
+												}),
+											},
+										],
+									},
+								}),
 							}}
-						/>
+						>
+							{/* Authentication and Landing Screens */}
+							<Stack.Screen name="HomeScreen" component={HomeScreen} />
+							<Stack.Screen name="LoginScreen" component={LoginScreen} />
+							<Stack.Screen name="Register" component={RegistrationScreen} />
+							<Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+							<Stack.Screen name="LandingPage" component={LandingPage} />
 
-						<Stack.Screen 
-							name="CreatePetProfile" 
-							component={AddPetName}
-							options={{
-								title: 'Add New Pet',
-								headerShown: true,
-								headerStyle: {
-									backgroundColor: '#8146C1',
-								},
-								headerTintColor: '#FFFFFF',
-								headerTitleStyle: {
-									fontWeight: 'bold',
-								},
-							}}
-						/>
-					</Stack.Navigator>
-				</NavigationContainer>
-				<Toast config={toastConfig} />
-			</ErrorBoundary>
-		</GestureHandlerRootView>
+							{/* Add ProfileVerification screen here */}
+							<Stack.Screen name="ProfileVerification" component={ProfileVerification} />
+
+							{/* Add ViewMorePro screen here */}
+							<Stack.Screen name="ViewMorePro" component={ViewMorePro} />
+
+							{/* Remove duplicate screens that are in DrawerNavigator */}
+							<Stack.Screen name="PetProfile" component={PetProfile} />
+							<Stack.Screen name="AddPetName" component={AddPetName} />
+							<Stack.Screen name="AddPetSize" component={AddPetSize} />
+							<Stack.Screen name="BookAppointment" component={BookAppointment} />
+							<Stack.Screen name="Consultation" component={Consultation} />
+							<Stack.Screen name="Vaccination" component={Vaccination} />
+							<Stack.Screen name="Deworming" component={Deworming} />
+							<Stack.Screen name="Grooming" component={Grooming} />
+							<Stack.Screen name="UpdatePetProfile" component={UpdatePetProfile} />
+
+							{/* DrawerNavigator (which now includes Appointment) */}
+							<Stack.Screen 
+								name="DrawerNavigator" 
+								component={DrawerNavigator}
+								options={{ headerShown: false }}
+							/>
+
+							{/* Add ProductListScreen */}
+							<Stack.Screen 
+								name="ProductListScreen" 
+								component={ProductListScreen}
+								options={{ 
+									headerShown: false,
+									initialParams: { user_id: undefined }
+								}}
+							/>
+
+							<Stack.Screen 
+								name="CreatePetProfile" 
+								component={AddPetName}
+								options={{
+									title: 'Add New Pet',
+									headerShown: true,
+									headerStyle: {
+										backgroundColor: '#8146C1',
+									},
+									headerTintColor: '#FFFFFF',
+									headerTitleStyle: {
+										fontWeight: 'bold',
+									},
+								}}
+							/>
+						</Stack.Navigator>
+					</NavigationContainer>
+					<Toast config={toastConfig} />
+				</ErrorBoundary>
+			</GestureHandlerRootView>
+		</NotificationProvider>
 	);
 };
 

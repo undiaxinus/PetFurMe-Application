@@ -2,11 +2,21 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const CompleteProfileBar = ({ onPress, style }) => {
+const CompleteProfileBar = ({ onPress, navigation, user_id, style }) => {
+    console.log("CompleteProfileBar props:", { user_id }); // Add this for debugging
+    
+    const handlePress = () => {
+        // Navigate to ProfileVerification instead of ProfileScreen
+        navigation.navigate('ProfileVerification', {
+            user_id,
+            initial: { user_id }
+        });
+    };
+
     return (
         <TouchableOpacity 
             style={[styles.setupBanner, styles.setupBannerHighlight, style]}
-            onPress={onPress}
+            onPress={handlePress}
         >
             <View style={styles.setupBannerContent}>
                 <View style={styles.setupIconContainer}>

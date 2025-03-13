@@ -3,13 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'rea
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const ProfileScreen = ({ navigation }) => {
-  const user = {
-    name: 'Erica L. Poche',
-    email: 'ericaloveranespoche@gmail.com',
-    profileImage: 'https://example.com/profile.jpg', // Replace with actual URL or local asset
-    phone: '0909-371-7983',
-  };
+const ProfileScreen = ({ navigation, route }) => {
+  const user_id = route.params?.user_id;
 
   return (
     <LinearGradient colors={['#A259B5', '#FFFFFF']} style={styles.gradientContainer}>

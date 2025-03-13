@@ -104,7 +104,12 @@ const CustomHeader = ({
           {showProfileButton && (
             <TouchableOpacity 
               style={styles.iconButton}
-              onPress={() => navigation.navigate('ProfileVerification', { user_id })}
+              onPress={() => {
+                navigation.navigate('ProfileVerification', { 
+                  user_id,
+                  initial: { user_id }
+                });
+              }}
             >
               <Image
                 source={
