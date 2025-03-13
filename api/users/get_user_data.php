@@ -34,7 +34,7 @@ try {
     }
 
     // Updated query to include all necessary fields
-    $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, role, email_verified_at FROM users WHERE id = ?";
+    $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, role, email_verified_at, verified_by FROM users WHERE id = ?";
     
     // Debug log for query
     error_log("Executing query: " . $query);
@@ -72,12 +72,16 @@ try {
                 'address' => $row['address'],
                 'photo' => $row['photo'],
                 'role' => $row['role'] ?? 'pet_owner',
-                'email_verified_at' => $row['email_verified_at']
+                'email_verified_at' => $row['email_verified_at'],
+                'verified_by' => $row['verified_by'],
+                'is_verified' => $row['verified_by'] !== null
             ]
         ];
         
         // Debug log for final response
         error_log("Final response data: " . json_encode($response));
+        
+        error_log("Sending response: " . json_encode($response));
         
         echo json_encode($response);
     } else {

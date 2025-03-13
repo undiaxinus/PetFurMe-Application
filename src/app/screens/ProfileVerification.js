@@ -11,13 +11,14 @@ import {
     ActivityIndicator,
     Platform
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomHeader from '../components/CustomHeader';
+
 const API_BASE_URL = `http://${SERVER_IP}/PetFurMe-Application`;
 
 const ProfileVerification = ({ navigation, route }) => {
@@ -34,12 +35,13 @@ const ProfileVerification = ({ navigation, route }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('••••••••••');
-    const [isEditingEmail, setIsEditingEmail] = useState(false);
     const [isEditingPassword, setIsEditingPassword] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [error, setError] = useState(null);
+    const [isVerified, setIsVerified] = useState(false);
+    const [isSaveDisabled, setSaveDisabled] = useState(false);
 
     useEffect(() => {
         if (!navigation) {
@@ -75,26 +77,29 @@ const ProfileVerification = ({ navigation, route }) => {
             const url = `${API_BASE_URL}/api/users/get_user_data.php?user_id=${user_id}`;
             console.log("Fetching user data from:", url);
 
-            const response = await axios.get(url, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    t: Date.now() // Cache busting
-                }
-            });
-
+            const response = await axios.get(url);
             console.log("Full API Response:", response.data);
 
             if (response.data.success && response.data.profile) {
                 const userData = response.data.profile;
                 
+                // Debug logs to verify the data
+                console.log("Verification status:", {
+                    verified_by: userData.verified_by,
+                    isVerified: Boolean(userData.verified_by)
+                });
+
                 // Update state with user data
                 setName(userData.name || '');
                 setEmail(userData.email || '');
                 setPhoneNumber(userData.phone || '');
                 setAddress(userData.address || '');
+                
+                // Explicitly check verification status
+                const verificationStatus = userData.verified_by !== null && userData.verified_by !== undefined;
+                console.log("Setting verification status to:", verificationStatus);
+                setIsVerified(verificationStatus);
+                setSaveDisabled(verificationStatus);
 
                 // Handle photo
                 if (userData.photo) {
@@ -293,7 +298,7 @@ const ProfileVerification = ({ navigation, route }) => {
                     },
                     body: JSON.stringify({
                         user_id,
-                        email: isEditingEmail ? email : undefined,
+                        email: undefined,
                         password: isEditingPassword ? newPassword : undefined
                     })
                 }
@@ -311,14 +316,12 @@ const ProfileVerification = ({ navigation, route }) => {
                     user_id,
                     {
                         updatedFields: [
-                            isEditingEmail && 'email',
                             isEditingPassword && 'password'
                         ].filter(Boolean)
                     }
                 );
 
                 Alert.alert('Success', 'Credentials updated successfully');
-                setIsEditingEmail(false);
                 setIsEditingPassword(false);
                 setNewPassword('');
                 setConfirmPassword('');
@@ -463,26 +466,20 @@ const ProfileVerification = ({ navigation, route }) => {
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Email</Text>
-                        <View style={styles.inputWrapper}>
+                        <View style={[styles.inputWrapper, styles.nonEditableInput]}>
                             <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
                             <TextInput
-                                style={[styles.input, { flex: 1 }]}
+                                style={[styles.input, { flex: 1, color: '#666' }]}
                                 value={email}
-                                onChangeText={setEmail}
-                                keyboardType="email-address"
-                                editable={isEditingEmail}
+                                editable={false}
                                 placeholder="Enter your email"
                             />
-                            <TouchableOpacity 
-                                style={styles.editButton}
-                                onPress={() => setIsEditingEmail(!isEditingEmail)}
-                            >
-                                <Ionicons 
-                                    name={isEditingEmail ? "checkmark" : "pencil"} 
-                                    size={20} 
-                                    color="#8146C1" 
-                                />
-                            </TouchableOpacity>
+                            <Ionicons 
+                                name="lock-closed" 
+                                size={16} 
+                                color="#666" 
+                                style={styles.lockIcon}
+                            />
                         </View>
                     </View>
 
@@ -502,9 +499,9 @@ const ProfileVerification = ({ navigation, route }) => {
                                 style={styles.editButton}
                                 onPress={() => setIsEditingPassword(!isEditingPassword)}
                             >
-                                <Ionicons 
-                                    name={isEditingPassword ? "checkmark" : "pencil"} 
-                                    size={20} 
+                                <MaterialCommunityIcons 
+                                    name={isEditingPassword ? "check-circle" : "pencil-circle"} 
+                                    size={24} 
                                     color="#8146C1" 
                                 />
                             </TouchableOpacity>
@@ -523,7 +520,7 @@ const ProfileVerification = ({ navigation, route }) => {
                         )}
                     </View>
 
-                    {(isEditingEmail || isEditingPassword) && (
+                    {(isEditingPassword) && (
                         <TouchableOpacity 
                             style={[styles.updateButton, styles.credentialsButton]}
                             onPress={handleUpdateCredentials}
@@ -533,10 +530,24 @@ const ProfileVerification = ({ navigation, route }) => {
                     )}
 
                     <TouchableOpacity 
-                        style={styles.updateButton}
+                        style={[
+                            styles.updateButton,
+                            (isVerified || isSaveDisabled) && styles.disabledButton
+                        ]}
                         onPress={handleUpdateInfo}
+                        disabled={isVerified || isSaveDisabled}
                     >
-                        <Text style={styles.updateButtonText}>Save Changes</Text>
+                        <Text style={[
+                            styles.updateButtonText,
+                            (isVerified || isSaveDisabled) && styles.disabledButtonText
+                        ]}>
+                            {isVerified ? 'Account Verified' : 'Save Changes'}
+                        </Text>
+                        {isVerified && (
+                            <View style={styles.verificationBadge}>
+                                <Ionicons name="checkmark-circle" size={20} color="#666666" style={styles.verifiedIcon} />
+                            </View>
+                        )}
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -645,8 +656,6 @@ const styles = StyleSheet.create({
     editButton: {
         padding: 8,
         marginRight: 8,
-        backgroundColor: '#F0E6FA',
-        borderRadius: 8,
     },
     updateButton: {
         backgroundColor: '#8146C1',
@@ -700,6 +709,33 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: '600',
     },
+    nonEditableInput: {
+        backgroundColor: '#F5F5F5',
+        borderColor: '#E0E0E0',
+    },
+    lockIcon: {
+        marginRight: 12,
+        opacity: 0.5
+    },
+    disabledButton: {
+        backgroundColor: '#E0E0E0',
+        elevation: 0,
+        opacity: 0.7,
+        borderWidth: 1,
+        borderColor: '#D0D0D0',
+    },
+    disabledButtonText: {
+        color: '#666666',
+    },
+    verificationBadge: {
+        position: 'absolute',
+        right: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    verifiedIcon: {
+        marginLeft: 8,
+    }
 });
 
 export default ProfileVerification; 
