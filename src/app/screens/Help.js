@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import {
   View,
   Text,
@@ -11,10 +12,29 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HelpScreen = ({ navigation }) => {
+const HelpScreen = ({ navigation, route }) => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isVerified, setIsVerified] = useState(false);
+  const user_id = route.params?.user_id;
+
+  // Add this useEffect to check verification status
+  useEffect(() => {
+    const checkVerificationStatus = async () => {
+      try {
+        const storedVerification = await AsyncStorage.getItem('isVerified');
+        if (storedVerification !== null) {
+          setIsVerified(JSON.parse(storedVerification));
+        }
+      } catch (error) {
+        console.error('Error reading verification status:', error);
+      }
+    };
+
+    checkVerificationStatus();
+  }, []);
 
   const toggleSection = (index) => {
     setExpandedSection(expandedSection === index ? null : index);
@@ -146,7 +166,7 @@ const HelpScreen = ({ navigation }) => {
         <View style={styles.contentContainer}>
           <View style={styles.helpDescriptionContainer}>
             <Text style={styles.helpDescription}>
-              Having trouble? We’re here—just send us a quick message!
+              Having trouble? We're here—just send us a quick message!
             </Text>
           </View>
           <FlatList
@@ -209,7 +229,11 @@ const HelpScreen = ({ navigation }) => {
 
       {renderContent()}
 
-      <BottomNavigation activeScreen="Help" />
+      <BottomNavigation 
+        activeScreen="Help" 
+        user_id={user_id}
+        isVerified={isVerified}
+      />
     </View>
   );
 };

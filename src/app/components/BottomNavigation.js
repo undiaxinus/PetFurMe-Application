@@ -1,14 +1,36 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Platform, Alert, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useNotifications } from '../context/NotificationContext';
 
-const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
+const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: propIsVerified }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const { hasUnreadNotifications, checkUnreadNotifications } = useNotifications();
+  const [isVerified, setIsVerified] = useState(propIsVerified || false);
   
+  // Check verification status from AsyncStorage
+  useEffect(() => {
+    const checkVerificationStatus = async () => {
+      try {
+        const storedVerification = await AsyncStorage.getItem('isVerified');
+        if (storedVerification !== null) {
+          setIsVerified(JSON.parse(storedVerification));
+        }
+      } catch (error) {
+        console.error('Error reading verification status:', error);
+      }
+    };
+
+    checkVerificationStatus();
+  }, []);
+
+  // Update local state when prop changes
+  useEffect(() => {
+    setIsVerified(propIsVerified);
+  }, [propIsVerified]);
+
   // Check for unread notifications when component mounts
   useEffect(() => {
     checkUnreadNotifications();
@@ -64,8 +86,17 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
 
   const handleNavigation = (screen) => {
     try {
+      // Check for verification status for Appointment screen
+      if (screen === 'Appointment' && !isVerified) {
+        Alert.alert(
+          "Account Pending Verification",
+          "Your account is currently pending verification by an administrator. This process helps ensure the safety and quality of our pet care community. You'll be notified once your account is verified.",
+          [{ text: "OK", style: "default" }]
+        );
+        return;
+      }
+
       if (!currentUserId && screen !== 'HomePage') {
-        // If no user_id and not going to HomePage, redirect to login
         navigation.navigate('LoginScreen');
         return;
       }
@@ -76,7 +107,6 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
       });
     } catch (error) {
       console.error('Navigation error:', error);
-      // Handle navigation error gracefully
     }
   };
 
@@ -196,6 +226,9 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
       fontSize: 10,
       fontWeight: 'bold',
     },
+    disabledNavItem: {
+      opacity: 0.5,
+    },
   });
 
   return (
@@ -205,18 +238,20 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
         {/* Navigation Items */}
         {[
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
-          { screen: 'Appointment', icon: 'calendar', label: 'Appointments' },
+          { screen: 'Appointment', icon: 'calendar', label: 'Appointments', requiresVerification: true },
           { screen: 'HomePage', icon: 'paw', label: 'Home' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
           { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
-        ].map(({ screen, icon, label }) => (
+        ].map(({ screen, icon, label, requiresVerification }) => (
           <TouchableOpacity 
             key={screen}
             style={[
               styles.navItem,
-              screen === 'HomePage' && styles.homeItem
+              screen === 'HomePage' && styles.homeItem,
+              requiresVerification && !isVerified && styles.disabledNavItem
             ]}
             onPress={() => handleNavigation(screen)}
+            disabled={requiresVerification && !isVerified}
           >
             <Animated.View style={[
               styles.iconContainer, 
@@ -226,7 +261,8 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
               <Ionicons 
                 name={currentScreen === screen ? icon : `${icon}-outline`}
                 size={screen === 'HomePage' ? 32 : 24}
-                color="#8146C1"
+                color={requiresVerification && !isVerified ? '#CCCCCC' : 
+                      currentScreen === screen ? '#8146C1' : '#8146C1'}
               />
               {screen === 'NotificationScreen' && hasUnreadNotifications && (
                 <View style={styles.notificationBadge}>
@@ -235,7 +271,8 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id }) => {
               )}
               <Text style={[
                 styles.navText, 
-                currentScreen === screen && styles.activeText
+                currentScreen === screen && styles.activeText,
+                requiresVerification && !isVerified && { color: '#CCCCCC' }
               ]}>{label}</Text>
             </Animated.View>
           </TouchableOpacity>

@@ -51,6 +51,23 @@ const NotificationScreen = ({ navigation, route }) => {
   const REFRESH_COOLDOWN = 1000;
   const [permissionStatus, setPermissionStatus] = useState('unknown');
   const { updateNotificationStatus } = useNotifications();
+  const [isVerified, setIsVerified] = useState(false);
+
+  // Add this useEffect to check verification status
+  useEffect(() => {
+    const checkVerificationStatus = async () => {
+      try {
+        const storedVerification = await AsyncStorage.getItem('isVerified');
+        if (storedVerification !== null) {
+          setIsVerified(JSON.parse(storedVerification));
+        }
+      } catch (error) {
+        console.error('Error reading verification status:', error);
+      }
+    };
+
+    checkVerificationStatus();
+  }, []);
 
   // Load notifications immediately when user_id is available
   useEffect(() => {
@@ -457,7 +474,11 @@ const NotificationScreen = ({ navigation, route }) => {
         )}
       />
 
-      <BottomNavigation activeScreen="NotificationScreen" />
+      <BottomNavigation 
+        activeScreen="NotificationScreen" 
+        user_id={user_id}
+        isVerified={isVerified}
+      />
     </View>
   );
 };

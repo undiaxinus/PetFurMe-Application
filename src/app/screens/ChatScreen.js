@@ -6,6 +6,8 @@ import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import axios from 'axios';
 import { SERVER_IP } from '../config/constants';  // Make sure this points to your server IP
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const baseStyles = StyleSheet.create({
   container: {
@@ -29,6 +31,7 @@ const logMessage = (message) => {
 
 const ChatScreen = ({ navigation, route }) => {
   const user_id = route.params?.user_id;
+  const [isVerified, setIsVerified] = useState(false);
 
   // Start in live chat mode by default since we want to show database messages
   const [isAutomated, setIsAutomated] = useState(false);
@@ -44,6 +47,22 @@ const ChatScreen = ({ navigation, route }) => {
   // Add separate states for bot and live messages
   const [botMessages, setBotMessages] = useState([]);
   const [liveMessages, setLiveMessages] = useState([]);
+
+  // Add this useEffect to check verification status
+  useEffect(() => {
+    const checkVerificationStatus = async () => {
+      try {
+        const storedVerification = await AsyncStorage.getItem('isVerified');
+        if (storedVerification !== null) {
+          setIsVerified(JSON.parse(storedVerification));
+        }
+      } catch (error) {
+        console.error('Error reading verification status:', error);
+      }
+    };
+
+    checkVerificationStatus();
+  }, []);
 
   // Function to fetch messages
   const fetchMessages = async () => {
@@ -612,7 +631,11 @@ const ChatScreen = ({ navigation, route }) => {
         </View>
       </KeyboardAvoidingView>
 
-      <BottomNavigation activeScreen="Chat" navigation={navigation} user_id={user_id} />
+      <BottomNavigation 
+        activeScreen="ChatScreen" 
+        user_id={user_id}
+        isVerified={isVerified}
+      />
 
       {/* Add this in your render method */}
       {console.log("Current mode:", isAutomated ? "Automated" : "Live Chat")}
@@ -633,11 +656,12 @@ const styles = StyleSheet.create({
   chatContainer: {
     padding: 12,
     paddingBottom: 24,
+    paddingTop: 8,
   },
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginVertical: 3,
+    marginVertical: 8,
     paddingHorizontal: 8,
   },
   userMessage: {

@@ -63,7 +63,7 @@ try {
     }
 
     // Prepare the query including photo column
-    $query = "INSERT INTO pets (user_id, created_by, name, type, breed, age, gender, weight, size, allergies, notes, category, photo) 
+    $query = "INSERT INTO pets (user_id, created_by, name, type, breed, age, gender, weight, size, allergies, notes, category, photo_data) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
     
     $stmt = $db->prepare($query);

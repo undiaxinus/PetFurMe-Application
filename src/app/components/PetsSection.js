@@ -18,6 +18,28 @@ const PetsSection = ({
     onAddNewPet,
     showVerificationAlert
 }) => {
+    // Add helper function to convert binary to base64
+    const getBinaryPhotoSource = (pet) => {
+        console.log('Pet data:', {
+            id: pet.id,
+            name: pet.name,
+            hasPhoto: !!pet.photo,
+            hasPhotoData: !!pet.photo_data,
+            photoType: typeof pet.photo,
+            photoDataType: typeof pet.photo_data
+        });
+
+        if (!pet.photo) return require("../../assets/images/doprof.png");
+        
+        try {
+            // If it's already a base64 string, just use it
+            return { uri: `data:image/jpeg;base64,${pet.photo}` };
+        } catch (error) {
+            console.error('Error processing photo:', error);
+            return require("../../assets/images/doprof.png");
+        }
+    };
+
     return (
         <View style={styles.petsSection}>
             <View style={styles.petsSectionHeader}>
@@ -45,16 +67,7 @@ const PetsSection = ({
                     >
                         <View style={styles.petImageContainer}>
                             <Image
-                                source={
-                                    pet.photo 
-                                        ? { 
-                                            uri: pet.photo,
-                                            headers: {
-                                                'Cache-Control': 'no-cache'
-                                            }
-                                        }
-                                        : require("../../assets/images/doprof.png")
-                                }
+                                source={getBinaryPhotoSource(pet)}
                                 style={styles.petImage}
                                 defaultSource={require("../../assets/images/doprof.png")}
                                 resizeMode="contain"

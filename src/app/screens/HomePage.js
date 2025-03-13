@@ -22,6 +22,7 @@ import CustomToast from '../components/CustomToast';
 import PetDetailsModal from '../components/PetDetailsModal';
 import PetProductsSection from '../components/PetProductsSection';
 import PetsSection from '../components/PetsSection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -167,12 +168,16 @@ const HomePage = ({ navigation, route }) => {
 			const response = await fetch(url);
 			const data = await response.json();
 			
-			console.log("Profile status response:", data); // Add this for debugging
+			console.log("Profile status response:", data);
 			
 			if (data.success && data.profile) {
 				// Update states based on profile data
 				setCredentialsComplete(data.profile.complete_credentials === 1);
-				setIsVerified(data.profile.verified_by !== null);
+				const verificationStatus = data.profile.verified_by !== null;
+				setIsVerified(verificationStatus);
+				
+				// Store verification status in AsyncStorage
+				await AsyncStorage.setItem('isVerified', JSON.stringify(verificationStatus));
 				
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
@@ -610,6 +615,7 @@ const HomePage = ({ navigation, route }) => {
 			<BottomNavigation 
 				activeScreen="HomePage" 
 				user_id={user_id}
+				isVerified={isVerified}
 				style={[
 					styles.bottomNav,
 					(showWelcomePopup || showProfileTutorial) && styles.bottomNavDisabled

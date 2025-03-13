@@ -1,0 +1,44 @@
+[13-Mar-2025 22:27:02 Europe/Berlin] Starting pet addition process
+[13-Mar-2025 22:27:02 Europe/Berlin] Attempting database connection to localhost/pet-management
+[13-Mar-2025 22:27:02 Europe/Berlin] Database connection successful
+[13-Mar-2025 22:27:02 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => Doggy
+    [type] => dog
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Dog
+    [gender] => male
+    [weight] => 
+)
+
+[13-Mar-2025 22:27:02 Europe/Berlin] Photo data processed successfully
+[13-Mar-2025 22:27:02 Europe/Berlin] Binding parameters for pet insertion
+[13-Mar-2025 23:40:49 Europe/Berlin] Starting pet addition process
+[13-Mar-2025 23:40:49 Europe/Berlin] Attempting database connection to localhost/pet-management
+[13-Mar-2025 23:40:49 Europe/Berlin] Database connection successful
+[13-Mar-2025 23:40:49 Europe/Berlin] Received data: Array
+(
+    [user_id] => 108
+    [created_by] => 108
+    [name] => ytty
+    [type] => cat
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Cat
+    [gender] => male
+    [weight] => 
+)
+
+[13-Mar-2025 23:40:49 Europe/Berlin] Photo data processed successfully
+[13-Mar-2025 23:40:49 Europe/Berlin] Binding parameters for pet insertion

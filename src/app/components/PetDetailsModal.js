@@ -29,6 +29,19 @@ const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
     
     if (!pet) return null;
     
+    // Add this function to handle photo source
+    const getPetPhotoSource = (pet) => {
+        if (!pet.photo) return defaultPetImage;
+        
+        try {
+            // Handle base64 image data
+            return { uri: `data:image/jpeg;base64,${pet.photo}` };
+        } catch (error) {
+            console.error('Error processing pet photo:', error);
+            return defaultPetImage;
+        }
+    };
+    
     const handleEdit = () => {
         onClose(); // Use onClose instead of setIsVisible
         navigation.navigate('UpdatePetProfile', {
@@ -66,10 +79,17 @@ const PetDetailsModal = ({ pet, isVisible, onClose, user_id, onEdit }) => {
                 
                 <ScrollView style={styles.modalScroll}>
                     <View style={styles.petImageContainer}>
+                        {console.log('Pet photo data:', {
+                            hasPhoto: !!pet.photo,
+                            photoType: typeof pet.photo,
+                            photoLength: pet.photo?.length,
+                            photoPreview: pet.photo?.substring(0, 50) + '...'
+                        })}
                         <Image
-                            source={pet.photo ? { uri: pet.photo } : defaultPetImage}
+                            source={getPetPhotoSource(pet)}
                             style={styles.modalPetImage}
                             resizeMode="contain"
+                            defaultSource={defaultPetImage}
                         />
                     </View>
 

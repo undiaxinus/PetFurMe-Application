@@ -70,9 +70,17 @@ const UpdatePetProfile = ({ navigation, route }) => {
     setPetGender(pet.gender || '');
     setAgeUnit(pet.age_unit || 'years');
     
+    // Handle existing photo
     if (pet.photo) {
+      console.log('Setting initial photo:', {
+        hasPhoto: true,
+        photoLength: pet.photo.length,
+        preview: pet.photo.substring(0, 50) + '...'
+      });
+      
       setPhoto({
-        uri: `http://${SERVER_IP}/PetFurMe-Application/uploads/${pet.photo}`,
+        uri: `data:image/jpeg;base64,${pet.photo}`,
+        base64: pet.photo,
         exists: true
       });
     }
@@ -93,11 +101,22 @@ const UpdatePetProfile = ({ navigation, route }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 1,
+        quality: 0.5,
+        base64: true,
       });
 
       if (!result.canceled) {
-        setPhoto(result.assets[0].uri);
+        const asset = result.assets[0];
+        setPhoto({
+          uri: asset.uri,
+          base64: asset.base64,
+          type: 'image/jpeg',
+          isNew: true
+        });
+        console.log('New photo selected:', {
+          hasUri: !!asset.uri,
+          hasBase64: !!asset.base64
+        });
       }
     } catch (error) {
       console.error('Error picking image:', error);
@@ -136,17 +155,34 @@ const UpdatePetProfile = ({ navigation, route }) => {
     setLoading(true);
     try {
       const formData = new FormData();
-      
-      // Add photo if selected
-      if (photo?.uri && !photo.uri.startsWith('data:image')) {
-        const localUri = photo.uri;
-        const filename = localUri.split('/').pop();
-        
-        formData.append('photo', {
-          uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-          type: 'image/jpeg',
-          name: filename || 'pet_photo.jpg'
-        });
+
+      // Handle photo as binary data - match AddPetName.js approach
+      if (photo) {
+        try {
+          if (photo.base64) {
+            // Directly append base64 data
+            formData.append('photo', photo.base64);
+            formData.append('is_base64', 'true');
+          } else if (photo.uri) {
+            // For URI, convert to base64
+            const response = await fetch(photo.uri);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            
+            const base64Data = await new Promise((resolve, reject) => {
+              reader.onload = () => resolve(reader.result.split(',')[1]);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+            
+            formData.append('photo', base64Data);
+            formData.append('is_base64', 'true');
+          }
+        } catch (error) {
+          console.error('Error processing photo:', error);
+          Alert.alert('Error', 'Failed to process photo. Please try again.');
+          return;
+        }
       }
 
       // Add pet data
@@ -154,66 +190,76 @@ const UpdatePetProfile = ({ navigation, route }) => {
         pet_id: pet.id,
         user_id: parseInt(user_id),
         name: petName.trim(),
-        age: petAge ? parseInt(petAge) : null,
+        age: petAge !== 'Not Specified' ? parseInt(petAge) : null,
         type: petType.toLowerCase(),
-        breed: petBreed.trim(),
+        breed: petBreed !== 'Not Specified' ? petBreed.trim() : null,
         gender: petGender.toLowerCase(),
-        weight: petWeight ? parseFloat(petWeight) : null,
+        weight: petWeight !== 'Not Specified' ? parseFloat(petWeight) : null,
         size: petSize.toLowerCase(),
-        allergies: petAllergies.trim(),
-        notes: petNotes.trim()
+        allergies: petAllergies.trim() || null,
+        notes: petNotes.trim() || null
       };
 
-      console.log('Sending pet data:', petData);
       formData.append('data', JSON.stringify(petData));
+
+      // Debug log
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value.substring(0, 100)}...`);
+      }
 
       const response = await fetch(
         `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
         {
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
         }
       );
 
-      const result = await response.json();
+      const responseText = await response.text();
+      console.log('Raw server response:', responseText);
 
-      if (result.success) {
-        // Log activity only after successful update
-        await logActivity(
-          ACTIVITY_TYPES.PET_UPDATED,
-          parseInt(user_id),
-          {
-            name: petName.trim(),
-            updatedFields: Object.entries({
-              name: petName.trim(),
-              age: petAge,
-              type: petType,
-              breed: petBreed,
-              gender: petGender,
-              weight: petWeight,
-              size: petSize,
-              allergies: petAllergies,
-              notes: petNotes,
-              photo: photo ? 'photo' : null
-            })
-            .filter(([_, value]) => value)
-            .map(([key]) => key)
-          }
-        );
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        console.error('Failed to parse server response:', error);
+        console.error('Response text:', responseText);
+        throw new Error('Invalid server response');
+      }
 
-        // Call onComplete if provided
-        if (route.params?.onComplete) {
-          route.params.onComplete();
-        }
-
-        // Navigate back
-        navigation.goBack();
-      } else {
+      if (!result.success) {
         throw new Error(result.message || 'Failed to update pet profile');
       }
+
+      // Success handling...
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'DrawerNavigator',
+            params: {
+              screen: 'HomePage',
+              params: {
+                user_id: user_id,
+                refresh: true,
+                showMessage: true,
+                message: 'Pet profile updated successfully!',
+                messageType: 'success'
+              }
+            }
+          }
+        ]
+      });
+
     } catch (error) {
       console.error('Error updating pet:', error);
-      Alert.alert("Error", `Failed to update pet profile: ${error.message}`);
+      Alert.alert(
+        "Error", 
+        error.message || "Failed to update pet profile. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -234,8 +280,12 @@ const UpdatePetProfile = ({ navigation, route }) => {
         <View style={styles.photoBox}>
           <View style={styles.photoCircle}>
             <Image 
-              source={photo ? { uri: photo.uri } : require("../../assets/images/doprof.png")}
-              style={styles.pawIcon}
+              source={
+                photo ? 
+                (typeof photo === 'string' ? { uri: photo } : photo) : 
+                require("../../assets/images/doprof.png")
+              }
+              style={styles.petImage}
             />
             <TouchableOpacity style={styles.addButton} onPress={pickImage}>
               <MaterialIcons name="add" size={20} color="#FFFFFF" />
@@ -522,10 +572,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#8146C1',
   },
-  pawIcon: {
-    width: 40,
-    height: 40,
-    tintColor: '#8146C1',
+  petImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 40,
+    resizeMode: 'cover',
   },
   addButton: {
     position: 'absolute',

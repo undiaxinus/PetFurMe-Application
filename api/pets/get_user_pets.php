@@ -28,10 +28,7 @@ try {
 
     // Fetch pets with BLOB data
     $query = "SELECT id, name, type, breed, age, gender, weight, size, 
-              CASE 
-                  WHEN photo_data IS NOT NULL THEN TO_BASE64(photo_data)
-                  ELSE NULL 
-              END as photo_base64,
+              photo_data,
               allergies, notes, deleted_at 
               FROM pets 
               WHERE user_id = ? AND deleted_at IS NULL";
@@ -53,12 +50,11 @@ try {
         while ($row = $result->fetch_assoc()) {
             error_log("Processing pet: " . json_encode($row));
             
-            // Handle photo
-            $photoUrl = null;
-            if (!empty($row['photo_base64'])) {
-                $row['photo'] = 'data:image/jpeg;base64,' . $row['photo_base64'];
-                unset($row['photo_base64']); // Remove the raw base64 from response
+            // Convert photo_data to base64 if it exists
+            if ($row['photo_data']) {
+                $row['photo'] = base64_encode($row['photo_data']);
             }
+            unset($row['photo_data']); // Remove the raw binary data
             
             $pets[] = $row;
         }
