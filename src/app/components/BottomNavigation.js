@@ -86,16 +86,6 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
 
   const handleNavigation = (screen) => {
     try {
-      // Check for verification status for Appointment screen
-      if (screen === 'Appointment' && !isVerified) {
-        Alert.alert(
-          "Account Pending Verification",
-          "Your account is currently pending verification by an administrator. This process helps ensure the safety and quality of our pet care community. You'll be notified once your account is verified.",
-          [{ text: "OK", style: "default" }]
-        );
-        return;
-      }
-
       if (!currentUserId && screen !== 'HomePage') {
         navigation.navigate('LoginScreen');
         return;
@@ -238,7 +228,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
         {/* Navigation Items */}
         {[
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
-          { screen: 'Appointment', icon: 'calendar', label: 'Appointments', requiresVerification: true },
+          { screen: 'Appointment', icon: 'calendar', label: 'Appointments' }, // Removed requiresVerification
           { screen: 'HomePage', icon: 'paw', label: 'Home' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
           { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
@@ -247,11 +237,9 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
             key={screen}
             style={[
               styles.navItem,
-              screen === 'HomePage' && styles.homeItem,
-              requiresVerification && !isVerified && styles.disabledNavItem
+              screen === 'HomePage' && styles.homeItem
             ]}
             onPress={() => handleNavigation(screen)}
-            disabled={requiresVerification && !isVerified}
           >
             <Animated.View style={[
               styles.iconContainer, 
@@ -261,8 +249,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
               <Ionicons 
                 name={currentScreen === screen ? icon : `${icon}-outline`}
                 size={screen === 'HomePage' ? 32 : 24}
-                color={requiresVerification && !isVerified ? '#CCCCCC' : 
-                      currentScreen === screen ? '#8146C1' : '#8146C1'}
+                color={currentScreen === screen ? '#8146C1' : '#8146C1'}
               />
               {screen === 'NotificationScreen' && hasUnreadNotifications && (
                 <View style={styles.notificationBadge}>
@@ -282,4 +269,4 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
   );
 };
 
-export default BottomNavigation; 
+export default BottomNavigation;
