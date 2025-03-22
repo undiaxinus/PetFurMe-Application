@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 export const SERVER_IP = Platform.select({
     ios: 'localhost',
     android: '10.0.2.2', // Special IP for Android emulator
-    default: '192.168.1.7' // Your computer's IP for physical devices
+    default: '192.168.1.4' // Your computer's IP for physical devices
 });
 
 export const SERVER_PORT = '3001';

@@ -23,6 +23,7 @@ import PetDetailsModal from '../components/PetDetailsModal';
 import PetProductsSection from '../components/PetProductsSection';
 import PetsSection from '../components/PetsSection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from 'react-native-modal';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 
@@ -45,6 +46,8 @@ const HomePage = ({ navigation, route }) => {
 	const [petRecords, setPetRecords] = useState([]);
 	const [selectedPet, setSelectedPet] = useState(null);
 	const [isPetModalVisible, setIsPetModalVisible] = useState(false);
+	const [isRecordModalVisible, setIsRecordModalVisible] = useState(false);
+	const [selectedRecord, setSelectedRecord] = useState(null);
 	const { updateDetails } = route.params || {};
 
 	// Add refresh interval reference
@@ -289,16 +292,22 @@ const HomePage = ({ navigation, route }) => {
 	};
 
 	const fetchPetRecords = async () => {
+		if (!user_id) return;
+		
 		try {
-			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pet_records.php?user_id=${user_id}`);
+			const response = await fetch(
+				`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pet_records.php?user_id=${user_id}&include_services=true`
+			);
+			
 			const data = await response.json();
+			
 			if (data.success) {
-				setPetRecords(data.records || []);
+				setPetRecords(data.records);
 			} else {
-				console.error("Failed to fetch pet records:", data.message);
+				console.error('Failed to fetch pet records:', data.message);
 			}
 		} catch (error) {
-			console.error("Error fetching pet records:", error);
+			console.error('Error fetching pet records:', error);
 		}
 	};
 
@@ -372,6 +381,216 @@ const HomePage = ({ navigation, route }) => {
 			color: '#383D41',
 			borderColor: '#D6D8DB'
 		}
+	};
+
+	const renderPetRecords = () => {
+		if (petRecords.length === 0) {
+			return (
+				<View style={styles.emptyStateContainer}>
+					<Text style={styles.emptyStateText}>No pet records found</Text>
+					<TouchableOpacity 
+						style={styles.scheduleButton}
+						onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
+					>
+						<Text style={styles.scheduleButtonText}>Add Record</Text>
+					</TouchableOpacity>
+				</View>
+			);
+		}
+
+		return (
+			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+				{petRecords.map((record, index) => (
+					<TouchableOpacity 
+						key={index}
+						style={[
+							styles.recordCardNew,
+							styles.medicalRecordCard
+						]}
+						onPress={() => {
+							if (record.medical) {
+								toggleRecordModal(record);
+							} else {
+								Alert.alert(
+									"Record Details",
+									"No medical details available for this record.",
+									[{ text: "OK" }]
+								);
+							}
+						}}
+					>
+						<View style={styles.recordHeader}>
+							<Text style={styles.recordPetName}>{record.pet_name}</Text>
+							<Text style={styles.recordDate}>{record.date}</Text>
+						</View>
+						
+						<View style={styles.singleRecordContainer}>
+							<View style={styles.iconTextRow}>
+								<Ionicons name="medical" size={16} color="#4285F4" />
+								<Text style={styles.recordType}>Finding</Text>
+							</View>
+							
+							<Text numberOfLines={1} style={styles.recordDescription}>
+								{record.medical?.description || "Medical Record"}
+							</Text>
+							
+							{record.medical?.details && (
+								<Text numberOfLines={2} style={styles.recordDetails}>
+									{record.medical.details}
+								</Text>
+							)}
+						</View>
+					</TouchableOpacity>
+				))}
+				
+				<TouchableOpacity 
+					style={styles.addRecordCardNew}
+					onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
+				>
+					<Ionicons name="add-circle" size={24} color="#8146C1" />
+					<Text style={styles.addRecordText}>Add New Record</Text>
+				</TouchableOpacity>
+			</ScrollView>
+		);
+	};
+
+	// Enhance the debug logging function
+	const logRecordStructure = (record) => {
+		if (!record) return;
+		
+		console.log('--------- DETAILED RECORD INSPECTION ---------');
+		// Log the entire record for reference
+		console.log('Complete record object:', record);
+		
+		// Medical record inspection
+		if (record.medical) {
+			console.log('MEDICAL RECORD KEYS:', Object.keys(record.medical));
+			console.log('Medical record content:', JSON.stringify(record.medical, null, 2));
+			
+			// Look for attending physician in various locations
+			console.log('Physician check - medical.attending_physician:', record.medical.attending_physician);
+			console.log('Physician check - medical.created_by:', record.medical.created_by);
+			console.log('Physician check - medical.physician:', record.medical.physician);
+		}
+		
+		// Financial record inspection
+		if (record.financial) {
+			console.log('FINANCIAL RECORD KEYS:', Object.keys(record.financial));
+			console.log('Financial record content:', JSON.stringify(record.financial, null, 2));
+			
+			// Look for services
+			console.log('Services check - financial.services:', record.financial.services);
+			if (record.financial.data) {
+				console.log('Services check - financial.data.services:', record.financial.data.services);
+				console.log('Services check - financial.data.items:', record.financial.data.items);
+			}
+			
+			// Look for attending physician in various locations
+			console.log('Physician check - financial.attending_physician:', record.financial.attending_physician);
+			if (record.financial.data) {
+				console.log('Physician check - financial.data.attending_physician:', record.financial.data.attending_physician);
+			}
+		}
+		
+		console.log('--------- END DETAILED INSPECTION ---------');
+	};
+
+	// Update toggleRecordModal to use this
+	const toggleRecordModal = (record = null) => {
+		if (record) {
+			logRecordStructure(record);
+			setSelectedRecord(record);
+			setIsRecordModalVisible(true);
+		} else {
+			setIsRecordModalVisible(false);
+			setSelectedRecord(null);
+		}
+	};
+
+	// Add these helper functions to flexibly find data in different formats
+	const findPhysician = (record) => {
+		if (!record || !record.medical || !record.medical.data) return null;
+		
+		// Check in medical.data for vaccination_administered_by
+		if (record.medical.data.vaccination_administered_by) {
+			return record.medical.data.vaccination_administered_by;
+		}
+		
+		return null;
+	};
+
+	// Add a product name mapping function
+	const getProductNameById = (productId) => {
+		// Map product IDs to names based on the products table
+		const productMap = {
+			"4": "Vetericyn",
+			"5": "Dog Food",
+			"6": "Comb",
+			// Add more as needed
+		};
+		
+		return productMap[productId] || `Product #${productId}`;
+	};
+
+	// Update the findServicesAndProducts function to use the product name mapping
+	const findServicesAndProducts = (record) => {
+		if (!record || !record.financial || !record.financial.data) return [];
+		
+		const items = [];
+		
+		// Add services
+		if (record.financial.data.services && Array.isArray(record.financial.data.services)) {
+			items.push(...record.financial.data.services.map(service => ({
+				name: service.description || 'Service',
+				quantity: 1,
+				price: service.amount || 0,
+				type: 'service'
+			})));
+		}
+		
+		// Add products with proper names
+		if (record.financial.data.products && Array.isArray(record.financial.data.products)) {
+			items.push(...record.financial.data.products.map(product => ({
+				name: getProductNameById(product.item),
+				quantity: product.quantity || 1,
+				price: product.amount || 0,
+				type: 'product'
+			})));
+		}
+		
+		return items;
+	};
+
+	// Helper function to get financial totals
+	const getFinancialTotals = (record) => {
+		if (!record || !record.financial || !record.financial.data) return {
+			servicesTotal: 0,
+			productsTotal: 0,
+			grandTotal: 0
+		};
+		
+		return {
+			servicesTotal: parseFloat(record.financial.data.services_total || 0),
+			productsTotal: parseFloat(record.financial.data.products_total || 0),
+			grandTotal: parseFloat(record.financial.data.grand_total || 0)
+		};
+	};
+
+	const findItemName = (item) => {
+		if (!item) return null;
+		return item.name || item.service_name || item.product_name || 
+			   item.description || item.item_name || item.title;
+	};
+
+	const findItemPrice = (item) => {
+		if (!item) return 0;
+		return item.price || item.amount || item.cost || item.value || 0;
+	};
+
+	// First, fix the description formatting in findPhysician function 
+	const formatDescription = (description) => {
+		// Remove any leading colons and trim whitespace
+		return description.replace(/^:?\s*/, '').trim();
 	};
 
 	return (
@@ -565,29 +784,7 @@ const HomePage = ({ navigation, route }) => {
 						<Ionicons name="document-text" size={24} color="#8146C1" />
 						<Text style={styles.widgetTitle}>Pet Records</Text>
 					</View>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-						{petRecords.map((record, index) => (
-							<TouchableOpacity 
-								key={index}
-								style={styles.recordCard}
-								onPress={() => navigation.navigate('PetRecordDetails', { recordId: record.id })}
-							>
-								<View style={styles.recordIcon}>
-									<Ionicons name="document-text" size={24} color="#8146C1" />
-								</View>
-								<Text style={styles.recordPetName}>{record.pet_name}</Text>
-								<Text style={styles.recordType}>{record.type}</Text>
-								<Text style={styles.recordDate}>{record.date}</Text>
-							</TouchableOpacity>
-						))}
-						<TouchableOpacity 
-							style={styles.addRecordCard}
-							onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
-						>
-							<Ionicons name="add-circle" size={32} color="#8146C1" />
-							<Text style={styles.addRecordText}>Add New Record</Text>
-						</TouchableOpacity>
-					</ScrollView>
+					{renderPetRecords()}
 				</View>
 
 				{/* Pets Section */}
@@ -633,6 +830,159 @@ const HomePage = ({ navigation, route }) => {
 					fetchUserPets();
 				}}
 			/>
+
+			<Modal
+				isVisible={isRecordModalVisible}
+				onBackdropPress={() => toggleRecordModal()}
+				onSwipeComplete={() => toggleRecordModal()}
+				swipeDirection="down"
+				propagateSwipe
+				style={styles.modalContainer}
+				backdropOpacity={0.5}
+				animationIn="slideInUp"
+				animationOut="slideOutDown"
+			>
+				<View style={styles.recordModalContent}>
+					<View style={styles.recordModalHandle} />
+					
+					<View style={styles.recordModalHeader}>
+						<Text style={styles.recordModalTitle}>
+							{selectedRecord?.pet_name || 'Pet'} Record
+						</Text>
+						<TouchableOpacity 
+							onPress={() => toggleRecordModal()} 
+							style={styles.closeButton}
+						>
+							<Ionicons name="close" size={24} color="#666" />
+						</TouchableOpacity>
+					</View>
+					
+					{selectedRecord && (
+						<ScrollView style={styles.recordModalScroll}>
+							{/* Combined Record Card */}
+							<View style={styles.recordCard}>
+								{/* Pet Info & Appointment Header */}
+								<View style={styles.recordCardHeader}>
+									<View>
+										<Text style={styles.recordCardPetName}>
+											{selectedRecord.pet_name}
+										</Text>
+										<Text style={styles.recordCardDate}>
+											{selectedRecord.date}
+										</Text>
+									</View>
+									<View style={styles.appointmentBadge}>
+										<Text style={styles.appointmentBadgeText}>
+											Appointment #{selectedRecord.appointment_id}
+										</Text>
+									</View>
+								</View>
+								
+								{/* Attending Physician - Now using the correct data path */}
+								<View style={styles.attendingPhysicianContainer}>
+									<Ionicons name="person" size={16} color="#8146C1" />
+									<Text style={styles.attendingPhysicianLabel}>Attending Physician:</Text>
+									<Text style={styles.attendingPhysicianName}>
+										{findPhysician(selectedRecord) || 'Not Specified'}
+									</Text>
+								</View>
+								
+								{/* Medical Finding Section - Use correct field names */}
+								<View style={styles.recordSubSection}>
+									<View style={styles.sectionTitleRow}>
+										<Ionicons name="medical" size={16} color="#4285F4" />
+										<Text style={styles.sectionTitle}>Medical Finding</Text>
+									</View>
+									
+									{selectedRecord.medical && selectedRecord.medical.description && (
+										<View style={styles.dataRow}>
+											<Text style={styles.dataLabel}>Description:</Text>
+											<Text style={styles.dataValue}>
+												{formatDescription(selectedRecord.medical.description)}
+											</Text>
+										</View>
+									)}
+									
+									{selectedRecord.medical && selectedRecord.medical.details && (
+										<View style={styles.dataRow}>
+											<Text style={styles.dataLabel}>Details:</Text>
+											<Text style={styles.dataValue}>
+												{formatDescription(selectedRecord.medical.details)}
+											</Text>
+										</View>
+									)}
+								</View>
+								
+								{/* Divider between medical and financial sections */}
+								{selectedRecord.medical && selectedRecord.financial && (
+									<View style={styles.sectionDivider} />
+								)}
+								
+								{/* Products & Services Section */}
+								{selectedRecord.financial && (
+									<>
+										<View style={styles.itemsContainer}>
+											<Text style={styles.dataLabel}>Products & Services:</Text>
+											
+											<View style={styles.itemsTable}>
+												<View style={styles.itemsTableHeader}>
+													<Text style={styles.itemNameHeader}>Item</Text>
+													<Text style={styles.itemQtyHeader}>Qty</Text>
+													<Text style={styles.itemPriceHeader}>Price</Text>
+												</View>
+												
+												{findServicesAndProducts(selectedRecord).map((item, index) => (
+													<View key={index} style={styles.itemsTableRow}>
+														<Text style={styles.itemNameCell} numberOfLines={1}>
+															{item.name}
+														</Text>
+														<Text style={styles.itemQtyCell}>
+															{item.quantity}
+														</Text>
+														<Text style={styles.itemPriceCell}>
+															${parseFloat(item.price).toFixed(2)}
+														</Text>
+													</View>
+												))}
+											</View>
+										</View>
+										
+										{/* Simplified financial summary showing just the total */}
+										<View style={styles.totalContainer}>
+											<Text style={styles.totalLabel}>Total:</Text>
+											<Text style={styles.totalValue}>
+												${parseFloat(selectedRecord.financial.data?.grand_total || 0).toFixed(2)}
+											</Text>
+										</View>
+									</>
+								)}
+								
+								{/* Payment Status Badge */}
+								{(selectedRecord.financial.data?.payment_status || 
+									selectedRecord.financial.payment_status) && (
+									<View style={[
+										styles.paymentStatusBadge, 
+										(selectedRecord.financial.data?.payment_status === 'paid' || 
+											selectedRecord.financial.payment_status === 'paid')
+											? styles.paidBadge : styles.unpaidBadge
+									]}>
+										<Text style={[
+											styles.paymentStatusText,
+											(selectedRecord.financial.data?.payment_status === 'paid' || 
+												selectedRecord.financial.payment_status === 'paid')
+													? styles.paidText : styles.unpaidText
+										]}>
+											{(selectedRecord.financial.data?.payment_status === 'paid' || 
+												selectedRecord.financial.payment_status === 'paid')
+													? 'PAID' : 'UNPAID'}
+										</Text>
+									</View>
+								)}
+							</View>
+						</ScrollView>
+					)}
+				</View>
+			</Modal>
 		</View>
 	);
 };
@@ -1347,139 +1697,336 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF',
 		fontWeight: '600',
 	},
-	recordCard: {
-		backgroundColor: '#F8F2FF',
+	recordCardNew: {
+		backgroundColor: '#F8F8F8',
 		borderRadius: 12,
-		padding: 16,
+		padding: 14,
 		marginRight: 12,
-		width: 150,
-		alignItems: 'center',
-	},
-	recordIcon: {
-		backgroundColor: '#FFFFFF',
-		borderRadius: 25,
-		padding: 12,
+		width: 240,
+		borderLeftWidth: 4,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 3,
+		elevation: 2,
+		minHeight: 160,
 		marginBottom: 8,
 	},
-	recordPetName: {
-		fontSize: 14,
-		fontWeight: 'bold',
-		color: '#333',
-		marginBottom: 4,
+	recordHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10,
+		paddingBottom: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: 'rgba(0,0,0,0.05)',
 	},
-	recordType: {
-		fontSize: 12,
-		color: '#8146C1',
-		marginBottom: 4,
+	recordPetName: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: '#333',
 	},
 	recordDate: {
-		fontSize: 11,
+		fontSize: 12,
 		color: '#666',
 	},
-	addRecordCard: {
-		backgroundColor: '#F8F2FF',
+	recordType: {
+		fontSize: 13,
+		fontWeight: '500',
+		color: '#555',
+	},
+	recordDescription: {
+		fontSize: 14,
+		color: '#333',
+		fontWeight: '500',
+		marginBottom: 6,
+		lineHeight: 18,
+	},
+	recordDetails: {
+		fontSize: 12,
+		color: '#666',
+		marginBottom: 6,
+		lineHeight: 16,
+	},
+	recordSection: {
+		paddingVertical: 8,
+	},
+	combinedRecordsContainer: {
+		flex: 1,
+	},
+	singleRecordContainer: {
+		flex: 1,
+		paddingTop: 4,
+	},
+	recordDivider: {
+		height: 1,
+		backgroundColor: 'rgba(0,0,0,0.05)',
+		marginVertical: 6,
+	},
+	iconTextRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 6,
+		gap: 6,
+	},
+	addRecordCardNew: {
+		backgroundColor: '#F0F0F0',
 		borderRadius: 12,
 		padding: 16,
 		marginRight: 12,
-		width: 150,
+		width: 180,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderStyle: 'dashed',
-		borderWidth: 2,
+		borderWidth: 1,
 		borderColor: '#8146C1',
+		height: 160,
 	},
-	addRecordText: {
+	totalAmount: {
 		fontSize: 14,
-		color: '#8146C1',
-		marginTop: 8,
-		fontWeight: '600',
+		fontWeight: 'bold',
+		color: '#34A853',
+		marginTop: 4,
+		alignSelf: 'flex-end',
 	},
-	modal: {
+	medicalRecordCard: {
+		backgroundColor: '#F0F7FF',
+		borderLeftWidth: 4,
+		borderLeftColor: '#4285F4',
+	},
+	modalContainer: {
 		margin: 0,
 		justifyContent: 'flex-end',
 	},
-	modalContent: {
+	recordModalContent: {
 		backgroundColor: 'white',
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
-		paddingTop: 20,
-		maxHeight: '80%',
+		paddingTop: 15,
+		paddingBottom: 25,
+		maxHeight: '85%',
 	},
-	modalHeader: {
+	recordModalHandle: {
+		width: 40,
+		height: 4,
+		backgroundColor: '#E0E0E0',
+		borderRadius: 2,
+		alignSelf: 'center',
+		marginBottom: 15,
+	},
+	recordModalHeader: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		paddingHorizontal: 20,
-		paddingBottom: 15,
+		marginBottom: 15,
 		borderBottomWidth: 1,
 		borderBottomColor: '#F0F0F0',
+		paddingBottom: 10,
 	},
-	modalTitle: {
-		fontSize: 20,
+	recordModalTitle: {
+		fontSize: 18,
 		fontWeight: 'bold',
 		color: '#333',
 	},
 	closeButton: {
-		padding: 5,
+		padding: 4,
 	},
-	modalScroll: {
-		padding: 20,
+	recordModalScroll: {
+		padding: 15,
+		paddingTop: 0,
 	},
-	modalPetImage: {
-		width: 150,
-		height: 150,
-		borderRadius: 75,
-		alignSelf: 'center',
-		marginBottom: 20,
+	recordCard: {
+		backgroundColor: 'white',
+		marginBottom: 12,
 	},
-	detailsGrid: {
+	recordCardHeader: {
 		flexDirection: 'row',
-		flexWrap: 'wrap',
 		justifyContent: 'space-between',
-		marginBottom: 24,
+		alignItems: 'flex-start',
+		marginBottom: 10,
+		paddingHorizontal: 20,
 	},
-	detailCard: {
-		width: '48%',
-		backgroundColor: '#F8F8F8',
-		padding: 16,
-		borderRadius: 12,
-		marginBottom: 16,
+	recordCardPetName: {
+		fontSize: 20,
+		fontWeight: 'bold',
+		color: '#333',
+		marginBottom: 2,
 	},
-	cardHeader: {
+	recordCardDate: {
+		fontSize: 14,
+		color: '#666',
+	},
+	appointmentBadge: {
+		backgroundColor: '#F0E6FF',
+		paddingHorizontal: 12,
+		paddingVertical: 6,
+		borderRadius: 16,
+	},
+	appointmentBadgeText: {
+		fontSize: 12,
+		color: '#8146C1',
+		fontWeight: '500',
+	},
+	attendingPhysicianContainer: {
+		backgroundColor: '#F8F2FF',
+		padding: 12,
+		borderRadius: 8,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginVertical: 16,
+	},
+	attendingPhysicianLabel: {
+		fontSize: 14,
+		fontWeight: '500',
+		color: '#8146C1',
+		marginLeft: 6,
+		marginRight: 4,
+	},
+	attendingPhysicianName: {
+		fontSize: 14,
+		fontWeight: '600',
+		color: '#333',
+		flex: 1,
+	},
+	sectionDivider: {
+		height: 1,
+		backgroundColor: '#E0E0E0',
+		marginVertical: 12,
+	},
+	recordSubSection: {
+		marginBottom: 12,
+	},
+	sectionTitleRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginBottom: 8,
+		paddingHorizontal: 20,
 	},
-	cardLabel: {
-		fontSize: 14,
-		color: '#666',
+	sectionTitle: {
+		fontSize: 15,
+		fontWeight: 'bold',
 		marginLeft: 6,
-	},
-	cardValue: {
-		fontSize: 16,
-		fontWeight: '600',
 		color: '#333',
 	},
-	breedContainer: {
-		backgroundColor: '#F8F8F8',
-		padding: 16,
-		borderRadius: 12,
-		marginBottom: 24,
+	dataRow: {
+		marginBottom: 6,
+		paddingHorizontal: 20,
 	},
-	breedHeader: {
+	dataLabel: {
+		fontSize: 13,
+		fontWeight: '500',
+		color: '#666',
+	},
+	dataValue: {
+		fontSize: 14,
+		color: '#333',
+		lineHeight: 18,
+	},
+	itemsContainer: {
+		marginTop: 5,
+		marginBottom: 10,
+		paddingHorizontal: 20,
+	},
+	itemsTable: {
+		marginTop: 4,
+		borderWidth: 1,
+		borderColor: '#E0E0E0',
+		borderRadius: 4,
+	},
+	itemsTableHeader: {
 		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 8,
+		backgroundColor: '#F5F5F5',
+		paddingVertical: 6,
+		paddingHorizontal: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: '#E0E0E0',
 	},
-	breedLabel: {
-		fontSize: 14,
+	itemNameHeader: {
+		flex: 2,
+		fontSize: 12,
+		fontWeight: '500',
 		color: '#666',
-		marginLeft: 6,
 	},
-	breedValue: {
-		fontSize: 16,
-		fontWeight: '600',
+	itemQtyHeader: {
+		width: 40,
+		fontSize: 12,
+		fontWeight: '500',
+		color: '#666',
+		textAlign: 'center',
+	},
+	itemPriceHeader: {
+		width: 60,
+		fontSize: 12,
+		fontWeight: '500',
+		color: '#666',
+		textAlign: 'right',
+	},
+	itemsTableRow: {
+		flexDirection: 'row',
+		paddingVertical: 6,
+		paddingHorizontal: 8,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
+	},
+	itemNameCell: {
+		flex: 2,
+		fontSize: 13,
 		color: '#333',
+	},
+	itemQtyCell: {
+		width: 40,
+		fontSize: 13,
+		color: '#333',
+		textAlign: 'center',
+	},
+	itemPriceCell: {
+		width: 60,
+		fontSize: 13,
+		color: '#333',
+		textAlign: 'right',
+	},
+	totalContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingVertical: 8,
+		paddingHorizontal: 20,
+		borderTopWidth: 1,
+		borderTopColor: '#E0E0E0',
+		marginTop: 5,
+	},
+	totalLabel: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: '#333',
+	},
+	totalValue: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: '#333',
+	},
+	paymentStatusBadge: {
+		padding: 4,
+		borderRadius: 12,
+		borderWidth: 1,
+		alignSelf: 'flex-start',
+	},
+	paidBadge: {
+		borderColor: '#34A853',
+	},
+	unpaidBadge: {
+		borderColor: '#FF4444',
+	},
+	paymentStatusText: {
+		fontSize: 10,
+		fontWeight: '600',
+		textTransform: 'capitalize',
+	},
+	paidText: {
+		color: '#34A853',
+	},
+	unpaidText: {
+		color: '#FF4444',
 	},
 });
 

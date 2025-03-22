@@ -1,6 +1,6 @@
 [2025-03-13 21:22:20] === New Message Save Request ===
 [2025-03-13 21:22:20] Request Method: POST
-[2025-03-13 21:22:20] Request Headers: {"Host":"192.168.1.7","Connection":"keep-alive","Content-Length":"109","Pragma":"no-cache","Cache-Control":"no-cache","User-Agent":"Mozilla\/5.0 (Linux; Android 13; SM-G981B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/134.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-03-13 21:22:20] Request Headers: {"Host":"192.168.1.4","Connection":"keep-alive","Content-Length":"109","Pragma":"no-cache","Cache-Control":"no-cache","User-Agent":"Mozilla\/5.0 (Linux; Android 13; SM-G981B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/134.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-03-13 21:22:20] Raw request data: {"sender_id":108,"message":"Hi, I have a question about my cat, Luna.","conversation_id":66,"is_automated":0}
 [2025-03-13 21:22:20] Decoded data: {"sender_id":108,"message":"Hi, I have a question about my cat, Luna.","conversation_id":66,"is_automated":0}
 [2025-03-13 21:22:20] Connecting to database...
@@ -13,7 +13,7 @@
 
 [2025-03-13 21:23:04] === New Message Save Request ===
 [2025-03-13 21:23:04] Request Method: POST
-[2025-03-13 21:23:04] Request Headers: {"Host":"192.168.1.7","Connection":"keep-alive","Content-Length":"136","Pragma":"no-cache","Cache-Control":"no-cache","User-Agent":"Mozilla\/5.0 (Linux; Android 13; SM-G981B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/134.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
+[2025-03-13 21:23:04] Request Headers: {"Host":"192.168.1.4","Connection":"keep-alive","Content-Length":"136","Pragma":"no-cache","Cache-Control":"no-cache","User-Agent":"Mozilla\/5.0 (Linux; Android 13; SM-G981B) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/134.0.0.0 Mobile Safari\/537.36","Accept":"application\/json, text\/plain, *\/*","Content-Type":"application\/json","Sec-GPC":"1","Accept-Language":"en-US,en;q=0.7","Origin":"http:\/\/localhost:8081","Referer":"http:\/\/localhost:8081\/","Accept-Encoding":"gzip, deflate"}
 [2025-03-13 21:23:04] Raw request data: {"sender_id":108,"message":"Luna has been scratching her ears a lot. Could this be an infection?","conversation_id":66,"is_automated":0}
 [2025-03-13 21:23:04] Decoded data: {"sender_id":108,"message":"Luna has been scratching her ears a lot. Could this be an infection?","conversation_id":66,"is_automated":0}
 [2025-03-13 21:23:04] Connecting to database...
