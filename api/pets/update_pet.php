@@ -1,18 +1,68 @@
 <?php
+// Send CORS headers first to avoid "headers already sent" issues
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
-require_once '../config/database.php';
+// Handle preflight OPTIONS request immediately
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Log all errors
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+error_log("Update pet script started at: " . date('Y-m-d H:i:s'));
+error_log("Full script path: " . __FILE__);
+error_log("Document root: " . $_SERVER['DOCUMENT_ROOT']);
+error_log("Request URI: " . $_SERVER['REQUEST_URI']);
 
 try {
+    // Test database connection first
+    require_once '../config/database.php';
     $database = new Database();
     $db = $database->getConnection();
-
-    // Get the form data
-    $data = json_decode($_POST['data'], true);
     
+    if (!$db) {
+        throw new Exception("Database connection failed");
+    }
+    error_log("Database connection successful");
+
+    // Log incoming data for debugging
+    error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
+    error_log("Content type: " . $_SERVER['CONTENT_TYPE']);
+    error_log("Raw POST data: " . file_get_contents('php://input'));
+    error_log("POST data: " . print_r($_POST, true));
+    error_log("FILES data: " . print_r($_FILES, true));
+
+    // Get the raw JSON data
+    if (!isset($_POST['data'])) {
+        throw new Exception('No pet data received');
+    }
+
+    $petDataJson = $_POST['data'];
+    $petData = json_decode($petDataJson, true);
+
+    if (!$petData) {
+        throw new Exception('Invalid pet data format: ' . json_last_error_msg());
+    }
+
+    // Validate required fields
+    $requiredFields = ['pet_id', 'user_id', 'name', 'type', 'gender', 'category'];
+    foreach ($requiredFields as $field) {
+        if (!isset($petData[$field]) || empty($petData[$field])) {
+            throw new Exception("Missing required field: {$field}");
+        }
+    }
+
+    // Check that breed is at least set, even if empty
+    if (!isset($petData['breed'])) {
+        throw new Exception("Breed field must be defined, even if empty");
+    }
+
     // Handle photo update - match the working approach from AddPetName.js
     $photo_binary = null;
     if (isset($_POST['photo'])) {
@@ -20,7 +70,10 @@ try {
         $photo_binary = base64_decode($_POST['photo']);
     }
 
-    // Prepare the SQL query
+    // Start transaction
+    $db->begin_transaction();
+
+    // Prepare the SQL query WITHOUT the size field
     $sql = "UPDATE pets SET 
             name = ?,
             type = ?,
@@ -28,30 +81,30 @@ try {
             gender = ?,
             age = ?,
             weight = ?,
-            size = ?,
             allergies = ?,
             notes = ?,
+            category = ?,
             photo = ?,      -- Update both photo and photo_data
             photo_data = ?  -- This ensures trigger works properly
             WHERE id = ? AND user_id = ?";
 
     $stmt = $db->prepare($sql);
     
-    // Create params array
+    // Create params array WITHOUT the size field
     $params = [
-        $data['name'],
-        $data['type'],
-        $data['breed'],
-        $data['gender'],
-        $data['age'],
-        $data['weight'],
-        $data['size'],
-        $data['allergies'],
-        $data['notes'],
+        $petData['name'],
+        $petData['type'],
+        $petData['breed'],
+        $petData['gender'],
+        $petData['age'],
+        $petData['weight'],
+        $petData['allergies'],
+        $petData['notes'],
+        $petData['category'],
         $photo_binary,  // photo column
         $photo_binary,  // photo_data column
-        $data['pet_id'],
-        $data['user_id']
+        $petData['pet_id'],
+        $petData['user_id']
     ];
 
     // Execute with params
@@ -59,16 +112,28 @@ try {
         throw new Exception($stmt->error);
     }
 
+    // Commit transaction
+    $db->commit();
+
     echo json_encode([
         'success' => true,
         'message' => 'Pet updated successfully'
     ]);
 
 } catch (Exception $e) {
-    error_log("Error in update_pet.php: " . $e->getMessage());
+    // Rollback transaction if active
+    if (isset($db) && $db->connect_errno === 0) {
+        $db->rollback();
+    }
+    
+    error_log("Error updating pet: " . $e->getMessage());
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => 'Failed to update pet profile: ' . $e->getMessage()
     ]);
+}
+
+if (isset($db)) {
+    $db->close();
 }
 ?> 

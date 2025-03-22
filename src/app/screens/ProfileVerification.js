@@ -101,18 +101,46 @@ const ProfileVerification = ({ navigation, route }) => {
                 setIsVerified(verificationStatus);
                 setSaveDisabled(verificationStatus);
 
-                // Handle photo
-                if (userData.photo) {
-                    const photoUrl = `${API_BASE_URL}/uploads/${userData.photo}`;
-                    console.log("Photo URL:", photoUrl);
+                // Handle photo - prioritize binary data in photo_data
+                try {
+                    const photoUrl = `${API_BASE_URL}/api/users/get_user_photo.php?user_id=${user_id}`;
+                    console.log("Fetching user photo from:", photoUrl);
                     
-                    setProfilePhoto({
-                        uri: photoUrl,
-                        headers: {
-                            'Cache-Control': 'no-cache'
+                    const photoResponse = await axios.get(photoUrl);
+                    console.log("Photo response:", photoResponse.data);
+                    
+                    if (photoResponse.data.success) {
+                        if (photoResponse.data.source === 'photo_data') {
+                            // Handle binary data returned as base64
+                            const base64Data = photoResponse.data.photo;
+                            console.log("Received photo as base64, length:", base64Data.length);
+                            
+                            setProfilePhoto({
+                                uri: `data:image/jpeg;base64,${base64Data}`,
+                                headers: {
+                                    'Cache-Control': 'no-cache'
+                                }
+                            });
+                        } else if (photoResponse.data.photo_path) {
+                            // Handle traditional file path
+                            const filePhotoUrl = `${API_BASE_URL}/uploads/${photoResponse.data.photo_path}`;
+                            console.log("Photo URL (file path):", filePhotoUrl);
+                            
+                            setProfilePhoto({
+                                uri: filePhotoUrl,
+                                headers: {
+                                    'Cache-Control': 'no-cache'
+                                }
+                            });
+                        } else {
+                            setProfilePhoto(null);
                         }
-                    });
-                } else {
+                    } else {
+                        console.log("No photo found for user");
+                        setProfilePhoto(null);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user photo:", error);
                     setProfilePhoto(null);
                 }
 
@@ -175,7 +203,7 @@ const ProfileVerification = ({ navigation, route }) => {
                 address,
                 phoneNumber,
                 email,
-                profilePhoto
+                profilePhoto: profilePhoto ? 'Present (not shown)' : null
             });
 
             const formData = new FormData();
@@ -189,44 +217,108 @@ const ProfileVerification = ({ navigation, route }) => {
             if (email !== undefined) userData.email = email.trim();
             userData.user_id = user_id;
 
-            // Handle profile photo
+            // Handle profile photo - store as binary data in photo_data column
             if (profilePhoto?.uri) {
                 const localUri = profilePhoto.uri;
-                let filename;
                 
                 // Handle base64 image
                 if (localUri.startsWith('data:image')) {
-                    const ext = 'png';
-                    filename = `user_${user_id}_${Date.now()}.${ext}`;
-                    
-                    // Convert base64 to blob
+                    // Image is already in base64 format
                     const base64Data = localUri.split(',')[1];
-                    const byteCharacters = atob(base64Data);
-                    const byteArrays = [];
-                    
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteArrays.push(byteCharacters.charCodeAt(i));
-                    }
-                    
-                    const blob = new Blob([new Uint8Array(byteArrays)], { type: 'image/png' });
-                    
-                    // Append to formData
-                    formData.append('photo', blob, filename);
-                    userData.photo = `user_photos/${filename}`;
+                    userData.photo_data = base64Data; // Send base64 data directly
+                    userData.photo_data_format = 'base64';
+                    console.log("Base64 image data length:", base64Data.length);
                 } else {
-                    // Handle file URI
-                    filename = localUri.split('/').pop();
-                    formData.append('photo', {
-                        uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
-                        type: 'image/jpeg',
-                        name: filename
-                    });
-                    userData.photo = `user_photos/${filename}`;
+                    // Convert file URI to base64
+                    try {
+                        let response;
+                        if (Platform.OS === 'web') {
+                            // For web, fetch the image and convert to base64
+                            response = await fetch(localUri);
+                            const blob = await response.blob();
+                            console.log("Image blob size:", blob.size, "bytes");
+                            
+                            const reader = new FileReader();
+                            
+                            // Create a promise to handle the FileReader async operation
+                            const base64 = await new Promise((resolve) => {
+                                reader.onloadend = () => {
+                                    const base64data = reader.result;
+                                    // Get just the base64 part without the prefix
+                                    const base64Only = base64data.split(',')[1];
+                                    console.log("Converted image to base64, length:", base64Only.length);
+                                    resolve(base64Only);
+                                };
+                                reader.readAsDataURL(blob);
+                            });
+                            
+                            userData.photo_data = base64;
+                            userData.photo_data_format = 'base64';
+                        } else {
+                            // For native apps, use react-native-fs or similar libraries 
+                            // to read the file as base64
+                            // This is a placeholder - actual implementation depends on available libraries
+                            console.log('Converting image to base64 on native platform');
+                            
+                            // Still include file in formData for fallback
+                            const filename = localUri.split('/').pop();
+                            formData.append('photo', {
+                                uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                                type: 'image/jpeg',
+                                name: filename
+                            });
+                            
+                            // Set flag to use fallback method if base64 conversion isn't available
+                            userData.use_fallback_photo = true;
+                        }
+                    } catch (error) {
+                        console.error('Error converting image to base64:', error);
+                        // Fallback to traditional file upload
+                        const filename = localUri.split('/').pop();
+                        formData.append('photo', {
+                            uri: Platform.OS === 'android' ? localUri : localUri.replace('file://', ''),
+                            type: 'image/jpeg',
+                            name: filename
+                        });
+                        userData.use_fallback_photo = true;
+                    }
                 }
-                console.log('Photo path to be saved:', userData.photo);
+                
+                console.log('Photo data prepared for database storage');
             }
 
-            console.log('Sending user data:', userData);
+            // Test sending image data directly to fix script if binary data is available
+            if (userData.photo_data) {
+                console.log("Sending photo data to fix script...");
+                
+                try {
+                    // Create a simpler form with just the base64 data for our fix script
+                    const testFormData = new FormData();
+                    testFormData.append('photo_data', userData.photo_data);
+                    
+                    const fixUrl = `${API_BASE_URL}/api/users/fix_photo_data.php?user_id=${user_id}`;
+                    console.log("Posting to fix script:", fixUrl);
+                    
+                    const testResponse = await axios.post(fixUrl, testFormData);
+                    console.log("Fix script response:", testResponse.data);
+                    
+                    if (testResponse.data.success) {
+                        console.log("Photo data fixed successfully! Length in DB:", testResponse.data.data_length);
+                        // Continue with the rest of profile update without photo
+                        delete userData.photo_data;
+                    }
+                } catch (error) {
+                    console.error("Error in fix script:", error);
+                    // Continue with regular update
+                }
+            }
+
+            console.log('Sending user data:', {
+                ...userData, 
+                photo_data: userData.photo_data ? 
+                    `[BINARY_DATA (${userData.photo_data.length} chars)]` : null
+            });
+            
             formData.append('data', JSON.stringify(userData));
 
             const updateUrl = `${API_BASE_URL}/api/users/update_user_data.php`;
@@ -243,6 +335,12 @@ const ProfileVerification = ({ navigation, route }) => {
             );
 
             console.log('Profile update response:', response.data);
+            
+            // Add additional response debugging
+            if (response.data.photo_data_size) {
+                console.log('Photo binary size stored in database:', 
+                    response.data.photo_data_size, 'bytes');
+            }
 
             if (response.data.success) {
                 // Prepare update details
@@ -390,29 +488,24 @@ const ProfileVerification = ({ navigation, route }) => {
                 <View style={styles.profileSection}>
                     <View style={styles.profileImageContainer}>
                         <View style={styles.profileImage}>
-                            <Image
-                                source={
-                                    profilePhoto?.uri
-                                        ? {
-                                            uri: profilePhoto.uri,
-                                            headers: profilePhoto.headers,
-                                            cache: 'reload'
-                                        }
-                                        : require('../../assets/images/defphoto.png')
-                                }
-                                style={[styles.profilePhotoImage, { borderRadius: 70 }]}
-                                onLoadStart={() => console.log('Starting image load:', profilePhoto?.uri)}
-                                onLoadEnd={() => console.log('Finished image load')}
-                                onError={(error) => {
-                                    console.error('Image loading error:', error.nativeEvent.error);
-                                    console.error('Failed URL:', profilePhoto?.uri);
-                                    setProfilePhoto(null);
-                                }}
-                            />
+                            {profilePhoto ? (
+                                <Image
+                                    source={profilePhoto}
+                                    style={styles.profilePhotoImage}
+                                    onLoad={() => console.log('Finished image load')}
+                                    onError={(e) => console.error('Error loading image:', e.nativeEvent.error)}
+                                />
+                            ) : (
+                                <Image
+                                    source={require('../../../uploads/defaults/avatar.png')}
+                                    style={styles.profilePhotoImage}
+                                />
+                            )}
                         </View>
                         <TouchableOpacity
                             style={styles.editPhotoButton}
                             onPress={pickImage}
+                            disabled={isVerified}
                         >
                             <Ionicons name="camera" size={20} color="#FFFFFF" />
                         </TouchableOpacity>

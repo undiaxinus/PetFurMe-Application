@@ -16,6 +16,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logActivity } from '../utils/activityLogger';
+import axios from 'axios';
 
 const API_BASE_URL = `http://${SERVER_IP}`;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -25,6 +26,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
 	const [userData, setUserData] = useState(null);
 	const [activityLogs, setActivityLogs] = useState([]);
+	const [profileImage, setProfileImage] = useState(null);
 	
 	const getUserData = async () => {
 		if (!state?.routes) return null;
@@ -66,6 +68,42 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		return null;
 	};
 
+	const fetchUserPhoto = async (userId) => {
+		if (!userId) return;
+		
+		try {
+			const photoUrl = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_photo.php?user_id=${userId}`;
+			
+			const photoResponse = await axios.get(photoUrl);
+			
+			if (photoResponse.data.success) {
+				if (photoResponse.data.source === 'photo_data') {
+					// Handle binary data returned as base64
+					const base64Data = photoResponse.data.photo;
+					
+					setProfileImage({
+						uri: `data:image/jpeg;base64,${base64Data}`
+					});
+				} else if (photoResponse.data.photo_path) {
+					// Handle traditional file path
+					const filePhotoUrl = `${API_BASE_URL}/PetFurMe-Application/uploads/${photoResponse.data.photo_path}`;
+					
+					setProfileImage({
+						uri: filePhotoUrl
+					});
+				} else {
+					setProfileImage(null);
+				}
+			} else {
+				console.log("No photo found for user in drawer");
+				setProfileImage(null);
+			}
+		} catch (error) {
+			console.error("Error fetching user photo in drawer:", error);
+			setProfileImage(null);
+		}
+	};
+
 	const loadActivityLogs = async () => {
 		if (!userData?.user_id) return; // Don't load if no user
 
@@ -96,6 +134,7 @@ const CustomDrawerContent = ({ navigation, state }) => {
 				const data = await getUserData();
 				if (data && isActive) {
 					setUserData(data);
+					fetchUserPhoto(data.user_id);
 				}
 			} catch (error) {
 				console.error('Error loading user data:', error);
@@ -164,29 +203,41 @@ const CustomDrawerContent = ({ navigation, state }) => {
 		return (
 			<View style={styles.profileGradient}>
 				<View style={styles.profileSection}>
-					<View style={styles.profileImageWrapper}>
-						<View style={styles.profileImageContainer}>
-							<Image
-								source={
-									userData?.photo 
-										? { uri: `${API_BASE_URL}/PetFurMe-Application/uploads/${userData.photo}` }
-										: require("../../assets/images/defphoto.png")
-								}
+					<View style={styles.profileImageContainer}>
+						{profileImage ? (
+							<Image 
+								source={profileImage}
 								style={styles.profileImage}
-								defaultSource={require("../../assets/images/defphoto.png")}
+								onError={() => setProfileImage(null)}
 							/>
-						</View>
+						) : (
+							<Image 
+								source={{ uri: `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/avatar.png` }}
+								style={styles.profileImage}
+							/>
+						)}
 					</View>
-					<View style={styles.profileTextContainer}>
-						<Text style={[styles.profileName, { color: '#FFFFFF' }]}>
-							{displayName}
+					
+					<View style={styles.profileInfoContainer}>
+						<Text style={styles.profileName} numberOfLines={1}>
+							{displayName || "Guest User"}
 						</Text>
-						<View style={styles.phoneContainer}>
-							<MaterialIcons name="phone" size={14} color="#F0F0F0" />
-							<Text style={[styles.profileRole, { color: '#F0F0F0' }]}>
-								{userPhone}
-							</Text>
-						</View>
+						<Text style={styles.profileRole}>
+							{userRole === "pet_owner" ? "Pet Owner" : 
+								userRole === "store_owner" ? "Store Owner" : 
+								userRole === "veterinarian" ? "Veterinarian" : 
+								userRole === "admin" ? "Administrator" : 
+								"Guest"}
+						</Text>
+						
+						{userData?.phone && (
+							<View style={styles.phoneContainer}>
+								<Ionicons name="call-outline" size={12} color="#FFFFFF" style={{marginRight: 5}} />
+								<Text style={styles.profilePhone} numberOfLines={1}>
+									{userPhone}
+								</Text>
+							</View>
+						)}
 					</View>
 				</View>
 			</View>
@@ -329,55 +380,44 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFFFFF",
 	},
 	profileGradient: {
-		paddingTop: 50,
-		paddingBottom: 20,
 		backgroundColor: '#8146C1',
-		marginBottom: 0,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 4,
-		},
-		shadowOpacity: 0.15,
-		shadowRadius: 12,
-		elevation: 8,
+		paddingTop: 40,
+		paddingBottom: 20,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
 	},
 	profileSection: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		padding: 20,
-		top: 0,
-	},
-	profileImageWrapper: {
-		padding: 3,
-		borderRadius: 40,
-		backgroundColor: 'rgba(255,255,255,0.2)',
+		paddingTop: 10,
 	},
 	profileImageContainer: {
-		width: 74,
-		height: 74,
-		borderRadius: 37,
+		width: 60,
+		height: 60,
+		borderRadius: 30,
 		backgroundColor: '#F0F0F0',
 		overflow: 'hidden',
-		borderWidth: 3,
+		borderWidth: 2,
 		borderColor: '#FFFFFF',
 	},
 	profileImage: {
 		width: '100%',
 		height: '100%',
 	},
-	profileTextContainer: {
+	profileInfoContainer: {
+		flex: 1,
 		marginLeft: 15,
 	},
 	profileName: {
 		fontSize: 18,
 		fontWeight: "bold",
-		color: "#000000",
+		color: "#FFFFFF",
 	},
 	profileRole: {
 		fontSize: 14,
-		color: "#888888",
-		marginTop: 4,
+		color: "#F0F0F0",
+		marginTop: 2,
 	},
 	navigationContainer: {
 		padding: 15,
@@ -616,11 +656,16 @@ const styles = StyleSheet.create({
 	phoneContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 8,
-		backgroundColor: 'rgba(255,255,255,0.1)',
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		borderRadius: 15,
+		marginTop: 6,
+		backgroundColor: 'rgba(255,255,255,0.15)',
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		borderRadius: 12,
+		alignSelf: 'flex-start',
+	},
+	profilePhone: {
+		fontSize: 13,
+		color: '#FFFFFF',
 	},
 });
 

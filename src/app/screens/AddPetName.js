@@ -180,6 +180,7 @@ const AddPetProfile = ({ route }) => {
 				category: petType,
 				gender: petGender?.toLowerCase() || null,
 				weight: petWeight ? parseFloat(petWeight) : null,
+				size: null  // Set size to null explicitly
 			};
 
 			// Handle photo as binary data
@@ -230,7 +231,6 @@ const AddPetProfile = ({ route }) => {
 				headers: {
 					'Accept': 'application/json',
 				},
-				credentials: 'include',
 				body: formData
 			});
 

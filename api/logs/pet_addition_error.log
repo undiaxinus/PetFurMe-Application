@@ -42,3 +42,486 @@
 
 [13-Mar-2025 23:40:49 Europe/Berlin] Photo data processed successfully
 [13-Mar-2025 23:40:49 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 10:15:24 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:15:24 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:15:24 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:15:24 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chicki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+)
+
+[22-Mar-2025 10:15:24 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:15:24 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:16:14 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:16:14 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:16:14 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:16:14 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chicki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+)
+
+[22-Mar-2025 10:16:14 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:16:14 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:17:03 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:17:03 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:17:03 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:17:03 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chikcki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+)
+
+[22-Mar-2025 10:17:03 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:17:03 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:20:13 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:20:13 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:20:13 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:20:13 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chicki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+)
+
+[22-Mar-2025 10:20:13 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:20:13 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:21:01 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:21:01 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:21:01 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:21:01 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+)
+
+[22-Mar-2025 10:21:01 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:21:01 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:30:10 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:30:10 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:30:10 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:30:10 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 10:30:10 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:30:10 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 10:34:57 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 10:34:57 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 10:34:57 Europe/Berlin] Database connection successful
+[22-Mar-2025 10:34:57 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+)
+
+[22-Mar-2025 10:34:57 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 10:34:57 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 12:31:00 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 12:31:00 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 12:31:00 Europe/Berlin] Database connection successful
+[22-Mar-2025 12:31:00 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 12:31:00 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 12:31:00 Europe/Berlin] Error in add_pet.php: Unknown column 'size' in 'field list'
+[22-Mar-2025 12:44:02 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 12:44:02 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 12:44:02 Europe/Berlin] Database connection successful
+[22-Mar-2025 12:44:02 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 12:44:02 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 12:44:02 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 12:44:02 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:82
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(82): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Chiki', 'bird', NULL, NULL, 'male', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 82
+[22-Mar-2025 12:53:31 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 12:53:31 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 12:53:31 Europe/Berlin] Database connection successful
+[22-Mar-2025 12:53:31 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 12:53:31 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 12:53:31 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 12:53:31 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:82
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(82): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Chiki', 'bird', NULL, NULL, 'female', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 82
+[22-Mar-2025 13:07:57 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 13:07:57 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 13:07:57 Europe/Berlin] Database connection successful
+[22-Mar-2025 13:07:57 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 13:07:57 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 13:07:57 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 13:07:57 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:82
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(82): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Chiki', 'bird', NULL, NULL, 'male', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 82
+[22-Mar-2025 13:10:31 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 13:10:31 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 13:10:31 Europe/Berlin] Database connection successful
+[22-Mar-2025 13:10:31 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 13:10:31 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 13:10:31 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 13:10:31 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:82
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(82): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Chiki', 'bird', NULL, NULL, 'female', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 82
+[22-Mar-2025 13:23:32 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 13:23:32 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 13:23:32 Europe/Berlin] Database connection successful
+[22-Mar-2025 13:23:32 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Raizel
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 13:23:32 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 13:23:32 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 13:23:32 Europe/Berlin] Parameter types: iisssissssb
+[22-Mar-2025 13:23:32 Europe/Berlin] Parameter count: 12
+[22-Mar-2025 13:23:32 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:99
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(99): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Raizel', 'bird', NULL, NULL, 'male', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 99
+[22-Mar-2025 13:27:12 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 13:27:12 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 13:27:12 Europe/Berlin] Database connection successful
+[22-Mar-2025 13:27:12 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Raizel
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 13:27:12 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 13:27:12 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 13:27:12 Europe/Berlin] Parameter types: iisssissssb
+[22-Mar-2025 13:27:12 Europe/Berlin] Parameter count: 12
+[22-Mar-2025 13:27:12 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php:103
+Stack trace:
+#0 D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php(103): mysqli_stmt->bind_param('iisssissssb', 143, 143, 'Raizel', 'bird', NULL, NULL, 'male', NULL, NULL, NULL, 'Bird', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00...')
+#1 {main}
+  thrown in D:\XAMPP\htdocs\PetFurMe-Application\api\pets\add_pet.php on line 103
+[22-Mar-2025 13:34:54 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 13:34:54 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 13:34:54 Europe/Berlin] Database connection successful
+[22-Mar-2025 13:34:54 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 13:34:54 Europe/Berlin] Photo data processed successfully
+[22-Mar-2025 13:34:54 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 16:02:44 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 16:02:44 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 16:02:44 Europe/Berlin] Database connection successful
+[22-Mar-2025 16:02:44 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 16:02:44 Europe/Berlin] Photo data processed successfully: 38962 bytes
+[22-Mar-2025 16:02:44 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 16:11:49 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 16:11:49 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 16:11:49 Europe/Berlin] Database connection successful
+[22-Mar-2025 16:11:49 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 16:11:49 Europe/Berlin] Photo binary exists: Yes
+[22-Mar-2025 16:11:49 Europe/Berlin] Photo binary length: 51952
+[22-Mar-2025 16:11:49 Europe/Berlin] Is base64 flag: true
+[22-Mar-2025 16:11:49 Europe/Berlin] Decoding base64 photo data
+[22-Mar-2025 16:11:49 Europe/Berlin] Photo data processed successfully: 38962 bytes
+[22-Mar-2025 16:11:49 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 16:11:49 Europe/Berlin] Photo data size for binding: 38962
+[22-Mar-2025 16:15:25 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 16:15:25 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 16:15:25 Europe/Berlin] Database connection successful
+[22-Mar-2025 16:15:25 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => female
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 16:15:25 Europe/Berlin] Photo binary exists: Yes
+[22-Mar-2025 16:15:25 Europe/Berlin] Photo binary length: 51952
+[22-Mar-2025 16:15:25 Europe/Berlin] Is base64 flag: true
+[22-Mar-2025 16:15:25 Europe/Berlin] Decoding base64 photo data
+[22-Mar-2025 16:15:25 Europe/Berlin] Photo data processed successfully: 38962 bytes
+[22-Mar-2025 16:15:25 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 16:15:25 Europe/Berlin] Photo data size for binding: 38962
+[22-Mar-2025 16:24:01 Europe/Berlin] Starting pet addition process
+[22-Mar-2025 16:24:01 Europe/Berlin] Attempting database connection to localhost/pet-management
+[22-Mar-2025 16:24:01 Europe/Berlin] Database connection successful
+[22-Mar-2025 16:24:01 Europe/Berlin] Received data: Array
+(
+    [user_id] => 143
+    [created_by] => 143
+    [name] => Chiki1
+    [type] => bird
+    [breed] => 
+    [age] => 
+    [age_unit] => years
+    [owner_name] => 
+    [allergies] => 
+    [notes] => 
+    [category] => Bird
+    [gender] => male
+    [weight] => 
+    [size] => 
+)
+
+[22-Mar-2025 16:24:01 Europe/Berlin] Photo binary exists: Yes
+[22-Mar-2025 16:24:01 Europe/Berlin] Photo binary length: 51952
+[22-Mar-2025 16:24:01 Europe/Berlin] Is base64 flag: true
+[22-Mar-2025 16:24:01 Europe/Berlin] Raw photo data length: 51952
+[22-Mar-2025 16:24:01 Europe/Berlin] Photo is base64 encoded, decoding now
+[22-Mar-2025 16:24:01 Europe/Berlin] Decoded photo size: 38962
+[22-Mar-2025 16:24:01 Europe/Berlin] Final photo data size: 38962 bytes
+[22-Mar-2025 16:24:01 Europe/Berlin] Binding parameters for pet insertion
+[22-Mar-2025 16:24:01 Europe/Berlin] Photo data for binding: Present (38962 bytes)
+[22-Mar-2025 16:24:01 Europe/Berlin] Using direct query for photo insertion

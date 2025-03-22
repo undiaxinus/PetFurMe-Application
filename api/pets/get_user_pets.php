@@ -27,7 +27,7 @@ try {
     error_log("Fetching pets for user_id: " . $user_id);
 
     // Fetch pets with BLOB data
-    $query = "SELECT id, name, type, breed, age, gender, weight, size, 
+    $query = "SELECT id, name, type, breed, age, gender, weight, 
               photo_data,
               allergies, notes, deleted_at 
               FROM pets 

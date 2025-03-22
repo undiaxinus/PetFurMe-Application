@@ -25,7 +25,7 @@ const PET_SIZES = ['Small', 'Medium', 'Large'];
 const PET_GENDERS = ['Male', 'Female'];
 
 // Add this constant at the top of the file with other imports
-const API_BASE_URL = `http://${SERVER_IP}`;
+const API_BASE_URL = `http://${SERVER_IP}${SERVER_PORT ? `:${SERVER_PORT}` : ''}`;
 
 const UpdatePetProfile = ({ navigation, route }) => {
   const { pet, user_id } = route.params;
@@ -163,6 +163,8 @@ const UpdatePetProfile = ({ navigation, route }) => {
             // Directly append base64 data
             formData.append('photo', photo.base64);
             formData.append('is_base64', 'true');
+            // Also indicate this is binary data for proper server handling
+            formData.append('is_binary_data', 'true');
           } else if (photo.uri) {
             // For URI, convert to base64
             const response = await fetch(photo.uri);
@@ -177,6 +179,7 @@ const UpdatePetProfile = ({ navigation, route }) => {
             
             formData.append('photo', base64Data);
             formData.append('is_base64', 'true');
+            formData.append('is_binary_data', 'true');
           }
         } catch (error) {
           console.error('Error processing photo:', error);
@@ -191,11 +194,13 @@ const UpdatePetProfile = ({ navigation, route }) => {
         user_id: parseInt(user_id),
         name: petName.trim(),
         age: petAge !== 'Not Specified' ? parseInt(petAge) : null,
+        // Use category and type according to database schema
+        category: petType.charAt(0).toUpperCase() + petType.slice(1).toLowerCase(),
         type: petType.toLowerCase(),
-        breed: petBreed !== 'Not Specified' ? petBreed.trim() : null,
+        breed: petBreed !== 'Not Specified' ? petBreed.trim() : "Not Specified",
         gender: petGender.toLowerCase(),
         weight: petWeight !== 'Not Specified' ? parseFloat(petWeight) : null,
-        size: petSize.toLowerCase(),
+        // Remove size field as it does not exist in the database
         allergies: petAllergies.trim() || null,
         notes: petNotes.trim() || null
       };
@@ -203,12 +208,22 @@ const UpdatePetProfile = ({ navigation, route }) => {
       formData.append('data', JSON.stringify(petData));
 
       // Debug log
+      console.log('Sending form data:');
       for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value.substring(0, 100)}...`);
+        if (key === 'photo') {
+          console.log(`${key}: [binary data]`);
+        } else {
+          console.log(`${key}: ${typeof value === 'string' ? value.substring(0, 100) + '...' : value}`);
+        }
       }
 
+      // Create the URL with the correct path including PetFurMe-Application
+      const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/update_pet.php`;
+      
+      console.log('Sending request to:', url);
+      
       const response = await fetch(
-        `${API_BASE_URL}/PetFurMe-Application/api/pets/update_pet.php`,
+        url,
         {
           method: 'POST',
           body: formData,

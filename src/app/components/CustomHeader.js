@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SERVER_IP } from '../config/constants';
+import axios from 'axios';
 
 const CustomHeader = ({ 
   title, 
@@ -15,6 +16,7 @@ const CustomHeader = ({
 }) => {
   const API_BASE_URL = `http://${SERVER_IP}`;
   const [userData, setUserData] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   const getUserData = async () => {
     if (!user_id) return null;
@@ -31,7 +33,6 @@ const CustomHeader = ({
       }
       
       const data = await response.json();
-      console.log("Raw API Response:", data);
       
       if (data.success) {
         const userData = {
@@ -51,11 +52,50 @@ const CustomHeader = ({
     return null;
   };
 
+  const fetchUserPhoto = async () => {
+    if (!user_id) return;
+    
+    try {
+      const photoUrl = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_photo.php?user_id=${user_id}`;
+      console.log("Header: Fetching user photo from:", photoUrl);
+      
+      const photoResponse = await axios.get(photoUrl);
+      
+      if (photoResponse.data.success) {
+        if (photoResponse.data.source === 'photo_data') {
+          // Handle binary data returned as base64
+          const base64Data = photoResponse.data.photo;
+          console.log("Header: Received photo as base64");
+          
+          setProfileImage({
+            uri: `data:image/jpeg;base64,${base64Data}`
+          });
+        } else if (photoResponse.data.photo_path) {
+          // Handle traditional file path
+          const filePhotoUrl = `${API_BASE_URL}/PetFurMe-Application/uploads/${photoResponse.data.photo_path}`;
+          
+          setProfileImage({
+            uri: filePhotoUrl
+          });
+        } else {
+          setProfileImage(null);
+        }
+      } else {
+        console.log("No photo found for user in header");
+        setProfileImage(null);
+      }
+    } catch (error) {
+      console.error("Error fetching user photo in header:", error);
+      setProfileImage(null);
+    }
+  };
+
   useEffect(() => {
     const loadUserData = async () => {
       const data = await getUserData();
       if (data) {
         setUserData(data);
+        fetchUserPhoto();
       }
     };
     
@@ -111,15 +151,21 @@ const CustomHeader = ({
                 });
               }}
             >
-              <Image
-                source={
-                  userData?.photo 
-                    ? { uri: `${API_BASE_URL}/PetFurMe-Application/uploads/${userData.photo}` }
-                    : require("../../assets/images/defphoto.png")
-                }
-                style={styles.profilePhoto}
-                defaultSource={require("../../assets/images/defphoto.png")}
-              />
+              {profileImage ? (
+                <Image
+                  source={profileImage}
+                  style={styles.profilePhoto}
+                  onError={(e) => {
+                    console.error('Error loading profile image in header:', e.nativeEvent);
+                    setProfileImage(null);
+                  }}
+                />
+              ) : (
+                <Image
+                  source={{ uri: `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/avatar.png` }}
+                  style={styles.profilePhoto}
+                />
+              )}
             </TouchableOpacity>
           )}
           {!showProfileButton && <View style={styles.iconButton} />}

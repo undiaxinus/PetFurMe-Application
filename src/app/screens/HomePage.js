@@ -387,13 +387,11 @@ const HomePage = ({ navigation, route }) => {
 		if (petRecords.length === 0) {
 			return (
 				<View style={styles.emptyStateContainer}>
-					<Text style={styles.emptyStateText}>No pet records found</Text>
-					<TouchableOpacity 
-						style={styles.scheduleButton}
-						onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
-					>
-						<Text style={styles.scheduleButtonText}>Add Record</Text>
-					</TouchableOpacity>
+					<Ionicons name="document-text-outline" size={32} color="#8146C1" style={{opacity: 0.5}} />
+					<Text style={styles.emptyStateText}>No medical records available</Text>
+					<Text style={styles.emptyStateSubtext}>
+						Records will appear here after your pet's veterinary visits
+					</Text>
 				</View>
 			);
 		}
@@ -442,14 +440,6 @@ const HomePage = ({ navigation, route }) => {
 						</View>
 					</TouchableOpacity>
 				))}
-				
-				<TouchableOpacity 
-					style={styles.addRecordCardNew}
-					onPress={() => navigation.navigate('AddPetRecord', { user_id: user_id })}
-				>
-					<Ionicons name="add-circle" size={24} color="#8146C1" />
-					<Text style={styles.addRecordText}>Add New Record</Text>
-				</TouchableOpacity>
 			</ScrollView>
 		);
 	};
@@ -767,13 +757,25 @@ const HomePage = ({ navigation, route }) => {
 						</ScrollView>
 					) : (
 						<View style={styles.emptyStateContainer}>
-							<Text style={styles.emptyStateText}>No upcoming appointments</Text>
-							<TouchableOpacity 
-								style={styles.scheduleButton}
-								onPress={() => navigation.navigate('Appointment', { user_id: user_id })}
-							>
-								<Text style={styles.scheduleButtonText}>Schedule Now</Text>
-							</TouchableOpacity>
+							{isVerified ? (
+								<>
+									<Text style={styles.emptyStateText}>No upcoming appointments</Text>
+									<TouchableOpacity 
+										style={styles.scheduleButton}
+										onPress={() => navigation.navigate('Appointment', { user_id: user_id })}
+									>
+										<Text style={styles.scheduleButtonText}>Schedule Now</Text>
+									</TouchableOpacity>
+								</>
+							) : (
+								<View style={styles.verificationRequiredContainer}>
+									<Ionicons name="lock-closed" size={24} color="#FF4444" />
+									<Text style={styles.verificationRequiredTitle}>Account verification required</Text>
+									<Text style={styles.verificationRequiredText}>
+										Appointment scheduling is available after your account is verified
+									</Text>
+								</View>
+							)}
 						</View>
 					)}
 				</View>
@@ -2027,6 +2029,30 @@ const styles = StyleSheet.create({
 	},
 	unpaidText: {
 		color: '#FF4444',
+	},
+	verificationRequiredContainer: {
+		alignItems: 'center',
+		padding: 20,
+		gap: 8,
+	},
+	verificationRequiredTitle: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: '#FF4444',
+		marginTop: 8,
+	},
+	verificationRequiredText: {
+		fontSize: 14,
+		color: '#666',
+		textAlign: 'center',
+		marginTop: 4,
+	},
+	emptyStateSubtext: {
+		fontSize: 12,
+		color: '#888',
+		textAlign: 'center',
+		marginTop: 4,
+		paddingHorizontal: 20,
 	},
 });
 

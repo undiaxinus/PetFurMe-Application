@@ -1,8 +1,8 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 // Log all errors
 error_reporting(E_ALL);
@@ -21,11 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     // Test database connection first
-    require_once '../../config/Database.php';
+    require_once '../config/database.php';
     $database = new Database();
-    $conn = $database->getConnection();
+    $db = $database->getConnection();
     
-    if (!$conn) {
+    if (!$db) {
         throw new Exception("Database connection failed");
     }
     error_log("Database connection successful");
@@ -57,89 +57,67 @@ try {
         }
     }
 
+    // Handle photo update - match the working approach from AddPetName.js
+    $photo_binary = null;
+    if (isset($_POST['photo'])) {
+        // Convert base64 to binary data
+        $photo_binary = base64_decode($_POST['photo']);
+    }
+
     // Start transaction
-    $conn->begin_transaction();
+    $db->begin_transaction();
 
-    // Prepare the base SQL query
+    // Prepare the SQL query WITHOUT the size field
     $sql = "UPDATE pets SET 
-            name = ?, 
-            type = ?, 
-            breed = ?, 
-            age = ?, 
-            size = ?, 
-            weight = ?, 
-            allergies = ?, 
-            notes = ?, 
-            gender = ?, 
-            category = ?";
+            name = ?,
+            type = ?,
+            breed = ?,
+            gender = ?,
+            age = ?,
+            weight = ?,
+            allergies = ?,
+            notes = ?,
+            category = ?,
+            photo = ?,      -- Update both photo and photo_data
+            photo_data = ?  -- This ensures trigger works properly
+            WHERE id = ? AND user_id = ?";
 
-    // Handle photo upload if present
-    $photoData = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $sql .= ", photo = ?";
-        $photoData = file_get_contents($_FILES['photo']['tmp_name']);
-    }
-
-    $sql .= " WHERE id = ? AND user_id = ?";
-
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
-
-    // Create types string and params array
-    $types = "sssssssssss";  // 11 parameters (10 fields + category)
+    $stmt = $db->prepare($sql);
+    
+    // Create params array WITHOUT the size field
     $params = [
         $petData['name'],
         $petData['type'],
         $petData['breed'],
+        $petData['gender'],
         $petData['age'],
-        $petData['size'],
         $petData['weight'],
         $petData['allergies'],
         $petData['notes'],
-        $petData['gender'],
-        $petData['category']
+        $petData['category'],
+        $photo_binary,  // photo column
+        $photo_binary,  // photo_data column
+        $petData['pet_id'],
+        $petData['user_id']
     ];
 
-    if ($photoData !== null) {
-        $types .= "b";  // 'b' for BLOB data
-        $params[] = $photoData;
-    }
-
-    $types .= "ii";  // Add types for pet_id and user_id
-    $params[] = $petData['pet_id'];
-    $params[] = $petData['user_id'];
-
-    // Bind parameters
-    $stmt->bind_param($types, ...$params);
-
-    // Execute the query
-    if (!$stmt->execute()) {
-        throw new Exception("Execute failed: " . $stmt->error);
+    // Execute with params
+    if (!$stmt->execute($params)) {
+        throw new Exception($stmt->error);
     }
 
     // Commit transaction
-    $conn->commit();
+    $db->commit();
 
-    if ($stmt->affected_rows > 0) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Pet profile updated successfully'
-        ]);
-    } else {
-        echo json_encode([
-            'success' => false,
-            'message' => 'No changes were made or pet not found'
-        ]);
-    }
-
-    $stmt->close();
+    echo json_encode([
+        'success' => true,
+        'message' => 'Pet updated successfully'
+    ]);
 
 } catch (Exception $e) {
     // Rollback transaction if active
-    if (isset($conn) && $conn->connect_errno === 0) {
-        $conn->rollback();
+    if (isset($db) && $db->connect_errno === 0) {
+        $db->rollback();
     }
     
     error_log("Error updating pet: " . $e->getMessage());
@@ -149,7 +127,7 @@ try {
     ]);
 }
 
-if (isset($conn)) {
-    $conn->close();
+if (isset($db)) {
+    $db->close();
 }
 ?> 

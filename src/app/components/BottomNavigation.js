@@ -228,7 +228,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
         {/* Navigation Items */}
         {[
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
-          { screen: 'Appointment', icon: 'calendar', label: 'Appointments' }, // Removed requiresVerification
+          { screen: 'Appointment', icon: 'calendar', label: 'Appointments', requiresVerification: true },
           { screen: 'HomePage', icon: 'paw', label: 'Home' },
           { screen: 'NotificationScreen', icon: 'notifications', label: 'Notifications' },
           { screen: 'Help', icon: 'help-circle', label: 'FAQ' }
@@ -237,9 +237,20 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
             key={screen}
             style={[
               styles.navItem,
-              screen === 'HomePage' && styles.homeItem
+              screen === 'HomePage' && styles.homeItem,
+              requiresVerification && !isVerified && styles.disabledNavItem
             ]}
-            onPress={() => handleNavigation(screen)}
+            onPress={() => {
+              if (requiresVerification && !isVerified) {
+                Alert.alert(
+                  "Verification Required",
+                  "Your account needs to be verified before accessing this feature.",
+                  [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+                );
+              } else {
+                handleNavigation(screen);
+              }
+            }}
           >
             <Animated.View style={[
               styles.iconContainer, 
