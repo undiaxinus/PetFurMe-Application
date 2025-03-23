@@ -1,4 +1,4 @@
-// Update these values according to your server configuration
-export const SERVER_IP = '192.168.1.4'; // Replace with your server IP
-export const SERVER_PORT = '80'; // Replace with your server port
-export const API_BASE_URL = `http://${SERVER_IP}`; // or `http://${SERVER_IP}:${SERVER_PORT}` if using a specific port 
+// Update these values for production
+export const SERVER_IP = 'app.petfurme.shop'; // Update to new subdomain
+export const SERVER_PORT = ''; // Leave empty for standard HTTPS port
+export const API_BASE_URL = `https://${SERVER_IP}`; // Use HTTPS for production 

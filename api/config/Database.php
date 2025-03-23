@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "pet-management";
-    private $username = "root";
-    private $password = "";
+    private $db_name = "u211529883_pet_management";
+    private $username = "u211529883_petfurme";
+    private $password = "223Petfurme";
     public $conn;
 
     public function connect() {

@@ -54,7 +54,8 @@ echo location of your Java installation. 1>&2
 goto fail
 
 :findJavaFromJavaHome
-set JAVA_HOME=%JAVA_HOME:"=%
+rem Override JAVA_HOME completely - LAST RESORT MODIFICATION
+set JAVA_HOME=C:\Program Files\Android\Android Studio\jbr
 set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
 if exist "%JAVA_EXE%" goto execute

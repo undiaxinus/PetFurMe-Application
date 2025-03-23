@@ -15,7 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import CustomDropdown from '../components/CustomDropdown';
 import * as ImagePicker from 'expo-image-picker';
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { BASE_URL, SERVER_IP, SERVER_PORT, API_BASE_URL } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import CustomHeader from '../components/CustomHeader';
@@ -220,7 +220,7 @@ const AddPetProfile = ({ route }) => {
 			formData.append('data', JSON.stringify(petData));
 
 			const endpoint = isEditing ? 'update_pet.php' : 'add_pet.php';
-			const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/${endpoint}`;
+			const url = `${API_BASE_URL}/pets/${endpoint}`;
 			
 			console.log('Sending request to:', url);
 			console.log('Pet Data:', petData);

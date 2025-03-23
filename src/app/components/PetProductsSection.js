@@ -9,9 +9,9 @@ import {
     Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SERVER_IP } from '../config/constants';
+import { SERVER_IP, BASE_URL } from '../config/constants';
 
-const API_BASE_URL = `http://${SERVER_IP}`;
+const API_BASE_URL = `${BASE_URL}/api`;
 
 console.log('SERVER_IP:', SERVER_IP);
 console.log('Full API URL:', `${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);

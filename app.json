@@ -3,39 +3,53 @@
     "name": "PetFurMe",
     "slug": "PetFurMe",
     "version": "1.0.0",
-    "newArchEnabled": true,
+    "orientation": "portrait",
+    "icon": "./src/assets/images/icon.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
-      }
+      "bundleIdentifier": "com.petfurme.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FFFFFF"
       },
-      "permissions": [
-        "NOTIFICATIONS",
-        "VIBRATE"
-      ],
-      "package": "com.petfurme",
-      "versionCode": 1,
-      "softwareKeyboardLayoutMode": "pan",
-      "enableHermes": true
+      "package": "com.petfurme.app"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png",
-      "bundler": "metro",
-      "build": {
-        "babel": {
-          "include": [
-            "@expo/vector-icons",
-            "react-native-gesture-handler"
-          ]
-        }
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "newArchEnabled": true,
+    "infoPlist": {
+      "UIBackgroundModes": [
+        "remote-notification"
+      ]
+    },
+    "permissions": [
+      "NOTIFICATIONS",
+      "VIBRATE"
+    ],
+    "versionCode": 1,
+    "softwareKeyboardLayoutMode": "pan",
+    "enableHermes": true,
+    "bundler": "metro",
+    "build": {
+      "babel": {
+        "include": [
+          "@expo/vector-icons",
+          "react-native-gesture-handler"
+        ]
       }
     },
     "plugins": [

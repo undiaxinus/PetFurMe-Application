@@ -136,6 +136,12 @@ android {
             enableSplit = true
         }
     }
+
+    compileOptions {
+        // Comment out these two lines if they exist
+        // sourceCompatibility JavaVersion.VERSION_11
+        // targetCompatibility JavaVersion.VERSION_11
+    }
 }
 
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
@@ -184,5 +190,12 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
+    }
+}
+
+afterEvaluate {
+    tasks.withType(JavaCompile).configureEach {
+        // Ensure Java 11 compatibility without using sourceCompatibility
+        options.release.set(11)
     }
 }

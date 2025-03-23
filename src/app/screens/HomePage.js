@@ -11,6 +11,7 @@ import {
 	ActivityIndicator,
 	ToastAndroid,
 	Platform,
+	Button,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
@@ -25,7 +26,7 @@ import PetsSection from '../components/PetsSection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 
-const API_BASE_URL = `http://${SERVER_IP}`;
+const API_BASE_URL = `${BASE_URL}/api`;
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -144,7 +145,7 @@ const HomePage = ({ navigation, route }) => {
 
 	const fetchUserPets = async () => {
 		try {
-			const url = `${API_BASE_URL}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
+			const url = `${API_BASE_URL}/pets/get_user_pets.php?user_id=${user_id}`;
 			console.log("Fetching updated pets from:", url);
 			
 			const response = await fetch(url);
@@ -165,7 +166,7 @@ const HomePage = ({ navigation, route }) => {
 		if (!user_id) return;
 		
 		try {
-			const url = `${API_BASE_URL}/PetFurMe-Application/api/users/check_profile_status.php?user_id=${user_id}`;
+			const url = `${API_BASE_URL}/users/check_profile_status.php?user_id=${user_id}`;
 			console.log("Checking profile status at:", url);
 			
 			const response = await fetch(url);
@@ -185,7 +186,7 @@ const HomePage = ({ navigation, route }) => {
 				if (data.profile) {
 					setUserName(data.profile.name || 'Guest');
 					setUserPhoto(data.profile.photo 
-						? `${API_BASE_URL}/PetFurMe-Application/${data.profile.photo}`
+						? `${BASE_URL}/${data.profile.photo}`
 						: null
 					);
 				}
@@ -258,7 +259,7 @@ const HomePage = ({ navigation, route }) => {
 
 	const fetchUpcomingAppointments = async () => {
 		try {
-			const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/appointments/get_upcoming.php?user_id=${user_id}`);
+			const response = await fetch(`${API_BASE_URL}/appointments/get_upcoming.php?user_id=${user_id}`);
 			
 			if (!response.ok) {
 				console.error("Server error:", response.status, response.statusText);
@@ -296,7 +297,7 @@ const HomePage = ({ navigation, route }) => {
 		
 		try {
 			const response = await fetch(
-				`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pet_records.php?user_id=${user_id}&include_services=true`
+				`${API_BASE_URL}/pets/get_pet_records.php?user_id=${user_id}&include_services=true`
 			);
 			
 			const data = await response.json();
@@ -581,6 +582,38 @@ const HomePage = ({ navigation, route }) => {
 	const formatDescription = (description) => {
 		// Remove any leading colons and trim whitespace
 		return description.replace(/^:?\s*/, '').trim();
+	};
+
+	const testApiConnection = async () => {
+		try {
+			// Show loading indicator
+			setIsLoading(true);
+			
+			console.log('Testing API connection to:', `${API_BASE_URL}/test_connection.php`);
+			
+			const response = await fetch(`${API_BASE_URL}/test_connection.php`);
+			const data = await response.json();
+			
+			console.log('Connection test result:', data);
+			
+			// Show success message
+			Alert.alert(
+				'Connection Test',
+				`Success! Server responded: ${data.message}`,
+				[{ text: 'OK' }]
+			);
+		} catch (error) {
+			console.error('Connection test failed:', error);
+			
+			// Show error message with details
+			Alert.alert(
+				'Connection Error',
+				`Failed to connect to server: ${error.message}. Please check your internet connection and try again.`,
+				[{ text: 'OK' }]
+			);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -985,6 +1018,12 @@ const HomePage = ({ navigation, route }) => {
 					)}
 				</View>
 			</Modal>
+
+			<Button 
+				title="Test API Connection" 
+				onPress={testApiConnection} 
+				color="#8146C1"
+			/>
 		</View>
 	);
 };

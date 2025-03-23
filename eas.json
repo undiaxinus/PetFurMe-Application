@@ -17,6 +17,9 @@
         "env": {
           "GRADLE_OPTS": "-Dorg.gradle.daemon=true -Dorg.gradle.jvmargs=-Xmx4096m"
         }
+      },
+      "env": {
+        "API_URL": "https://app.petfurme.shop/api"
       }
     },
     "production": {

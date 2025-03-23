@@ -18,9 +18,9 @@ const API_PATH = path.join('C:', 'xampp', 'htdocs', 'PetFurMe-Application', 'api
 // Database configuration
 const dbConfig = {
 	host: "localhost",
-	user: "root",
-	password: "",
-	database: "pet-management",
+	user: "u211529883_petfurme",
+	password: "223Petfurme",
+	database: "u211529883_pet_management",
 	waitForConnections: true,
 	connectionLimit: 10,
 	queueLimit: 0,
