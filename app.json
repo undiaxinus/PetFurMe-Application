@@ -25,43 +25,20 @@
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.petfurme.app"
+      "package": "app.petfurme.shop"
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"
     },
-    "newArchEnabled": true,
-    "infoPlist": {
-      "UIBackgroundModes": [
-        "remote-notification"
-      ]
-    },
-    "permissions": [
-      "NOTIFICATIONS",
-      "VIBRATE"
-    ],
-    "versionCode": 1,
-    "softwareKeyboardLayoutMode": "pan",
-    "enableHermes": true,
-    "bundler": "metro",
-    "build": {
-      "babel": {
-        "include": [
-          "@expo/vector-icons",
-          "react-native-gesture-handler"
-        ]
-      }
-    },
     "plugins": [
+      "./app.config.plugin.js",
       "expo-notifications",
       "expo-font"
     ],
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps"
-        }
-      ]
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
     }
   }
 }

@@ -25,7 +25,7 @@ app.get('/test', (req, res) => {
 // Register the appointments router with /api prefix
 app.use('/api', appointmentsRouter);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 1800;
 app.listen(PORT, () => {
   console.log(`\n=== Server Started ===`);
   console.log(`Server is running on port ${PORT}`);

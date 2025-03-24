@@ -1,29 +1,32 @@
 {
   "cli": {
-    "version": ">= 15.0.10",
+    "version": ">= 3.0.0",
     "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleDebug"
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease",
-        "withoutCredentials": true,
-        "env": {
-          "GRADLE_OPTS": "-Dorg.gradle.daemon=true -Dorg.gradle.jvmargs=-Xmx4096m"
-        }
+        "gradleCommand": ":app:assembleRelease"
       },
       "env": {
         "API_URL": "https://app.petfurme.shop/api"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   },
   "submit": {

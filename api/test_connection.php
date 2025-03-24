@@ -9,5 +9,5 @@ echo json_encode([
     'message' => 'Connection successful',
     'timestamp' => date('Y-m-d H:i:s'),
     'server' => $_SERVER['SERVER_NAME'],
-    'api_url' => 'https://app.petfurme.shop/api'
+    'api_url' => 'https://app.petfurme.shop/PetFurMe-Application/api'
 ]); 

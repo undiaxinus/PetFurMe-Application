@@ -1,8 +1,8 @@
-const config = require('./app.json');
+import { ExpoConfig, ConfigContext } from 'expo/config';
 
-module.exports = ({ config: _config }) => {
+export default ({ config }) => {
   return {
-    ...config.expo,
+    ...config,
     extra: {
       eas: {
         projectId: "6378a1f3-cb06-4f64-8c38-9f84b9627f12"
@@ -27,13 +27,6 @@ module.exports = ({ config: _config }) => {
     },
     "assetBundlePatterns": [
       "assets/*"
-    ],
-    "excludeAssets": [
-      "assets/**/*-web.png",
-      "assets/**/*.gif",
-      "assets/debug/*",
-      "assets/temp/*",
-      "**/__tests__/*"
     ]
   };
 }; 

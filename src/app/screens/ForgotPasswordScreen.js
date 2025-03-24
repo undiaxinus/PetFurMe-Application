@@ -27,7 +27,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   // Update API URL configuration to match your server setup
   const API_URL = Platform.select({
-    ios: 'http://localhost:3001',
+    ios: 'http://localhost:1800',
     android: `http://${SERVER_IP}:${SERVER_PORT}`,
     web: BASE_URL || `http://${SERVER_IP}:${SERVER_PORT}`
   });

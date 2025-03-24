@@ -107,12 +107,12 @@ $isIOS = stripos($userAgent, 'iphone') !== false || stripos($userAgent, 'ipad') 
             <p><strong>Download our app to get started</strong></p>
             
             <?php if ($isAndroid): ?>
-                <a href="https://play.google.com/store/apps/details?id=com.petfurme" class="download-button" style="background-color: #4CAF50;">Get on Google Play</a>
+                <a href="https://play.google.com/store/apps/details?id=app.petfurme.shop" class="download-button" style="background-color: #4CAF50;">Get on Google Play</a>
             <?php elseif ($isIOS): ?>
                 <a href="https://apps.apple.com/app/petfurme/id123456789" class="download-button" style="background-color: #007AFF;">Download on App Store</a>
             <?php else: ?>
                 <a href="/downloads/petfurme-latest.apk" class="download-button">Download Android APK</a>
-                <a href="https://play.google.com/store/apps/details?id=com.petfurme" class="download-button" style="background-color: #4CAF50;">Get on Google Play</a>
+                <a href="https://play.google.com/store/apps/details?id=app.petfurme.shop" class="download-button" style="background-color: #4CAF50;">Get on Google Play</a>
                 <a href="https://apps.apple.com/app/petfurme/id123456789" class="download-button" style="background-color: #007AFF;">Download on App Store</a>
             <?php endif; ?>
         </div>

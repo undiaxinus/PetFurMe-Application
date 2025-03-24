@@ -1,4 +1,4 @@
-package com.petfurme
+package app.petfurme.shop
 
 import android.os.Build
 import android.os.Bundle

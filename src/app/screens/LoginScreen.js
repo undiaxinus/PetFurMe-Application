@@ -13,7 +13,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { BASE_URL, SERVER_IP, SERVER_PORT, checkServerConnectivity, SERVER_CONFIGS, changeServer, useStandardHTTPS, API_BASE_URL, AUTH_BASE_URL, AUTH_API_URL } from '../config/constants';
+import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -24,13 +26,141 @@ const LoginScreen = ({ navigation }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [visibleError, setVisibleError] = useState("");
 
-	const API_URL = BASE_URL; // Use the BASE_URL from constants directly
+	const API_URL = API_BASE_URL; // Use the API_BASE_URL which includes PetFurMe-Application/api
 
 	// Add these animations
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const slideAnim = useRef(new Animated.Value(50)).current;
 
+	// Replace direct console usage with conditional logging
+	const log = __DEV__ ? console.log : () => {};
+	const logError = __DEV__ ? console.error : () => {};
+
+	// Add this function to check network connectivity and DNS resolution
+	const checkNetworkAndDns = async () => {
+		try {
+			log('===== NETWORK DIAGNOSTIC =====');
+			
+			// Check basic internet connectivity first
+			const netInfo = await NetInfo.fetch();
+			log('Network state:', {
+				type: netInfo.type,
+				isConnected: netInfo.isConnected,
+				isInternetReachable: netInfo.isInternetReachable,
+				details: netInfo.details
+			});
+			
+			if (!netInfo.isConnected) {
+				return {
+					success: false,
+					error: 'Device is not connected to any network'
+				};
+			}
+			
+			// Try to resolve the domain name with a standard HTTP request first
+			log(`Testing DNS resolution for ${SERVER_IP}...`);
+			try {
+				const dnsCheckStart = Date.now();
+				const response = await fetch(`https://${SERVER_IP}`, { 
+					method: 'HEAD',
+					mode: 'no-cors',
+					timeout: 3000
+				});
+				const dnsCheckTime = Date.now() - dnsCheckStart;
+				log(`DNS resolution successful in ${dnsCheckTime}ms`);
+			} catch (dnsError) {
+				log(`DNS resolution error:`, dnsError);
+				
+				// Try IP-only request if hostname fails
+				if (SERVER_IP.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/)) {
+					log('Server appears to be an IP address, not a hostname');
+				} else {
+					log('Checking if the issue is DNS-related...');
+				}
+			}
+			
+			// Check if the server port is properly defined
+			if (!SERVER_PORT) {
+				logError('SERVER_PORT is undefined or null!', { SERVER_PORT });
+				return {
+					success: false,
+					error: 'Server port is not properly configured in the app'
+				};
+			}
+			
+			log('===== NETWORK DIAGNOSTIC COMPLETE =====');
+			return { success: true };
+		} catch (error) {
+			logError('Network diagnostic error:', error);
+			return {
+				success: false,
+				error: 'Failed to complete network diagnostics'
+			};
+		}
+	};
+
+	// Update testConnection to handle CORS in web mode
+	const testConnection = async () => {
+		try {
+			log('===== CONNECTION TEST =====');
+			
+			// First perform network diagnostics
+			const networkCheck = await checkNetworkAndDns();
+			if (!networkCheck.success) {
+				setError(`Network issue: ${networkCheck.error}`);
+				return false;
+			}
+			
+			// Use the correct protocol based on port
+			const protocol = SERVER_PORT === 443 ? 'https' : 'http';
+			const rootUrl = `${protocol}://${SERVER_IP}${(SERVER_PORT !== 80 && SERVER_PORT !== 443) ? `:${SERVER_PORT}` : ''}`;
+			
+			log('Testing connection to server:', rootUrl);
+			
+			try {
+				// For web platform, we need to use no-cors mode
+				const fetchOptions = {
+					method: 'GET',
+					mode: Platform.OS === 'web' ? 'no-cors' : undefined,
+					cache: 'no-cache'
+				};
+				
+				// Try a simple ping to see if the server is reachable
+				const response = await fetch(rootUrl, fetchOptions);
+				
+				// With no-cors mode, we can't check response details,
+				// but if we get here without an error, the server is reachable
+				log('Server is reachable!');
+				return true;
+			} catch (error) {
+				log('===== CONNECTION TEST FAILED =====');
+				logError('Connection test error type:', error.constructor.name);
+				logError('Connection test failed:', {
+					message: error.message,
+					code: error.code,
+					name: error.name
+				});
+				
+				setError(`Cannot connect to server. Error: ${error.message}`);
+				return false;
+			}
+		} catch (error) {
+			log('===== CONNECTION TEST FAILED =====');
+			setError(`Error: ${error.message}`);
+			return false;
+		}
+	};
+
 	useEffect(() => {
+		log('===== LOGIN SCREEN MOUNTED =====');
+		log('Environment details:', {
+			Platform: Platform.OS,
+			SERVER_IP,
+			SERVER_PORT,
+			API_URL,
+			BASE_URL
+		});
+		
 		Animated.parallel([
 			Animated.timing(fadeAnim, {
 				toValue: 1,
@@ -44,132 +174,97 @@ const LoginScreen = ({ navigation }) => {
 			}),
 		]).start();
 
-		// Add connection test on component mount
-		const testConnection = async () => {
-			try {
-				console.log('Testing connection to:', `${API_URL}/health`);
-				const response = await axios.get(`${API_URL}/health`, { 
-					timeout: 5000,
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json',
-					},
-					// Add retry logic
-					validateStatus: function (status) {
-						return status >= 200 && status < 300;
-					},
-				});
-				console.log('Server health check response:', response.data);
-				setError(""); // Clear any existing errors
-				return true;
-			} catch (error) {
-				console.error('Connection test failed:', {
-					message: error.message,
-					code: error.code,
-					config: error.config
-				});
-				
-				// More specific error messages
-				if (error.code === 'ECONNABORTED') {
-					setError('Connection timed out. Please check if the server is running.');
-				} else if (error.code === 'ERR_NETWORK') {
-					setError('Network error. Please check:\n1. Is the server running?\n2. Is XAMPP running?\n3. Check port 3001 is free');
-				} else {
-					setError(`Cannot connect to server. Error: ${error.message}`);
-				}
-				return false;
-			}
-		};
-
-		testConnection();
+		// Call the testConnection function
+		log('Initiating connection test on component mount...');
+		testConnection().then(success => {
+			log('Initial connection test result:', success ? 'SUCCESS' : 'FAILED');
+		});
 
 		// Clear loading state if screen is stuck
 		const timeoutId = setTimeout(() => {
-			if (isLoading) {
+			if (loading || isLoading) {
+				log('Login timeout detected - resetting loading state');
+				setLoading(false);
 				setIsLoading(false);
 				setVisibleError("Connection timed out. Please try again.");
 			}
 		}, 10000);
 
-		return () => clearTimeout(timeoutId);
+		return () => {
+			log('===== LOGIN SCREEN UNMOUNTED =====');
+			clearTimeout(timeoutId);
+		};
 	}, []);
 
 	const handleLogin = async () => {
 		try {
-			setIsLoading(true);
-			setError("");
-
-			console.log('Login attempt:', {
-				API_URL,
-				SERVER_IP,
-				SERVER_PORT,
-				Platform: Platform.OS
-			});
-
-			if (!email || !password) {
-				setError("Please enter both email and password");
-				return;
-			}
-
-			// Add connection test
-			try {
-				console.log('Testing connection to:', `${API_URL}/health`);
-				const healthCheck = await axios.get(`${API_URL}/health`, { timeout: 5000 });
-				console.log('Server health check:', healthCheck.data);
-			} catch (healthError) {
-				console.error('Health check failed:', healthError);
-				setError(`Cannot connect to server (${SERVER_IP}:${SERVER_PORT}). Please check your connection and server address.`);
-				return;
-			}
-
-			console.log('Attempting login to:', `${API_URL}/api/login`);
-
-			const response = await axios({
-				method: 'post',
-				url: `${API_URL}/api/login`,
-				data: {
-					username: email,
-					password: password
-				},
+			log('===== LOGIN ATTEMPT =====');
+			
+			setLoading(true);
+			setError('');
+			
+			const loginData = {
+				email: email,
+				password: password
+			};
+			
+			// Simplify the URL construction by using API_BASE_URL directly
+			const loginUrl = `${API_BASE_URL}/auth/login.php`;
+			
+			log('Sending login request to:', loginUrl);
+			
+			const axiosConfig = {
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json'
 				},
-				timeout: 10000,
-			});
-
-			console.log("Login response:", response.data);
-
-			if (response.data.success) {
-				navigation.navigate("DrawerNavigator", { 
-					screen: 'HomePage',
-					params: { user_id: response.data.user.id }
-				});
-			} else {
-				setError(response.data.error || "Login failed");
+				timeout: 15000,
+				withCredentials: false // Add this to handle CORS
+			};
+			
+			try {
+				const response = await axios.post(loginUrl, loginData, axiosConfig);
+				
+				log('Login response:', response.data);
+				
+				if (response.data.success) {
+					// Store user data
+					const userData = {
+						user_id: response.data.user.id,
+						name: response.data.user.name,
+						username: response.data.user.email,
+						role: response.data.user.role
+					};
+					
+					await AsyncStorage.setItem('userData', JSON.stringify(userData));
+					
+					// Navigate to home screen
+					navigation.navigate('DrawerNavigator', { 
+						screen: 'HomePage',
+						params: { user_id: userData.user_id }
+					});
+				} else {
+					setError(response.data.error || 'Login failed. Please try again.');
+				}
+			} catch (error) {
+				logError('Login error:', error);
+				
+				if (error.code === 'ECONNABORTED') {
+					setError('Connection timed out. Please try again.');
+				} else if (error.response) {
+					setError(error.response.data.error || `Server error: ${error.response.status}`);
+				} else if (error.request) {
+					setError('No response from server. Please check your connection.');
+				} else {
+					setError(`Error: ${error.message}`);
+				}
 			}
 		} catch (error) {
-			console.error('Login error:', {
-				message: error.message,
-				code: error.code,
-				response: error.response?.data,
-				config: error.config,
-				stack: error.stack
-			});
-			
-			if (error.code === 'ECONNABORTED') {
-				setError(`Connection timed out. Server (${SERVER_IP}:${SERVER_PORT}) is not responding.`);
-			} else if (error.code === 'ERR_NETWORK') {
-				setError(`Network error. Please check if:\n- Server is running (${SERVER_IP}:${SERVER_PORT})\n- IP is correct\n- You're on the same network`);
-			} else if (error.response) {
-				setError(error.response.data?.error || `Server error: ${error.response.status}`);
-			} else if (error.request) {
-				setError(`Cannot reach server at ${API_URL}. Check your connection.`);
-			} else {
-				setError(`Error: ${error.message}`);
-			}
+			logError('===== LOGIN ATTEMPT FAILED =====');
+			logError('Login error:', error);
+			setError(`Login failed: ${error.message}`);
 		} finally {
-			setIsLoading(false);
+			setLoading(false);
 		}
 	};
 
@@ -177,7 +272,7 @@ const LoginScreen = ({ navigation }) => {
 		navigation.navigate('ForgotPassword'); // Make sure this matches the screen name in App.js
 	};
 
-	console.log('Environment:', {
+	log('Environment:', {
 		Platform: Platform.OS,
 		SERVER_IP,
 		SERVER_PORT,
@@ -277,15 +372,11 @@ const LoginScreen = ({ navigation }) => {
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
 
 				<TouchableOpacity
-					style={[styles.loginButton, loading && styles.disabledButton]}
+					style={[styles.loginButton, (!email || !password || loading) && styles.disabledButton]}
+					disabled={!email || !password || loading}
 					onPress={handleLogin}
-					disabled={loading}
 				>
-					{loading ? (
-						<ActivityIndicator size="small" color="#FFFFFF" />
-					) : (
-						<Text style={styles.loginButtonText}>LOGIN</Text>
-					)}
+					<Text style={styles.loginButtonText}>LOGIN</Text>
 				</TouchableOpacity>
 
 				<View style={styles.registerContainer}>
@@ -432,7 +523,7 @@ const styles = StyleSheet.create({
 	},
 	retryButtonText: {
 		color: '#FFFFFF'
-	}
+	},
 });
 
 export default LoginScreen;

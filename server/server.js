@@ -9,7 +9,7 @@ const { BASE_URL, SERVER_IP, SERVER_PORT } = require('./config/constants');
 const http = require('http');
 	
 // Server configuration
-const PORT = 3001;
+const PORT = 1800;
 const HOST = "0.0.0.0";  // This allows connections from all network interfaces
 
 // Set the path to your XAMPP htdocs directory

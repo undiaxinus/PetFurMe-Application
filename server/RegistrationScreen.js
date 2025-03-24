@@ -25,8 +25,8 @@ const SignupScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const API_URL = Platform.select({
-    ios: 'http://localhost:3001',
-    android: `http://${SERVER_IP}:3001`
+    ios: 'http://localhost:1800',
+    android: `http://${SERVER_IP}:1800`
   });
 
   // Add debug logging

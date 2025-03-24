@@ -1,4 +1,4 @@
-package com.petfurme
+package app.petfurme.shop
 
 import android.app.Application
 import android.content.res.Configuration
