@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { SERVER_IP } from '../config/constants';
+import { SERVER_IP, API_BASE_URL } from '../config/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NotificationContext = createContext();
@@ -14,7 +14,7 @@ export const NotificationProvider = ({ children }) => {
       if (!user_id) return;
 
       const response = await axios.get(
-        `http://${SERVER_IP}/PetFurMe-Application/api/notifications/check_unread.php?user_id=${user_id}`
+        `${API_BASE_URL}/notifications/check_unread.php?user_id=${user_id}`
       );
 
       if (response.data?.success) {

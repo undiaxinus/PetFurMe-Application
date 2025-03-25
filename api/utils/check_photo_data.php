@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: text/plain');
 
-require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/database.php';
 
 try {
     $database = new Database();

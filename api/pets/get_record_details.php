@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: GET");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-require_once '../config/Database.php';
+require_once '../config/database.php';
 // require_once '../middlewares/auth.php';
 $database = new Database();
 $conn = $database->connect();

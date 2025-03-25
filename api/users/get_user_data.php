@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/constants.php';
 
 try {
@@ -34,7 +34,7 @@ try {
     }
 
     // Updated query to include all necessary fields
-    $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, role, email_verified_at, verified_by FROM users WHERE id = ?";
+    $query = "SELECT id, uuid, username, name, email, phone, age, address, store_address, photo, photo_data, role, email_verified_at, verified_by FROM users WHERE id = ?";
     
     // Debug log for query
     error_log("Executing query: " . $query);
@@ -59,6 +59,15 @@ try {
         // Debug log for raw data
         error_log("Raw data from database: " . json_encode($row));
         
+        // Convert blob to base64
+        $photo_data = null;
+        if ($row['photo_data']) {
+            $photo_data = base64_encode($row['photo_data']);
+            error_log("Found photo_data in database, length: " . strlen($photo_data));
+        } else {
+            error_log("No photo_data found in database");
+        }
+        
         $response = [
             'success' => true,
             'profile' => [
@@ -74,7 +83,8 @@ try {
                 'role' => $row['role'] ?? 'pet_owner',
                 'email_verified_at' => $row['email_verified_at'],
                 'verified_by' => $row['verified_by'],
-                'is_verified' => $row['verified_by'] !== null
+                'is_verified' => $row['verified_by'] !== null,
+                'photo_data' => $photo_data  // Include the base64 encoded photo
             ]
         ];
         

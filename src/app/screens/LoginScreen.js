@@ -208,8 +208,8 @@ const LoginScreen = ({ navigation }) => {
 				password: password
 			};
 			
-			// Simplify the URL construction by using API_BASE_URL directly
-			const loginUrl = `${API_BASE_URL}/auth/login.php`;
+			// Fix the URL construction to match the working PHP endpoint
+			const loginUrl = `${API_BASE_URL}/auth/login.php`;  // This should point to your PHP endpoint
 			
 			log('Sending login request to:', loginUrl);
 			
@@ -219,7 +219,7 @@ const LoginScreen = ({ navigation }) => {
 					'Accept': 'application/json'
 				},
 				timeout: 15000,
-				withCredentials: false // Add this to handle CORS
+				withCredentials: false
 			};
 			
 			try {
@@ -261,7 +261,7 @@ const LoginScreen = ({ navigation }) => {
 			}
 		} catch (error) {
 			logError('===== LOGIN ATTEMPT FAILED =====');
-			logError('Login error:', error);
+			logError('Login error details:', error);
 			setError(`Login failed: ${error.message}`);
 		} finally {
 			setLoading(false);
@@ -270,6 +270,20 @@ const LoginScreen = ({ navigation }) => {
 
 	const handleForgotPassword = () => {
 		navigation.navigate('ForgotPassword'); // Make sure this matches the screen name in App.js
+	};
+
+	const handleLoginError = (error) => {
+		if (error.code === 'ECONNABORTED') {
+			setError('Connection timed out. Please try again.');
+		} else if (error.response) {
+			setError(error.response.data.error || `Server error: ${error.response.status}`);
+		} else if (error.request) {
+			setError('No response from server. Please check your connection.');
+		} else {
+			setError(`Error: ${error.message}`);
+		}
+		logError('===== LOGIN ATTEMPT FAILED =====');
+		logError('Login error details:', error);
 	};
 
 	log('Environment:', {

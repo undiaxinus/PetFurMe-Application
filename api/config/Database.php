@@ -16,14 +16,10 @@ class Database {
         try {
             error_log("Attempting database connection to {$this->host}/{$this->db_name}");
             
-            // Use MySQLi connection
+            // Use MySQLi connection with error mode
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
             
-            if ($this->conn->connect_error) {
-                error_log("Connection Error: " . $this->conn->connect_error);
-                throw new Exception("Connection failed: " . $this->conn->connect_error);
-            }
-
             // Set charset
             $this->conn->set_charset("utf8");
             
@@ -32,6 +28,9 @@ class Database {
             
         } catch(Exception $e) {
             error_log("Database connection error: " . $e->getMessage());
+            error_log("Error code: " . $e->getCode());
+            error_log("Error file: " . $e->getFile() . " on line " . $e->getLine());
+            error_log("Stack trace: " . $e->getTraceAsString());
             throw new Exception("Database connection failed: " . $e->getMessage());
         }
     }

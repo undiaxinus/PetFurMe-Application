@@ -11,7 +11,7 @@ error_log("PHP version: " . PHP_VERSION);
 
 try {
     // Test database connection
-    require_once __DIR__ . '/../config/Database.php';
+    require_once __DIR__ . '/../config/database.php';
     $database = new Database();
     $conn = $database->getConnection();
     

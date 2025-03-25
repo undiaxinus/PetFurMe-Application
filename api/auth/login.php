@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
 
 // Verify the database file exists
-$dbPath = __DIR__ . '/../config/Database.php';
+$dbPath = __DIR__ . '/../config/database.php';
 if (!file_exists($dbPath)) {
     echo json_encode([
         'success' => false,
@@ -56,29 +56,29 @@ try {
     $database = new Database();
     $conn = $database->connect();
     
-    // Clean data
-    $email = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags($data->email)));
+    // Match the Node.js implementation by checking both email and username
+    $email = mysqli_real_escape_string($conn, $data->email);
     
-    // Create query using proper mysqli syntax
-    $query = "SELECT * FROM users WHERE email = ? LIMIT 1";
+    $query = "SELECT * FROM users WHERE email = ? OR username = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
+    $stmt->bind_param("ss", $email, $email); // Check both email and username fields
     $stmt->execute();
     
     $result = $stmt->get_result();
     
     if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+        $user = $result->fetch_assoc();
         
-        // Verify password
-        if (password_verify($data->password, $row['password'])) {
+        // Use the same password verification as Node.js
+        if (password_verify($data->password, $user['password'])) {
+            // Match the Node.js response structure exactly
             echo json_encode([
                 'success' => true,
                 'user' => [
-                    'id' => $row['id'],
-                    'name' => $row['name'],
-                    'email' => $row['email'],
-                    'role' => $row['role']
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'role' => $user['role']
                 ]
             ]);
         } else {
@@ -98,9 +98,9 @@ try {
     $conn->close();
     
 } catch(Exception $e) {
-    error_log("Database Error: " . $e->getMessage());
+    error_log("Login error: " . $e->getMessage());
     echo json_encode([
         'success' => false,
-        'error' => 'Database Error: ' . $e->getMessage()
+        'error' => 'Login failed. Please try again.'
     ]);
 } 

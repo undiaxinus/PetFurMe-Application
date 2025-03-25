@@ -26,7 +26,7 @@ import PetsSection from '../components/PetsSection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 
-const API_BASE_URL = `${BASE_URL}/api`;
+const API_BASE_URL = `${BASE_URL}/PetFurMe-Application/api`;
 
 const HomePage = ({ navigation, route }) => {
 	const user_id = route.params?.user_id;
@@ -1018,12 +1018,6 @@ const HomePage = ({ navigation, route }) => {
 					)}
 				</View>
 			</Modal>
-
-			<Button 
-				title="Test API Connection" 
-				onPress={testApiConnection} 
-				color="#8146C1"
-			/>
 		</View>
 	);
 };

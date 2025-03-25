@@ -8,7 +8,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
-require_once '../config/Database.php';
+require_once '../config/database.php';
 
 // Update the debugLog function
 function debugLog($message, $data = null) {

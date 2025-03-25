@@ -10,9 +10,8 @@ import {
   StatusBar
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SERVER_IP } from '../config/constants';
-
-const API_BASE_URL = `http://${SERVER_IP}`;
+import { API_BASE_URL } from '../config/constants';
+import { safeFetch, getApiUrl } from '../utils/apiHelper';
 
 const PetRecordDetails = ({ route, navigation }) => {
   const { appointmentId, medicalId, petName, date } = route.params;
@@ -28,11 +27,14 @@ const PetRecordDetails = ({ route, navigation }) => {
       
       try {
         console.log('Fetching medical record:', medicalId); // Debug logging
-        const response = await fetch(
-          `${API_BASE_URL}/PetFurMe-Application/api/pets/get_record_details.php?record_type=medical&record_id=${medicalId}`
-        );
         
-        const data = await response.json();
+        // Use the getApiUrl helper
+        const url = getApiUrl('pets/get_record_details.php', {
+          record_type: 'medical',
+          record_id: medicalId
+        });
+        
+        const data = await safeFetch(url);
         console.log('API response:', data); // Debug logging
         
         if (data.success) {

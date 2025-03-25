@@ -12,7 +12,7 @@
       <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/config/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/database.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/logs/pet_addition_error.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/logs/pet_addition_error.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/messages/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/messages/debug.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/messages/message_errors.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/messages/message_errors.log" afterDir="false" />

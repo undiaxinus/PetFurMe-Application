@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import axios from 'axios';
-import { SERVER_IP } from '../config/constants';  // Make sure this points to your server IP
+import { SERVER_IP, API_BASE_URL, getApiUrl } from '../config/constants';  // Add getApiUrl here
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -64,36 +64,64 @@ const ChatScreen = ({ navigation, route }) => {
     checkVerificationStatus();
   }, []);
 
-  // Function to fetch messages
+  // Add this near your other state declarations
+  const [error, setError] = useState(null);
+
+  // Modify the fetchMessages function
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(
-        `http://${SERVER_IP}/PetFurMe-Application/api/messages/get_messages.php?user_id=${user_id}`
-      );
+      setError(null);
+      
+      // Use the direct URL to eliminate any path construction issues
+      const url = `${API_BASE_URL}/messages/get_messages.php?user_id=${user_id}`;
+      console.log('Fetching messages from:', url);
+      
+      const response = await axios.get(url, {
+        timeout: 15000,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      });
 
-      if (response.data.success) {
-        const formattedMessages = response.data.messages.map(msg => {
-          const isReceiver = msg.receivers?.some(receiver => 
-            receiver.id.toString() === user_id.toString()
-          );
+      console.log('Messages response status:', response.status);
+      console.log('Messages response data:', response.data);
 
-          return {
-            id: msg.id.toString(),
-            text: msg.message,
-            sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
-            senderName: msg.sender_name,
-            senderRole: msg.sender_role,
-            type: 'database',
-            timestamp: msg.sent_at,
-            conversation_id: msg.conversation_id,
-            isReceiver: isReceiver
-          };
-        });
+      if (response.data && response.data.success) {
+        if (!response.data.messages || response.data.messages.length === 0) {
+          console.log('No messages found for user:', user_id);
+          setLiveMessages([]);
+          return;
+        }
 
+        console.log(`Received ${response.data.messages.length} messages`);
+        
+        // Map the messages to our UI format
+        const formattedMessages = response.data.messages.map(msg => ({
+          id: msg.id.toString(),
+          text: msg.message || '',
+          sender: parseInt(msg.sender_id) === parseInt(user_id) ? 'user' : 'other',
+          senderName: msg.sender_name || 'Unknown',
+          senderRole: msg.sender_role || 'user',
+          type: 'database',
+          timestamp: msg.sent_at,
+          conversation_id: msg.conversation_id || null
+        }));
+
+        console.log(`Formatted ${formattedMessages.length} messages`);
         setLiveMessages(formattedMessages);
+      } else {
+        console.warn('Invalid response format:', response.data);
+        setLiveMessages([]);
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
     }
   };
 
@@ -102,41 +130,31 @@ const ChatScreen = ({ navigation, route }) => {
     fetchMessages();
   }, [user_id]);
 
-  // Modify useEffect for mode changes
+  // Update the useEffect for polling to be more robust
   useEffect(() => {
-    if (isAutomated) {
-      // Show temporary message notice when switching to bot mode
-      setShowTempNotice(true);
-      
-      // Add welcome message if no bot messages exist
-      if (botMessages.length === 0) {
-        const welcomeMessage = {
-          id: Date.now().toString(),
-          text: '🤖 You are now in Automated Chat mode.\n\nYou can ask me about:\n\n• Pet grooming services\n• Veterinary consultations\n• Vaccination schedules\n• Deworming services\n• Booking appointments\n\nHow can I assist you today?',
-          sender: 'other',
-          type: 'automated'
-        };
-        setBotMessages([welcomeMessage]);
-      }
-
-      // Stop polling when in bot mode
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        setPollingInterval(null);
-      }
-    } else {
-      // When switching to live chat
-      setShowTempNotice(false);
+    if (!isAutomated && user_id) {
+      // Fetch messages immediately
       fetchMessages();
       
-      // Start polling for live chat messages
-      const interval = setInterval(fetchMessages, 5000);
+      // Set up polling
+      const interval = setInterval(() => {
+        if (!isAutomated) {  // Double check we're still in live mode
+          fetchMessages();
+        }
+      }, 7000);  // Every 7 seconds
+      
       setPollingInterval(interval);
+      
+      // Clean up
       return () => {
         if (interval) clearInterval(interval);
       };
+    } else if (pollingInterval) {
+      // Clear polling if we're in automated mode
+      clearInterval(pollingInterval);
+      setPollingInterval(null);
     }
-  }, [isAutomated]);
+  }, [isAutomated, user_id]);
 
   const [input, setInput] = useState('');
   const flatListRef = useRef(null);
@@ -151,16 +169,17 @@ const ChatScreen = ({ navigation, route }) => {
   // Add this near the top of ChatScreen component
   const [admins, setAdmins] = useState([]);
 
-  // Add this useEffect to fetch admins when component mounts
+  // Modify the fetchAdmins function
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get(`http://${SERVER_IP}/PetFurMe-Application/api/users/get_admins.php`);
+        const response = await axios.get(`${API_BASE_URL}/users/get_admins.php`);
+        console.log('Admin response:', response.data); // Add logging
         if (response.data.success) {
           setAdmins(response.data.admins);
         }
       } catch (error) {
-        console.error('Error fetching admins:', error);
+        console.error('Error fetching admins:', error.response?.data || error.message);
       }
     };
 
@@ -173,23 +192,21 @@ const ChatScreen = ({ navigation, route }) => {
   // Modify the startConversation function
   const startConversation = async () => {
     try {
-      // First get all active admins and sub-admins
       const adminResponse = await axios.get(
-        `http://${SERVER_IP}/PetFurMe-Application/api/users/get_admins.php`
+        `${API_BASE_URL}/users/get_admins.php`
       );
 
       if (!adminResponse.data.success || !adminResponse.data.admins.length) {
         throw new Error('No administrators available');
       }
 
-      // Get the first available admin/sub-admin
       const availableAdmin = adminResponse.data.admins[0];
 
       const response = await axios.post(
-        `http://${SERVER_IP}/PetFurMe-Application/api/messages/start_conversation.php`,
+        `${API_BASE_URL}/messages/start_conversation.php`,
         { 
           user_id: user_id,
-          admin_id: availableAdmin.id // Use the ID of the first available admin
+          admin_id: availableAdmin.id
         }
       );
       
@@ -411,7 +428,7 @@ const ChatScreen = ({ navigation, route }) => {
           setInput('');
 
           const response = await axios.post(
-            `http://${SERVER_IP}/PetFurMe-Application/api/messages/save_message.php`,
+            `${API_BASE_URL}/messages/save_message.php`,
             {
               sender_id: parseInt(user_id),
               message: messageText,

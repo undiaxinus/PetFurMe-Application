@@ -438,3 +438,191 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Add these new endpoints to match your PHP routes
+app.get("/api/products/get_home_products.php", async (req, res) => {
+    try {
+        const [products] = await db.query(
+            "SELECT * FROM products WHERE status = 'active' ORDER BY created_at DESC LIMIT 10"
+        );
+        
+        res.json({
+            success: true,
+            products: products
+        });
+    } catch (error) {
+        console.error("Error fetching home products:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch products"
+        });
+    }
+});
+
+app.get("/api/pets/get_user_pets.php", async (req, res) => {
+    try {
+        const user_id = req.query.user_id;
+        
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing user_id parameter"
+            });
+        }
+
+        const [pets] = await db.query(
+            "SELECT * FROM pets WHERE user_id = ?",
+            [user_id]
+        );
+        
+        res.json({
+            success: true,
+            pets: pets
+        });
+    } catch (error) {
+        console.error("Error fetching user pets:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch pets"
+        });
+    }
+});
+
+app.get("/api/appointments/get_upcoming.php", async (req, res) => {
+    try {
+        const user_id = req.query.user_id;
+        
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing user_id parameter"
+            });
+        }
+
+        const [appointments] = await db.query(
+            "SELECT * FROM appointments WHERE user_id = ? AND appointment_date >= CURDATE() ORDER BY appointment_date ASC",
+            [user_id]
+        );
+        
+        res.json({
+            success: true,
+            appointments: appointments
+        });
+    } catch (error) {
+        console.error("Error fetching appointments:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch appointments"
+        });
+    }
+});
+
+app.get("/api/pets/get_pet_records.php", async (req, res) => {
+    try {
+        const { user_id, include_services } = req.query;
+        
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing user_id parameter"
+            });
+        }
+
+        let query = "SELECT * FROM pet_records WHERE user_id = ?";
+        if (include_services === 'true') {
+            query = `
+                SELECT pr.*, s.name as service_name 
+                FROM pet_records pr 
+                LEFT JOIN services s ON pr.service_id = s.id 
+                WHERE pr.user_id = ?
+            `;
+        }
+
+        const [records] = await db.query(query, [user_id]);
+        
+        res.json({
+            success: true,
+            records: records
+        });
+    } catch (error) {
+        console.error("Error fetching pet records:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch pet records"
+        });
+    }
+});
+
+app.get("/api/users/check_profile_status.php", async (req, res) => {
+    try {
+        const user_id = req.query.user_id;
+        
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing user_id parameter"
+            });
+        }
+
+        const [user] = await db.query(
+            "SELECT profile_completed FROM users WHERE id = ?",
+            [user_id]
+        );
+        
+        res.json({
+            success: true,
+            profile_completed: user[0]?.profile_completed || false
+        });
+    } catch (error) {
+        console.error("Error checking profile status:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to check profile status"
+        });
+    }
+});
+
+app.get("/api/users/get_user_photo.php", async (req, res) => {
+    try {
+        const user_id = req.query.user_id;
+        
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing user_id parameter"
+            });
+        }
+
+        const [user] = await db.query(
+            "SELECT photo FROM users WHERE id = ?",
+            [user_id]
+        );
+        
+        if (!user[0]) {
+            return res.status(404).json({
+                success: false,
+                error: "User not found"
+            });
+        }
+
+        res.json({
+            success: true,
+            photo: user[0].photo
+        });
+    } catch (error) {
+        console.error("Error fetching user photo:", error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch user photo"
+        });
+    }
+});
+
+// Add this at the end of your server.js
+app.use((req, res) => {
+    console.log(`404 - Not Found: ${req.method} ${req.url}`);
+    res.status(404).json({
+        success: false,
+        error: `Endpoint not found: ${req.method} ${req.url}`
+    });
+});

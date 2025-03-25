@@ -1,14 +1,15 @@
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Server configurations - allows switching between servers
+// Single source of truth for API URL construction
 export const SERVER_CONFIGS = {
   production: {
     name: 'Production',
     ip: 'app.petfurme.shop',
-    port: 443,  // HTTPS port
+    port: 443,
     https: true,
-    apiPath: '/PetFurMe-Application/api'
+    // This should match the server structure
+    apiPath: 'PetFurMe-Application/api'
   },
   auth: {
     name: 'Auth Server',
@@ -19,8 +20,8 @@ export const SERVER_CONFIGS = {
   },
   development: {
     name: 'Development',
-    ip: '192.168.1.100', // Replace with your actual development IP
-    port: 8080, // Common development port
+    ip: '192.168.1.100', // Your development IP
+    port: 8080,
     https: false,
     apiPath: '/api'
   },
@@ -37,18 +38,20 @@ export const SERVER_CONFIGS = {
   }
 };
 
-// Default to production if no server is selected
-let activeServer = 'production';
+// Use production by default
+const CURRENT_SERVER = 'production';
+const SERVER_CONFIG = SERVER_CONFIGS[CURRENT_SERVER];
 
-// Production server details
-export const SERVER_IP = SERVER_CONFIGS[activeServer].ip;
-export const SERVER_PORT = SERVER_CONFIGS[activeServer].port;
+// Export constants
+export const SERVER_IP = SERVER_CONFIG.ip;
+export const SERVER_PORT = SERVER_CONFIG.port;
 export const SERVER_PORT_PROD = '1800';
 export const SERVER_PORT_DEV = '1800';
 export const API_VERSION = 'v1';
+export const USE_HTTPS = SERVER_CONFIG.https;
 
-// Determine the right URL format based on platform and environment
-export const BASE_URL = `${SERVER_CONFIGS[activeServer]?.https || SERVER_PORT === 443 ? 'https' : 'http'}://${SERVER_IP}${(SERVER_PORT !== 80 && SERVER_PORT !== 443) ? `:${SERVER_PORT}` : ''}`;
+// Construct base URLs correctly
+export const BASE_URL = `${USE_HTTPS ? 'https' : 'http'}://${SERVER_IP}`;
 export const API_BASE_URL = 'https://app.petfurme.shop/PetFurMe-Application/api';
 
 // For local development, you might want to use different URLs
@@ -68,7 +71,8 @@ export const EFFECTIVE_API_URL = IS_DEVELOPMENT ? `${DEV_BASE_URL}/api` : API_BA
 // Allow changing server at runtime
 export const changeServer = async (serverKey) => {
   if (SERVER_CONFIGS[serverKey]) {
-    activeServer = serverKey;
+    CURRENT_SERVER = serverKey;
+    SERVER_CONFIG = SERVER_CONFIGS[serverKey];
     
     // Save the selection for next app start
     try {
@@ -78,16 +82,16 @@ export const changeServer = async (serverKey) => {
     }
     
     // Update the URLs
-    Object.defineProperty(global, 'SERVER_IP', { value: SERVER_CONFIGS[serverKey].ip });
-    Object.defineProperty(global, 'SERVER_PORT', { value: SERVER_CONFIGS[serverKey].port });
+    Object.defineProperty(global, 'SERVER_IP', { value: SERVER_CONFIG.ip });
+    Object.defineProperty(global, 'SERVER_PORT', { value: SERVER_CONFIG.port });
     Object.defineProperty(global, 'BASE_URL', { 
-      value: `${SERVER_CONFIGS[serverKey].https ? 'https' : 'http'}://${SERVER_CONFIGS[serverKey].ip}:${SERVER_CONFIGS[serverKey].port}` 
+      value: `${USE_HTTPS ? 'https' : 'http'}://${SERVER_CONFIG.ip}:${SERVER_CONFIG.port}` 
     });
     
     console.log('Server changed to:', serverKey, {
-      ip: SERVER_CONFIGS[serverKey].ip,
-      port: SERVER_CONFIGS[serverKey].port,
-      url: `${SERVER_CONFIGS[serverKey].https ? 'https' : 'http'}://${SERVER_CONFIGS[serverKey].ip}:${SERVER_CONFIGS[serverKey].port}`
+      ip: SERVER_CONFIG.ip,
+      port: SERVER_CONFIG.port,
+      url: `${USE_HTTPS ? 'https' : 'http'}://${SERVER_CONFIG.ip}:${SERVER_CONFIG.port}`
     });
     
     return true;
@@ -162,7 +166,7 @@ export const checkServerConnectivity = async () => {
 // Add this function to handle the "Standard HTTPS" option
 export const useStandardHTTPS = () => {
   // Custom server change for standard HTTPS
-  activeServer = 'standard';
+  CURRENT_SERVER = 'standard';
   const config = {
     ip: 'app.petfurme.shop',
     port: 443,
@@ -183,10 +187,12 @@ export const useStandardHTTPS = () => {
   return true;
 };
 
-// Add a helper function to get the full API URL with endpoint
-export const getApiUrl = (endpoint) => {
-  const baseUrl = API_BASE_URL;
-  return `${baseUrl}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+// Add a helper function for API URLs
+export const getApiUrl = (endpoint, params = {}) => {
+  const cleanEndpoint = endpoint.replace(/^\/+/, '');
+  const baseUrl = `${API_BASE_URL}/${cleanEndpoint}`;
+  const queryString = new URLSearchParams(params).toString();
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
 };
 
 // Add constants for auth server

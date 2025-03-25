@@ -13,13 +13,18 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { API_BASE_URL } from '../../utils/config';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomHeader from '../components/CustomHeader';
 
-const API_BASE_URL = `http://${SERVER_IP}/PetFurMe-Application`;
+const getApiUrl = (endpoint, params = {}) => {
+    const queryString = Object.keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+    return `${API_BASE_URL}/api/${endpoint}${queryString ? `?${queryString}` : ''}`;
+};
 
 const ProfileVerification = ({ navigation, route }) => {
     const user_id = route.params?.user_id || 
@@ -101,46 +106,36 @@ const ProfileVerification = ({ navigation, route }) => {
                 setIsVerified(verificationStatus);
                 setSaveDisabled(verificationStatus);
 
-                // Handle photo - prioritize binary data in photo_data
+                // Update photo handling logic
                 try {
-                    const photoUrl = `${API_BASE_URL}/api/users/get_user_photo.php?user_id=${user_id}`;
-                    console.log("Fetching user photo from:", photoUrl);
-                    
-                    const photoResponse = await axios.get(photoUrl);
-                    console.log("Photo response:", photoResponse.data);
-                    
-                    if (photoResponse.data.success) {
-                        if (photoResponse.data.source === 'photo_data') {
-                            // Handle binary data returned as base64
-                            const base64Data = photoResponse.data.photo;
-                            console.log("Received photo as base64, length:", base64Data.length);
-                            
+                    if (userData.photo_data || userData.photo) {  // Check for either photo_data or blob photo
+                        console.log("Loading photo from database");
+                        const photoData = userData.photo_data || userData.photo;
+                        
+                        if (typeof photoData === 'string' && photoData.startsWith('data:image')) {
+                            // If it's already a base64 data URL
                             setProfilePhoto({
-                                uri: `data:image/jpeg;base64,${base64Data}`,
-                                headers: {
-                                    'Cache-Control': 'no-cache'
-                                }
-                            });
-                        } else if (photoResponse.data.photo_path) {
-                            // Handle traditional file path
-                            const filePhotoUrl = `${API_BASE_URL}/uploads/${photoResponse.data.photo_path}`;
-                            console.log("Photo URL (file path):", filePhotoUrl);
-                            
-                            setProfilePhoto({
-                                uri: filePhotoUrl,
+                                uri: photoData,
                                 headers: {
                                     'Cache-Control': 'no-cache'
                                 }
                             });
                         } else {
-                            setProfilePhoto(null);
+                            // Convert blob/binary data to base64
+                            setProfilePhoto({
+                                uri: `data:image/jpeg;base64,${photoData}`,
+                                headers: {
+                                    'Cache-Control': 'no-cache'
+                                }
+                            });
                         }
+                        console.log("Successfully loaded photo from database");
                     } else {
-                        console.log("No photo found for user");
+                        console.log("No photo data in database");
                         setProfilePhoto(null);
                     }
                 } catch (error) {
-                    console.error("Error fetching user photo:", error);
+                    console.error("Error setting user photo:", error);
                     setProfilePhoto(null);
                 }
 

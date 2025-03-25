@@ -13,7 +13,7 @@ import { useFonts } from "expo-font";
 import { Fredoka_400Regular } from "@expo-google-fonts/fredoka";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Path, Svg } from 'react-native-svg';
-import { API_BASE_URL } from '../../utils/config';
+import { API_BASE_URL, getApiUrl } from '../../utils/config';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,7 +40,8 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchPets = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/PetFurMe-Application/api/pets/get_pets.php`);
+      const url = getApiUrl('pets/get_pets.php');
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

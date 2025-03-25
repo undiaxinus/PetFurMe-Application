@@ -62,7 +62,7 @@ const ProductListScreen = ({ navigation, route }) => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      let url = `${API_BASE_URL}/PetFurMe-Application/api/products/get_products.php`;
+      let url = `${API_BASE_URL}/api/products/get_products.php`;
       
       const params = new URLSearchParams();
       if (selectedCategory !== 'all') {

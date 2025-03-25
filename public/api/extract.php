@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Adjust include path
-require_once __DIR__ . '/../api/config/Database.php';
+require_once __DIR__ . '/../api/config/database.php';
 
 // Define upload directories relative to project root
 define('UPLOAD_BASE', __DIR__ . '/../../uploads/');

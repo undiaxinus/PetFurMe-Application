@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SERVER_IP } from '../config/constants';
+import { API_BASE_URL, getApiUrl } from '../config/constants';
 import axios from 'axios';
 
 const CustomHeader = ({ 
@@ -14,7 +14,6 @@ const CustomHeader = ({
   userPhoto,
   user_id
 }) => {
-  const API_BASE_URL = `http://${SERVER_IP}`;
   const [userData, setUserData] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
@@ -24,12 +23,18 @@ const CustomHeader = ({
     try {
       console.log("Fetching data for user_id:", user_id);
       
-      const response = await fetch(
-        `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_data.php?user_id=${user_id}&t=${Date.now()}`
-      );
+      const url = getApiUrl('users/get_user_data.php', { user_id, t: Date.now() });
+      console.log("Fetching user data from:", url);
+      
+      const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch user data');
+        throw new Error(`Failed to fetch user data: ${response.status}`);
+      }
+      
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/html')) {
+        throw new Error('Server returned HTML instead of JSON');
       }
       
       const data = await response.json();
@@ -56,36 +61,28 @@ const CustomHeader = ({
     if (!user_id) return;
     
     try {
-      const photoUrl = `${API_BASE_URL}/PetFurMe-Application/api/users/get_user_photo.php?user_id=${user_id}`;
+      const photoUrl = getApiUrl('users/get_user_photo.php', { user_id });
       console.log("Header: Fetching user photo from:", photoUrl);
       
       const photoResponse = await axios.get(photoUrl);
+      console.log("Photo response:", photoResponse.data);
       
-      if (photoResponse.data.success) {
-        if (photoResponse.data.source === 'photo_data') {
-          // Handle binary data returned as base64
-          const base64Data = photoResponse.data.photo;
-          console.log("Header: Received photo as base64");
-          
-          setProfileImage({
-            uri: `data:image/jpeg;base64,${base64Data}`
-          });
-        } else if (photoResponse.data.photo_path) {
-          // Handle traditional file path
-          const filePhotoUrl = `${API_BASE_URL}/PetFurMe-Application/uploads/${photoResponse.data.photo_path}`;
-          
-          setProfileImage({
-            uri: filePhotoUrl
-          });
-        } else {
-          setProfileImage(null);
-        }
+      if (photoResponse.data.success && photoResponse.data.source === 'photo_data') {
+        const base64Data = photoResponse.data.photo;
+        console.log("Header: Received photo as base64, length:", base64Data.length);
+        
+        setProfileImage({
+          uri: `data:image/jpeg;base64,${base64Data}`,
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
       } else {
-        console.log("No photo found for user in header");
+        console.log("No photo data found for user");
         setProfileImage(null);
       }
     } catch (error) {
-      console.error("Error fetching user photo in header:", error);
+      console.error("Error fetching user photo:", error);
       setProfileImage(null);
     }
   };

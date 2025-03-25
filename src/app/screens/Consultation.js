@@ -15,11 +15,12 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import RNPickerSelect from 'react-native-picker-select';
-import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
+import { BASE_URL, SERVER_IP, SERVER_PORT, API_BASE_URL } from '../config/constants';
 import { logActivity, ACTIVITY_TYPES } from '../utils/activityLogger';
 import CustomHeader from '../components/CustomHeader';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getApiUrl, apiRequest, safeFetch } from '../utils/apiHelper';
 
 // Modify the WebAlert component to work on both platforms
 const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
@@ -128,6 +129,11 @@ const Consultation = ({ navigation, route }) => {
   const [appointmentTime, setAppointmentTime] = useState('');
   const [showWebAlert, setShowWebAlert] = useState(false);
   const [alertConfig, setAlertConfig] = useState({});
+  const [userVerificationStatus, setUserVerificationStatus] = useState({
+    verified: false,
+    complete_credentials: false,
+    loading: true
+  });
 
   const VACCINATION_TYPES = [
     'Anti-Rabies',
@@ -203,10 +209,10 @@ const Consultation = ({ navigation, route }) => {
 
       // Add debug logs
       console.log('Fetching pets for user_id:', user_id);
-      const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/get_user_pets.php?user_id=${user_id}`;
+      const url = getApiUrl('pets/get_user_pets.php', { user_id });
       console.log('Fetch URL:', url);
 
-      const response = await fetch(url);
+      const response = await safeFetch(url);
       
       // Add response debugging
       console.log('Response status:', response.status);
@@ -883,6 +889,62 @@ const Consultation = ({ navigation, route }) => {
     );
   };
 
+  // Add a function to check user verification status
+  const checkUserVerificationStatus = async (userId) => {
+    if (!userId) return;
+    
+    try {
+      console.log('Checking verification status for user:', userId);
+      const url = getApiUrl('users/check_profile_status.php', { user_id: userId });
+      
+      const response = await safeFetch(url);
+      console.log('Verification status response:', response);
+      
+      if (response && response.success) {
+        setUserVerificationStatus({
+          verified: response.verified === "1" || response.verified === true,
+          complete_credentials: response.complete_credentials === "1" || response.complete_credentials === true,
+          loading: false
+        });
+      } else {
+        console.error('Failed to get verification status:', response?.message || 'Unknown error');
+        setUserVerificationStatus(prev => ({ ...prev, loading: false }));
+      }
+    } catch (error) {
+      console.error('Error checking verification status:', error);
+      setUserVerificationStatus(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  // Add conditional rendering based on verification status
+  const renderVerificationWarning = () => {
+    if (userVerificationStatus.loading) return null;
+    
+    if (!userVerificationStatus.verified) {
+      return (
+        <View style={styles.verificationWarning}>
+          <Ionicons name="alert-circle" size={20} color="#F59E0B" />
+          <Text style={styles.verificationWarningText}>
+            Your account is not yet verified. Some features may be limited.
+          </Text>
+        </View>
+      );
+    }
+    
+    if (!userVerificationStatus.complete_credentials) {
+      return (
+        <View style={styles.verificationWarning}>
+          <Ionicons name="information-circle" size={20} color="#3B82F6" />
+          <Text style={styles.verificationWarningText}>
+            Please complete your profile information to access all features.
+          </Text>
+        </View>
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -890,6 +952,8 @@ const Consultation = ({ navigation, route }) => {
         navigation={navigation}
         showBackButton={true}
       />
+
+      {renderVerificationWarning()}
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
@@ -1499,6 +1563,21 @@ const styles = StyleSheet.create({
   selectedInput: {
     color: '#374151',
     fontWeight: '500',
+  },
+  verificationWarning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    padding: 12,
+    borderRadius: 8,
+    margin: 16,
+    marginTop: 8,
+  },
+  verificationWarningText: {
+    color: '#92400E',
+    marginLeft: 8,
+    flex: 1,
+    fontSize: 14,
   },
 });
 

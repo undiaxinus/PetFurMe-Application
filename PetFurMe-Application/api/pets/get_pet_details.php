@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With');
 
-require_once '../../config/Database.php';
+require_once '../../config/database.php';
 
 try {
     $database = new Database();

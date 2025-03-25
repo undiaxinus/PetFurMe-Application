@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-    BASE_URL: 'https://petforme.online',
-    API_PATH: '/api',
-    UPLOADS_PATH: '/uploads'
+    BASE_URL: 'https://app.petfurme.shop',
+    API_PATH: '/PetFurMe-Application/api',
+    UPLOADS_PATH: '/PetFurMe-Application/uploads'
 }; 

@@ -11,10 +11,10 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { SERVER_IP, BASE_URL } from '../config/constants';
 
-const API_BASE_URL = `${BASE_URL}/api`;
+const API_BASE_URL = `${BASE_URL}/PetFurMe-Application/api`;
 
 console.log('SERVER_IP:', SERVER_IP);
-console.log('Full API URL:', `${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`);
+
 
 const categoryColors = {
     '1': { bg: '#FFE8E8', tag: '#FF4444', text: '#FFFFFF' }, // Food
@@ -33,7 +33,7 @@ const PetProductsSection = ({ navigation, user_id }) => {
             setIsProductsLoading(true);
             
             const response = await fetch(
-                `${API_BASE_URL}/PetFurMe-Application/api/products/get_home_products.php`,
+                `${API_BASE_URL}/products/get_home_products.php`,
                 {
                     method: 'GET',
                     headers: {

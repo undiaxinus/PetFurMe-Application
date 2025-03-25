@@ -19,7 +19,7 @@
         "gradleCommand": ":app:assembleRelease"
       },
       "env": {
-        "API_URL": "https://app.petfurme.shop/api"
+        "API_URL": "https://app.petfurme.shop/PetFurMe-Application/"
       }
     },
     "production": {
