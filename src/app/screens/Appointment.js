@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
-  Platform
+  Platform,
+  RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +16,7 @@ import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
 import { SERVER_IP, SERVER_PORT } from '../config/constants';
+import { useRefresh } from '../hooks/useRefresh';
 
 const CustomAlert = ({ visible, title, message, onConfirm, onCancel }) => {
   if (!visible) return null;
@@ -573,6 +575,27 @@ const Appointment = ({ navigation, route }) => {
     );
   };
 
+  // Add a refresh function
+  const refreshAppointments = useCallback(async () => {
+    console.log('Refreshing appointments...');
+    try {
+      // Get the user ID from AsyncStorage or route params
+      const storedUserId = await AsyncStorage.getItem('user_id');
+      const currentUserId = route.params?.user_id || storedUserId;
+      
+      if (currentUserId) {
+        await fetchAppointments(currentUserId);
+      } else {
+        console.error('No user ID available for refreshing appointments');
+      }
+    } catch (error) {
+      console.error('Error refreshing appointments:', error);
+    }
+  }, [route.params?.user_id]);
+  
+  // Use the refresh hook
+  const { refreshControlProps, RefreshButton, webProps } = useRefresh(refreshAppointments);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -596,6 +619,12 @@ const Appointment = ({ navigation, route }) => {
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={renderCalendar}
+            refreshControl={
+              <RefreshControl
+                {...refreshControlProps}
+              />
+            }
+            {...webProps}
           />
         </View>
       )}

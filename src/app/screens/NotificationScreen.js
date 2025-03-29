@@ -9,6 +9,7 @@ import Constants from 'expo-constants';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
 import { useNotifications } from '../context/NotificationContext';
+import { useRefresh } from '../hooks/useRefresh';
 
 // Add this at the top level
 const configureNotifications = Platform.OS === 'web' 
@@ -52,6 +53,7 @@ const NotificationScreen = ({ navigation, route }) => {
   const [permissionStatus, setPermissionStatus] = useState('unknown');
   const { updateNotificationStatus } = useNotifications();
   const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Add this useEffect to check verification status
   useEffect(() => {
@@ -441,6 +443,27 @@ const NotificationScreen = ({ navigation, route }) => {
     );
   }, [notifications, user_id, updateNotificationStatus]);
 
+  // Add a refresh function
+  const refreshNotifications = useCallback(async () => {
+    console.log('Refreshing notifications...');
+    setLoading(true);
+    try {
+      await fetchNotifications();
+      // Update unread status for notification badge
+      if (updateNotificationStatus) {
+        const hasUnread = notifications.some(item => !item.read_at);
+        updateNotificationStatus(hasUnread);
+      }
+    } catch (error) {
+      console.error('Error refreshing notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user_id]);
+  
+  // Use the refresh hook
+  const { refreshControlProps, RefreshButton, webProps } = useRefresh(refreshNotifications);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -458,13 +481,10 @@ const NotificationScreen = ({ navigation, route }) => {
         contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-            colors={['#8146C1']}
-            tintColor="#8146C1"
+            {...refreshControlProps}
           />
         }
-        scrollEnabled={true}
+        {...webProps}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>

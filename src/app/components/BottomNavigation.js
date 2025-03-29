@@ -124,7 +124,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
       left: 0,
       right: 0,
       backgroundColor: 'transparent',
-      height: Platform.OS === 'ios' ? 110 : 96,
+      height: Platform.OS === 'ios' ? 90 : 75,
       zIndex: 1000,
       elevation: 8,
       borderTopWidth: 0,
@@ -154,22 +154,22 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
       justifyContent: 'space-around',
       alignItems: 'center',
       height: '100%',
-      paddingHorizontal: 15,
-      paddingBottom: 0,
+      paddingHorizontal: 10,
+      paddingBottom: Platform.OS === 'ios' ? 20 : 10,
     },
     navItem: {
-      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
       height: 50,
-      marginHorizontal: 5,
+      width: '20%',
+      paddingHorizontal: 2,
     },
     homeItem: {
-      marginTop: -25,
+      marginTop: -15,
     },
     homeIconContainer: {
       backgroundColor: '#f0e6f7',
-      padding: 16,
+      padding: 12,
       borderRadius: 30,
       borderWidth: 2,
       borderColor: '#8146C1',
@@ -186,11 +186,13 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
       position: 'relative',
       alignItems: 'center',
       justifyContent: 'center',
+      width: '100%',
     },
     navText: {
-      fontSize: 11,
+      fontSize: 10,
       color: '#8146C1',
-      marginTop: 4,
+      marginTop: 2,
+      textAlign: 'center',
       opacity: 0.8,
     },
     activeText: {
@@ -223,8 +225,8 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
 
   return (
     <View style={styles.container}>
+      <View style={styles.background} />
       <View style={styles.bottomNav}>
-        <View style={styles.background} />
         {/* Navigation Items */}
         {[
           { screen: 'ChatScreen', icon: 'chatbubble', label: 'Chat' },
@@ -259,7 +261,7 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
             ]}>
               <Ionicons 
                 name={currentScreen === screen ? icon : `${icon}-outline`}
-                size={screen === 'HomePage' ? 32 : 24}
+                size={screen === 'HomePage' ? 28 : 22}
                 color={currentScreen === screen ? '#8146C1' : '#8146C1'}
               />
               {screen === 'NotificationScreen' && hasUnreadNotifications && (
@@ -267,12 +269,19 @@ const BottomNavigation = ({ activeScreen = 'HomePage', user_id, isVerified: prop
                   <Text style={styles.badgeText}>•</Text>
                 </View>
               )}
-              <Text style={[
+            </Animated.View>
+            <Text 
+              style={[
                 styles.navText, 
                 currentScreen === screen && styles.activeText,
-                requiresVerification && !isVerified && { color: '#CCCCCC' }
-              ]}>{label}</Text>
-            </Animated.View>
+                requiresVerification && !isVerified && { color: '#CCCCCC' },
+                screen === 'NotificationScreen' && { fontSize: 9 },
+              ]} 
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {label}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>

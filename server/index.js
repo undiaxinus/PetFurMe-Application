@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const appointmentsRouter = require('./routes/appointments');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
@@ -14,7 +15,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors());
+app.use(cors({
+  origin: '*', // In production, you should restrict this
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Test route
@@ -25,11 +31,14 @@ app.get('/test', (req, res) => {
 // Register the appointments router with /api prefix
 app.use('/api', appointmentsRouter);
 
+// Mount the auth router at /api/auth
+app.use('/api/auth', authRouter);
+
 const PORT = process.env.PORT || 1800;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n=== Server Started ===`);
   console.log(`Server is running on port ${PORT}`);
   console.log(`Full URL: http://localhost:${PORT}`);
   console.log(`Test endpoint: http://localhost:${PORT}/test`);
-  console.log(`API endpoint example: http://localhost:${PORT}/api/user/appointments/108`);
+  console.log(`Auth endpoint: http://localhost:${PORT}/api/auth/test-auth`);
 }); 

@@ -248,28 +248,22 @@ router.post('/register', async (req, res) => {
     try {
         const { email, username, password, role, name } = req.body;
         console.log('Received registration request for:', email);
-
-        const connection = await mysql.createConnection(config);
         
-        try {
-            // Hash the password
-            const hashedPassword = await bcrypt.hash(password, 10);
-            
-            // Insert the new user
-            const [result] = await connection.execute(
-                'INSERT INTO users (email, username, password, role, name) VALUES (?, ?, ?, ?, ?)',
-                [email.trim(), username.trim(), hashedPassword, role, name]
-            );
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Insert the new user using the existing pool
+        const [result] = await pool.execute(
+            'INSERT INTO users (email, username, password, role, name) VALUES (?, ?, ?, ?, ?)',
+            [email.trim(), username.trim(), hashedPassword, role, name]
+        );
 
-            console.log('User registered successfully:', result);
+        console.log('User registered successfully:', result);
 
-            res.json({
-                success: true,
-                message: 'Registration successful'
-            });
-        } finally {
-            await connection.end();
-        }
+        res.json({
+            success: true,
+            message: 'Registration successful'
+        });
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({

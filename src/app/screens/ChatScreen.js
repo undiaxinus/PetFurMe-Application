@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, KeyboardAvoidingView, Image, Platform, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,8 @@ import CustomHeader from '../components/CustomHeader';
 import axios from 'axios';
 import { SERVER_IP, API_BASE_URL, getApiUrl } from '../config/constants';  // Add getApiUrl here
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRefresh } from '../hooks/useRefresh';
+import { RefreshControl } from 'react-native';
 
 
 const baseStyles = StyleSheet.create({
@@ -594,6 +596,26 @@ const ChatScreen = ({ navigation, route }) => {
     </View>
   );
 
+  // Add a refresh function
+  const refreshMessages = useCallback(async () => {
+    console.log('Refreshing chat messages...');
+    try {
+      if (isAutomated) {
+        // For bot chat, you might want to clear or refresh the conversation
+        // This depends on your application's behavior
+        console.log('Refreshing bot conversation');
+      } else {
+        // For live chat, fetch the latest messages
+        await fetchMessages();
+      }
+    } catch (error) {
+      console.error('Error refreshing messages:', error);
+    }
+  }, [isAutomated, user_id]);
+  
+  // Use the refresh hook
+  const { refreshControlProps, webProps } = useRefresh(refreshMessages);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -616,6 +638,12 @@ const ChatScreen = ({ navigation, route }) => {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.chatContainer}
           renderItem={renderMessage}
+          refreshControl={
+            <RefreshControl
+              {...refreshControlProps}
+            />
+          }
+          {...webProps}
         />
       </View>
 

@@ -11,6 +11,7 @@ import {
 	Platform,
 	Alert,
 	Animated,
+	Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
@@ -48,10 +49,13 @@ const RegistrationScreen = ({ navigation }) => {
 	const [otp, setOtp] = useState("");
 	const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
-	const API_URL = API_BASE_URL;
+	const API_URL = 'https://app.petfurme.shop/PetFurMe-Application/api/auth';
 
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const slideAnim = useRef(new Animated.Value(50)).current;
+
+	const windowWidth = Dimensions.get('window').width;
+	const isSmallDevice = windowWidth < 380;
 
 	useEffect(() => {
 		Animated.parallel([
@@ -67,17 +71,44 @@ const RegistrationScreen = ({ navigation }) => {
 			}),
 		]).start();
 
+		console.log('Environment:', Platform.OS, __DEV__ ? 'Development' : 'Production');
 		console.log('API URL:', API_URL);
-	}, [API_URL]);
+	}, []);
+
+	const tryAlternateEndpoints = async (email) => {
+		const endpoints = [
+			`${API_URL}/send-otp`,
+		];
+		
+		const axiosInstance = axios.create({
+			timeout: 15000, // Increased timeout
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		});
+		
+		for (const endpoint of endpoints) {
+			try {
+				console.log(`Trying endpoint: ${endpoint}`);
+				const response = await axiosInstance.post(endpoint, { 
+					email: email.trim() 
+				});
+				
+				console.log(`Response from ${endpoint}:`, response.data);
+				return response;
+			} catch (error) {
+				console.log(`Failed with endpoint ${endpoint}:`, error.message);
+				throw error; // Throw the error to handle it in the calling function
+			}
+		}
+	};
 
 	const handleSendOTP = async () => {
 		try {
 			setLoading(true);
 			setError("");
 
-			console.log('Current API_URL:', API_URL);
-			console.log('Full verify-email URL:', `${API_URL}/verify-email`);
-			
 			// Basic validation
 			if (!email || !username || !password || !confirmPassword) {
 				setError("Please fill in all fields");
@@ -89,14 +120,12 @@ const RegistrationScreen = ({ navigation }) => {
 				return;
 			}
 
-			// Add email validation
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailRegex.test(email)) {
 				setError("Please enter a valid email address");
 				return;
 			}
 
-			// Check password strength
 			const passwordCheck = checkPasswordStrength(password);
 			if (passwordCheck.strength === 'weak') {
 				setError("Please choose a stronger password");
@@ -105,12 +134,18 @@ const RegistrationScreen = ({ navigation }) => {
 
 			console.log('Sending request to:', `${API_URL}/verify-email`);
 			
-			// Check if email already exists
-			const verifyResponse = await axios.post(`${API_URL}/verify-email`, {
+			// Create axios instance with timeout and better error handling
+			const axiosInstance = axios.create({
+				timeout: 15000,
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				}
+			});
+			
+			// Check if email exists
+			const verifyResponse = await axiosInstance.post(`${API_URL}/verify-email`, {
 				email: email.trim()
-			}).catch(error => {
-				console.error('Email verification error:', error.response || error);
-				throw error;
 			});
 
 			if (verifyResponse.data.exists) {
@@ -120,38 +155,32 @@ const RegistrationScreen = ({ navigation }) => {
 
 			console.log('Sending OTP request to:', `${API_URL}/send-otp`);
 			
-			// Send OTP with improved error handling
-			const response = await axios.post(`${API_URL}/send-otp`, {
+			// Send OTP
+			const response = await axiosInstance.post(`${API_URL}/send-otp`, {
 				email: email.trim()
-			}).catch(error => {
-				console.error('Send OTP error:', error.response || error);
-				throw error;
 			});
+
+			console.log('OTP Response:', response.data);
 
 			if (response.data.success) {
 				setStep(2);
-				// Add success message
 				Alert.alert(
 					"Success",
 					"Verification code has been sent to your email",
 					[{ text: "OK" }]
 				);
 			} else {
-				setError(response.data.error || "Failed to send OTP");
+				throw new Error(response.data.error || "Failed to send OTP");
 			}
 		} catch (error) {
-			console.error('Detailed error:', error);
-			// More detailed error message based on the error type
-			if (error.response) {
-				// Server responded with an error
-				setError(error.response.data.error || `Server error: ${error.response.status}`);
-			} else if (error.request) {
-				// Request was made but no response received
-				setError("No response from server. Please check your connection.");
-			} else {
-				// Error in request setup
-				setError("Failed to send OTP. Please try again.");
-			}
+			console.error('Detailed error:', {
+				message: error.message,
+				response: error.response?.data,
+				status: error.response?.status,
+				config: error.config
+			});
+			
+			setError(error.response?.data?.error || error.message);
 		} finally {
 			setLoading(false);
 		}
@@ -163,57 +192,52 @@ const RegistrationScreen = ({ navigation }) => {
 			setError("");
 
 			if (!otp) {
-				setError("Please enter the OTP");
+				setError("Please enter the verification code");
 				return;
 			}
 
-			// Verify OTP
-			const verifyResponse = await axios.post(`${API_URL}/verify-otp`, {
-				email,
+			console.log('Verifying OTP:', otp, 'for email:', email);
+
+			const axiosInstance = axios.create({
+				timeout: 15000,
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				}
+			});
+
+			const response = await axiosInstance.post(`${API_URL}/verify-otp`, {
+				email: email.trim(),
 				otp: otp.trim()
 			});
 
-			if (verifyResponse.data.success) {
-				const registerData = {
+			console.log('OTP verification response:', response.data);
+
+			if (response.data.success) {
+				// Register the user
+				const registerResponse = await axiosInstance.post(`${API_URL}/register`, {
 					email: email.trim(),
 					username: username.trim(),
-					password,
-					role: "pet_owner",
-					name: username.trim()
-				};
+					password: password
+				});
 
-				const registerResponse = await axios.post(`${API_URL}/register`, registerData);
+				console.log('Registration response:', registerResponse.data);
 
 				if (registerResponse.data.success) {
-					// Clear form data
-					setEmail("");
-					setUsername("");
-					setPassword("");
-					setConfirmPassword("");
-					setOtp("");
-					
-					// Show success popup
 					setShowSuccessPopup(true);
-					
-					// Auto-navigate after 5 seconds if user doesn't click the button
-					setTimeout(() => {
-						if (showSuccessPopup) { // Only navigate if popup is still showing
-							setShowSuccessPopup(false);
-							navigation.reset({
-								index: 0,
-								routes: [{ name: 'LoginScreen' }]
-							});
-						}
-					}, 5000);
 				} else {
-					setError(registerResponse.data.error || "Registration failed");
+					throw new Error(registerResponse.data.error || "Registration failed");
 				}
 			} else {
-				setError(verifyResponse.data.error || "Invalid OTP");
+				setError(response.data.error || "Invalid verification code");
 			}
 		} catch (error) {
-			console.error('Registration error:', error.response?.data || error);
-			setError(error.response?.data?.error || "Registration failed");
+			console.error('Verification error:', {
+				message: error.message,
+				response: error.response?.data,
+				status: error.response?.status
+			});
+			setError(error.response?.data?.error || error.message);
 		} finally {
 			setLoading(false);
 		}
@@ -285,7 +309,10 @@ const RegistrationScreen = ({ navigation }) => {
 	const renderOTPVerification = () => (
 		<>
 			<Text style={styles.otpText}>
-				Please enter the verification code sent to your email
+				Please enter the verification code sent to:
+			</Text>
+			<Text style={styles.emailDisplay}>
+				{email}
 			</Text>
 			<View style={styles.inputWrapper}>
 				<Ionicons name="key-outline" size={20} color="#8146C1" style={styles.icon} />
@@ -321,6 +348,12 @@ const RegistrationScreen = ({ navigation }) => {
 				/>
 			)}
 
+			{error ? (
+				<View style={styles.errorContainer}>
+					<Text style={styles.errorText}>{error}</Text>
+				</View>
+			) : null}
+
 			<Animated.View 
 				style={[
 					styles.content,
@@ -330,53 +363,56 @@ const RegistrationScreen = ({ navigation }) => {
 					}
 				]}
 			>
-				<View style={styles.formContainer}>
-					<View style={styles.logoContainer}>
-						<Image
-							source={require("../../assets/images/vetcare.png")}
-							style={styles.logo}
-						/>
-					</View>
+				<ScrollView 
+					contentContainerStyle={styles.scrollContent}
+					showsVerticalScrollIndicator={false}
+				>
+					<View style={[styles.formContainer, isSmallDevice && styles.formContainerSmall]}>
+						<View style={styles.logoContainer}>
+							<Image
+								source={require("../../assets/images/vetcare.png")}
+								style={[styles.logo, isSmallDevice && styles.logoSmall]}
+							/>
+						</View>
 
-					<Text style={styles.headerText}>
-						{step === 1 ? "Create Account" : "Verify Email"}
-					</Text>
-					
-					{error ? <Text style={styles.errorText}>{error}</Text> : null}
-					
-					{step === 1 ? renderRegistrationForm() : renderOTPVerification()}
+						<Text style={styles.headerText}>
+							{step === 1 ? "Create Account" : "Verify Email"}
+						</Text>
+						
+						{step === 1 ? renderRegistrationForm() : renderOTPVerification()}
 
-					<TouchableOpacity
-						style={[styles.registerButton, loading && styles.disabledButton]}
-						onPress={step === 1 ? handleSendOTP : handleVerifyOTP}
-						disabled={loading}
-					>
-						{loading ? (
-							<ActivityIndicator size="small" color="#FFFFFF" />
-						) : (
-							<Text style={styles.registerButtonText}>
-								{step === 1 ? "CONTINUE" : "VERIFY & REGISTER"}
-							</Text>
-						)}
-					</TouchableOpacity>
-
-					{step === 2 && (
 						<TouchableOpacity
-							style={styles.resendButton}
-							onPress={handleSendOTP}
+							style={[styles.registerButton, loading && styles.disabledButton]}
+							onPress={step === 1 ? handleSendOTP : handleVerifyOTP}
 							disabled={loading}
 						>
-							<Text style={styles.resendButtonText}>Resend OTP</Text>
+							{loading ? (
+								<ActivityIndicator size="small" color="#FFFFFF" />
+							) : (
+								<Text style={styles.registerButtonText}>
+									{step === 1 ? "CONTINUE" : "VERIFY & REGISTER"}
+								</Text>
+							)}
 						</TouchableOpacity>
-					)}
 
-					<View style={styles.loginContainer}>
-						<Text style={styles.loginText}>Already have an account? </Text>
-						<TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
-							<Text style={styles.loginLink}>Login</Text>
-						</TouchableOpacity>
+						{step === 2 && (
+							<TouchableOpacity
+								style={styles.resendButton}
+								onPress={handleSendOTP}
+								disabled={loading}
+							>
+								<Text style={styles.resendButtonText}>Resend OTP</Text>
+							</TouchableOpacity>
+						)}
+
+						<View style={styles.loginContainer}>
+							<Text style={styles.loginText}>Already have an account? </Text>
+							<TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+								<Text style={styles.loginLink}>Login</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
+				</ScrollView>
 			</Animated.View>
 		</View>
 	);
@@ -388,7 +424,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#F0E6FF",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingHorizontal: 20,
+		paddingHorizontal: Platform.OS === 'web' ? 20 : 10,
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
@@ -406,10 +442,14 @@ const styles = StyleSheet.create({
 		height: 150,
 		resizeMode: "contain",
 	},
+	logoSmall: {
+		width: 120,
+		height: 120,
+	},
 	formContainer: {
 		width: "100%",
-		maxWidth: 450,
-		padding: 40,
+		maxWidth: Platform.OS === 'web' ? 450 : '95%',
+		padding: Platform.OS === 'web' ? 40 : 20,
 		backgroundColor: "rgba(255, 255, 255, 0.95)",
 		borderRadius: 16,
 		shadowColor: "#8146C1",
@@ -418,25 +458,29 @@ const styles = StyleSheet.create({
 		shadowRadius: 12,
 		elevation: 5,
 		marginBottom: 20,
+		marginTop: Platform.OS === 'web' ? 0 : 10,
+	},
+	formContainerSmall: {
+		padding: 15,
 	},
 	headerText: {
-		fontSize: 26,
+		fontSize: Platform.OS === 'web' ? 26 : 22,
 		fontWeight: "bold",
 		color: "#8146C1",
 		textAlign: "center",
-		marginBottom: 20,
+		marginBottom: Platform.OS === 'web' ? 20 : 15,
 	},
 	inputWrapper: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 16,
+		marginBottom: Platform.OS === 'web' ? 16 : 12,
 		borderWidth: 1,
 		borderColor: "#E0E0E0",
 		borderRadius: 12,
 		backgroundColor: "#FFFFFF",
 		paddingHorizontal: 15,
-		paddingVertical: 12,
-		marginTop: 8,
+		paddingVertical: Platform.OS === 'web' ? 12 : 10,
+		marginTop: Platform.OS === 'web' ? 8 : 6,
 	},
 	icon: {
 		marginRight: 12,
@@ -477,11 +521,18 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "500",
 	},
+	errorContainer: {
+		padding: 10,
+		marginVertical: 10,
+		backgroundColor: 'rgba(255, 68, 68, 0.1)',
+		borderRadius: 8,
+		width: '100%',
+	},
 	errorText: {
-		color: "#FF4444",
-		textAlign: "center",
-		marginTop: 10,
+		color: '#FF4444',
+		textAlign: 'center',
 		fontSize: 14,
+		fontFamily: Platform.select({ ios: 'System', android: 'Roboto' }),
 	},
 	loginContainer: {
 		flexDirection: "row",
@@ -505,12 +556,19 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#666666",
 		textAlign: "center",
-		marginBottom: 20,
+		marginBottom: 10,
+	},
+	scrollContent: {
+		flexGrow: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '100%',
 	},
 	content: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
+		width: '100%',
 	},
 	successOverlay: {
 		position: 'absolute',
@@ -572,6 +630,13 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		marginBottom: 16,
 		position: 'relative',
+	},
+	emailDisplay: {
+		fontSize: 16,
+		fontWeight: "500",
+		color: "#8146C1",
+		textAlign: "center",
+		marginBottom: 20,
 	},
 });
 

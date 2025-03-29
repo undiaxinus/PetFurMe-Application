@@ -98,15 +98,15 @@ const PetProductsSection = ({ navigation, user_id }) => {
     const renderProduct = (item) => (
         <TouchableOpacity 
             key={item.id}
-            style={styles.productCard}
+            style={styles.petProductCard}
             onPress={() => navigation.navigate("ProductDetails", { product: item })}
             activeOpacity={0.7}
         >
-            <View style={styles.imageContainer}>
+            <View style={styles.productImageContainer}>
                 <Image 
                     source={item.image} 
-                    style={styles.productImage}
-                    resizeMode="cover"
+                    style={styles.productImageWrapper}
+                    resizeMode="contain"
                     onError={(e) => {
                         console.error('Image loading error:', e.nativeEvent.error);
                         // Update the product's image to default if loading fails
@@ -134,12 +134,20 @@ const PetProductsSection = ({ navigation, user_id }) => {
                     </View>
                 )}
             </View>
-            <View style={styles.productInfo}>
-                <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
-                <Text style={styles.productPrice}>
-                    ₱{item.sellingPrice.toFixed(2)}
+            <View style={styles.productDetails}>
+                <Text style={styles.productName} numberOfLines={2} ellipsizeMode="tail">
+                    {item.name}
                 </Text>
-                <Text style={styles.stockCount}>In Stock: {item.quantity}</Text>
+                <View style={styles.productFooter}>
+                    <Text style={styles.productPrice}>
+                        ₱{item.sellingPrice.toFixed(2)}
+                    </Text>
+                    {item.quantity === 0 ? (
+                        <Text style={styles.lowStock}>Out of Stock</Text>
+                    ) : item.quantity <= item.quantityAlert && (
+                        <Text style={styles.lowStock}>In Stock: {item.quantity}</Text>
+                    )}
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -235,59 +243,69 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        gap: 8,
-        paddingHorizontal: 4,
+        paddingHorizontal: 2,
     },
-    productCard: {
-        width: '48%',
-        backgroundColor: '#FFF',
+    petProductCard: {
         borderRadius: 12,
-        elevation: 3,
-        overflow: 'hidden',
-        marginBottom: 16,
-        borderWidth: 1,
-        borderColor: '#E0E0E0',
+        width: '48%',
+        marginBottom: 12,
+        backgroundColor: '#FFFFFF',
+        elevation: 2,
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
-        shadowRadius: 3,
+        shadowRadius: 2,
+        overflow: 'hidden',
     },
-    imageContainer: {
+    productImageContainer: {
         width: '100%',
-        aspectRatio: 1,
-        backgroundColor: '#F8F8F8',
-        position: 'relative',
+        height: 120,
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    productImageWrapper: {
+        width: '85%',
+        height: '85%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     productImage: {
         width: '100%',
         height: '100%',
-        resizeMode: 'cover',
+        resizeMode: 'contain',
     },
-    productInfo: {
-        padding: 12,
-        height: 90,
-        justifyContent: 'space-between',
+    productDetails: {
+        padding: 10,
+        backgroundColor: '#FFFFFF',
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
     },
     productName: {
-        fontSize: 14,
-        fontWeight: '600',
-        marginBottom: 4,
-        height: 36,
-        lineHeight: 18,
+        fontSize: 13,
+        fontWeight: "600",
         color: '#333',
+        marginBottom: 6,
+        height: 36,
+    },
+    productFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 4,
     },
     productPrice: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: "700",
         color: '#8146C1',
-        marginBottom: 4,
     },
-    stockCount: {
-        fontSize: 12,
-        color: '#666',
+    lowStock: {
+        fontSize: 10,
+        color: '#FF4444',
+        fontWeight: '500',
     },
     stockBadge: {
         position: 'absolute',

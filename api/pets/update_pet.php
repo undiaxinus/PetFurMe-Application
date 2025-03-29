@@ -33,33 +33,47 @@ try {
 
     // Log incoming data for debugging
     error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
-    error_log("Content type: " . $_SERVER['CONTENT_TYPE']);
+    error_log("Content type: " . (isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'Not set'));
     error_log("Raw POST data: " . file_get_contents('php://input'));
     error_log("POST data: " . print_r($_POST, true));
     error_log("FILES data: " . print_r($_FILES, true));
 
-    // Get the raw JSON data
+    // Check for data in $_POST directly
     if (!isset($_POST['data'])) {
         throw new Exception('No pet data received');
     }
 
-    $petDataJson = $_POST['data'];
-    $petData = json_decode($petDataJson, true);
-
-    if (!$petData) {
-        throw new Exception('Invalid pet data format: ' . json_last_error_msg());
+    // Get the raw POST data
+    $data = json_decode($_POST['data'], true);
+    
+    if (!$data) {
+        throw new Exception('Invalid data received');
     }
+
+    // Extract pet data
+    $pet_id = $data['pet_id'];
+    $user_id = $data['user_id'];
+    $name = $data['name'];
+    $age = $data['age'];
+    $type = $data['type'];
+    $breed = $data['breed'];
+    $size = isset($data['size']) ? $data['size'] : null;
+    $weight = $data['weight'];
+    $allergies = $data['allergies'];
+    $notes = $data['notes'];
+    $gender = $data['gender'];
+    $age_unit = isset($data['age_unit']) ? $data['age_unit'] : 'years';
 
     // Validate required fields
     $requiredFields = ['pet_id', 'user_id', 'name', 'type', 'gender', 'category'];
     foreach ($requiredFields as $field) {
-        if (!isset($petData[$field]) || empty($petData[$field])) {
+        if (!isset($data[$field]) || empty($data[$field])) {
             throw new Exception("Missing required field: {$field}");
         }
     }
 
     // Check that breed is at least set, even if empty
-    if (!isset($petData['breed'])) {
+    if (!isset($data['breed'])) {
         throw new Exception("Breed field must be defined, even if empty");
     }
 
@@ -92,19 +106,19 @@ try {
     
     // Create params array WITHOUT the size field
     $params = [
-        $petData['name'],
-        $petData['type'],
-        $petData['breed'],
-        $petData['gender'],
-        $petData['age'],
-        $petData['weight'],
-        $petData['allergies'],
-        $petData['notes'],
-        $petData['category'],
+        $name,
+        $type,
+        $breed,
+        $gender,
+        $age,
+        $weight,
+        $allergies,
+        $notes,
+        $data['category'],
         $photo_binary,  // photo column
         $photo_binary,  // photo_data column
-        $petData['pet_id'],
-        $petData['user_id']
+        $pet_id,
+        $user_id
     ];
 
     // Execute with params

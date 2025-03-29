@@ -154,102 +154,101 @@ const UpdatePetProfile = ({ navigation, route }) => {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      const formData = new FormData();
-
-      // Handle photo as binary data - match AddPetName.js approach
-      if (photo) {
-        try {
-          if (photo.base64) {
-            // Directly append base64 data
-            formData.append('photo', photo.base64);
-            formData.append('is_base64', 'true');
-            // Also indicate this is binary data for proper server handling
-            formData.append('is_binary_data', 'true');
-          } else if (photo.uri) {
-            // For URI, convert to base64
-            const response = await fetch(photo.uri);
-            const blob = await response.blob();
-            const reader = new FileReader();
-            
-            const base64Data = await new Promise((resolve, reject) => {
-              reader.onload = () => resolve(reader.result.split(',')[1]);
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-            
-            formData.append('photo', base64Data);
-            formData.append('is_base64', 'true');
-            formData.append('is_binary_data', 'true');
-          }
-        } catch (error) {
-          console.error('Error processing photo:', error);
-          Alert.alert('Error', 'Failed to process photo. Please try again.');
-          return;
-        }
+      // Check if we have the required fields
+      if (!petName.trim() || !petType || !petGender) {
+        Alert.alert("Error", "Pet name, type, and gender are required.");
+        setLoading(false);
+        return;
       }
 
-      // Add pet data
+      // Create the pet data object
       const petData = {
         pet_id: pet.id,
         user_id: parseInt(user_id),
         name: petName.trim(),
-        age: petAge !== 'Not Specified' ? parseInt(petAge) : null,
-        // Use category and type according to database schema
-        category: petType.charAt(0).toUpperCase() + petType.slice(1).toLowerCase(),
         type: petType.toLowerCase(),
-        breed: petBreed !== 'Not Specified' ? petBreed.trim() : "Not Specified",
+        category: petType,
+        breed: petBreed !== 'Not Specified' ? petBreed.trim() : "",
         gender: petGender.toLowerCase(),
-        weight: petWeight !== 'Not Specified' ? parseFloat(petWeight) : null,
-        // Remove size field as it does not exist in the database
-        allergies: petAllergies.trim() || null,
-        notes: petNotes.trim() || null
+        age: petAge !== 'Not Specified' && petAge ? parseInt(petAge) : null,
+        weight: petWeight !== 'Not Specified' && petWeight ? parseFloat(petWeight) : null,
+        allergies: petAllergies && petAllergies.trim() ? petAllergies.trim() : null,
+        notes: petNotes && petNotes.trim() ? petNotes.trim() : null,
+        age_unit: ageUnit || 'years',
+        size: null
       };
-
-      formData.append('data', JSON.stringify(petData));
-
-      // Debug log
-      console.log('Sending form data:');
-      for (let [key, value] of formData.entries()) {
-        if (key === 'photo') {
-          console.log(`${key}: [binary data]`);
-        } else {
-          console.log(`${key}: ${typeof value === 'string' ? value.substring(0, 100) + '...' : value}`);
-        }
-      }
-
-      // Create the URL with the correct path including PetFurMe-Application
-      const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/update_pet.php`;
       
+      // Convert petData to JSON string
+      const petDataJson = JSON.stringify(petData);
+      console.log('Pet data JSON:', petDataJson.substring(0, 100) + '...');
+      
+      // Create a FormData object
+      const formData = new FormData();
+      formData.append('data', petDataJson);
+      
+      // Handle photo if it exists
+      if (photo && photo.base64) {
+        formData.append('photo', photo.base64);
+        formData.append('is_base64', 'true');
+      }
+      
+      // Debug: Log all form data entries
+      console.log('FormData entries:');
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + (pair[0] === 'photo' ? '[binary data]' : pair[1].substring(0, 50) + '...'));
+      }
+      
+      // Create URL
+      const url = `http://${SERVER_IP}/PetFurMe-Application/api/pets/update_pet.php`;
       console.log('Sending request to:', url);
       
-      const response = await fetch(
-        url,
-        {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
-        }
-      );
-
+      // Try a different approach for web - use fetch with URLSearchParams
+      const params = new URLSearchParams();
+      params.append('data', petDataJson);
+      
+      if (photo && photo.base64) {
+        params.append('photo', photo.base64);
+        params.append('is_base64', 'true');
+      }
+      
+      console.log('Using URLSearchParams for web platform');
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params
+      });
+      
       const responseText = await response.text();
       console.log('Raw server response:', responseText);
-
+      
+      // Try to parse the JSON response
       let result;
       try {
-        result = JSON.parse(responseText);
+        // If the response contains HTML/XML tags, try to extract the JSON
+        if (responseText.includes('<br />') || responseText.includes('<b>')) {
+          const jsonMatch = responseText.match(/(\{.*\})/s);
+          if (jsonMatch && jsonMatch[0]) {
+            result = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error('Could not extract JSON from response');
+          }
+        } else {
+          result = JSON.parse(responseText);
+        }
       } catch (error) {
         console.error('Failed to parse server response:', error);
-        console.error('Response text:', responseText);
         throw new Error('Invalid server response');
       }
-
+      
+      // Check if the update was successful
       if (!result.success) {
         throw new Error(result.message || 'Failed to update pet profile');
       }
-
-      // Success handling...
+      
+      // Success! Navigate back to the home screen
       navigation.reset({
         index: 0,
         routes: [
@@ -268,7 +267,7 @@ const UpdatePetProfile = ({ navigation, route }) => {
           }
         ]
       });
-
+      
     } catch (error) {
       console.error('Error updating pet:', error);
       Alert.alert(

@@ -21,8 +21,9 @@ import CustomHeader from '../components/CustomHeader';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiUrl, apiRequest, safeFetch } from '../utils/apiHelper';
+import { Calendar } from 'react-native-calendars';
 
-// Modify the WebAlert component to work on both platforms
+// Modified WebAlert component with updated header-matching color
 const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
   if (!visible) return null;
 
@@ -33,9 +34,9 @@ const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
   );
 
   // Reconstruct the message with styled notification
-  const beforeNotification = messageLines.slice(0, notificationIndex - 1).join('\n');
+  const beforeNotification = messageLines.slice(0, notificationIndex).join('\n');
   const notification = messageLines[notificationIndex];
-  const afterNotification = messageLines.slice(notificationIndex + 2).join('\n');
+  const afterNotification = messageLines.slice(notificationIndex + 1).join('\n');
 
   return (
     <Modal
@@ -47,11 +48,11 @@ const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
       <View style={styles.webAlertOverlay}>
         <View style={styles.webAlertContainer}>
           <View style={styles.webAlertHeader}>
-            <MaterialCommunityIcons name="check-circle" size={40} color="#CC38F2" />
+            <MaterialCommunityIcons name="check-circle" size={40} color="#8146C1" />
             <Text style={styles.webAlertTitle}>{title}</Text>
           </View>
           
-          <ScrollView style={styles.webAlertMessageContainer}>
+          <View style={styles.webAlertMessageContainer}>
             <Text style={styles.webAlertMessage}>{beforeNotification}</Text>
             
             <View style={styles.webAlertNotification}>
@@ -63,7 +64,7 @@ const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
             {afterNotification && (
               <Text style={styles.webAlertMessage}>{afterNotification}</Text>
             )}
-          </ScrollView>
+          </View>
 
           <View style={styles.webAlertButtonContainer}>
             {buttons.map((button, index) => (
@@ -72,7 +73,6 @@ const WebAlert = ({ visible, title, message, buttons, onDismiss }) => {
                 style={[
                   styles.webAlertButton,
                   index === 0 ? styles.webAlertPrimaryButton : styles.webAlertSecondaryButton,
-                  index === 0 && buttons.length > 1 && { marginRight: 8 }
                 ]}
                 onPress={button.onPress}
               >
@@ -113,7 +113,7 @@ const Consultation = ({ navigation, route }) => {
   const originalAppointment = route.params?.originalAppointment || null;
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(selected_pet || null);
-  const [reasons_for_visit, setReasons] = useState([]);
+  const [reasons, setReasons] = useState([]);
   const [custom_reason, setCustomReason] = useState('');
   const [appointment_date, setDate] = useState(new Date());
   const [appointment_time, setTime] = useState(new Date());
@@ -212,7 +212,8 @@ const Consultation = ({ navigation, route }) => {
       const url = getApiUrl('pets/get_user_pets.php', { user_id });
       console.log('Fetch URL:', url);
 
-      const response = await safeFetch(url);
+      // Replace safeFetch with a direct fetch call to better handle the response
+      const response = await fetch(url);
       
       // Add response debugging
       console.log('Response status:', response.status);
@@ -359,232 +360,133 @@ const Consultation = ({ navigation, route }) => {
 
   const handleSaveAppointment = async () => {
     try {
-      // Initial validation checks
-      if (!user_id || !selectedPet || !appointmentDate || !appointmentTime || reasons_for_visit.length === 0) {
-        const missingFields = [];
-        if (!user_id) missingFields.push('User ID');
-        if (!selectedPet) missingFields.push('Pet');
-        if (!appointmentDate) missingFields.push('Appointment Date');
-        if (!appointmentTime) missingFields.push('Appointment Time');
-        if (reasons_for_visit.length === 0) missingFields.push('Reason for Visit');
-
-        Alert.alert('Missing Information', `Please provide: ${missingFields.join(', ')}`);
-        return;
-      }
-
-      // Get the selected pet's details
-      const selectedPetDetails = pets.find(p => p.id.toString() === selectedPet);
-      if (!selectedPetDetails) {
-        Alert.alert('Error', 'Selected pet not found');
-        return;
-      }
-
       setLoading(true);
-
-      // Ensure all data is properly formatted before sending
-      const formattedAppointmentData = {
-        user_id: user_id.toString(),
-        pet_id: selectedPet,
-        pet_name: selectedPetDetails.name,
-        pet_type: selectedPetDetails.type || 'pet',
-        pet_age: selectedPetDetails.age ? selectedPetDetails.age.toString() : '0',
-        reason_for_visit: JSON.stringify(reasons_for_visit),
-        appointment_date: moment(appointmentDate).format('YYYY-MM-DD'),
-        appointment_time: moment(appointmentTime, 'HH:mm').format('HH:mm')
-      };
-
-      // Choose the appropriate endpoint based on whether we're rescheduling or creating
-      let endpoint;
       
-      // Enhanced rescheduling logic
-      if (isRescheduling) {
-        console.log('Processing rescheduling request with:', originalAppointment);
-        
-        // Try multiple ways to get the ID
-        let originalId = null;
-        
-        if (typeof originalAppointment === 'object' && originalAppointment !== null) {
-          originalId = originalAppointment.id || originalAppointment.appointment_id;
-          console.log('Found ID from object:', originalId);
-        } 
-        else if (typeof originalAppointment === 'string') {
-          // Try to parse if it's a JSON string
-          try {
-            const parsed = JSON.parse(originalAppointment);
-            originalId = parsed.id || parsed.appointment_id;
-            console.log('Found ID from parsed string:', originalId);
-          } catch (e) {
-            console.error('Failed to parse originalAppointment string:', e);
-          }
-        }
-        
-        if (!originalId) {
-          console.error('Could not extract original appointment ID');
-          Alert.alert(
-            'Error',
-            'Cannot reschedule - original appointment data is missing. Please try again or book a new appointment.'
-          );
-          setLoading(false);
-          return;
-        }
-        
-        // Use the reschedule endpoint instead of save endpoint
-        endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/reschedule.php`;
-        
-        // Add to the request data
-        formattedAppointmentData.original_appointment_id = originalId.toString();
+      // Determine the reason for visit - ensure it's a non-empty string
+      let reasonForVisit = '';
+      
+      if (reasons && reasons.length > 0) {
+        // Convert the array to a JSON string instead of comma-separated values
+        reasonForVisit = JSON.stringify(reasons);
+      } else if (selectedConsultationReasons && selectedConsultationReasons.length > 0) {
+        // Convert the array to a JSON string
+        reasonForVisit = JSON.stringify(selectedConsultationReasons);
+      } else if (consultationReason && consultationReason.trim() !== '') {
+        reasonForVisit = consultationReason;
       } else {
-        // For new appointments, use the regular save endpoint
-        endpoint = `http://${SERVER_IP}/PetFurMe-Application/api/appointments/save.php`;
+        // Default reason if nothing is selected
+        reasonForVisit = JSON.stringify(["General check-up"]);
       }
-
-      console.log('Sending appointment data to API:', formattedAppointmentData);
+      
+      // Validate all required fields
+      if (!selectedPet || !appointmentDate || !appointmentTime) {
+        Alert.alert(
+          "Missing Information",
+          "Please fill in all required fields to book your appointment."
+        );
+        setLoading(false);
+        return;
+      }
+      
+      // Find the selected pet details
+      const pet = pets.find(p => p.id.toString() === selectedPet);
+      if (!pet) {
+        Alert.alert("Error", "Selected pet not found. Please try again.");
+        setLoading(false);
+        return;
+      }
+      
+      // Prepare appointment data with explicit type conversions
+      const appointmentData = {
+        user_id: parseInt(user_id, 10),
+        pet_id: parseInt(pet.id, 10),
+        pet_name: String(pet.name),
+        pet_type: String(pet.type).toLowerCase(),
+        pet_age: parseInt(pet.age, 10),
+        reason_for_visit: reasonForVisit, // Now properly formatted as JSON string
+        appointment_date: String(appointmentDate),
+        appointment_time: String(appointmentTime)
+      };
+      
+      console.log('Sending appointment data to API:', appointmentData);
+      
+      // Use the API endpoint
+      const endpoint = `${API_BASE_URL}/appointments/save.php`;
       console.log('Using endpoint:', endpoint);
-
+      
+      // Make a POST request
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formattedAppointmentData)
+        body: JSON.stringify(appointmentData)
       });
-
-      // Log the raw response for debugging
-      const responseText = await response.text();
-      console.log('Raw API response:', responseText);
       
-      let result;
+      const responseText = await response.text();
+      console.log('Raw API response: ', responseText);
+      
+      // Try to parse the response as JSON
+      let responseData;
       try {
-        result = JSON.parse(responseText);
-      } catch (e) {
-        console.error('Failed to parse API response as JSON:', e);
-        throw new Error('Invalid response from server');
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error parsing response:', parseError);
+        throw new Error(`Invalid response format: ${responseText}`);
       }
-
-      if (!result.success) {
-        throw new Error(result.message || 'Failed to save appointment');
+      
+      if (!response.ok || !responseData.success) {
+        throw new Error(responseData.message || 'Failed to book appointment');
       }
-
-      setLoading(false);
-
-      // Update success message
-      const alertTitle = isRescheduling 
-        ? 'Appointment Rescheduled Successfully! 🎉' 
-        : 'Appointment Booked Successfully! 🎉';
-
-      const successMessage = [
-        `${getFormattedDate()}`,
-        `${getFormattedTime()}`,
-        '',
-        `Pet: ${selectedPetDetails.name}`,
-        `Service: ${reasons_for_visit.join(', ')}`,
-        '',
-        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯',
-        isRescheduling 
-          ? 'We will notify you once your rescheduled appointment is confirmed.'
-          : 'We will notify you once your appointment is confirmed.',
-        '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯'
-      ].join('\n');
-
-      const alertButtons = [
-        {
-          text: 'View',
-          onPress: async () => {
-            try {
-              await logActivity(
-                isRescheduling ? ACTIVITY_TYPES.APPOINTMENT_RESCHEDULED : ACTIVITY_TYPES.APPOINTMENT_BOOKED, 
-                {
-                  appointment_id: result.appointment_id,
-                  pet_id: selectedPet,
-                  appointment_date: appointmentDate,
-                  reason_for_visit: reasons_for_visit
-                });
-              
+      
+      // Log the activity
+      await logActivity(ACTIVITY_TYPES.BOOK_APPOINTMENT, {
+        pet_id: pet.id,
+        pet_name: pet.name,
+        appointment_date: appointmentDate,
+        appointment_time: appointmentTime,
+        reason: reasonForVisit
+      });
+      
+      // Show success message - use a readable format for display
+      const readableReason = Array.isArray(reasons) && reasons.length > 0 
+        ? reasons.join(', ') 
+        : (Array.isArray(selectedConsultationReasons) && selectedConsultationReasons.length > 0 
+          ? selectedConsultationReasons.join(', ') 
+          : (consultationReason || "General check-up"));
+      
+      const appointmentDateTime = `${moment(appointmentDate).format('MMMM D, YYYY')} at ${moment(appointmentTime, 'HH:mm').format('h:mm A')}`;
+      
+      setShowWebAlert(true);
+      setAlertConfig({
+        title: "Appointment Booked!",
+        message: `Your appointment for ${pet.name} has been successfully booked for ${appointmentDateTime}.\n\nReason: ${readableReason}\n\nWe will notify you if there are any changes to your appointment.\n\nThank you for choosing PetFurMe!`,
+        buttons: [
+          {
+            text: "View My Appointments",
+            onPress: () => {
               setShowWebAlert(false);
-              
-              // Get and verify user_id
-              const storedUserId = await AsyncStorage.getItem('user_id');
-              const currentUserId = storedUserId || user_id;
-              
-              if (!currentUserId) {
-                throw new Error('No user ID available');
-              }
-
-              // Force refresh by adding timestamp and forceRefresh flag
-              if (Platform.OS === 'web') {
-                // For web platform
-                navigation.navigate('Appointment', {
-                  user_id: currentUserId,
-                  timestamp: Date.now(),
-                  fromConsultation: true,
-                  forceRefresh: true
-                });
-              } else {
-                // For mobile platform with refresh
-                navigation.navigate('Appointment', {
-                  user_id: currentUserId,
-                  timestamp: Date.now(),
-                  fromConsultation: true,
-                  forceRefresh: true
-                });
-              }
-            } catch (error) {
-              console.error('Navigation error:', error);
-              Alert.alert('Error', 'Failed to view appointment. Please try again.');
+              navigation.navigate('Appointments');
+            }
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              setShowWebAlert(false);
+              navigation.goBack();
             }
           }
-        },
-        {
-          text: 'Home',
-          onPress: () => {
-            logActivity(
-              isRescheduling ? ACTIVITY_TYPES.APPOINTMENT_RESCHEDULED : ACTIVITY_TYPES.APPOINTMENT_BOOKED,
-              {
-                appointment_id: result.appointment_id,
-                pet_id: selectedPet,
-                appointment_date: appointmentDate,
-                reason_for_visit: reasons_for_visit
-              }
-            );
-            setShowWebAlert(false);
-            // Modified navigation to match the expected URL format
-            if (Platform.OS === 'web') {
-              // For web platform with refresh parameter
-              const timestamp = Date.now();
-              window.location.href = `/home?user_id=${user_id}&timestamp=${timestamp}&refreshed=true`;
-            } else {
-              // For mobile platforms with refresh flag
-              navigation.reset({
-                index: 0,
-                routes: [{ 
-                  name: 'HomePage',
-                  params: {
-                    user_id: user_id,
-                    timestamp: Date.now(),
-                    refreshed: true
-                  }
-                }],
-              });
-            }
-          }
-        }
-      ];
-
-      showAlert(
-        alertTitle,
-        successMessage,
-        alertButtons
-      );
-
+        ]
+      });
+      
     } catch (error) {
-      setLoading(false);
       console.error('Booking error:', error);
       Alert.alert(
-        'Booking Error',
-        'Failed to book appointment. Please try again.',
-        [{ text: 'OK' }]
+        "Booking Failed",
+        `Unable to book your appointment. ${error.message}`
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -631,18 +533,117 @@ const Consultation = ({ navigation, route }) => {
     }
   };
 
+  // Modified to check if a date is Sunday
+  const isSunday = (date) => {
+    return date.getDay() === 0; // 0 represents Sunday
+  };
+
+  // Modified date/time picker handlers
+  const openDatePicker = () => {
+    console.log('Opening date picker...');
+    setShowDatePicker(true);
+  };
+
+  const openTimePicker = () => {
+    console.log('Opening time picker...');
+    setShowTimePicker(true);
+  };
+
+  // Add this function to handle calendar date selection
+  const handleCalendarDayPress = (day) => {
+    const selectedDate = new Date(day.dateString);
+    handleDateConfirm(selectedDate);
+  };
+
+  // Update the getMarkedDates function to properly mark Sundays as disabled
+  const getMarkedDates = () => {
+    const markedDates = {};
+    
+    // Mark selected date
+    if (appointmentDate) {
+      markedDates[appointmentDate] = { 
+        selected: true, 
+        selectedColor: '#8146C1' 
+      };
+    }
+    
+    // Mark Sundays as disabled
+    const currentDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 3); // Show 3 months ahead
+    
+    // Loop through each date in the range
+    for (let d = new Date(currentDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      // Format the date as YYYY-MM-DD for the calendar
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+      
+      // Get the day of week (0 = Sunday, 6 = Saturday)
+      const dayOfWeek = d.getDay();
+      
+      // Check if it's a past date
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (d < today) {
+        // Disable past dates
+        markedDates[dateString] = { 
+          disabled: true, 
+          disableTouchEvent: true,
+          textColor: '#d9d9d9'
+        };
+      } 
+      else if (dayOfWeek === 0) {  // Check if it's Sunday (0)
+        // Disable Sundays
+        console.log(`Marking Sunday as disabled: ${dateString}`);
+        markedDates[dateString] = { 
+          disabled: true, 
+          disableTouchEvent: true,
+          textColor: '#d9d9d9'
+        };
+      }
+    }
+    
+    console.log('Marked dates:', markedDates);
+    return markedDates;
+  };
+
+  // Update the handleDateConfirm function to check for past dates
   const handleDateConfirm = async (selectedDate) => {
+    console.log('Date selected:', selectedDate);
     try {
-      const isAvailable = await checkAvailability(selectedDate);
-      if (isAvailable) {
-        setDate(selectedDate);
-        const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
-        setAppointmentDate(formattedDate);
-      } else {
+      // Check if the selected date is in the past
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
         Alert.alert(
-          'Date Unavailable',
-          'This date is fully booked. Please select another date.'
+          'Invalid Date',
+          'Please select a future date for your appointment.'
         );
+        return;
+      }
+      
+      // Check if the selected date is a Sunday
+      if (isSunday(selectedDate)) {
+        Alert.alert(
+          'Clinic Closed',
+          'The clinic is closed on Sundays. Please select another date.'
+        );
+      } else {
+        const isAvailable = await checkAvailability(selectedDate);
+        if (isAvailable) {
+          setDate(selectedDate);
+          const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+          setAppointmentDate(formattedDate);
+        } else {
+          Alert.alert(
+            'Date Unavailable',
+            'This date is fully booked. Please select another date.'
+          );
+        }
       }
     } catch (error) {
       console.error('Error handling date confirmation:', error);
@@ -651,7 +652,9 @@ const Consultation = ({ navigation, route }) => {
     setShowDatePicker(false);
   };
 
+  // Modified date/time picker handlers
   const handleTimeConfirm = (selectedTime) => {
+    console.log('Time selected:', selectedTime);
     try {
       setTime(selectedTime);
       const formattedTime = moment(selectedTime).format('HH:mm');
@@ -663,30 +666,60 @@ const Consultation = ({ navigation, route }) => {
     setShowTimePicker(false);
   };
 
+  // Handle web-compatible pet selector
   const renderPetSelector = () => {
+    // Web-specific implementation
     if (Platform.OS === 'web') {
       return (
-        <View style={styles.webPickerContainer}>
-          <MaterialCommunityIcons name="paw" size={20} color="#CC38F2" style={styles.webPickerIcon} />
+        <View style={styles.pickerOuterContainer}>
+          <MaterialCommunityIcons 
+            name="paw" 
+            size={20} 
+            color="#8146C1" 
+            style={styles.webPickerIcon}
+          />
           <select
             value={selectedPet || ''}
             onChange={(e) => setSelectedPet(e.target.value)}
-            style={styles.webSelect}
+            style={{
+              width: '100%',
+              height: '48px',
+              padding: '8px 36px',
+              fontSize: '14px',
+              color: selectedPet ? '#6a4190' : '#9CA3AF',
+              border: '1px solid #DDC6F7',
+              borderRadius: '12px',
+              backgroundColor: 'white',
+              outline: 'none',
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              backgroundImage: "url('data:image/svg+xml;utf8,<svg fill=\"%238146C1\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>')",
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 10px center',
+              cursor: 'pointer',
+            }}
           >
-            <option value="">Choose a pet</option>
+            <option value="" disabled>Choose a pet</option>
             {pets.map(pet => (
               <option key={pet.id} value={pet.id.toString()}>
                 {pet.name}
               </option>
             ))}
           </select>
-          <MaterialCommunityIcons name="chevron-down" size={24} color="#6B7280" style={styles.webPickerArrow} />
         </View>
       );
     }
-
+    
+    // Mobile implementation
     return (
       <View style={styles.pickerOuterContainer}>
+        <MaterialCommunityIcons 
+          name="paw" 
+          size={20} 
+          color="#8146C1" 
+          style={styles.pickerLeftIcon} 
+        />
         <RNPickerSelect
           onValueChange={(itemValue) => setSelectedPet(itemValue || '')}
           value={selectedPet || ''}
@@ -702,131 +735,32 @@ const Consultation = ({ navigation, route }) => {
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles}
           Icon={() => (
-            <MaterialCommunityIcons name="chevron-down" size={24} color="#6B7280" />
+            <MaterialCommunityIcons 
+              name="chevron-down" 
+              size={24} 
+              color="#8146C1" 
+              style={styles.pickerRightIcon} 
+            />
           )}
         />
-        <View style={styles.pickerLeftIcon}>
-          <MaterialCommunityIcons name="paw" size={20} color="#CC38F2" />
-        </View>
       </View>
     );
   };
 
+  // Modify the renderDateTimePicker function to use DateTimePickerModal for all platforms
   const renderDateTimePicker = () => {
-    if (Platform.OS === 'web') {
-      return (
-        <View style={styles.scheduleContainer}>
-          <View style={styles.scheduleInputContainer}>
-            <View style={styles.scheduleInputWrapper}>
-              <MaterialCommunityIcons 
-                name="calendar" 
-                size={20} 
-                color={appointmentDate ? '#374151' : '#6B7280'} 
-                style={styles.scheduleIcon} 
-              />
-              <div style={{ position: 'relative', flex: 1 }}>
-                <input
-                  type="text"
-                  value={appointmentDate ? getFormattedDate() : ''}
-                  onFocus={(e) => {
-                    e.target.type = 'date';
-                    e.target.showPicker();
-                  }}
-                  onBlur={(e) => {
-                    if (!appointmentDate) {
-                      e.target.type = 'text';
-                    }
-                  }}
-                  onChange={(e) => {
-                    const date = e.target.value;
-                    if (date) {
-                      setAppointmentDate(date);
-                      checkAvailability(new Date(date));
-                      e.target.type = 'text';
-                    }
-                  }}
-                  style={{
-                    ...styles.scheduleInput,
-                    width: '100%',
-                    color: appointmentDate ? '#374151' : '#9CA3AF',
-                    fontSize: '14px',
-                    fontWeight: appointmentDate ? '500' : '400',
-                  }}
-                  placeholder="Select Date"
-                />
-              </div>
-              <MaterialCommunityIcons 
-                name="chevron-down" 
-                size={20} 
-                color={appointmentDate ? '#374151' : '#6B7280'} 
-                style={styles.scheduleArrow} 
-              />
-            </View>
-          </View>
-
-          <View style={styles.scheduleInputContainer}>
-            <View style={styles.scheduleInputWrapper}>
-              <MaterialCommunityIcons 
-                name="clock-outline" 
-                size={20} 
-                color={appointmentTime ? '#374151' : '#6B7280'} 
-                style={styles.scheduleIcon} 
-              />
-              <div style={{ position: 'relative', flex: 1 }}>
-                <input
-                  type="time"
-                  value={appointmentTime}
-                  onChange={(e) => {
-                    const time = e.target.value;
-                    setAppointmentTime(time);
-                    e.target.blur(); // Hide the native time picker after selection
-                  }}
-                  style={{
-                    ...styles.scheduleInput,
-                    width: '100%',
-                    color: 'transparent', // Hide the default time display
-                    fontSize: '14px',
-                    fontWeight: appointmentTime ? '500' : '400',
-                    caretColor: 'transparent', // Hide the cursor
-                  }}
-                />
-                <div style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: appointmentTime ? '#374151' : '#6B7280',
-                  fontSize: '14px',
-                  fontWeight: appointmentTime ? '500' : '400',
-                  pointerEvents: 'none',
-                  width: '100%'
-                }}>
-                  {appointmentTime ? getFormattedTime() : 'Select Time'}
-                </div>
-              </div>
-              <MaterialCommunityIcons 
-                name="chevron-down" 
-                size={20} 
-                color={appointmentTime ? '#374151' : '#6B7280'} 
-                style={styles.scheduleArrow} 
-              />
-            </View>
-          </View>
-        </View>
-      );
-    }
-
     return (
       <View style={styles.scheduleContainer}>
         <TouchableOpacity
           style={styles.scheduleInputContainer}
-          onPress={() => setShowDatePicker(true)}
+          onPress={openDatePicker}
+          activeOpacity={0.7}
         >
           <View style={styles.scheduleInputWrapper}>
             <MaterialCommunityIcons 
               name="calendar" 
               size={20} 
-              color={appointmentDate ? '#374151' : '#6B7280'} 
+              color={appointmentDate ? '#8146C1' : '#6B7280'} 
               style={styles.scheduleIcon} 
             />
             <Text style={[
@@ -839,7 +773,7 @@ const Consultation = ({ navigation, route }) => {
             <MaterialCommunityIcons 
               name="chevron-down" 
               size={20} 
-              color={appointmentDate ? '#374151' : '#6B7280'} 
+              color={appointmentDate ? '#8146C1' : '#6B7280'} 
               style={styles.scheduleArrow} 
             />
           </View>
@@ -847,13 +781,14 @@ const Consultation = ({ navigation, route }) => {
 
         <TouchableOpacity
           style={styles.scheduleInputContainer}
-          onPress={() => setShowTimePicker(true)}
+          onPress={openTimePicker}
+          activeOpacity={0.7}
         >
           <View style={styles.scheduleInputWrapper}>
             <MaterialCommunityIcons 
               name="clock-outline" 
               size={20} 
-              color={appointmentTime ? '#374151' : '#6B7280'} 
+              color={appointmentTime ? '#8146C1' : '#6B7280'} 
               style={styles.scheduleIcon} 
             />
             <Text style={[
@@ -866,25 +801,11 @@ const Consultation = ({ navigation, route }) => {
             <MaterialCommunityIcons 
               name="chevron-down" 
               size={20} 
-              color={appointmentTime ? '#374151' : '#6B7280'} 
+              color={appointmentTime ? '#8146C1' : '#6B7280'} 
               style={styles.scheduleArrow} 
             />
           </View>
         </TouchableOpacity>
-
-        <DateTimePickerModal
-          isVisible={showDatePicker}
-          mode="date"
-          onConfirm={handleDateConfirm}
-          onCancel={() => setShowDatePicker(false)}
-          minimumDate={new Date()}
-        />
-        <DateTimePickerModal
-          isVisible={showTimePicker}
-          mode="time"
-          onConfirm={handleTimeConfirm}
-          onCancel={() => setShowTimePicker(false)}
-        />
       </View>
     );
   };
@@ -945,6 +866,65 @@ const Consultation = ({ navigation, route }) => {
     return null;
   };
 
+  // Update the generateTimeSlots function to handle disabling past times for today
+  const generateTimeSlots = () => {
+    const slots = [];
+    const morningStartHour = 8; // 8 AM
+    const morningEndHour = 12; // 12 PM (lunch break starts)
+    const afternoonStartHour = 13; // 1 PM (after lunch break)
+    const afternoonEndHour = 15; // 3 PM
+    
+    // Check if selected date is today to disable past times
+    const isToday = appointmentDate === moment(new Date()).format('YYYY-MM-DD');
+    const currentHour = isToday ? new Date().getHours() : 0;
+    const currentMinute = isToday ? new Date().getMinutes() : 0;
+    
+    // Morning slots (8 AM to 12 PM)
+    for (let hour = morningStartHour; hour < morningEndHour; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const h = hour < 10 ? `0${hour}` : hour;
+        const m = minute === 0 ? '00' : minute;
+        const time = `${h}:${m}`;
+        const displayTime = moment(`${h}:${m}`, 'HH:mm').format('hh:mm A');
+        
+        // Check if this time is in the past for today
+        const isPastTime = isToday && (hour < currentHour || (hour === currentHour && minute <= currentMinute));
+        
+        slots.push({ 
+          time, 
+          displayTime, 
+          period: 'morning',
+          disabled: isPastTime
+        });
+      }
+    }
+    
+    // Afternoon slots (1 PM to 3 PM)
+    for (let hour = afternoonStartHour; hour <= afternoonEndHour; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        // Don't go past 3 PM
+        if (hour === afternoonEndHour && minute > 0) continue;
+        
+        const h = hour < 10 ? `0${hour}` : hour;
+        const m = minute === 0 ? '00' : minute;
+        const time = `${h}:${m}`;
+        const displayTime = moment(`${h}:${m}`, 'HH:mm').format('hh:mm A');
+        
+        // Check if this time is in the past for today
+        const isPastTime = isToday && (hour < currentHour || (hour === currentHour && minute <= currentMinute));
+        
+        slots.push({ 
+          time, 
+          displayTime, 
+          period: 'afternoon',
+          disabled: isPastTime
+        });
+      }
+    }
+    
+    return slots;
+  };
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -957,131 +937,337 @@ const Consultation = ({ navigation, route }) => {
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
-          {/* Pet Selection */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeaderContainer}>
-              <MaterialCommunityIcons name="paw" size={24} color="#CC38F2" />
-              <Text style={[styles.sectionHeaderText, { color: '#CC38F2' }]}>Select Your Pet</Text>
-            </View>
-            
-            <View style={styles.pickerWrapper}>
-              <Text style={styles.pickerLabel}>Pet Name</Text>
-              {renderPetSelector()}
-            </View>
-
-            {/* Selected pet details card */}
-            {selectedPet && (
-              <View style={styles.petCardContainer}>
-                {(() => {
-                  const pet = pets.find(p => p.id.toString() === selectedPet);
-                  if (!pet) return null;
-                  
-                  return (
-                    <View style={styles.petCard}>
-                      <View style={styles.petCardHeader}>
-                        <View style={styles.petAvatarContainer}>
-                          <MaterialCommunityIcons 
-                            name={getPetTypeIcon(pet.type)} 
-                            size={32} 
-                            color="#CC38F2" 
-                          />
-                        </View>
-                        <View style={styles.petHeaderInfo}>
-                          <Text style={styles.petName}>{pet.name}</Text>
-                          <Text style={styles.petSubInfo}>{`${pet.breed || 'Unknown Breed'}`}</Text>
-                        </View>
-                      </View>
-                      
-                      <View style={styles.petDetailsGrid}>
-                        <View style={styles.petDetailItem}>
-                          <MaterialCommunityIcons name="dog-side" size={20} color="#CC38F2" />
-                          <View style={styles.petDetailTextContainer}>
-                            <Text style={styles.petDetailLabel}>Type</Text>
-                            <Text style={styles.petDetailValue}>{pet.type || 'N/A'}</Text>
-                          </View>
-                        </View>
-                        
-                        <View style={styles.petDetailItem}>
-                          <MaterialCommunityIcons name="calendar-blank" size={20} color="#CC38F2" />
-                          <View style={styles.petDetailTextContainer}>
-                            <Text style={styles.petDetailLabel}>Age</Text>
-                            <Text style={styles.petDetailValue}>{pet.age || 'N/A'}</Text>
-                          </View>
-                        </View>
-                        
-                        <View style={styles.petDetailItem}>
-                          <MaterialCommunityIcons name="gender-male-female" size={20} color="#CC38F2" />
-                          <View style={styles.petDetailTextContainer}>
-                            <Text style={styles.petDetailLabel}>Gender</Text>
-                            <Text style={styles.petDetailValue}>{pet.gender || 'N/A'}</Text>
-                          </View>
-                        </View>
-                        
-                        <View style={styles.petDetailItem}>
-                          <MaterialCommunityIcons name="weight" size={20} color="#CC38F2" />
-                          <View style={styles.petDetailTextContainer}>
-                            <Text style={styles.petDetailLabel}>Weight</Text>
-                            <Text style={styles.petDetailValue}>{pet.weight ? `${pet.weight} kg` : 'N/A'}</Text>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  );
-                })()}
+          {/* Single Card Container for All Sections */}
+          <View style={styles.cardContainer}>
+            {/* Pet Selection */}
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionHeaderContainer}>
+                <MaterialCommunityIcons name="paw" size={24} color="#8146C1" />
+                <Text style={styles.sectionHeaderText}>Select Your Pet</Text>
               </View>
-            )}
-          </View>
+              
+              <View style={styles.pickerWrapper}>
+                <Text style={styles.pickerLabel}>Pet Name</Text>
+                {renderPetSelector()}
+              </View>
 
-          {/* Reason for Visit */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              <MaterialCommunityIcons name="clipboard-text" size={20} color="#CC38F2" />
-              <Text style={[styles.sectionTitleText, { color: '#CC38F2' }]}> Reason for Visit</Text>
-            </Text>
-            <View style={styles.reasonButtonsContainer}>
-              {[
-                { label: 'Consultation', icon: 'stethoscope' },
-                { label: 'Vaccination', icon: 'needle' },
-                { label: 'Deworming', icon: 'pill' },
-                { label: 'Grooming', icon: 'scissors-cutting' },
-                { label: 'Other', icon: 'dots-horizontal' }
-              ].map(({ label, icon }) => (
-                <TouchableOpacity
-                  key={label}
-                  style={[
-                    styles.reasonButton,
-                    reasons_for_visit.includes(label) && styles.selectedReasonButton,
-                  ]}
-                  onPress={() => handleReasonToggle(label)}
-                >
-                  <MaterialCommunityIcons 
-                    name={icon} 
-                    size={20} 
-                    color={reasons_for_visit.includes(label) ? '#FFF' : '#666'} 
-                  />
-                  <Text
+              {/* Selected pet details card */}
+              {selectedPet && (
+                <View style={styles.petCardContainer}>
+                  {(() => {
+                    const pet = pets.find(p => p.id.toString() === selectedPet);
+                    if (!pet) return null;
+                    
+                    return (
+                      <View style={styles.petCard}>
+                        <View style={styles.petCardHeader}>
+                          <View style={styles.petAvatarContainer}>
+                            <MaterialCommunityIcons 
+                              name={getPetTypeIcon(pet.type)} 
+                              size={32} 
+                              color="#8146C1" 
+                            />
+                          </View>
+                          <View style={styles.petHeaderInfo}>
+                            <Text style={styles.petName}>{pet.name}</Text>
+                            <Text style={styles.petSubInfo}>{`${pet.breed || 'Unknown Breed'}`}</Text>
+                          </View>
+                        </View>
+                        
+                        <View style={styles.petDetailsGrid}>
+                          <View style={styles.petDetailItem}>
+                            <MaterialCommunityIcons name="dog-side" size={20} color="#8146C1" />
+                            <View style={styles.petDetailTextContainer}>
+                              <Text style={styles.petDetailLabel}>Type</Text>
+                              <Text style={styles.petDetailValue}>{pet.type || 'N/A'}</Text>
+                            </View>
+                          </View>
+                          
+                          <View style={styles.petDetailItem}>
+                            <MaterialCommunityIcons name="calendar-blank" size={20} color="#8146C1" />
+                            <View style={styles.petDetailTextContainer}>
+                              <Text style={styles.petDetailLabel}>Age</Text>
+                              <Text style={styles.petDetailValue}>{pet.age || 'N/A'}</Text>
+                            </View>
+                          </View>
+                          
+                          <View style={styles.petDetailItem}>
+                            <MaterialCommunityIcons name="gender-male-female" size={20} color="#8146C1" />
+                            <View style={styles.petDetailTextContainer}>
+                              <Text style={styles.petDetailLabel}>Gender</Text>
+                              <Text style={styles.petDetailValue}>{pet.gender || 'N/A'}</Text>
+                            </View>
+                          </View>
+                          
+                          <View style={styles.petDetailItem}>
+                            <MaterialCommunityIcons name="weight" size={20} color="#8146C1" />
+                            <View style={styles.petDetailTextContainer}>
+                              <Text style={styles.petDetailLabel}>Weight</Text>
+                              <Text style={styles.petDetailValue}>{pet.weight ? `${pet.weight} kg` : 'N/A'}</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    );
+                  })()}
+                </View>
+              )}
+            </View>
+
+            {/* Divider */}
+            <View style={styles.divider} />
+
+            {/* Reason for Visit */}
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionHeaderContainer}>
+                <MaterialCommunityIcons name="clipboard-text" size={24} color="#8146C1" />
+                <Text style={styles.sectionHeaderText}>Reason for Visit</Text>
+              </View>
+              <View style={styles.reasonButtonsContainer}>
+                {[
+                  { label: 'Consultation', icon: 'stethoscope' },
+                  { label: 'Vaccination', icon: 'needle' },
+                  { label: 'Deworming', icon: 'pill' },
+                  { label: 'Grooming', icon: 'scissors-cutting' }
+                ].map(({ label, icon }) => (
+                  <TouchableOpacity
+                    key={label}
                     style={[
-                      styles.reasonButtonText,
-                      reasons_for_visit.includes(label) && styles.selectedReasonButtonText,
+                      styles.reasonButton,
+                      reasons.includes(label) && styles.selectedReasonButton,
                     ]}
+                    onPress={() => handleReasonToggle(label)}
                   >
-                    {label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <MaterialCommunityIcons 
+                      name={icon} 
+                      size={20} 
+                      color={reasons.includes(label) ? '#FFF' : '#8146C1'} 
+                    />
+                    <Text
+                      style={[
+                        styles.reasonButtonText,
+                        reasons.includes(label) && styles.selectedReasonButtonText,
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </View>
 
-          {/* Date and Time Selection */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeaderContainer}>
-              <MaterialCommunityIcons name="calendar-clock" size={24} color="#CC38F2" />
-              <Text style={[styles.sectionHeaderText, { color: '#CC38F2' }]}>Schedule</Text>
+            {/* Divider */}
+            <View style={styles.divider} />
+
+            {/* Date and Time Selection */}
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionHeaderContainer}>
+                <MaterialCommunityIcons name="calendar-clock" size={24} color="#8146C1" />
+                <Text style={styles.sectionHeaderText}>Schedule</Text>
+              </View>
+              {renderDateTimePicker()}
             </View>
-            {renderDateTimePicker()}
           </View>
         </View>
       </ScrollView>
+
+      {/* Date & Time Pickers - moved outside ScrollView for better rendering */}
+      {Platform.OS === 'ios' || Platform.OS === 'android' ? (
+        <>
+          <DateTimePickerModal
+            isVisible={showDatePicker}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={() => setShowDatePicker(false)}
+            minimumDate={new Date()}
+            display="default"
+            isDayDisabled={(data) => data.getDay() === 0} // Disable Sundays
+          />
+          
+          <DateTimePickerModal
+            isVisible={showTimePicker}
+            mode="time"
+            onConfirm={handleTimeConfirm}
+            onCancel={() => setShowTimePicker(false)}
+            display="default"
+          />
+        </>
+      ) : (
+        // Web-specific implementation
+        <>
+          {showDatePicker && (
+            <Modal 
+              animationType="fade" 
+              transparent={true} 
+              visible={showDatePicker}
+              onRequestClose={() => setShowDatePicker(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Select Date</Text>
+                    <TouchableOpacity onPress={() => setShowDatePicker(false)}>
+                      <MaterialCommunityIcons name="close" size={24} color="#8146C1" />
+                    </TouchableOpacity>
+                  </View>
+                  
+                  <Calendar
+                    current={appointmentDate || new Date()}
+                    minDate={new Date().toISOString().split('T')[0]}
+                    onDayPress={handleCalendarDayPress}
+                    markedDates={getMarkedDates()}
+                    firstDay={1} // Start week on Monday (0 = Sunday, 1 = Monday)
+                    disableAllTouchEventsForDisabledDays={true}
+                    theme={{
+                      calendarBackground: '#ffffff',
+                      textSectionTitleColor: '#8146C1',
+                      selectedDayBackgroundColor: '#8146C1',
+                      selectedDayTextColor: '#ffffff',
+                      todayTextColor: '#8146C1',
+                      dayTextColor: '#2d4150',
+                      textDisabledColor: '#d9d9d9',
+                      dotColor: '#8146C1',
+                      selectedDotColor: '#ffffff',
+                      arrowColor: '#8146C1',
+                      monthTextColor: '#8146C1',
+                      indicatorColor: '#8146C1',
+                      textDayFontWeight: '300',
+                      textMonthFontWeight: 'bold',
+                      textDayHeaderFontWeight: '500',
+                      textDayFontSize: 16,
+                      textMonthFontSize: 16,
+                      textDayHeaderFontSize: 14
+                    }}
+                  />
+                  
+                  <View style={styles.modalFooter}>
+                    <TouchableOpacity 
+                      style={styles.modalButton}
+                      onPress={() => setShowDatePicker(false)}
+                    >
+                      <Text style={styles.modalButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          )}
+          
+          {showTimePicker && (
+            <Modal 
+              animationType="fade" 
+              transparent={true} 
+              visible={showTimePicker}
+              onRequestClose={() => setShowTimePicker(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Select Time</Text>
+                    <TouchableOpacity onPress={() => setShowTimePicker(false)}>
+                      <MaterialCommunityIcons name="close" size={24} color="#8146C1" />
+                    </TouchableOpacity>
+                  </View>
+                  
+                  <View style={styles.timePickerContainer}>
+                    <View style={styles.timePickerHeader}>
+                      <MaterialCommunityIcons name="clock-outline" size={20} color="#8146C1" />
+                      <Text style={styles.timePickerHeaderText}>Morning</Text>
+                    </View>
+                    
+                    <View style={styles.timeGrid}>
+                      {generateTimeSlots()
+                        .filter(slot => slot.period === 'morning')
+                        .map((slot) => (
+                          <TouchableOpacity
+                            key={slot.time}
+                            style={[
+                              styles.timeGridItem,
+                              appointmentTime === slot.time && styles.selectedTimeGridItem,
+                              slot.disabled && styles.disabledTimeGridItem
+                            ]}
+                            onPress={() => {
+                              if (!slot.disabled) {
+                                const today = new Date();
+                                const [hours, minutes] = slot.time.split(':');
+                                today.setHours(parseInt(hours, 10));
+                                today.setMinutes(parseInt(minutes, 10));
+                                handleTimeConfirm(today);
+                              }
+                            }}
+                            disabled={slot.disabled}
+                          >
+                            <Text style={[
+                              styles.timeGridItemText,
+                              appointmentTime === slot.time && styles.selectedTimeGridItemText,
+                              slot.disabled && styles.disabledTimeGridItemText
+                            ]}>
+                              {slot.displayTime}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                    </View>
+                    
+                    <View style={styles.lunchBreakContainer}>
+                      <View style={styles.lunchBreakIconContainer}>
+                        <MaterialCommunityIcons name="food-fork-drink" size={16} color="#FFF" />
+                      </View>
+                      <Text style={styles.lunchBreakText}>Lunch Break (12:00 PM - 1:00 PM)</Text>
+                    </View>
+                    
+                    <View style={styles.timePickerHeader}>
+                      <MaterialCommunityIcons name="clock-outline" size={20} color="#8146C1" />
+                      <Text style={styles.timePickerHeaderText}>Afternoon</Text>
+                    </View>
+                    
+                    <View style={styles.timeGrid}>
+                      {generateTimeSlots()
+                        .filter(slot => slot.period === 'afternoon')
+                        .map((slot) => (
+                          <TouchableOpacity
+                            key={slot.time}
+                            style={[
+                              styles.timeGridItem,
+                              appointmentTime === slot.time && styles.selectedTimeGridItem,
+                              slot.disabled && styles.disabledTimeGridItem
+                            ]}
+                            onPress={() => {
+                              if (!slot.disabled) {
+                                const today = new Date();
+                                const [hours, minutes] = slot.time.split(':');
+                                today.setHours(parseInt(hours, 10));
+                                today.setMinutes(parseInt(minutes, 10));
+                                handleTimeConfirm(today);
+                              }
+                            }}
+                            disabled={slot.disabled}
+                          >
+                            <Text style={[
+                              styles.timeGridItemText,
+                              appointmentTime === slot.time && styles.selectedTimeGridItemText,
+                              slot.disabled && styles.disabledTimeGridItemText
+                            ]}>
+                              {slot.displayTime}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                    </View>
+                  </View>
+                  
+                  <View style={styles.modalFooter}>
+                    <TouchableOpacity 
+                      style={styles.modalCancelButton}
+                      onPress={() => setShowTimePicker(false)}
+                    >
+                      <Text style={styles.modalCancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          )}
+        </>
+      )}
 
       {/* Book Button */}
       <View style={styles.buttonContainer}>
@@ -1114,51 +1300,70 @@ const Consultation = ({ navigation, route }) => {
 
 const pickerSelectStyles = {
   inputIOS: {
-    height: 50,
-    fontSize: 16,
-    fontWeight: '400',
     paddingVertical: 12,
-    paddingHorizontal: 50,
-    borderRadius: 12,
-    color: '#1F2937',
-    paddingRight: 30,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 36, // Increased to make room for icon
+    fontSize: 14,
+    color: '#6a4190',
+    fontWeight: '400',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#DDC6F7',
+    borderRadius: 12,
+    backgroundColor: 'white',
+    paddingRight: 40, // Space for the dropdown icon
   },
   inputAndroid: {
-    height: 50,
-    fontSize: 16,
-    fontWeight: '400',
     paddingVertical: 8,
-    paddingHorizontal: 50,
-    borderRadius: 12,
-    color: '#1F2937',
-    paddingRight: 30,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 36, // Increased to make room for icon
+    fontSize: 14,
+    color: '#6a4190',
+    fontWeight: '400',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  viewContainer: {
+    borderColor: '#DDC6F7',
     borderRadius: 12,
+    backgroundColor: 'white',
+    paddingRight: 40, // Space for the dropdown icon
+  },
+  placeholder: {
+    color: '#9CA3AF',
+  },
+  iconContainer: {
+    top: 12,
+    right: 12,
   }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F4EBFD', // Very light violet background
   },
   scrollView: {
     flex: 1,
   },
   formContainer: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 100,
   },
-  section: {
-    marginBottom: 24,
-    paddingHorizontal: 16,
+  cardContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    shadowColor: '#8146C1',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#DDC6F7', // Lighter violet border
+    overflow: 'hidden',
+    marginBottom: 16,
+  },
+  sectionContainer: {
+    padding: 16,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#DDC6F7', // Light violet divider
+    marginHorizontal: 0, // Span the full width
   },
   sectionTitle: {
     flexDirection: 'row',
@@ -1168,7 +1373,7 @@ const styles = StyleSheet.create({
   sectionTitleText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#CC38F2',
+    color: '#8146C1', // Header matching violet
   },
   sectionHeaderContainer: {
     flexDirection: 'row',
@@ -1179,7 +1384,7 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#CC38F2',
+    color: '#8146C1', // Header matching violet
     marginLeft: 12,
   },
   pickerWrapper: {
@@ -1188,20 +1393,28 @@ const styles = StyleSheet.create({
   pickerLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: '#6a4190', // Dark violet for labels
     marginBottom: 8,
     marginLeft: 4,
   },
   pickerOuterContainer: {
     position: 'relative',
     borderRadius: 12,
+    marginBottom: 8,
   },
   pickerLeftIcon: {
     position: 'absolute',
-    left: 15,
+    left: 12,
     top: '50%',
-    transform: [{ translateY: -10 }],
-    zIndex: 1,
+    transform: [{translateY: -10}],
+    zIndex: 10,
+  },
+  pickerRightIcon: {
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: [{translateY: -12}],
+    zIndex: 10,
   },
   dropdownIconContainer: {
     height: '100%',
@@ -1215,13 +1428,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
     borderWidth: 1,
-    borderColor: '#E9ECEF',
+    borderColor: '#DDC6F7', // Lighter violet border
   },
   petCardHeader: {
     flexDirection: 'row',
@@ -1232,7 +1440,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#F0E6FD',
+    backgroundColor: '#F4EBFD', // Very light violet background
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1243,12 +1451,12 @@ const styles = StyleSheet.create({
   petName: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
+    color: '#6a4190', // Dark violet for name
     marginBottom: 4,
   },
   petSubInfo: {
     fontSize: 14,
-    color: '#666',
+    color: '#8146C1', // Header matching violet for subinfo
   },
   petDetailsGrid: {
     flexDirection: 'row',
@@ -1268,37 +1476,39 @@ const styles = StyleSheet.create({
   },
   petDetailLabel: {
     fontSize: 12,
-    color: '#666',
+    color: '#8146C1', // Header matching violet for labels
     marginBottom: 2,
   },
   petDetailValue: {
     fontSize: 14,
-    color: '#333',
+    color: '#6a4190', // Dark violet for values
     fontWeight: '500',
   },
   reasonButtonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginTop: 8,
   },
   reasonButton: {
     width: '48%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F4EBFD', // Very light violet background
     padding: 12,
     borderRadius: 12,
-    marginBottom: 8,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E9ECEF',
+    borderColor: '#DDC6F7', // Lighter violet border
+    height: 48,
   },
   selectedReasonButton: {
-    backgroundColor: '#CC38F2',
-    borderColor: '#CC38F2',
+    backgroundColor: '#8146C1', // Header matching violet for selected state
+    borderColor: '#8146C1', // Header matching violet border
   },
   reasonButtonText: {
-    color: '#666',
+    color: '#8146C1', // Header matching violet text
     fontSize: 14,
     fontWeight: '500',
     marginLeft: 8,
@@ -1309,12 +1519,12 @@ const styles = StyleSheet.create({
   dateTimeButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F4EBFD', // Very light violet background
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E9ECEF',
+    borderColor: '#DDC6F7', // Lighter violet border
   },
   dateTimeContent: {
     flex: 1,
@@ -1322,11 +1532,11 @@ const styles = StyleSheet.create({
   },
   dateTimeLabel: {
     fontSize: 12,
-    color: '#666',
+    color: '#8146C1', // Header matching violet for labels
   },
   dateTimeValue: {
     fontSize: 14,
-    color: '#333',
+    color: '#6a4190', // Dark violet for values
     fontWeight: '500',
     marginTop: 2,
   },
@@ -1341,13 +1551,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E9ECEF',
+    borderTopColor: '#DDC6F7', // Lighter violet border
+    shadowColor: '#8146C1',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   bookButton: {
-    backgroundColor: '#CC38F2',
+    backgroundColor: '#8146C1', // Header matching violet for button
     padding: 16,
     borderRadius: 12,
-    shadowColor: '#CC38F2',
+    shadowColor: '#8146C1',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -1370,7 +1585,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#DDC6F7', // Lighter violet border
     backgroundColor: '#FFFFFF',
     overflow: 'hidden',
   },
@@ -1394,6 +1609,7 @@ const styles = StyleSheet.create({
     top: '50%',
     transform: [{ translateY: -10 }],
     zIndex: 1,
+    color: '#8146C1', // Header matching violet for icon
   },
   webPickerArrow: {
     position: 'absolute',
@@ -1408,7 +1624,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#DDC6F7', // Lighter violet border
     padding: 12,
     marginBottom: 16,
   },
@@ -1426,18 +1642,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   webAlertContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: '#FFF',
+    borderRadius: 12,
     padding: 20,
     width: '100%',
-    maxWidth: Platform.OS === 'web' ? 400 : '85%',
+    maxWidth: 400,
+    maxHeight: '80%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -1449,21 +1661,31 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   webAlertTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '600',
-    color: '#333',
-    textAlign: 'center',
+    color: '#8146C1',
     marginTop: 8,
-    marginBottom: 4,
+    textAlign: 'center',
   },
   webAlertMessageContainer: {
-    marginVertical: 16,
-    maxHeight: Platform.OS === 'web' ? 200 : 'auto',
+    marginBottom: 20,
   },
   webAlertMessage: {
-    fontSize: 15,
-    color: '#666',
-    lineHeight: 20,
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 12,
+  },
+  webAlertNotification: {
+    backgroundColor: '#F4EBFD',
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 12,
+  },
+  webAlertNotificationText: {
+    fontSize: 14,
+    color: '#6a4190',
     textAlign: 'center',
   },
   webAlertButtonContainer: {
@@ -1473,58 +1695,42 @@ const styles = StyleSheet.create({
   },
   webAlertButton: {
     flex: 1,
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 4,
-  },
-  webAlertButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
+    marginHorizontal: 6,
   },
   webAlertPrimaryButton: {
-    backgroundColor: '#CC38F2',
+    backgroundColor: '#8146C1',
   },
   webAlertSecondaryButton: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F4EBFD',
     borderWidth: 1,
-    borderColor: '#CC38F2',
+    borderColor: '#DDC6F7',
+  },
+  webAlertButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   webAlertPrimaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#FFF',
   },
   webAlertSecondaryButtonText: {
-    color: '#CC38F2',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  webAlertNotification: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  webAlertNotificationText: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    fontWeight: '500',
+    color: '#8146C1',
   },
   scheduleContainer: {
-    gap: 16,
+    marginTop: 8,
+    marginBottom: 8,
   },
   scheduleInputContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#DDC6F7', // Lighter violet border
     height: 48,
+    marginBottom: 16,
   },
   scheduleInputWrapper: {
     flexDirection: 'row',
@@ -1535,18 +1741,8 @@ const styles = StyleSheet.create({
   scheduleInput: {
     flex: 1,
     fontSize: 14,
-    height: '100%',
-    ...(Platform.OS === 'web' && {
-      border: 'none',
-      outline: 'none',
-      backgroundColor: 'transparent',
-      WebkitAppearance: 'none',
-      MozAppearance: 'none',
-      appearance: 'none',
-      cursor: 'pointer',
-      paddingLeft: 0,
-      paddingRight: 0,
-    }),
+    color: '#6a4190',
+    fontWeight: '500',
   },
   schedulePlaceholder: {
     color: '#9CA3AF',
@@ -1554,30 +1750,154 @@ const styles = StyleSheet.create({
   },
   scheduleIcon: {
     marginRight: 12,
-    color: '#6B7280',
+    color: '#8146C1', // Header matching violet for icon
   },
   scheduleArrow: {
     marginLeft: 'auto',
-    color: '#6B7280',
+    color: '#8146C1', // Header matching violet for icon
   },
   selectedInput: {
-    color: '#374151',
+    color: '#6a4190', // Dark violet for selected text
     fontWeight: '500',
   },
   verificationWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#FFF3E0', // Warm orange background
     padding: 12,
     borderRadius: 8,
     margin: 16,
     marginTop: 8,
+    borderWidth: 1,
+    borderColor: '#FFB74D', // Orange border
   },
   verificationWarningText: {
-    color: '#92400E',
+    color: '#E65100', // Dark orange text
     marginLeft: 8,
     flex: 1,
     fontSize: 14,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    maxWidth: 400,
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#8146C1',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDC6F7',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#8146C1',
+  },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#DDC6F7',
+  },
+  modalButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#F4EBFD',
+  },
+  modalButtonText: {
+    color: '#8146C1',
+    fontWeight: '600',
+  },
+  timePickerContainer: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  timeGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  timeGridItem: {
+    width: '48%',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#DDC6F7',
+    borderRadius: 8,
+  },
+  timeGridItemText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#6a4190',
+  },
+  selectedTimeGridItem: {
+    backgroundColor: '#8146C1',
+  },
+  selectedTimeGridItemText: {
+    color: '#FFF',
+  },
+  lunchBreakContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
+  lunchBreakText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#8146C1',
+    marginLeft: 8,
+  },
+  timePickerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  timePickerHeaderText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#8146C1',
+    marginLeft: 8,
+  },
+  lunchBreakIconContainer: {
+    backgroundColor: '#8146C1',
+    borderRadius: 8,
+    padding: 4,
+    marginRight: 8,
+  },
+  modalCancelButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#F4EBFD',
+  },
+  modalCancelButtonText: {
+    color: '#8146C1',
+    fontWeight: '600',
+  },
+  disabledTimeGridItem: {
+    backgroundColor: '#d9d9d9',
+  },
+  disabledTimeGridItemText: {
+    color: '#9CA3AF',
   },
 });
 

@@ -25,6 +25,7 @@ const LoginScreen = ({ navigation }) => {
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [visibleError, setVisibleError] = useState("");
+	const [rememberMe, setRememberMe] = useState(false); // New state for remember me option
 
 	const API_URL = API_BASE_URL; // Use the API_BASE_URL which includes PetFurMe-Application/api
 
@@ -174,6 +175,9 @@ const LoginScreen = ({ navigation }) => {
 			}),
 		]).start();
 
+		// Load saved credentials if they exist
+		loadSavedCredentials();
+
 		// Call the testConnection function
 		log('Initiating connection test on component mount...');
 		testConnection().then(success => {
@@ -195,6 +199,40 @@ const LoginScreen = ({ navigation }) => {
 			clearTimeout(timeoutId);
 		};
 	}, []);
+
+	// Add this function to load saved credentials
+	const loadSavedCredentials = async () => {
+		try {
+			const savedCredentials = await AsyncStorage.getItem('savedCredentials');
+			if (savedCredentials) {
+				const { savedEmail, savedPassword } = JSON.parse(savedCredentials);
+				setEmail(savedEmail);
+				setPassword(savedPassword);
+				setRememberMe(true);
+				log('Loaded saved credentials');
+			}
+		} catch (error) {
+			logError('Error loading saved credentials:', error);
+		}
+	};
+
+	// Add this function to save credentials
+	const saveCredentials = async () => {
+		try {
+			if (rememberMe) {
+				await AsyncStorage.setItem('savedCredentials', JSON.stringify({
+					savedEmail: email,
+					savedPassword: password
+				}));
+				log('Credentials saved successfully');
+			} else {
+				await AsyncStorage.removeItem('savedCredentials');
+				log('Credentials removed');
+			}
+		} catch (error) {
+			logError('Error saving credentials:', error);
+		}
+	};
 
 	const handleLogin = async () => {
 		try {
@@ -228,6 +266,9 @@ const LoginScreen = ({ navigation }) => {
 				log('Login response:', response.data);
 				
 				if (response.data.success) {
+					// Save credentials if remember me is checked
+					await saveCredentials();
+					
 					// Store user data
 					const userData = {
 						user_id: response.data.user.id,
@@ -379,9 +420,23 @@ const LoginScreen = ({ navigation }) => {
 					</TouchableOpacity>
 				</View>
 
-				<TouchableOpacity onPress={handleForgotPassword}>
-					<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-				</TouchableOpacity>
+				<View style={styles.rememberForgotContainer}>
+					<TouchableOpacity 
+						style={styles.rememberMeContainer} 
+						onPress={() => setRememberMe(!rememberMe)}
+					>
+						<View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
+							{rememberMe && (
+								<Ionicons name="checkmark" size={14} color="#FFFFFF" />
+							)}
+						</View>
+						<Text style={styles.rememberMeText}>Remember Me</Text>
+					</TouchableOpacity>
+
+					<TouchableOpacity onPress={handleForgotPassword}>
+						<Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+					</TouchableOpacity>
+				</View>
 
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -497,12 +552,37 @@ const styles = StyleSheet.create({
 	disabledButton: {
 		opacity: 0.7,
 	},
-	forgotPasswordText: {
-		color: '#8146C1',
-		textAlign: 'right',
-		fontSize: 14,
+	rememberForgotContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		marginTop: 8,
 		marginBottom: 8,
+	},
+	rememberMeContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	checkbox: {
+		width: 20,
+		height: 20,
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: '#8146C1',
+		marginRight: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	checkboxChecked: {
+		backgroundColor: '#8146C1',
+	},
+	rememberMeText: {
+		color: '#666666',
+		fontSize: 14,
+	},
+	forgotPasswordText: {
+		color: '#8146C1',
+		fontSize: 14,
 		fontWeight: '500',
 	},
 	registerContainer: {

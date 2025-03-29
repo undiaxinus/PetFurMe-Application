@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { API_BASE_URL } from '../../utils/config';
 import BottomNavigation from '../components/BottomNavigation';
 import CustomHeader from '../components/CustomHeader';
+import { useRefresh } from '../hooks/useRefresh';
 
 const ProductListScreen = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
@@ -80,30 +81,33 @@ const ProductListScreen = ({ navigation, route }) => {
         const data = JSON.parse(responseText);
         if (data.success) {
           // Debug log to see what we're receiving
-          console.log('Raw product data sample:', data.products[0]);
+          console.log('Raw product data sample:', data.products?.[0] || 'No products received');
           
-          const transformedProducts = data.products.map(product => {
-            const imageUri = product.product_image_data 
-              ? `data:image/jpeg;base64,${product.product_image_data}`
-              : product.product_image
-                ? `${API_BASE_URL}/PetFurMe-Application/${product.product_image}`
-                : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png`;
+          if (Array.isArray(data.products)) {
+            const transformedProducts = data.products.map(product => {
+              const imageUri = product.product_image_data 
+                ? `data:image/jpeg;base64,${product.product_image_data}`
+                : product.product_image
+                  ? `${API_BASE_URL}/PetFurMe-Application/${product.product_image}`
+                  : `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/product-placeholder.png`;
                 
-            console.log(`Image URI for ${product.name}:`, imageUri.substring(0, 100) + '...');
+              return {
+                id: product.id?.toString() || '',
+                name: product.name || '',
+                price: product.selling_price ? parseFloat(product.selling_price) / 100 : 0,
+                image: { uri: imageUri },
+                category: product.category_name || '',
+                stock: parseInt(product.quantity) || 0,
+                description: product.notes || '',
+                category_id: product.category_id?.toString() || '',
+              };
+            });
             
-            return {
-              id: product.id?.toString() || '',
-              name: product.name || '',
-              price: product.selling_price ? parseFloat(product.selling_price) / 100 : 0,
-              image: { uri: imageUri },
-              category: product.category_name || '',
-              stock: parseInt(product.quantity) || 0,
-              description: product.notes || '',
-              category_id: product.category_id?.toString() || '',
-            };
-          });
-          
-          setProducts(transformedProducts);
+            setProducts(transformedProducts);
+          } else {
+            console.error('Products data is not an array:', data.products);
+            setProducts([]);
+          }
         } else {
           throw new Error(data.message || 'Failed to fetch products');
         }
@@ -172,6 +176,21 @@ const ProductListScreen = ({ navigation, route }) => {
       </View>
     </TouchableOpacity>
   );
+
+  const refreshProducts = useCallback(async () => {
+    console.log('Refreshing products...');
+    setRefreshing(true);
+    try {
+      await fetchProducts();
+    } catch (error) {
+      console.error('Error refreshing products:', error);
+      // Make sure to reset loading states even on error
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [selectedCategory]);
+  
+  const { refreshControlProps, RefreshButton, webProps } = useRefresh(refreshProducts);
 
   return (
     <View style={styles.container}>
@@ -244,14 +263,10 @@ const ProductListScreen = ({ navigation, route }) => {
                 contentContainerStyle={styles.productList}
                 refreshControl={
                   <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={() => {
-                      setRefreshing(true);
-                      fetchProducts();
-                    }}
-                    colors={['#8146C1']}
+                    {...refreshControlProps}
                   />
                 }
+                {...webProps}
                 ListEmptyComponent={
                   <Text style={styles.emptyText}>No products found</Text>
                 }
@@ -261,7 +276,11 @@ const ProductListScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      <BottomNavigation activeScreen="ProductListScreen" user_id={userId} />
+      <BottomNavigation 
+        activeScreen="ProductListScreen" 
+        user_id={userId} 
+        navigation={navigation}
+      />
     </View>
   );
 };
@@ -331,7 +350,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     overflow: 'hidden',
     maxWidth: '46%',
-    minHeight: 280,
+    minHeight: 225,
     borderWidth: 1,
     borderColor: '#E0E0E0',
     shadowColor: '#000',
@@ -344,7 +363,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    aspectRatio: 1,
+    aspectRatio: 1.2,
     backgroundColor: '#F8F8F8',
     overflow: 'hidden',
   },
@@ -355,12 +374,12 @@ const styles = StyleSheet.create({
   },
   stockBadge: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 6,
+    right: 6,
     backgroundColor: 'rgba(255, 68, 68, 0.9)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
   stockText: {
     color: '#FFF',
@@ -368,26 +387,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   productInfo: {
-    padding: 12,
-    height: 90,
+    padding: 10,
+    height: 72,
     justifyContent: 'space-between',
   },
   productName: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     marginBottom: 4,
-    height: 36,
-    lineHeight: 18,
+    height: 30,
+    lineHeight: 15,
     color: '#333',
   },
   productPrice: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     color: '#8146C1',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   stockCount: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#666',
   },
   loader: {
@@ -459,12 +478,12 @@ const styles = StyleSheet.create({
   },
   outOfStockText: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     textTransform: 'uppercase',
     backgroundColor: '#FF4444',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 4,
   },
 });

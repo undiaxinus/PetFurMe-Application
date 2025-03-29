@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
 	View,
 	Text,
@@ -12,6 +12,7 @@ import {
 	ToastAndroid,
 	Platform,
 	Button,
+	RefreshControl,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL, SERVER_IP, SERVER_PORT } from '../config/constants';
@@ -25,6 +26,7 @@ import PetProductsSection from '../components/PetProductsSection';
 import PetsSection from '../components/PetsSection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
+import { useRefresh } from '../hooks/useRefresh';
 
 const API_BASE_URL = `${BASE_URL}/PetFurMe-Application/api`;
 
@@ -55,6 +57,38 @@ const HomePage = ({ navigation, route }) => {
 	const refreshIntervalRef = React.useRef(null);
 
 	console.log("HomePage user_id:", user_id);
+
+	// Add this refresh function to fetch all data at once
+	const refreshAllContent = useCallback(async () => {
+		console.log('Pull-to-refresh triggered, refreshing all content...');
+		
+		if (!user_id) {
+			console.warn('Cannot refresh: No user ID available');
+			return;
+		}
+		
+		// Show loading indicator during manual refresh
+		setIsLoading(true);
+		
+		try {
+			// Use Promise.all to fetch data in parallel
+			await Promise.all([
+				checkProfileStatus(),
+				fetchUserPets(),
+				fetchUpcomingAppointments(),
+				fetchPetRecords()
+			]);
+			
+			console.log('All content refreshed successfully');
+		} catch (error) {
+			console.error('Error refreshing content:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [user_id]);
+	
+	// Use our custom refresh hook
+	const { refreshControlProps, RefreshButton, webProps } = useRefresh(refreshAllContent);
 
 	useEffect(() => {
 		if (user_id) {
@@ -122,7 +156,7 @@ const HomePage = ({ navigation, route }) => {
 				messageType: undefined
 			});
 			
-			refreshAllData();
+			refreshAllContent();
 		}
 	}, [route.params?.showMessage]);
 
@@ -234,14 +268,6 @@ const HomePage = ({ navigation, route }) => {
 		navigation.navigate("AddPetName", { 
 			user_id: user_id 
 		});
-	};
-
-	// Add a function to refresh all data
-	const refreshAllData = async () => {
-		await Promise.all([
-			checkProfileStatus(),
-			fetchUserPets()
-		]);
 	};
 
 	const showVerificationAlert = () => {
@@ -634,7 +660,15 @@ const HomePage = ({ navigation, route }) => {
 				user_id={user_id}
 			/>
 
-			<ScrollView contentContainerStyle={styles.scrollContent}>
+			<ScrollView 
+				contentContainerStyle={styles.scrollContent}
+				refreshControl={
+					<RefreshControl
+						{...refreshControlProps}
+					/>
+				}
+				{...webProps}
+			>
 				{/* Only show verification banner if not verified */}
 				{!isVerified && (
 					<View style={styles.verificationBanner}>
