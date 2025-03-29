@@ -293,28 +293,42 @@ const Appointment = ({ navigation, route }) => {
     }
   };
 
-  const handleAddAppointment = () => {
-    // Get user_id from AsyncStorage instead of route params since we already have it
-    AsyncStorage.getItem('user_id').then(user_id => {
-      if (!user_id) {
+  const handleAddAppointment = async () => {
+    try {
+      // Get user_id from AsyncStorage
+      const userId = await AsyncStorage.getItem('user_id');
+      
+      if (!userId) {
+        console.log('No user ID found in AsyncStorage');
         Alert.alert('Error', 'Please login to book an appointment');
         navigation.navigate('LoginScreen');
         return;
       }
 
+      console.log('Navigating to Consultation with user ID:', userId);
+      
       // Add timestamp to the navigation params
       const timestamp = Date.now();
 
       // Navigate to Consultation with the user_id and timestamp
-      navigation.navigate('Consultation', {
-        user_id: user_id,
-        timestamp: timestamp
-      });
-    }).catch(error => {
-      console.error('Error getting user_id:', error);
-      Alert.alert('Error', 'Please login to book an appointment');
-      navigation.navigate('LoginScreen');
-    });
+      // Wrap navigation in a timeout to prevent potential race conditions
+      setTimeout(() => {
+        navigation.navigate('Consultation', {
+          user_id: userId,
+          timestamp: timestamp
+        });
+      }, 0);
+      
+    } catch (error) {
+      console.error('Error in handleAddAppointment:', error);
+      
+      // Show error to user but don't navigate if there's an error
+      Alert.alert(
+        'Error',
+        'Something went wrong. Please try again later.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   const handleCancelPress = (appointmentId) => {

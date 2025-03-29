@@ -159,7 +159,7 @@ const CustomHeader = ({
                 />
               ) : (
                 <Image
-                  source={{ uri: `${API_BASE_URL}/PetFurMe-Application/uploads/defaults/avatar.png` }}
+                  source={{ uri: `${API_BASE_URL}/uploads/defaults/avatar.png` }}
                   style={styles.profilePhoto}
                 />
               )}
@@ -249,6 +249,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
+  },
+  defaultProfilePhoto: {
+    // Remove this style or replace with proper values
   },
 });
 
