@@ -16,6 +16,8 @@ web-build/
 *.key
 *.mobileprovision
 
+# Native folders if using CNG/Prebuild
+
 # Metro
 .metro-health-check*
 
@@ -33,3 +35,5 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+

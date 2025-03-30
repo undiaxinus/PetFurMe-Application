@@ -1,0 +1,43 @@
+RewriteEngine On
+
+# Remove the PetFurMe-Application prefix for API requests
+RewriteCond %{REQUEST_URI} ^/PetFurMe-Application/api/(.*)
+RewriteRule ^PetFurMe-Application/api/(.*)$ /api/$1 [L]
+
+# Allow direct access to api folder
+RewriteRule ^api/ - [L]
+
+# Allow direct access to uploads folder
+RewriteRule ^uploads/ - [L]
+RewriteRule ^PetFurMe-Application/uploads/ - [L]
+
+# Set proper headers for API responses
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+# Enable error reporting for debugging
+php_flag display_errors on
+php_value error_reporting E_ALL
+
+# Enable headers module
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+# Route API requests to Node.js server
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ http://localhost:1800/api/$1 [P,L]
+
+# Handle PHP files directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)\.php$ $1.php [L]
+
+# Handle OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L] 

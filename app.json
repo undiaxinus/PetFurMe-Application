@@ -1,34 +1,58 @@
 {
   "expo": {
-    "name": "Thesis",
-    "slug": "Thesis",
+    "name": "PetFurMe",
+    "slug": "PetFurMe",
     "version": "1.0.0",
-    "extra": {
-      "SUPABASE_URL": "https://euaelkwwqtlztdalgnfo.supabase.co",
-      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1YWVsa3d3cXRsenRkYWxnbmZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk0MzM3NTAsImV4cCI6MjA0NTAwOTc1MH0.LP4qArmAk05dGpQBUcko5_FGiByMTF8tpOOOZdpY0Cg",
-      "orientation": "portrait",
-      "icon": "./assets/icon.png",
-      "userInterfaceStyle": "light",
-      "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff"
-      }
+    "orientation": "portrait",
+    "icon": "./src/assets/images/icon.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.petfurme.app"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "app.petfurme.shop"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./src/assets/images/favicon.png",
+      "name": "PetFurMe",
+      "shortName": "PetFurMe",
+      "lang": "en",
+      "themeColor": "#ffffff",
+      "backgroundColor": "#ffffff",
+      "startUrl": "/"
     },
     "plugins": [
-      "expo-font"
-    ]
+      "./app.config.plugin.js",
+      "expo-notifications",
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/path/to/your/app-icon.png",
+          "color": "#ffffff",
+          "sounds": ["./local/path/to/your/notification-sound.wav"]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
   }
 }

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="08749849-8cd9-4eb5-8b09-a1d2a812c0a4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/logs/pet_addition_error.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/logs/pet_addition_error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/messages/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/messages/debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/messages/message_errors.log" beforeDir="false" afterPath="$PROJECT_DIR$/api/messages/message_errors.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/pets/get_user_pets.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/pets/get_user_pets.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eas.json" beforeDir="false" afterPath="$PROJECT_DIR$/eas.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/error.log" beforeDir="false" afterPath="$PROJECT_DIR$/error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/application.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/application.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/appointments.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/appointments.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/headers.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/headers.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/products.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/config/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/PetProductsSection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/PetProductsSection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/config/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/config/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/AddPetName.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/AddPetName.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/screens/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/screens/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/images/adaptive-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/images/adaptive-icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/images/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/images/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/images/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/images/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/0hg5YagFrsyXRT4vtPlbjoJ6vHIwrv6Xjcnd1htO.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/0v80eKTgiEvDqeJkLPg9ZRM1fSWYGPW7Fy9IFGUk.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1737654586_images.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1737655623_images (1).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1737665620_images (1).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1737665621_images (1).jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1737674916_images.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/19019rtqi6lNx3J3ePRa6nH0CLFMgTz1aCgOVGPn.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/1oniodQg1kXOPhbvOaJGmoLsWCkvj3kkZNb20jtH.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/21fGpS3jKAadtsxCXXqHay7kDxanF0sbR22Tckev.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/4kY6cZtcFEg3Fc0lP8bSMwbDbOCt1MftDhlccTUV.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/60rq2gJ57nQ41XorPKmOI7JTtvgY9nUKeuq9nD35.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/6Cb57xF8pU3Ib3FBsktMwjsbExvCjcPetV9OWcFx.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/6YcQXZNcXmyijkDcSYxCHrwPj8WFkGpSFFLxSmy0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/6mopJxcbpbts0orJOWdDMBFli2UNFuBl1A5oBclg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/7xl63pZzpcQLP1JGJfTV7BCupRWd6lYwKfyNOj9S.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/8Mw5XzrLcbQLt2fz2Ay0b03cBlAFY59M37BqQeb9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/8PTbfESzs1zFSh05y7Cmo8KiP5bUhJUIkJGRN9TR.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/8d4728eckMlH70u8gMl2zt0MIxbdEGroEoHFW42F.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/9tK3B3QpqJE0TPFExQOizwlLccF6qjOxCcmhRm77.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/B7nLbWArAAhOGVUvnB7KO4rQv4T7qL56zvhJEZk2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/BgWwbwsoD4skNG6bjXVrhpzsBQKLYUfyg2pP9IU9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/C048ln6pKqs5VtPQSQdnPwd54BPFC9RrOvATGyWR.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/CNL1USUIGReAHY9FEryBvD4ASjV9aoNg5VYwI3Bw.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Cb2V3Q1jbvSVy0plUIL7lnBSTMUkYmuSi8nAnJJJ.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/GEQBCxjyadnidI0O2PXpmjOKTxKpGa4FCGvqLZZQ.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/GMYdYWtmu1grTBFHxEyZve58SLzwGL1Qqlv2jk8f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/HHPaCfz1VuoBFWTGAI3qkpdkvHRcMOOtuqmoS5FY.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/HIkofDxUCRr9pF9gq9WwExEMk6OW0pNvTucWVRmA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/HJejf2uLRD1tG8o2XsM5GDapd49ebODVNur79M3g.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Hu6cnc8H2lN6o6ngJ0zzBH0UtUZztxTv1LZUDlDz.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/IsQK6yWvrZxzk6hAHUSlYKFhVUiZmrZBE36SUOH5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/IxV8FYBZFGO5ufRu0UpkuqJjILd4ZLQ07rgkDcsf.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/LVqG0v6cORNbmCS6YG99VxmR8faXVwTv6n1kJIG4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/LcuEX6emYIpakVqhYAOmigz3cH7uBlSELlc5C28e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/M9UFJQcHiAwkM8gPxXyhFJSBIFOKD1Kv8DO4XbLL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/MupNFUmD7osuscFb1PcJQfboB099u31F4Qv87QTm.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/OrrNHmNfOpe8OHXJ6gwUQUaGEpc9i1BHdu2OvuS2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/RmXAjneSrhePK6X1MCU2N8e510TV9mq9UwtQGYqI.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Rr645o3EO2SrZxDm4uiF41T5ZYPxzfEjScDZYdQL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Sq5pIdoIJ4uv79p2yhQAOh9QAwcmR0czNWZR1Hoy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/SrNmONOYXLxJvYLUHUaI3VXHi40lbw9car7ItQv9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/TF6FEe6mmD9o4N6o1a4gPX9O8M2pBcYMA4qVUBoL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/UTThpmts4b0b25z137elyi8LJxEVqXjAxotaAe99.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/XSrqIoeJfEXmnYpnjTTy88gOl8METW1SqV4aaPpz.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/XdVSMKgDx0tqdf2IjQ57ZHp9kIF57oQLu9kJhdwX.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Y4xWMl1XFABDhUivXlDVZyTDn5PGYkLl8dbRg429.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/YOjQjAGwkfonmUIUGGqFx7ISgdbHddtdrCmfQvsE.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/YWTLv7pgZO0Y9xpGTiPMggP8Qw0bIe9nPLtFUm92.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/Zft49vnr0HfUvDj2HDffJnuXEuCf4unheHdL6LNY.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/cth6IYA7xcmZE0EdAmCjHadKe0FKBodZAovD7OwD.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/dHEcVLpPxZU10xopTP3rkTqUKNR0j8QQg91SjXEY.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/dmfkVR6CPJiHlQrYnAEQcKubkJxrjaDvrcMSIIJL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/eJAmvpHlXqovo2VsxG6GBeqMrmHmzIsaEjvpOMdQ.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/fGidYOq7PcJuANayIc9wHKDEsWiNCsNruffSH17v.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/fPHc8hBi0lUnKJkWeaq7znwMJKvzffu2YJzURzgG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/h6xXbrTG5nyAl2HlASSIawAKg816SbyunSTqSlKw.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/haqh7zu1ngRb65cKqMEooV0e79UlXvniuzTkcOkq.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/ksnSeAaH5hFqeDgSP2oyQdOGh8HXmH5rsU50Ahk1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/l8RGopnZRhei4xmbREUA1H0T6Pg90Uj7ZRjHA4kG.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/mEcOOV7dVmmy9HZdXsOhGuvHMZYTpTKHFjwBALZR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/mnlEj09H7Bi7ASnOaRs7IHWANhZi65FaTuGob7an.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/nheOglca0inWQB882ZgL6Pzt3VdgDod5revHKWEO.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/ofjpwK2BFJ3REDXfZhPiBPeUUCjCbP92bRpBacmC.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/ozk0U8Ma6UKVmxMA5WAVRInCRlp4sTiYtxLQWCsR.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pOiAKaXCJzWpxa6SxielRLrCcXgXUH7B8qllE7lY.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_108_1740075827609.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_108_1740076296954.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_108_1740076469636.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_12_67d35d6e8c39b.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea72185d8.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea7556380.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea7f5890b.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea895797d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea9359f55.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ea9d59bef.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eaa7593c7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eab157e94.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eabb5858e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eac55716a.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eacf59da0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ead9596c6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eae35f572.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eaed57b99.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eaf757b26.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb01706f6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb0b588f1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb1558f5d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb1f5951f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb2959750.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb3356c18.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb3d5a437.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb4758c19.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb5157f25.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb5b567db.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb65591f3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb6f5934f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb795cfcb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb835746d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb8d59010.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eb9759448.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eba15b718.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebab564e6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebb55d7b0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebbf57ebf.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebc957825.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebd356342.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebdd58f0f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebe75a11a.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebf15cba6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ebfb57201.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec0559331.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec0f59022.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec1958b29.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec2356cdc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec2d597ba.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec375723d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec4170847.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec4b565d9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec556e58d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec5f6e304.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec69718fd.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec7370d5f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec7d7144f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec876e4cc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ec9d70b2c.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eca870c9e.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ecc56ba04.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eccd6fa7c.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ecd771b90.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ece16f8a3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eceb70fe2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ecf56f047.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ecff72426.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ed206f32b.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ed5c74a03.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ed8be98a3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ed8f0c536.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ed990ef9d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eda30f8f5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edad0cc17.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edb70f57d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edc10f285.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edcb0c471.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edd50f7bb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eddf0fc63.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ede90dbc7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edf30e385.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3edfd0d52f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee070c458.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee1111c59.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee1b10464.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee25704e3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee2f6ffcb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee396ecd1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee4375afa.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee4d700b5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee570ddd6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee617135a.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee6b6f8f5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee7570a13.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee7f70aa4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee8971111.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ee9371591.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eec471f56.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eee3becca.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eee7186a7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eef11a5cd.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eefb199c9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef051c0bc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef0f1faa5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef191813f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef231b6fe.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef2d1a9c9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef3719971.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef41195b1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef4b70e38.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef556f2ac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef5f7007f.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef69715e5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef736dec5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3ef7d6e628.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3efb470ce6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3eff0718e2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3f00d23e64.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3f0137250d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3f01d6f2d4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3f0276db85.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/pet_59_67c3f15875451.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/r5lMEbNvsqgVPpetemgWjIHzqO5LIGZTIXjS6oqI.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/rQduU6x2eIooYRHvFw9xnsPLoW1jyC7RSUS0vIhS.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/tm91hDMEmXuwgrzPneTbdDvt3vAbjsmjln5M0wef.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/tmcQT2OPZtbkQlwK62GkngPp3VghBD3aZzVVxUZ5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/uYHvjHkXm2sbhObZrAQ1QvtKLfMKRHkcS92Bi0RL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/vEtYCGva71ABj6U3PEIxuhonOB18efkCk9bQcu2Q.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/vfTpaa99FSxeN5jwlZq29gdDAciVwupmoGIjrsWC.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/wSAtvqOE3J801FHo0LgIsFLNACRlTIW6wVcXQsfI.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/wo7HWvo07PkKfKmgCrSRgRA6tfKs3UoCKSFWN1I9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/xGFempIBhaW20RZ28zE3PckK8Iav5T1YgeDkg6GN.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/y8yr1KVM8RtK0WnFo133o03fuLOWitG35fzl3gq9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/ydXtVPr15z64qL3dKqT7jSVVum9z3ZpIUzfnTpMe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/ymMHWQS7E5H74E3eeBlDHBFUs6f4iglbhhqrhi1H.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/pet_photos/z65VLnTG8pSnZSWWeWn2FxcBd5ssXkVxmn98KnNl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/products/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/0R0VX371e2kEuPvBr8MArI69dSJDj7YzNnq7UW2N.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/5lzgTKFXnR7pW9UJx91bz9sAgnLaVNoUfp5aG3bN.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/8MSa9boRg63FKEq4QUZSfECadwB4u0bxXagmllwa.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/AUONeoYsxauo0GRAfIQO8Ar4x6mZr2t2OItiigE1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/BLzFHm6TKKCvQM8LHwhoQFdNeQ3IIEg7mnkkYMYY.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/WXkeUa61ncniZdVkv7Aj9SxNb81wYewDd0VWZthX.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/mywGUn9xnY9MRvbteR3VN4wEISHpgepYNO9sIbeh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/no-avatar.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/oiJ7EGte6XtrrNDyIjVlKlEzWTVfYcp2z8ASWjPQ.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/sxfvlMqJbfVIYj5LpTZa3h1kvP4RFYJFLZxcqWb2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_108_1740074310868.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_108_1741875675054.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_108_1741906140377.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_137_1738841003997.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_138_1738911827617.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_143_1741937254779.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_143_1742629738730.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a45351a0df2.avif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a4546f6ce7a.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a4593cb103f.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a4594c43073.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a45a5507866.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a45a6982d5d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/user_photos/user_67a49b0266c29.png" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ReuAzel181&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ericapoche/PetFurMe-Application.git&quot;,
+    &quot;accountId&quot;: &quot;350496c7-56c6-4cb7-ae9a-e265ee472297&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2siyjRBVPmFrcHsyXHQvEnsxpIy" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "AnalyzeApkAction.lastApkPath": "D:/XAMPP/htdocs/PetFurMe-Application",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "temp-branch",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/XAMPP/htdocs/PetFurMe-Application/android",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\XAMPP\htdocs\PetFurMe-Application\android\app" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="08749849-8cd9-4eb5-8b09-a1d2a812c0a4" name="Changes" comment="" />
+      <created>1738952825800</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1738952825800</updated>
+    </task>
+    <servers />
+  </component>
+</project>
