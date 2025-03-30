@@ -28,12 +28,26 @@
       "package": "app.petfurme.shop"
     },
     "web": {
-      "favicon": "./src/assets/images/favicon.png"
+      "favicon": "./src/assets/images/favicon.png",
+      "name": "PetFurMe",
+      "shortName": "PetFurMe",
+      "lang": "en",
+      "themeColor": "#ffffff",
+      "backgroundColor": "#ffffff",
+      "startUrl": "/"
     },
     "plugins": [
       "./app.config.plugin.js",
       "expo-notifications",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/path/to/your/app-icon.png",
+          "color": "#ffffff",
+          "sounds": ["./local/path/to/your/notification-sound.wav"]
+        }
+      ]
     ],
     "extra": {
       "eas": {
